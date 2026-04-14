@@ -1,10 +1,11 @@
 "use client";
 
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import styles from './page.module.css';
-import DroneModel from '../components/DroneModel';
-import ScrollProgress from '../components/ScrollProgress';
 import { motion } from 'framer-motion';
+
+import HeroVideo from '../components/HeroVideo';
 
 const fadeInUp = {
   initial: { opacity: 0, y: 30 },
@@ -15,86 +16,87 @@ const fadeInUp = {
 
 export default function Home() {
   return (
-    <div className={styles.container}>
-      <DroneModel />
-      <ScrollProgress />
+    <>
+      <div className={styles.container}>
+        <HeroVideo />
 
-      {/* Hero Section */}
-      <section className={`${styles.section} ${styles.hero}`}>
-        <motion.div className={styles.heroContent} {...fadeInUp}>
-          <h1 className={styles.title}>
-            <span>Mastering Autonomy</span>
-            <span>With</span>
-            <span className={styles.greyText}>Vayu Stack.</span>
-          </h1>
-          <p className={styles.subtext}>
-            The only indigenous drone flight control system that gives you the keys to the hardware. Built from the silicon up for infinite reliability and scale.
-          </p>
-          <div className={styles.ctaGroup}>
-            <Link href="/docs" className={styles.primaryBtn}>Documentation</Link>
-            <Link href="/contact" className={styles.secondaryBtn}>Contact Us &rarr;</Link>
-          </div>
-        </motion.div>
-      </section>
-
-      {/* Problem Section */}
-      <section className={`${styles.section} ${styles.problem}`}>
-        <div className={styles.sectionContent}>
-          <motion.div className={styles.sectionHeader} {...fadeInUp}>
-            <h2>The Challenge.</h2>
+        {/* Hero Section */}
+        <section className={`${styles.section} ${styles.hero}`}>
+          <motion.div className={styles.heroContent} {...fadeInUp}>
+            <h1 className={styles.title}>
+              <span>Mastering Autonomy</span>
+              <span>With</span>
+              <span className={styles.greyText}>Vayu Stack.</span>
+            </h1>
+            <p className={styles.subtext}>
+              The only indigenous drone flight control system that gives you the keys to the hardware. Built from the silicon up for infinite reliability and scale.
+            </p>
+            <div className={styles.ctaGroup}>
+              <Link href="/docs" className={styles.primaryBtn}>Documentation</Link>
+              <Link href="/contact" className={styles.secondaryBtn}>Contact Us &rarr;</Link>
+            </div>
           </motion.div>
-          <div className={styles.grid2}>
-            <motion.div className={styles.card} {...fadeInUp}>
-              <h3>Foreign Dependency</h3>
-              <p>Relying on external flight stacks makes local debugging impossible and creates enormous security vulnerabilities for defense platforms.</p>
-            </motion.div>
-            <motion.div className={styles.card} {...fadeInUp} transition={{ delay: 0.2, duration: 0.8 }}>
-              <h3>Bloated Complexity</h3>
-              <p>Legacy systems suffer from deep complexity, lacking the necessary control to effectively implement modern hardware acceleration.</p>
-            </motion.div>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Product Highlights */}
-      <section className={`${styles.section} ${styles.highlights}`}>
-        <div className={styles.sectionContent}>
-          <motion.div className={styles.sectionHeader} {...fadeInUp}>
-            <h2>Core Capabilities.</h2>
-          </motion.div>
-          <div className={styles.grid3}>
-            <motion.div className={styles.highlightCard} {...fadeInUp}>
-              <div className={styles.highlightIcon}>⚡</div>
-              <h3>Deterministic Execution</h3>
-              <p>Minimizes interrupt jitter with lock-free SPSC queues.</p>
+        {/* Problem Section */}
+        <section className={`${styles.section} ${styles.problem}`}>
+          <div className={styles.sectionContent}>
+            <motion.div className={styles.sectionHeader} {...fadeInUp}>
+              <h2>The Challenge.</h2>
             </motion.div>
-            <motion.div className={styles.highlightCard} {...fadeInUp} transition={{ delay: 0.2, duration: 0.8 }}>
-              <h3>Cascaded Control</h3>
-              <p>High-frequency precision control across both angle and rate loops.</p>
-            </motion.div>
+            <div className={styles.grid2}>
+              <motion.div className={styles.card} {...fadeInUp}>
+                <h3>Foreign Dependency</h3>
+                <p>Relying on external flight stacks makes local debugging impossible and creates enormous security vulnerabilities for defense platforms.</p>
+              </motion.div>
+              <motion.div className={styles.card} {...fadeInUp} transition={{ delay: 0.2, duration: 0.8 }}>
+                <h3>Bloated Complexity</h3>
+                <p>Legacy systems suffer from deep complexity, lacking the necessary control to effectively implement modern hardware acceleration.</p>
+              </motion.div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Why Now & Traction */}
-      <section className={`${styles.section} ${styles.traction}`}>
-        <div className={styles.sectionContent}>
-          <motion.div className={styles.sectionHeader} {...fadeInUp}>
-            <h2>Why Now?</h2>
-            <p className={styles.mutedText}>Timeline</p>
-          </motion.div>
-          <div className={styles.timeline}>
-            <motion.div className={styles.timelineItem} {...fadeInUp}>
-              <h4>Sovereign Autonomy</h4>
-              <p>The global push for sovereign platforms demands an independent and auditable tech stack.</p>
+        {/* Product Highlights */}
+        <section className={`${styles.section} ${styles.highlights}`}>
+          <div className={styles.sectionContent}>
+            <motion.div className={styles.sectionHeader} {...fadeInUp}>
+              <h2>Core Capabilities.</h2>
             </motion.div>
-            <motion.div className={styles.timelineItem} {...fadeInUp} transition={{ delay: 0.2, duration: 0.8 }}>
-              <h4>Hardware Validation</h4>
-              <p>Currently deep in flight testing on STM32F4-based avionics with custom NavHAL implementation.</p>
-            </motion.div>
+            <div className={styles.grid3}>
+              <motion.div className={styles.highlightCard} {...fadeInUp}>
+                <div className={styles.highlightIcon}>⚡</div>
+                <h3>Deterministic Execution</h3>
+                <p>Minimizes interrupt jitter with lock-free SPSC queues.</p>
+              </motion.div>
+              <motion.div className={styles.highlightCard} {...fadeInUp} transition={{ delay: 0.2, duration: 0.8 }}>
+                <h3>Cascaded Control</h3>
+                <p>High-frequency precision control across both angle and rate loops.</p>
+              </motion.div>
+            </div>
           </div>
-        </div>
-      </section>
-    </div>
+        </section>
+
+        {/* Why Now & Traction */}
+        <section className={`${styles.section} ${styles.traction}`}>
+          <div className={styles.sectionContent}>
+            <motion.div className={styles.sectionHeader} {...fadeInUp}>
+              <h2>Why Now?</h2>
+              <p className={styles.mutedText}>Timeline</p>
+            </motion.div>
+            <div className={styles.timeline}>
+              <motion.div className={styles.timelineItem} {...fadeInUp}>
+                <h4>Sovereign Autonomy</h4>
+                <p>The global push for sovereign platforms demands an independent and auditable tech stack.</p>
+              </motion.div>
+              <motion.div className={styles.timelineItem} {...fadeInUp} transition={{ delay: 0.2, duration: 0.8 }}>
+                <h4>Hardware Validation</h4>
+                <p>Currently deep in flight testing on STM32F4-based avionics with custom NavHAL implementation.</p>
+              </motion.div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </>
   );
 }

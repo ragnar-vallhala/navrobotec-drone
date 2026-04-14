@@ -1,0 +1,136 @@
+.article {
+  animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.header {
+  margin-bottom: 3rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 1.5rem;
+}
+
+.label {
+  display: block;
+  font-size: 0.8rem;
+  color: #00e5ff;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.title {
+  font-size: 2.5rem;
+  color: #fff;
+  letter-spacing: -1px;
+}
+
+.content {
+  color: #aaa;
+  line-height: 1.8;
+}
+
+.lead {
+  font-size: 1.25rem;
+  color: #ddd;
+  margin-bottom: 2rem;
+}
+
+.section {
+  margin-bottom: 3rem;
+}
+
+.section h2 {
+  color: #fff;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.infoBox {
+  background: rgba(0, 229, 255, 0.05);
+  border-left: 3px solid #00e5ff;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+  color: #fff;
+  font-style: italic;
+}
+
+.list {
+  padding-left: 1.2rem;
+}
+
+.list li {
+  margin-bottom: 0.8rem;
+}
+
+.list strong {
+  color: #fff;
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.miniCard {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.miniCard h3 {
+  color: #00e5ff;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.miniCard p {
+  font-size: 0.9rem;
+}
+
+.diagram {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 2rem;
+}
+
+.layerLayer {
+  padding: 1rem;
+  background: #111;
+  border: 1px solid #333;
+  text-align: center;
+  color: #fff;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.tikz-svg {
+  display: block;
+  margin: 2rem auto;
+  max-width: 100%;
+  height: auto;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 2rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: transform 0.3s ease;
+}
+
+.tikz-svg:hover {
+  transform: scale(1.01);
+  background: rgba(255, 255, 255, 0.04);
+}

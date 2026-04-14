@@ -1,0 +1,22 @@
+.docsContainer {
+  display: flex;
+  min-height: 100vh;
+  background-color: #000;
+  padding-top: 80px; /* Space for Navbar */
+}
+
+.docsContent {
+  flex: 1;
+  padding: 4rem 2rem;
+}
+
+.innerContent {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+@media (max-width: 1024px) {
+  .docsContainer {
+    flex-direction: column;
+  }
+}

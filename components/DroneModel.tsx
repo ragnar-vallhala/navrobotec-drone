@@ -40,7 +40,7 @@ const DRONE_KEYFRAMES = [
     }
 ];
 
-function Model() {
+function Model({ ready }: { ready: boolean }) {
     const materials = useLoader(MTLLoader, '/Drone-Design/Drone_obj.mtl');
     const obj = useLoader(OBJLoader, '/Drone-Design/Drone_obj.obj', (loader: any) => {
         materials.preload();
@@ -76,11 +76,12 @@ function Model() {
     useFrame((state: any) => {
         if (!group.current) return;
 
-        // Rotate rotors
-        rotors.current.forEach((rotor, i) => {
-            // Alternate rotation direction for realism if multiple
-            rotor.rotation.y += (i % 2 === 0 ? 1 : -1) * 0.8;
-        });
+        // Rotate rotors only if ready
+        if (ready) {
+            rotors.current.forEach((rotor, i) => {
+                rotor.rotation.y += (i % 2 === 0 ? 1 : -1) * 0.8;
+            });
+        }
 
         const scrollY = window.scrollY;
         const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
@@ -101,15 +102,15 @@ function Model() {
         // Local progress within the segment
         const segmentProgress = (scrollProgress - startState.scroll) / (endState.scroll - startState.scroll);
 
-        // Stabilization effect (High-frequency micro-adjustments)
+        // Stabilization effect (High-frequency micro-adjustments) only if ready
         const t = state.clock.elapsedTime;
-        const jitterX = Math.sin(t * 1.2) * 0.015 + Math.cos(t * 0.7) * 0.01;
-        const jitterY = Math.sin(t * 1.5) * 0.02 + Math.cos(t * 0.5) * 0.01;
-        const jitterZ = Math.sin(t * 0.8) * 0.01;
+        const jitterX = ready ? (Math.sin(t * 1.2) * 0.015 + Math.cos(t * 0.7) * 0.01) : 0;
+        const jitterY = ready ? (Math.sin(t * 1.5) * 0.02 + Math.cos(t * 0.5) * 0.01) : 0;
+        const jitterZ = ready ? (Math.sin(t * 0.8) * 0.01) : 0;
 
-        const jitterRotX = Math.sin(t * 5) * 0.01;
-        const jitterRotY = Math.cos(t * 1.2) * 0.01;
-        const jitterRotZ = Math.sin(t * 1.4) * 0.015;
+        const jitterRotX = ready ? (Math.sin(t * 10) * 0.01) : 0;
+        const jitterRotY = ready ? (Math.cos(t * 1.2) * 0.01) : 0;
+        const jitterRotZ = ready ? (Math.sin(t * 1.4) * 0.015) : 0;
 
         // Interpolate Position
         group.current.position.set(
@@ -139,7 +140,7 @@ function Model() {
     );
 }
 
-export default function DroneModel() {
+export default function DroneModel({ ready = true }: { ready?: boolean }) {
     const [mounted, setMounted] = useState(false);
     useEffect(() => setMounted(true), []);
 
@@ -154,7 +155,7 @@ export default function DroneModel() {
                 <spotLight position={[10, -10, 10]} angle={0.5} penumbra={0.5} intensity={10} color="#0077ff" />
 
                 <Suspense fallback={null}>
-                    <Model />
+                    <Model ready={ready} />
                     <Environment preset="city" />
                     <ContactShadows resolution={1024} scale={30} blur={2.5} opacity={0.5} far={15} color="#000000" />
                 </Suspense>

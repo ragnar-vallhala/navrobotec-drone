@@ -5,9 +5,10 @@ export default function Navbar() {
     return (
         <nav className={styles.navbar}>
             <div className={styles.container}>
-                <Link href="/" className={styles.logo} style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                    <img src="/logo.svg" alt="NAVRobotec Logo" style={{ height: '24px', width: 'auto', display: 'block', filter: 'invert(1)' }} />
-                    NAVROBOTEC
+                <Link href="/" className={styles.logo} style={{ display: 'flex', alignItems: 'center' }}>
+                    NAVR
+                    <img src="/logo.svg" alt="O" className={styles.logoIcon} style={{ height: '30px', width: 'auto', display: 'block', filter: 'invert(1)', margin: '0 -6px' }} />
+                    BOTEC
                 </Link>
                 <ul className={styles.navLinks}>
                     <li><Link href="/">HOME</Link></li>
