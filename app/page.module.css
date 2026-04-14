@@ -1,76 +1,34 @@
 .container {
   display: flex;
   flex-direction: column;
+  background-color: #000;
+}
+
+.section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 0 8rem;
+  position: relative;
+  z-index: 1;
 }
 
 /* HERO SECTION */
 .hero {
-  min-height: 90vh;
-  display: flex;
-  align-items: center;
-  position: relative;
-  overflow: hidden;
-  padding: 0 4rem;
-}
-
-.heroBackground {
-  position: absolute;
-  right: -10vw;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 50vw;
-  height: 50vw;
-  max-width: 800px;
-  max-height: 800px;
-  background: radial-gradient(
-    circle,
-    rgba(0, 119, 255, 0.15) 0%,
-    rgba(0, 229, 255, 0) 70%
-  );
-  border-radius: 50%;
-  z-index: 0;
-}
-
-.heroImage {
-  position: absolute;
-  right: -5vw;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 55vw;
-  max-width: 900px;
-  object-fit: contain;
-  z-index: 0;
-  mask-image: radial-gradient(circle, black 40%, transparent 70%);
-  -webkit-mask-image: radial-gradient(circle, black 40%, transparent 70%);
-  animation: float 6s ease-in-out infinite;
-  pointer-events: none;
-}
-
-@keyframes float {
-  0% {
-    transform: translateY(-50%) rotate(0deg);
-  }
-  50% {
-    transform: translateY(calc(-50% - 20px)) rotate(1deg);
-  }
-  100% {
-    transform: translateY(-50%) rotate(0deg);
-  }
+  min-height: 100vh;
 }
 
 .heroContent {
-  position: relative;
-  z-index: 1;
-  max-width: 700px;
-  animation: fadeIn 1s ease-out;
+  max-width: 800px;
 }
 
 .title {
-  font-size: 5rem;
+  font-size: 6rem;
   line-height: 1.1;
   margin-bottom: 2rem;
-  letter-spacing: -1.5px;
+  letter-spacing: -2px;
   color: #fff;
+  font-weight: 800;
 }
 
 .title span {
@@ -78,143 +36,97 @@
 }
 
 .greyText {
-  color: #555;
+  color: #444;
 }
 
 .subtext {
-  font-size: 1.1rem;
-  color: #ccc;
-  margin-bottom: 3rem;
-  line-height: 1.6;
-  max-width: 550px;
-}
-
-.ctaGroup {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-}
-
-.primaryBtn {
-  font-weight: 700;
-  font-size: 0.95rem;
-  color: #fff;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  letter-spacing: 1px;
-}
-
-.primaryBtn::before {
-  content: "[ ";
-  color: #555;
-  transition: color 0.3s ease;
-}
-
-.primaryBtn::after {
-  content: " ]";
-  color: #555;
-  transition: color 0.3s ease;
-}
-
-.primaryBtn:hover::before,
-.primaryBtn:hover::after {
-  color: #fff;
-}
-
-.secondaryBtn {
-  background: transparent;
+  font-size: 1.25rem;
   color: #888;
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  transition: color 0.3s ease;
+  margin-bottom: 3.5rem;
+  line-height: 1.6;
+  max-width: 600px;
 }
 
-.secondaryBtn:hover {
-  color: #fff;
-}
-
-/* Sections Global */
-.hero,
-.problem,
-.solution,
-.highlights,
-.traction {
-  padding: 6rem 4rem;
-}
-
-.problem,
+/* Common Section styles */
 .highlights {
-  background: transparent;
+  justify-content: flex-start;
+  text-align: left;
 }
 
-.sectionHeader {
-  margin-bottom: 4rem;
+/* Right aligned sections for storytelling variety */
+.problem,
+.traction {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.sectionContent {
+  max-width: 600px;
 }
 
 .sectionHeader h2 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
+  font-size: 3.5rem;
+  margin-bottom: 2rem;
+  letter-spacing: -1px;
 }
 
 .mutedText {
-  color: #555;
-  font-size: 1.1rem;
+  color: #444;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
 }
 
 /* Problem Section */
 .grid2 {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 3rem;
-  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
 }
 
 .card {
-  padding: 2.5rem 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  transition: transform 0.3s ease;
+  padding: 3rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .card h3 {
-  font-size: 1.4rem;
-  margin-bottom: 1rem;
-  color: #fff;
-}
-
-.card p {
-  color: #888;
-  line-height: 1.6;
-}
-
-/* Product Highlights */
-.grid3 {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 3rem;
-  max-width: 1200px;
-}
-
-.highlightCard {
-  padding: 2rem 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.highlightIcon {
   font-size: 2rem;
   margin-bottom: 1.5rem;
   color: #fff;
 }
 
+.card p {
+  color: #666;
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+/* Product Highlights */
+.grid3 {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.highlightCard {
+  padding: 2.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.highlightIcon {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  color: #00e5ff;
+}
+
 .highlightCard h3 {
-  font-size: 1.3rem;
+  font-size: 1.8rem;
   margin-bottom: 1rem;
 }
 
 .highlightCard p {
-  color: #888;
-  font-size: 0.95rem;
+  color: #666;
+  font-size: 1.1rem;
   line-height: 1.6;
 }
 
@@ -222,10 +134,10 @@
 .timeline {
   max-width: 800px;
   border-left: 1px solid rgba(255, 255, 255, 0.1);
-  padding-left: 2rem;
+  padding-left: 3rem;
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  gap: 5rem;
 }
 
 .timelineItem {
@@ -235,32 +147,65 @@
 .timelineItem::before {
   content: "";
   position: absolute;
-  left: -2.3rem;
-  top: 0.3rem;
-  width: 10px;
-  height: 10px;
-  background: #fff;
+  left: -3.35rem;
+  top: 0.5rem;
+  width: 12px;
+  height: 12px;
+  background: #00e5ff;
   border-radius: 50%;
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.5);
 }
 
 .timelineItem h4 {
-  font-size: 1.3rem;
-  margin-bottom: 0.5rem;
+  font-size: 2rem;
+  margin-bottom: 1rem;
   color: #fff;
 }
 
 .timelineItem p {
-  color: #888;
-  line-height: 1.6;
+  color: #666;
+  font-size: 1.1rem;
+  line-height: 1.7;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.ctaGroup {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+.primaryBtn,
+.secondaryBtn {
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-decoration: none;
+}
+
+.primaryBtn {
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+.primaryBtn::before {
+  content: "[ ";
+  color: #333;
+}
+.primaryBtn::after {
+  content: " ]";
+  color: #333;
+}
+.primaryBtn:hover::before,
+.primaryBtn:hover::after {
+  color: #00e5ff;
+}
+
+.secondaryBtn {
+  color: #444;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
+
+.secondaryBtn:hover {
+  color: #fff;
 }
