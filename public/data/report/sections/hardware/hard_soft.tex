@@ -1,0 +1,99 @@
+\section{Hardware-Software Co-design}
+\label{sec:hw_codesign}
+
+The Vayu flight control system is developed using a hardware–software co-design approach, where the hardware platform and software architecture are designed in tandem to achieve deterministic performance, modularity, and scalability.
+
+Figure~\ref{fig:hw_sw_stack} illustrates the layered architecture of the Vayu platform, highlighting the abstraction between the physical hardware and high-level application logic.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        layer/.style={draw, rectangle, minimum width=6cm, minimum height=1cm, align=center, font=\small\bfseries, rounded corners=2pt},
+        hw_layer/.style={layer, fill=gray!20},
+        hal_layer/.style={layer, fill=blue!10},
+        os_layer/.style={layer, fill=green!10},
+        app_layer/.style={layer, fill=yellow!10},
+        arrow/.style={Latex-Latex, thick}
+    ]
+
+    % Nodes
+    \node[app_layer] (app) {Application Tasks\\(Control, Navigation, Telemetry)};
+    \node[os_layer, below=0.5cm of app] (os) {VAIOS Execution Layer\\(Deterministic Scheduling, IPC)};
+    \node[hal_layer, below=0.5cm of os] (hal) {NavHAL (Hardware Abstraction)\\(Drivers, Peripheral Wrappers)};
+    \node[hw_layer, below=0.5cm of hal] (hw) {Physical Hardware\\(STM32F4, BMX160, Peripherals)};
+
+    % Connections
+    \draw[arrow] (app) -- (os);
+    \draw[arrow] (os) -- (hal);
+    \draw[arrow] (hal) -- (hw);
+
+    % Right side labels (Braces/groups)
+    \draw [decorate, decoration={brace, amplitude=10pt}] 
+        ([xshift=0.5cm]app.north east) -- ([xshift=0.5cm]os.south east) 
+        node [midway, right=12pt, align=left, font=\tiny\itshape] {Software\\Stack};
+    
+    \draw [decorate, decoration={brace, amplitude=10pt}] 
+        ([xshift=0.5cm]hal.north east) -- ([xshift=0.5cm]hw.south east) 
+        node [midway, right=12pt, align=left, font=\tiny\itshape] {Hardware\\Abstraction};
+
+    \end{tikzpicture}
+    \caption{Layered system architecture demonstrating the hierarchy from physical hardware to application-level flight control tasks through abstraction layers.}
+    \label{fig:hw_sw_stack}
+\end{figure}
+
+Rather than treating hardware and software as independent layers, the system is structured such that hardware capabilities directly inform software design decisions, and software requirements guide hardware selection and configuration.
+
+\subsection{Mapping of Hardware Resources to Software Modules}
+
+Each hardware component in the system is accessed through a corresponding software module, ensuring a clear and structured interface between physical devices and application logic.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|l|l|}
+        \hline
+        \textbf{Hardware Component} & \textbf{Interface} & \textbf{Software Module} \\
+        \hline
+        BMX160 IMU & I2C / SPI & Sensor Task \\
+        \hline
+        Barometer (BMP180) & I2C & Sensor Module \\
+        \hline
+        GPS Module & UART & Communication Module \\
+        \hline
+        RC Receiver (iBus) & UART & RC Input Module \\
+        \hline
+        PWM Outputs (ESC) & Timer & Motor Control Task \\
+        \hline
+        SD Card & SPI / SDIO & Logging Module \\
+        \hline
+    \end{tabular}
+    \caption{Mapping between hardware components and software modules}
+    \label{tab:hw_sw_mapping}
+\end{table}
+
+This structured mapping ensures that all hardware interactions are mediated through well-defined software interfaces, enabling modular development and easier system maintenance.
+
+\subsection{Role of NavHAL}
+
+The Hardware Abstraction Layer (NavHAL) acts as the bridge between hardware and higher-level software components. It provides standardized interfaces for peripherals such as communication buses, timers, and GPIO.
+
+By abstracting hardware-specific details, NavHAL allows the upper layers—including estimation, control, and communication modules—to operate independently of the underlying microcontroller. This enables portability across different hardware platforms without requiring significant changes to application logic.
+
+\subsection{Execution Support through Hardware Features}
+
+The hardware platform is specifically selected to support the deterministic execution model implemented by VAIOS. Key hardware features that enable this include:
+
+\begin{itemize}
+    \item \textbf{Timers}: Used for precise scheduling of control loops and generation of PWM signals.
+    \item \textbf{Interrupts}: Enable low-latency handling of sensor data and communication events.
+    \item \textbf{Multiple Communication Interfaces}: Allow concurrent data exchange without resource contention.
+\end{itemize}
+
+These features ensure that time-critical tasks such as sensor acquisition and control computation can be executed reliably at fixed intervals.
+
+\subsection{Design Alignment and Scalability}
+
+The co-design approach ensures that the system remains scalable and adaptable to future enhancements. For example, the addition of new sensors or communication protocols can be accommodated by extending the corresponding modules without modifying the overall architecture.
+
+Similarly, hardware upgrades—such as transitioning to higher-performance microcontrollers—can be achieved with minimal impact on higher-level software due to the abstraction provided by NavHAL.
+
+This tight integration between hardware and software enables the Vayu system to achieve predictable performance, efficient resource utilization, and long-term maintainability.

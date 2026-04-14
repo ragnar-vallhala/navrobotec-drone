@@ -1,0 +1,48 @@
+\section{Design Principles}
+\label{sec:design}
+
+The stack is designed around a set of core architectural principles that guide its structure, execution, and reliability. These principles are not only conceptual but are directly reflected in the current implementation, ensuring that the system remains stable, maintainable, and scalable.
+
+\subsection{Architectural Pillars}
+
+The system architecture is structured around four primary pillars:
+
+\begin{itemize}
+    \item \textbf{Decoupled Processing (Modularity)}:  
+    Functional logic is partitioned into independent modules (e.g., \texttt{sensor}, \texttt{control}, \texttt{comm}, \texttt{logger}), enabling clear separation of concerns. This modular structure supports isolated testing, simplified debugging, and seamless replacement or extension of individual components without affecting the overall system.
+
+    \item \textbf{Deterministic Task Execution}:  
+    The \textbf{VAIOS} execution layer enforces well-defined scheduling of time-critical tasks. By maintaining consistent execution intervals (\(dt\)), the system ensures predictable behavior of control loops, which is essential for maintaining stability in real-time control systems.
+
+    \item \textbf{Hardware Abstraction}:  
+    The \textbf{NavHAL} layer provides a uniform interface to low-level peripherals such as I2C, SPI, and UART. This abstraction isolates hardware-specific implementations from higher-level logic, enabling portability across different microcontroller platforms.
+
+    \item \textbf{State-Aware Fail-Safety}:  
+    The system maintains a global system state (\texttt{sys\_state\_t}) to track operational readiness and detect abnormal conditions. Safety checks across modules—such as RC signal validation and IMU health monitoring—enable automatic transitions to predefined failsafe states in the event of faults or signal loss.
+\end{itemize}
+
+These principles collectively ensure that the system remains modular, predictable, and robust under varying operating conditions. By embedding these design choices into the architecture, the Vayu stack achieves a balance between performance, flexibility, and reliability.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        pillar/.style={draw, rectangle, minimum width=2.8cm, minimum height=1cm, align=center, fill=white, font=\small, rounded corners},
+        core/.style={circle, draw, fill=blue!5, minimum size=2.2cm, align=center, font=\footnotesize\bfseries}
+    ]
+
+    \node[core] (core) {Vayu Architecture\\Principles};
+
+    \node[pillar, above=1.2cm of core] (mod) {Modular\\Design};
+    \node[pillar, below=1.2cm of core] (det) {Deterministic\\Execution};
+    \node[pillar, left=1.2cm of core] (hal) {Hardware\\Abstraction};
+    \node[pillar, right=1.2cm of core] (saf) {Fail-Safe\\Design};
+
+    \draw[thick, ->, >=stealth] (core) -- (mod);
+    \draw[thick, ->, >=stealth] (core) -- (det);
+    \draw[thick, ->, >=stealth] (core) -- (hal);
+    \draw[thick, ->, >=stealth] (core) -- (saf);
+
+    \end{tikzpicture}
+    \caption{Core architectural principles of the Vayu flight control system.}
+    \label{fig:design_pillars}
+\end{figure}

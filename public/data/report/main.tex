@@ -1,0 +1,106 @@
+\documentclass[12pt,a4paper]{report}
+
+% --- Preamble ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows.meta, 3d, calc, decorations.pathreplacing}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{xcolor}
+\usepackage{caption}
+\usepackage{float}
+
+% Colors
+\definecolor{primary}{RGB}{0, 51, 102}
+\definecolor{secondary}{RGB}{102, 102, 102}
+
+% Fonts and Sections
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{primary}}{\chaptertitlename\ \thechapter}{20pt}{\Huge}
+\titleformat{\section}
+  {\normalfont\Large\bfseries\color{primary}}{\thesection}{1em}{}
+
+% Hyperlinks
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primary,
+    filecolor=magenta,      
+    urlcolor=primary,
+    pdftitle={Vayu Flight Control Stack Technical Report},
+    pdfpagemode=FullScreen,
+}
+
+% Header and Footer
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\color{secondary}Vayu Technical Report}
+\lhead{\color{secondary}NAVRobotec}
+\rfoot{\thepage}
+
+% --- Document ---
+\begin{document}
+
+% --- Frontpage ---
+\begin{titlepage}
+    \centering
+    \vspace*{1cm}
+    
+    \includegraphics[width=0.4\textwidth]{img/logo.png}\\[2cm]
+    
+    {\Huge \bfseries \color{primary} Vayu Flight Control Stack}\\[0.5cm]
+    {\Large \bfseries \color{secondary} Technical Report and System Documentation}\\[2cm]
+    
+    \vfill
+    
+    {\large \bfseries Prepared by:}\\[0.2cm]
+    {\large Ashutosh Vishwakarma}\\[1cm]
+    
+    {\large 2026}\\[2cm]
+    
+    \vfill
+    \rule{\textwidth}{1pt}\\[0.4cm]
+    {\small \color{secondary}}
+\end{titlepage}
+
+% --- Table of Contents ---
+\tableofcontents
+\newpage
+
+% --- Abstract ---
+\input{sections/abstract}
+
+% --- Introduction ---
+\input{sections/introduction}
+
+% --- Preliminary ---
+\input{sections/preliminary}
+
+% --- Architecture ---
+\input{sections/architecture}
+
+% --- Hardware ---
+\input{sections/hardware}
+
+% --- NavHAL ---
+\input{sections/navhal}
+
+% --- VAIOS ---
+\input{sections/vaios}
+
+% --- Vayu ---
+\input{sections/vayu}
+
+% --- Results ---
+\input{sections/results}
+
+% --- Conclusion ---
+\input{sections/conclusion}
+\end{document}

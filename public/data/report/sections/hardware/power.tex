@@ -1,0 +1,71 @@
+\section{Power Management}
+\label{sec:hw_power}
+
+The power management subsystem of the Vayu flight control platform is responsible for providing stable and efficient voltage regulation to all system components. Given the sensitivity of sensors and the real-time requirements of control algorithms, maintaining clean and reliable power rails is critical for system performance.
+
+\subsection{Power Architecture}
+
+The system is powered from an external supply, typically a battery source, which is regulated through a two-stage power conversion architecture.
+
+Figure~\ref{fig:power_architecture} illustrates the two-stage regulation approach used to provide stable power rails to the system.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        block/.style={draw, rectangle, minimum width=2.8cm, minimum height=1cm, align=center, fill=white, font=\small, rounded corners=3pt},
+        input/.style={draw, circle, minimum size=1cm, fill=orange!10, font=\small\bfseries},
+        arrow/.style={-Latex, thick},
+        line/.style={thick}
+    ]
+
+    % Nodes
+    \node[input] (bat) {Battery};
+    \node[block, right=1.2cm of bat, fill=blue!5] (buck) {Buck Converter\\(TPS562200)};
+    \node[block, right=1.2cm of buck, fill=green!5] (ldo) {Linear Regulator\\(LDO)};
+    \node[block, below right=0.5cm and 0.2cm of bat, fill=orange!5] (bec) {ESC BEC\\(5V Input)};
+    
+    % Consumer nodes
+    \node[block, above right=0.3cm and 1.2cm of buck] (periph) {Peripherals\\(5V Rails)};
+    \node[block, right=1.2cm of ldo] (mcu_sens) {MCU \& Sensors\\(3.3V Rails)};
+
+    % Connections
+    \draw[arrow] (bat) -- (buck) node[midway, above, font=\tiny] {VBAT};
+    \draw[line] (buck) -- (ldo) node[midway, above, font=\tiny, xshift=0.2cm] (junction) {5V};
+    \draw[arrow] (buck.east) -- ++(0.4,0) |- (periph.west) node[pos=0.2, right, yshift=0.25cm, font=\tiny] {5V};
+    \draw[arrow] (ldo) -- (mcu_sens) node[midway, above, font=\tiny] {3.3V};
+    \draw[arrow] (bec.east) -| (junction.south) node[pos=0.25, right, font=\tiny, yshift=-1.1cm] {5V Alt.};
+
+    % Labels
+    \node[below=0.2cm of buck, font=\tiny\itshape, color=gray] {Stage 1: High Efficiency};
+    \node[below=0.2cm of ldo, font=\tiny\itshape, color=gray] {Stage 2: Low Noise};
+
+    \end{tikzpicture}
+    \caption{Two-stage power regulation architecture showing voltage step-down from battery to 5V and subsequent filtration for sensitive 3.3V components.}
+    \label{fig:power_architecture}
+\end{figure}
+
+In the first stage, a switching regulator (buck converter) is used to step down the input voltage to a stable 5V rail. This stage is implemented using a high-efficiency regulator, enabling the system to handle varying input voltages while minimizing power loss. Additionally, the system can be powered via a 5V input from an external Battery Elimination Circuit (BEC) integrated within the Electronic Speed Controllers (ESCs). This provides a redundant or alternative power source for the 5V rail, particularly useful in secondary system testing or when the main battery-fed regulator is not active.
+
+In the second stage, a linear regulator (LDO) is used to derive a clean 3.3V rail from the 5V supply. This 3.3V rail powers sensitive components such as the microcontroller and sensor modules.
+
+\subsection{Noise and Signal Integrity}
+
+Switching regulators, while efficient, introduce high-frequency noise into the power supply. To mitigate this, the two-stage regulation approach isolates noise-sensitive components by using the LDO to provide a cleaner supply.
+
+Decoupling capacitors are placed close to power pins of the microcontroller and sensors to filter high-frequency noise and ensure stable voltage levels during transient load conditions.
+
+This is particularly important for the IMU, where power supply noise can directly affect measurement accuracy and degrade estimation performance.
+
+\subsection{Power Distribution}
+
+The regulated power rails are distributed across the system to support different subsystems, including the microcontroller, sensors, communication interfaces, and peripheral modules.
+
+Careful routing and grounding practices are followed to minimize voltage drops and electromagnetic interference. Analog and digital components are supplied through stable rails to ensure consistent operation under dynamic load conditions.
+
+\subsection{Design Considerations}
+
+The power system is designed to balance efficiency, stability, and simplicity. The use of a switching regulator ensures efficient energy conversion, while the LDO provides clean power for critical components.
+
+Future iterations of the hardware may incorporate additional power monitoring and protection mechanisms, such as current sensing and fault detection, to enhance system reliability.
+
+Overall, the power management subsystem plays a crucial role in ensuring the stability and accuracy of the Vayu flight control system by providing reliable and low-noise power to all components.

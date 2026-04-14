@@ -1,0 +1,65 @@
+\section{System Overview}
+\label{sec:hw_overview}
+
+The hardware platform for the Vayu flight control stack is designed as an integrated embedded system that supports real-time sensing, computation, and actuation. It brings together a microcontroller unit, sensor suite, communication interfaces, actuator outputs, and power management circuitry into a cohesive and extensible design.
+
+At the core of the system lies a microcontroller-based processing unit, which interfaces with multiple peripherals to acquire sensor data, execute control algorithms, and generate actuator signals. The sensor subsystem includes an inertial measurement unit (IMU) for high-frequency motion sensing, along with support for additional sensors such as barometers and GPS modules for enhanced state estimation.
+
+The system provides multiple communication interfaces to enable interaction with external components. These include serial communication for radio control input and telemetry, as well as expansion interfaces such as I2C and SPI for connecting additional peripherals. Dedicated connectors are provided to facilitate modular integration of sensors and external devices.
+
+Actuation is achieved through timer-driven PWM outputs, which are routed to electronic speed controllers (ESCs) for motor control. The design supports multi-rotor configurations and ensures precise timing required for stable flight control.
+
+The power subsystem is designed to efficiently regulate input voltage and provide stable supply rails for digital and analog components. A switching regulator is used to generate a 5V rail from the input supply, followed by a linear regulator to produce a clean 3.3V supply for sensitive components such as the microcontroller and sensors.
+
+Figure~\ref{fig:hardware_overview} illustrates the high-level organization of the hardware system, highlighting the interaction between major subsystems.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        block/.style={draw, rectangle, minimum width=2.6cm, minimum height=0.7cm, align=center, fill=white, font=\tiny, rounded corners=2pt},
+        mcu_block/.style={draw, rectangle, minimum width=3.8cm, minimum height=1.8cm, align=center, fill=yellow!10, font=\small\bfseries, rounded corners=2pt},
+        arrow/.style={-Latex, thick},
+        bus/.style={font=\fontsize{5}{6}\selectfont\itshape, color=gray}
+    ]
+
+    % MCU Core (STM32F401RE)
+    \node[mcu_block] (mcu) {STM32F401RE\\(ARM Cortex-M4)};
+
+    % Sensors Block (Left)
+    \node[block, above left=0.4cm and 1.8cm of mcu] (imu) {BMX160 (IMU/Mag)\\BMP180 (Baro)};
+    \node[block, left=1.2cm of mcu] (gps) {GPS Module};
+    
+    % Input/Control (Bottom Left)
+    \node[block, below left=0.4cm and 1.8cm of mcu] (rc) {Radio Receiver\\(iBus/PPM)};
+
+    % Storage & Debug (Top)
+    \node[block, above=1.0cm of mcu, xshift=-1.8cm] (sd) {MicroSD Card\\(Logging)};
+    \node[block, above=1.0cm of mcu, xshift=1.8cm] (swd) {SWD Header\\(Debug)};
+
+    % Expansion & Peripherals (Right)
+    \node[block, right=1.8cm of mcu] (expansion) {Expansion Ports\\(SPI, I2C, UART)};
+    \node[block, above=0.5cm of expansion] (esc) {PWM Headers\\(ESC/Servo)};
+    \node[block, below=0.5cm of expansion] (feedback) {Buzzer \& RGB LED};
+
+    % Power System (Bottom)
+    \node[block, below=0.8cm of mcu, fill=orange!10] (power) {Power Management\\(TPS562200 → 5V/3V3)};
+
+    % Connections
+    \draw[arrow] (imu.east) -- ([yshift=0.4cm]mcu.west) node[midway, bus, above] {I2C};
+    \draw[arrow] (gps.east) -- ([yshift=0.15cm]mcu.west) node[midway, bus, below] {UART};
+    \draw[arrow] (rc.east) -- ([yshift=-0.4cm]mcu.west) node[midway, bus, below] {UART};
+    
+    \draw[arrow] (mcu.east) -- (expansion.west) node[midway, bus, above] {SPI/I2C/UART};
+    \draw[arrow] (mcu.east) -- ([yshift=0.3cm]esc.west) node[midway, bus, above] {PWM};
+    \draw[arrow] (mcu.east) -- ([yshift=-0.3cm]feedback.west) node[midway, bus, below] {GPIO/PWM};
+
+    \draw[arrow] (mcu.north) -- ([xshift=-0.2cm]sd.south) node[midway, bus, left] {SDIO};
+    \draw[arrow] (mcu.north) -- ([xshift=0.2cm]swd.south) node[midway, bus, right] {SWD};
+    \draw[arrow] (power.north) -- (mcu.south) node[midway, bus, right] {3V3/5V};
+
+    \end{tikzpicture}
+    \caption{Detailed hardware architecture based on the Vayu v0.0.3 schematics, illustrating the integration of the STM32F401RE MCU, sensor suite, and power regulation stages.}
+    \label{fig:hardware_overview}
+\end{figure}
+
+This hardware architecture is designed to support the layered software structure introduced in Chapter~\ref{chap:architecture}. The microcontroller and peripherals are abstracted through NavHAL, while the deterministic execution requirements are enabled by the underlying hardware capabilities such as timers, interrupts, and communication interfaces. This alignment between hardware and software ensures efficient and predictable system operation.

@@ -1,0 +1,93 @@
+.container {
+  padding: 4rem 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.headerArea {
+  text-align: center;
+  margin-bottom: 5rem;
+}
+
+.headerArea h1 {
+  font-size: 3.5rem;
+  background: linear-gradient(135deg, #00e5ff, #0077ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1rem;
+}
+
+.headerArea p {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+}
+
+.techSection {
+  margin-bottom: 5rem;
+  padding: 2rem;
+  background: var(--bg-elevated);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.techSection h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #fff;
+  border-bottom: 1px solid rgba(0, 229, 255, 0.2);
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}
+
+.techSection p {
+  color: var(--text-secondary);
+  line-height: 1.7;
+  font-size: 1.05rem;
+}
+
+.layers {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.layerCard {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 1.5rem;
+  border-radius: 8px;
+  border-left: 4px solid var(--accent-cyan);
+}
+
+.layerCard h3 {
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.flowDiagram {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(0, 119, 255, 0.05);
+  padding: 2rem;
+  border-radius: 8px;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.flowNode {
+  background: linear-gradient(135deg, #111, #222);
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 229, 255, 0.4);
+  font-weight: bold;
+  text-align: center;
+  flex: 1;
+  min-width: 120px;
+}
+
+.flowArrow {
+  color: var(--accent-cyan);
+  font-size: 1.5rem;
+  font-weight: bold;
+}

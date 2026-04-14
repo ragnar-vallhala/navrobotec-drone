@@ -1,65 +1,89 @@
-import Image from "next/image";
+import Link from 'next/link';
+import styles from './page.module.css';
+import DroneModel from '../components/DroneModel';
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <div className={styles.container}>
+      {/* Hero Section */}
+      <section className={styles.hero}>
+        <div className={styles.heroBackground}></div>
+        <DroneModel />
+
+        <div className={styles.heroContent}>
+          <h1 className={styles.title}>
+            <span>Mastering Autonomy</span>
+            <span>With</span>
+            <span className={styles.greyText}>Vayu Stack.</span>
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className={styles.subtext}>
+            The only indigenous drone flight control system that gives you the keys to the hardware. Built from the silicon up for infinite reliability and scale. Don't rent your autonomy, own it.
           </p>
+          <div className={styles.ctaGroup}>
+            <Link href="/docs" className={styles.primaryBtn}>Documentation</Link>
+            <Link href="/contact" className={styles.secondaryBtn}>Contact Us &rarr;</Link>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      {/* Problem Section */}
+      <section className={styles.problem}>
+        <div className={styles.sectionHeader}>
+          <h2>The Problem with Modern UAVs</h2>
         </div>
-      </main>
+        <div className={styles.grid2}>
+          <div className={styles.card}>
+            <h3>Foreign Stack Dependency</h3>
+            <p>Relying on external flight stacks makes local debugging impossible and creates enormous security vulnerabilities for defense platforms.</p>
+          </div>
+          <div className={styles.card}>
+            <h3>Bloated Complexity</h3>
+            <p>Legacy systems suffer from deep complexity, lacking the necessary control to effectively implement modern hardware acceleration.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Product Highlights */}
+      <section className={styles.highlights}>
+        <div className={styles.sectionHeader}>
+          <h2>Capabilities.</h2>
+        </div>
+        <div className={styles.grid3}>
+          <div className={styles.highlightCard}>
+            <div className={styles.highlightIcon}>⚡</div>
+            <h3>Lock-free Execution</h3>
+            <p>Minimizes interrupt jitter with deterministic SPSC queues.</p>
+          </div>
+          <div className={styles.highlightCard}>
+            <div className={styles.highlightIcon}>🧠</div>
+            <h3>Cascaded PID</h3>
+            <p>High-frequency precision control across both angle and rate loops.</p>
+          </div>
+          <div className={styles.highlightCard}>
+            <div className={styles.highlightIcon}>🛡️</div>
+            <h3>Robust Failsafes</h3>
+            <p>Designed with hardware interlocks and RC disruption recovery.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Why Now & Traction */}
+      <section className={styles.traction}>
+        <div className={styles.sectionHeader}>
+          <h2>Why Now?</h2>
+          <p className={styles.mutedText}>Timeline</p>
+        </div>
+        <div className={styles.timeline}>
+          <div className={styles.timelineItem}>
+            <h4>Explosive Drone Growth</h4>
+            <p>The global push for sovereign autonomy platforms demands an independent tech stack.</p>
+          </div>
+          <div className={styles.timelineItem}>
+            <h4>Prototype Status</h4>
+            <p>Currently deep in hardware validation and flight testing on STM32F4-based avionics.</p>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

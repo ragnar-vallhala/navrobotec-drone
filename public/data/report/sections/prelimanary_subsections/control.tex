@@ -1,0 +1,75 @@
+\section{Control}
+\label{sec:control}
+
+Control systems are responsible for regulating the behavior of a system to achieve desired performance objectives. In embedded flight systems, control algorithms use estimated system states—such as orientation, angular velocity, and position—to compute actuator commands that stabilize and guide the vehicle.
+
+\subsection{Feedback Control}
+
+Most embedded control systems operate using \textit{feedback control}, where the current state of the system is continuously measured and compared against a desired reference. The difference between the desired state and the measured state, known as the \textit{error}, is used to compute corrective actions.
+
+Feedback control enables the system to compensate for disturbances, model uncertainties, and sensor noise, making it essential for stable operation in dynamic environments.
+
+\subsection{Proportional-Integral-Derivative (PID) Control}
+
+One of the most widely used control strategies in embedded systems is the Proportional-Integral-Derivative (PID) controller. A PID controller computes the control input based on three components:
+
+\begin{itemize}
+    \item \textbf{Proportional (P)}:  
+    Produces an output proportional to the current error. It provides immediate corrective action but may lead to steady-state error.
+
+    \item \textbf{Integral (I)}:  
+    Accumulates the error over time to eliminate steady-state error. However, excessive integral action can lead to overshoot and instability.
+
+    \item \textbf{Derivative (D)}:  
+    Responds to the rate of change of the error, providing damping and improving system stability. It is sensitive to noise and often requires filtering.
+\end{itemize}
+
+The control input \( u(t) \) is given by:
+
+\[
+u(t) = K_p e(t) + K_i \int_{0}^{t} e(\tau)\,d\tau + K_d \frac{de(t)}{dt}
+\]
+
+where \( e(t) \) is the error and \( K_p, K_i, K_d \) are the controller gains.
+
+\subsection{Cascaded Control Architecture}
+
+In flight control systems, a single control loop is often insufficient to achieve stable and responsive behavior. Instead, a \textit{cascaded control architecture} is used, where multiple control loops operate at different levels.
+
+A typical structure consists of:
+
+\begin{itemize}
+    \item \textbf{Outer Loop (Angle Control)}:  
+    Regulates the desired orientation (roll, pitch, yaw) by computing target angular rates.
+
+    \item \textbf{Inner Loop (Rate Control)}:  
+    Regulates angular velocity using gyroscope measurements and generates actuator commands.
+\end{itemize}
+
+The inner loop operates at a higher frequency and provides fast response, while the outer loop operates at a lower frequency and ensures stability with respect to the desired orientation.
+
+\subsection{Actuator Command Generation}
+
+The outputs of the control system must be translated into actuator commands. In multi-rotor systems, this involves mapping control inputs (e.g., roll, pitch, yaw, and thrust) to individual motor outputs through a process known as \textit{motor mixing}.
+
+This mapping ensures that the combined effect of all actuators produces the desired forces and torques on the vehicle.
+
+\subsection{Practical Considerations}
+
+In real-world embedded systems, several practical factors influence control performance:
+
+\begin{itemize}
+    \item \textbf{Sampling Rate}:  
+    Control loops must run at sufficiently high frequencies to ensure responsiveness and stability.
+
+    \item \textbf{Noise and Filtering}:  
+    Sensor noise affects derivative terms and requires filtering techniques to maintain stability.
+
+    \item \textbf{Saturation}:  
+    Actuator limits can lead to saturation, which may cause integral windup and degraded performance.
+
+    \item \textbf{Tuning}:  
+    Proper tuning of controller gains is essential for achieving desired performance and stability.
+\end{itemize}
+
+Designing an effective control system requires balancing responsiveness, stability, and robustness under varying operating conditions. These principles form the foundation for the control strategies implemented in embedded flight systems.

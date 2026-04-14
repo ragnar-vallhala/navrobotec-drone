@@ -1,0 +1,115 @@
+\section{Coordinate System}
+\label{sec:coordinate}
+
+In embedded control systems, particularly in aerial robotics, the representation of position, orientation, and motion is fundamentally dependent on the choice of coordinate systems. A clear definition of coordinate frames and their transformations is essential for accurate state estimation and control.
+
+\subsection{Reference Frames}
+
+A \textit{reference frame} defines a coordinate system with respect to which the position and orientation of an object are measured. In flight control systems, two primary reference frames are commonly used:
+
+\begin{itemize}
+    \item \textbf{Inertial Frame (World Frame)}:  
+    A fixed reference frame, typically aligned with the Earth. In many applications, the North-East-Down (NED) convention is used, where:
+    \begin{itemize}
+        \item X-axis points toward the North
+        \item Y-axis points toward the East
+        \item Z-axis points downward
+    \end{itemize}
+    
+    \item \textbf{Body Frame}:  
+    A moving reference frame attached to the vehicle. Its axes are defined relative to the drone:
+    \begin{itemize}
+        \item X-axis points forward
+        \item Y-axis points to the right
+        \item Z-axis points downward
+    \end{itemize}
+\end{itemize}
+
+The body frame moves and rotates with the vehicle, while the inertial frame remains fixed. Sensor measurements are typically obtained in the body frame, whereas navigation and control objectives are often defined in the inertial frame.
+
+\subsection{Coordinate Transformations}
+
+To relate quantities between different frames, coordinate transformations are required. These transformations are typically represented using rotation matrices or equivalent representations. A rotation matrix \( R \in SO(3) \) describes the orientation of the body frame with respect to the inertial frame and allows vectors to be transformed between frames.
+
+If \( \mathbf{v}_b \) represents a vector in the body frame, and \( \mathbf{v}_i \) represents the same vector in the inertial frame, then:
+
+\[
+\mathbf{v}_i = R \, \mathbf{v}_b
+\]
+
+These transformations are essential for interpreting sensor data and applying control laws in a consistent reference frame.
+
+\subsection{Attitude Representation}
+
+The orientation of a rigid body in three-dimensional space, referred to as its \textit{attitude}, can be represented using several methods. The most common representations include Euler angles, rotation matrices, and quaternions.
+
+\begin{itemize}
+    \item \textbf{Euler Angles}:  
+    Orientation is described using three sequential rotations, typically roll, pitch, and yaw. While intuitive, Euler angles suffer from singularities (gimbal lock) and are not well-suited for continuous rotational dynamics.
+
+    \item \textbf{Rotation Matrices}:  
+    A 3×3 orthonormal matrix representing orientation. Rotation matrices are free from singularities but require more computational resources and must maintain orthogonality.
+
+    \item \textbf{Quaternions}:  
+    A compact and numerically stable representation of orientation using four parameters. Quaternions avoid singularities and are widely used in real-time systems for attitude estimation and control.
+\end{itemize}
+
+In practical flight control systems, quaternions are commonly used for internal computations due to their stability and efficiency, while Euler angles may be used for interpretation and user interaction.
+
+\subsection{Relevance to Control Systems}
+
+Accurate representation of coordinate frames and attitude is critical for transforming sensor measurements into meaningful state estimates. For example, inertial measurements obtained from an IMU in the body frame must be transformed into the inertial frame for tasks such as stabilization and navigation.
+
+Similarly, control algorithms often compute desired orientations or angular rates in a specific frame, requiring consistent transformation between reference frames. Errors in these transformations can lead to incorrect state estimation and unstable control behavior.
+
+Thus, a well-defined coordinate system framework forms the foundation for sensor fusion, state estimation, and control in embedded flight systems. Figure~\ref{fig:coordinate_frames} illustrates the relationship between the fixed inertial frame and the drone's body frame, along with the convention for Euler angle rotations.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        % Scaled down 3D perspective
+        x={(0.7cm,-0.15cm)}, y={(0.3cm,0.4cm)}, z={(0cm,0.85cm)},
+        >=Stealth,
+        axis/.style={->, thick},
+        inertial/.style={color=primary, densely dashed},
+        body/.style={color=secondary, thick},
+        rotation/.style={->, color=gray!80, thick, font=\tiny}
+    ]
+
+    % Inertial Frame (NED) - On the Left
+    \begin{scope}[shift={(0,0,0)}]
+        \draw[axis, inertial] (0,0,0) -- (2.5,0,0) node[anchor=north east] {$X_i$ (North)};
+        \draw[axis, inertial] (0,0,0) -- (0,2.5,0) node[anchor=north west] {$Y_i$ (East)};
+        \draw[axis, inertial] (0,0,0) -- (0,0,-2.5) node[anchor=south] {$Z_i$ (Down)};
+        \node[anchor=north east, color=primary, font=\tiny\bfseries] at (1.5,0,0.5) {Inertial Frame (NED)};
+    \end{scope}
+
+    % Body Frame (On the Right, side-by-side)
+    \begin{scope}[shift={(7.5,0,0)}, rotate around z=30, rotate around y=-75, rotate around x=120]
+        % Drone Body Proxy
+        \draw[fill=secondary!10, opacity=0.3] (-1.2,-0.6,-0.3) rectangle (1.2,0.6,0.3);
+        
+        % Body Axes
+        \draw[axis, body] (0,0,0) -- (4,0,0) node[anchor=south west] {$X_b$ (Forward)};
+        \draw[axis, body] (0,0,0) -- (0,3.2,0) node[anchor=north west] {$Y_b$ (Right)};
+        \draw[axis, body] (0,0,0) -- (0,0,3.2) node[anchor=north east] {$Z_b$ (Down)};
+        \node[anchor=south, color=secondary, font=\tiny\bfseries] at (0,0,4.5) {Body Frame};
+        
+        % Rotations
+        \begin{scope}[canvas is yz plane at x=2.0]
+            \draw[rotation] (1.0,0) arc (0:270:1.0) node[pos=0.5, anchor=west, xshift=2pt] {Roll ($\phi$)};
+        \end{scope}
+
+        \begin{scope}[canvas is xz plane at y=1.6]
+            \draw[rotation] (1.0,0) arc (0:270:1.0) node[pos=2.3, anchor=south, yshift=6pt] {Pitch ($\theta$)};
+        \end{scope}
+
+        \begin{scope}[canvas is xy plane at z=1.8]
+            \draw[rotation] (1.0,0) arc (0:270:1.0) node[pos=0.5, anchor=east, xshift=-2pt] {Yaw ($\psi$)};
+        \end{scope}
+    \end{scope}
+
+    \end{tikzpicture}
+    \caption{Refined 3D coordinate systems showing the Inertial (NED) and Body frames side-by-side.}
+    \label{fig:coordinate_frames}
+\end{figure}

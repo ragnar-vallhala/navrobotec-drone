@@ -1,0 +1,43 @@
+\section{Communication Interfaces}
+\label{sec:hw_comm}
+
+The Vayu hardware platform incorporates multiple communication interfaces to support interaction with sensors, external modules, and ground control systems. These interfaces are selected to balance data rate, reliability, and system complexity, while enabling modular expansion.
+
+\subsection{UART Interfaces}
+
+Universal Asynchronous Receiver-Transmitter (UART) interfaces are used for communication with external modules requiring serial data exchange. In the current system, UART is primarily used for:
+
+\begin{itemize}
+    \item \textbf{Radio Control Input}:  
+    The radio receiver communicates using the iBus protocol over UART, providing pilot commands for roll, pitch, yaw, and thrust.
+
+    \item \textbf{GPS Module}:  
+    GPS data is received over UART, delivering position and velocity information at lower update rates.
+
+    \item \textbf{Telemetry and Debugging}:  
+    UART interfaces are also used for transmitting system data to external devices for monitoring, logging, and debugging.
+\end{itemize}
+
+UART is chosen for these applications due to its simplicity, low overhead, and wide compatibility with external devices.
+
+\subsection{I2C Interface}
+
+The Inter-Integrated Circuit (I2C) interface is used for communication with low- to moderate-speed peripherals. In the Vayu system, I2C is used to interface with sensors such as the IMU and barometric pressure sensor.
+
+The shared bus structure of I2C allows multiple devices to be connected using a minimal number of wires, making it suitable for compact embedded designs. However, its relatively lower data rate compared to SPI is considered during system design to ensure it meets the timing requirements of the application.
+
+\subsection{SPI Interface}
+
+The Serial Peripheral Interface (SPI) provides high-speed, full-duplex communication and is used for peripherals that require faster data transfer. In the system, SPI is utilized for components such as external storage (e.g., microSD card) and may also be used for high-speed sensor interfacing.
+
+SPI offers higher throughput and lower latency compared to I2C, making it suitable for applications involving large data transfers or high-frequency sampling.
+
+\subsection{Debug and Programming Interface}
+
+A Serial Wire Debug (SWD) interface is provided for programming and debugging the microcontroller. This interface enables firmware development, real-time debugging, and system diagnostics during both development and testing phases.
+
+\subsection{Design Considerations}
+
+The communication architecture is designed to support concurrent data exchange across multiple interfaces. Careful allocation of peripherals ensures that time-critical communication, such as IMU data acquisition and control input, does not conflict with lower-priority tasks like telemetry or logging.
+
+Additionally, the system exposes communication interfaces through dedicated connectors, enabling easy integration of external modules and future expansion. This aligns with the modular design philosophy of the Vayu platform.

@@ -1,0 +1,94 @@
+\section{Sensor}
+\label{sec:sensor}
+
+Sensors form the primary interface between an embedded system and the physical environment. In aerial robotics and embedded control systems, sensors provide measurements of physical quantities such as acceleration, angular velocity, magnetic field, pressure, and position. These measurements are essential for estimating the state of the system and enabling closed-loop control.
+
+\subsection{Types of Sensors}
+
+Flight control systems typically rely on a combination of sensors, each providing complementary information:
+
+\begin{itemize}
+    \item \textbf{Inertial Measurement Unit (IMU)}:  
+    An IMU consists of accelerometers and gyroscopes. Accelerometers measure linear acceleration, including the effect of gravity, while gyroscopes measure angular velocity. IMUs provide high-frequency data and are fundamental for attitude estimation and stabilization.
+
+    \item \textbf{Magnetometer}:  
+    Measures the Earth's magnetic field and is commonly used for heading (yaw) estimation. It helps correct long-term drift in orientation estimates derived from gyroscopes.
+
+    \item \textbf{Barometer}:  
+    Measures atmospheric pressure and is used to estimate altitude. It provides relatively low-frequency but stable altitude information.
+
+    \item \textbf{Global Positioning System (GPS)}:  
+    Provides global position and velocity estimates. GPS measurements are typically low-frequency and subject to noise and delay but are essential for navigation.
+
+\end{itemize}
+
+Each sensor has its own characteristics in terms of accuracy, noise, update rate, and reliability. As a result, no single sensor can provide a complete and accurate estimate of the system state.
+
+\subsection{Sensor Characteristics}
+
+Sensor measurements are inherently imperfect and are affected by various sources of error:
+
+\begin{itemize}
+    \item \textbf{Noise}:  
+    Random variations in sensor readings, often modeled as stochastic processes. Noise limits the precision of measurements and must be filtered.
+
+    \item \textbf{Bias}:  
+    A constant or slowly varying offset in sensor output. For example, gyroscope bias can lead to drift in orientation estimation over time.
+
+    \item \textbf{Scale Factor Errors}:  
+    Deviations in the proportionality between the measured signal and the actual physical quantity.
+
+    \item \textbf{Drift}:  
+    Accumulated error over time, particularly significant in integration-based measurements such as those from gyroscopes.
+
+\end{itemize}
+
+Understanding these characteristics is essential for designing reliable estimation and control algorithms.
+
+\subsection{Sensor Fusion}
+
+Due to the limitations of individual sensors, modern embedded systems employ \textit{sensor fusion} techniques to combine measurements from multiple sources and obtain a more accurate and robust estimate of the system state.
+
+In flight control systems, sensor fusion typically combines high-frequency IMU data with lower-frequency but more stable measurements such as those from magnetometers, barometers, or GPS. For example, gyroscope measurements provide short-term orientation changes, while accelerometer and magnetometer data help correct long-term drift.
+
+Sensor fusion algorithms aim to balance responsiveness and stability by leveraging the strengths of different sensors. These algorithms may range from simple complementary filters to more advanced techniques such as Kalman filters and nonlinear observers. The general architecture of such a fusion system is illustrated in Figure~\ref{fig:sensor_fusion}.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        node distance=0.8cm and 1.2cm,
+        block/.style={draw, rectangle, minimum width=2.4cm, minimum height=0.8cm, align=center, fill=white, font=\small},
+        sensor/.style={block, fill=primary!10},
+        fusion/.style={block, fill=secondary!20, minimum width=3cm, minimum height=1.5cm, font=\small\bfseries},
+        output/.style={block, fill=gray!10},
+        arrow/.style={draw, thick, ->, >=stealth}
+    ]
+
+    % Sensor Nodes
+    \node[sensor] (imu) {IMU\\(Accel, Gyro)};
+    \node[sensor, below=of imu] (mag) {Magnetometer};
+    \node[sensor, below=of mag] (baro) {Barometer};
+    \node[sensor, below=of baro] (gps) {GPS};
+
+    % Fusion Node (Enlarged to catch arrows)
+    \node[fusion, right=of mag.south east, xshift=1.2cm, yshift=-0.4cm, minimum height=2.5cm] (algo) {Sensor Fusion\\Algorithm\\(EKF / Comp. Filter)};
+
+    % Output Node
+    \node[output, right=of algo] (state) {State Estimate\\(Attitude, Position, Velocity)};
+
+    % Connections (Orthogonal routing)
+    \draw[arrow] (imu.east) -- ++(0.6,0) |- (algo.155);
+    \draw[arrow] (mag.east) -- (algo.west |- mag.east);
+    \draw[arrow] (baro.east) -- (algo.west |- baro.east);
+    \draw[arrow] (gps.east) -- ++(0.6,0) |- (algo.205);
+    
+    \draw[arrow] (algo.east) -- (state.west);
+
+    % Legend/Grouping
+    \draw[dashed, gray] ($(imu.north west)+(-0.3,0.3)$) rectangle ($(gps.south east)+(0.3,-0.3)$);
+    \node[above, font=\tiny\itshape, color=gray] at ($(imu.north)+(0,0.3)$) {Physical Sensors};
+
+    \end{tikzpicture}
+    \caption{Architecture of a sensor fusion system combining disparate data sources into a unified state estimate}
+    \label{fig:sensor_fusion}
+\end{figure}

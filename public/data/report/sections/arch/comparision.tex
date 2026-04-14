@@ -1,0 +1,37 @@
+\section{Comparison}
+\label{sec:comparison}
+
+Vayu is designed with a focus on modularity, hardware independence, and deterministic execution. While several open-source flight control frameworks such as PX4 and ArduPilot provide comprehensive and feature-rich solutions, their architectural design and target use cases differ from the objectives of the Vayu system.
+
+Established platforms like PX4 and ArduPilot are designed to support a wide range of hardware configurations and application scenarios. As a result, they often adopt large, monolithic codebases with extensive feature sets. While this provides flexibility, it can introduce additional complexity, increase resource requirements, and make system-level modifications more challenging.
+
+In contrast, the Vayu architecture emphasizes a lightweight and structured design. By explicitly separating hardware abstraction (NavHAL), execution management (VAIOS), and control logic (Vayu), the system achieves a clear separation of concerns. This enables easier customization, improved maintainability, and tighter control over execution behavior.
+
+Another key distinction lies in execution control. Traditional systems rely on general-purpose RTOS frameworks with complex scheduling mechanisms, whereas Vayu adopts a purpose-driven execution model tailored for embedded control systems. This approach simplifies task management while ensuring deterministic timing for critical control loops.
+
+From a hardware perspective, many existing systems are closely tied to specific microcontroller families or vendor-provided libraries. Vayu addresses this limitation through a dedicated hardware abstraction layer, allowing the same control logic to be deployed across different platforms with minimal changes.
+
+Table~\ref{tab:comparison} summarizes the key differences between the approaches.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|c|c|}
+        \hline
+        \textbf{Aspect} & \textbf{PX4 / ArduPilot} & \textbf{Vayu} \\
+        \hline
+        Architecture & Feature-rich, monolithic & Layered, modular \\
+        \hline
+        Hardware Support & Broad, vendor-linked & Hardware-agnostic (NavHAL) \\
+        \hline
+        Execution Model & General-purpose RTOS & Structured, deterministic (VAIOS) \\
+        \hline
+        Complexity & High & Controlled and minimal \\
+        \hline
+        Customization & Moderate (complex) & High (modular design) \\
+        \hline
+    \end{tabular}
+    \caption{Comparison of Vayu architecture with existing flight control stacks}
+    \label{tab:comparison}
+\end{table}
+
+It is important to note that the objective of Vayu is not to replace existing systems, but to explore a design space that prioritizes simplicity, control over execution, and hardware independence. This makes it particularly suitable for research, rapid prototyping, and systems where fine-grained control over architecture is required.

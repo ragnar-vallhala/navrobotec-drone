@@ -1,0 +1,82 @@
+\section{Real-Time Operating System}
+\label{sec:rtos}
+
+A Real-Time Operating System (RTOS) is a software layer that manages the execution of tasks in an embedded system while ensuring that timing constraints are met. Unlike general-purpose operating systems, which prioritize throughput and user experience, an RTOS is designed to provide predictable and deterministic behavior, making it suitable for time-critical applications such as flight control systems.
+
+In embedded systems, multiple tasks must often be executed concurrently, including sensor data acquisition, state estimation, control computation, and communication. An RTOS provides a structured framework to manage these activities through mechanisms such as task scheduling, synchronization, and inter-task communication. Each task can be assigned a priority and execution constraints, allowing the system to ensure that critical operations are performed within their required deadlines.
+
+One of the core components of an RTOS is the \textit{scheduler}, which determines the order and timing of task execution. Scheduling policies may be cooperative or preemptive. In cooperative scheduling, tasks voluntarily yield control, whereas in preemptive scheduling, higher-priority tasks can interrupt lower-priority ones to ensure timely execution. Preemptive scheduling is commonly used in real-time systems where strict timing guarantees are required.
+
+An RTOS provides synchronization primitives such as mutexes, semaphores, and event flags to coordinate access to shared resources and enable communication between tasks. These mechanisms are essential to prevent issues such as race conditions, deadlocks, and priority inversion in concurrent systems.
+
+Another important feature of RTOS is its support for precise timing operations. Timers and tick-based scheduling allow tasks to be executed periodically at fixed intervals, which is critical for control systems that rely on consistent loop frequencies. For example, flight control systems often require control loops to run at frequencies ranging from hundreds of Hertz to several kilohertz, with minimal timing jitter.
+
+Despite these advantages, RTOS-based systems introduce their own challenges. Improper task design, priority misconfiguration, or excessive context switching can lead to performance degradation and unpredictability. Additionally, traditional RTOS implementations may impose overhead and complexity that are not always necessary for simpler systems.
+
+In the context of embedded control systems, the RTOS serves as the execution backbone, coordinating multiple subsystems while ensuring deterministic behavior. However, achieving the right balance between flexibility, performance, and simplicity requires careful design of the execution model and task structure.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        node distance=0.5cm,
+        task/.style={draw, rectangle, minimum height=0.6cm, font=\tiny\bfseries},
+        isr_style/.style={task, fill=red!20},
+        hp_task/.style={task, fill=primary!20},
+        lp_task/.style={task, fill=secondary!20},
+        time_axis/.style={draw, thick, ->, >=stealth}
+    ]
+
+    % Time Axis
+    \draw[time_axis] (0,0) -- (12,0) node[right, font=\small] {Time};
+    
+    % Guide Lines
+    \draw[dashed, gray!30] (0, 0.4) -- (12, 0.4);
+    \draw[dashed, gray!30] (0, 1.2) -- (12, 1.2);
+    \draw[dashed, gray!30] (0, 2.0) -- (12, 2.0);
+
+    % Task Labels
+    \node[left=0.2cm, font=\scriptsize\bfseries] at (0, 2.0) {ISR};
+    \node[left=0.2cm, font=\scriptsize\bfseries] at (0, 1.2) {High Prio (Task A)};
+    \node[left=0.2cm, font=\scriptsize\bfseries] at (0, 0.4) {Low Prio (Task B)};
+
+    % Scheduling Blocks
+    % Task B starts
+    \node[lp_task, minimum width=1.5cm, anchor=west] at (0, 0.4) {B};
+    
+    % Task A preempts B
+    \node[hp_task, minimum width=2.0cm, anchor=west] at (1.5, 1.2) {A};
+    \draw[->, thick, gray] (1.5, 0.7) -- (1.5, 1.2);
+    
+    % Task A finishes, B resumes
+    \node[lp_task, minimum width=1.0cm, anchor=west] at (3.5, 0.4) {B};
+    
+    % ISR preempts B
+    \node[isr_style, minimum width=0.8cm, anchor=west] at (4.5, 2.0) {ISR};
+    \draw[->, thick, red] (4.5, 0.7) -- (4.5, 2.0);
+    
+    % ISR finishes, B resumes
+    \node[lp_task, minimum width=1.0cm, anchor=west] at (5.3, 0.4) {B};
+    
+    % Task A preempts B again
+    \node[hp_task, minimum width=1.0cm, anchor=west] at (6.3, 1.2) {A};
+    \draw[->, thick, gray] (6.3, 0.7) -- (6.3, 1.2);
+    
+    % ISR preempts A (Nested Preemption)
+    \node[isr_style, minimum width=0.8cm, anchor=west] at (7.3, 2.0) {ISR};
+    \draw[->, thick, red] (7.3, 1.5) -- (7.3, 2.0);
+    
+    % A resumes
+    \node[hp_task, minimum width=0.5cm, anchor=west] at (8.1, 1.2) {A};
+    
+    % B resumes
+    \node[lp_task, minimum width=2.5cm, anchor=west] at (8.6, 0.4) {B};
+
+    % Period markers
+    \draw[|<->|, gray] (1.5, -0.4) -- (6.3, -0.4) node[midway, below, font=\tiny] {Task A Period};
+
+    \end{tikzpicture}
+    \caption{RTOS scheduling timeline illustrating task preemption and periodic execution driven by priority and hardware interrupts}
+    \label{fig:rtos_scheduling}
+\end{figure}
+
+The role of RTOS in structuring system execution and enabling predictable behavior forms a critical component of the overall system architecture. In subsequent chapters, we present our approach to system-level execution management, which builds upon these principles to provide a lightweight and scalable solution tailored for high-performance embedded applications.

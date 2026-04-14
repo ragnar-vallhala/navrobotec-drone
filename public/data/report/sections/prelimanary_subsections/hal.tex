@@ -1,0 +1,53 @@
+\section{Hardware Abstraction Layer}
+\label{sec:hal}
+
+A Hardware Abstraction Layer (HAL) is a software layer that provides a uniform interface between application logic and the underlying hardware. It abstracts the details of microcontroller peripherals, communication interfaces, and hardware-specific configurations, enabling higher-level software components to operate independently of the target platform.
+
+In embedded systems, direct interaction with hardware typically involves low-level operations such as register manipulation, peripheral configuration, and device-specific initialization. While this approach can yield high performance, it results in tightly coupled code that is difficult to maintain, reuse, and port across different hardware platforms. HAL addresses this challenge by encapsulating hardware-specific implementations behind well-defined interfaces.
+
+A typical HAL exposes functionalities such as communication (e.g., I2C, SPI, UART), timing (timers, delays), digital and analog I/O (GPIO, ADC), and actuator control (PWM). These interfaces allow application-level modules to interact with hardware without requiring knowledge of the underlying microcontroller architecture. As a result, the same application logic can be reused across different platforms by modifying only the HAL implementation.
+
+The role of HAL becomes increasingly important in complex systems where multiple peripherals and subsystems must operate in coordination. By providing a structured interface to hardware resources, HAL improves modularity and simplifies system integration. It also enables parallel development, where application logic and hardware-specific implementations can be developed and tested independently.
+
+However, traditional HAL designs often introduce trade-offs. Many implementations are tightly coupled to a specific microcontroller family or vendor ecosystem, limiting portability across heterogeneous platforms. Additionally, overly generic abstractions may incur performance overhead or restrict access to advanced hardware features. In some cases, HAL implementations expose inconsistent interfaces, leading to fragmentation and increased integration complexity.
+
+These limitations highlight the need for a carefully designed abstraction layer that balances portability, performance, and flexibility. An effective HAL should provide consistent and minimal interfaces, while still allowing access to hardware capabilities when required. It should also support scalability across different classes of microcontrollers and system configurations.
+
+In the context of flight control systems, the HAL plays a critical role in isolating control logic, estimation algorithms, and communication modules from hardware-specific details. This separation is essential for enabling portability across different flight controller boards and for simplifying system evolution as hardware platforms change as shown in Figure~\ref{fig:hal_layers}.
+
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        layer/.style={draw, rectangle, minimum width=8cm, minimum height=1cm, align=center, font=\small\bfseries},
+        app_layer/.style={layer, fill=primary!15},
+        hal_layer/.style={layer, fill=secondary!15},
+        hw_layer/.style={layer, fill=gray!15},
+        arrow/.style={draw, thick, ->, >=stealth}
+    ]
+
+    % Layer Nodes
+    \node[app_layer] (app) {Application Layer\\(Flight Control, Navigation, Telemetry)};
+    \node[hal_layer, below=1.2cm of app] (hal) {Hardware Abstraction Layer (HAL)\\ (Unified API: UART, SPI, I2C, PWM, ADC)};
+    \node[hw_layer, below=1.2cm of hal] (hw) {Hardware / Low-Level Driver Layer\\ (MCU Registers, DMA, NVIC, Peripherals)};
+
+    % Abstraction Barrier
+    \draw[thick, dashed, gray!60] (-4.5cm, -1.85cm) -- (4.5cm, -1.85cm) node[right, font=\tiny\itshape, color=gray] {Software Abstraction Barrier};
+
+    % Inter-layer Connections
+    \draw[arrow] ([xshift=-2cm]app.south) -- ([xshift=-2cm]hal.north) node[midway, left, font=\scriptsize] {API Calls};
+    \draw[arrow] ([xshift=2cm]hal.north) -- ([xshift=2cm]app.south) node[midway, right, font=\scriptsize] {Data / Events};
+    
+    \draw[arrow] ([xshift=-1cm]hal.south) -- ([xshift=-1cm]hw.north) node[midway, left, font=\scriptsize] {Reg Access};
+    \draw[arrow] ([xshift=1cm]hw.north) -- ([xshift=1cm]hal.south) node[midway, right, font=\scriptsize] {Interrupts};
+
+    % Side Labels
+    \node[left=0.5cm of app, align=right, font=\tiny\bfseries] {High-Level\\Software};
+    \node[left=0.5cm of hw, align=right, font=\tiny\bfseries] {Physical\\Hardware};
+
+    \end{tikzpicture}
+    \caption{Layered architecture illustrating the role of HAL in decoupling application logic from hardware-specific implementations}
+    \label{fig:hal_layers}
+\end{figure}
+
+The design and implementation of such a structured abstraction layer form a key component of the proposed system. In subsequent chapters, we introduce our approach to hardware abstraction, which aims to provide a lightweight, flexible, and hardware-agnostic interface tailored for high-performance embedded control systems.

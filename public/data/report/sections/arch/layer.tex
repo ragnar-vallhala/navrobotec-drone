@@ -1,0 +1,49 @@
+\section{Layered Architecture}
+\label{sec:layered_arch}
+
+The Vayu system is structured as a layered architecture, where each layer encapsulates a specific set of responsibilities and interacts with adjacent layers through well-defined interfaces. This design promotes modularity, portability, and maintainability, while enabling precise control over system behavior.
+
+At a high level, the architecture is composed of four primary layers:
+
+\begin{itemize}
+    \item \textbf{Hardware Layer}:  
+    This layer consists of the physical components of the system, including the microcontroller, sensors (e.g., IMU, GPS, barometer), and actuators (e.g., motors, servos). It provides the raw interface to the physical world.
+
+    \item \textbf{Hardware Abstraction Layer (NavHAL)}:  
+    NavHAL provides a uniform interface to hardware peripherals such as communication interfaces, timers, GPIO, and sensor drivers. It abstracts hardware-specific details, enabling the upper layers to remain independent of the underlying platform.
+
+    \item \textbf{Execution Layer (VAIOS)}:  
+    VAIOS is responsible for managing system execution, including task scheduling, timing, and coordination between different subsystems. It ensures deterministic behavior by organizing tasks according to their timing and priority requirements.
+
+    \item \textbf{Control Layer (Vayu)}:  
+    The top layer implements the core flight control logic, including sensor fusion, state estimation, control algorithms, and actuator command generation. It operates on abstracted interfaces provided by the lower layers and remains independent of hardware-specific details.
+\end{itemize}
+
+These layers interact in a hierarchical manner, where each layer depends only on the services provided by the layer immediately below it. This separation of concerns allows changes in one layer—such as adapting to new hardware or modifying execution strategies—without affecting the functionality of other layers.
+
+The layered architecture also enables clear data and control flow across the system. Sensor data is acquired at the hardware level, abstracted by NavHAL, processed within the control layer, and translated into actuator commands that propagate back down to the hardware.
+
+Figure~\ref{fig:layered_arch} illustrates the high-level layered structure of the Vayu system.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        layer/.style={draw, rectangle, minimum width=8cm, minimum height=1.2cm, align=center},
+        arrow/.style={->, thick}
+    ]
+
+    \node[layer] (vayu) {Control Layer (Vayu)};
+    \node[layer, below=0.5cm of vayu] (vaios) {Execution Layer (VAIOS)};
+    \node[layer, below=0.5cm of vaios] (hal) {Hardware Abstraction Layer (NavHAL)};
+    \node[layer, below=0.5cm of hal] (hw) {Hardware Layer};
+
+    \draw[arrow] (hw) -- (hal);
+    \draw[arrow] (hal) -- (vaios);
+    \draw[arrow] (vaios) -- (vayu);
+
+    \end{tikzpicture}
+    \caption{Layered architecture of the Vayu flight control system}
+    \label{fig:layered_arch}
+\end{figure}
+
+This layered design provides a clear separation between hardware interaction, execution management, and control logic, forming a scalable and flexible foundation for embedded flight systems.

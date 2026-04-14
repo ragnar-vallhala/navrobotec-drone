@@ -1,0 +1,16 @@
+\chapter{System Architecture}
+\label{chap:architecture}
+This chapter presents the overall system architecture of the Vayu flight control stack. Building upon the foundational concepts introduced in the previous chapter, we now describe how these elements are integrated into a cohesive and structured system.
+
+The architecture is designed with a focus on modularity, hardware independence, and deterministic execution. It organizes the system into well-defined layers, each responsible for a specific aspect of functionality, ranging from low-level hardware interaction to high-level control logic.
+
+In this chapter, we first provide an overview of the system in Section~\ref{sec:overview}, followed by a detailed description of its layered design in Section~\ref{sec:layered_arch}, core components in Section~\ref{sec:component}, data flow in Section~\ref{sec:dataflow}, and execution model in Section~\ref{sec:execution}. We also discuss the key design principles that guided the development of the system in Section~\ref{sec:design} and compare our approach with existing solutions in Section~\ref{sec:comparison}. This structured view establishes a clear understanding of how the Vayu stack operates as an integrated whole.
+
+\input{sections/arch/overview}
+\input{sections/arch/layer}
+\input{sections/arch/component}
+\input{sections/arch/flow}
+\input{sections/arch/execution}
+\input{sections/arch/design}
+\input{sections/arch/comparision}
+\input{sections/arch/summary}

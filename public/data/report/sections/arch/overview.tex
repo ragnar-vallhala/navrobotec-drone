@@ -1,0 +1,14 @@
+\section{Overview}
+\label{sec:overview}
+
+The Vayu flight control stack is designed as a vertically integrated system that spans multiple layers of abstraction, from low-level hardware interaction to high-level control logic. The primary goal of the architecture is to provide a modular, hardware-agnostic, and efficient framework for developing embedded flight systems, while maintaining strict control over execution behavior and system performance.
+
+At a high level, the system is organized into distinct layers, each responsible for a specific aspect of functionality. The lowest layer consists of the physical hardware, including the microcontroller, sensors, and actuators. Above this lies the Hardware Abstraction Layer (NavHAL), which provides a uniform interface to hardware peripherals, enabling portability across different platforms. The execution layer (VAIOS) manages task scheduling, timing, and system coordination, ensuring deterministic and predictable behavior. On top of this foundation resides the Vayu control stack, which implements state estimation, control algorithms, and actuator command generation.
+
+The system follows a clear data flow pipeline, where sensor measurements are acquired from hardware, processed through estimation algorithms, and used by control modules to compute actuator outputs. This structured flow ensures that each stage of processing is well-defined and isolated, improving both maintainability and system clarity.
+
+A key characteristic of the architecture is the separation of concerns between hardware interaction, execution management, and control logic. This separation allows each layer to evolve independently while maintaining a consistent interface with adjacent layers. As a result, the system can be adapted to new hardware platforms or extended with additional functionality without requiring significant changes to core components.
+
+Furthermore, the architecture is designed with real-time constraints in mind. High-frequency control loops, low-latency sensor processing, and reliable communication are all supported through a combination of efficient abstraction and structured execution.
+
+This overview establishes the fundamental structure of the Vayu system. The following sections provide a detailed breakdown of each layer, the interactions between components, and the design decisions that enable a scalable and high-performance flight control stack.

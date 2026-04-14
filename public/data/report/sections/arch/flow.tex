@@ -1,0 +1,99 @@
+\section{Data Flow}
+\label{sec:dataflow}
+
+The stack implements a deterministic, high-frequency data flow pipeline designed to minimize latency and ensure consistent control performance. Data moves through the system in a structured sequence of sensing, estimation, command processing, and actuation.
+
+\subsection{Data Processing Pipeline}
+
+The core data flow follows a strictly defined path as illustrated in Figure~\ref{fig:data_flow_pipeline}:
+
+\begin{enumerate}
+    \item \textbf{Sensor Acquisition}: Raw measurements are read from the BMX160 IMU and Magnetometer. These values are buffered and low-pass filtered to remove high-frequency noise.
+    \item \textbf{State Estimation}: The filtered measurements are processed by the sensor fusion module (e.g., Mahony filter) to compute the vehicle's current orientation (Roll, Pitch, Yaw).
+    \item \textbf{Command Input Processing}: Concurrently, RC commands are received and decoded from the iBus receiver. These inputs define the desired setpoints for the vehicle's attitude and thrust.
+    \item \textbf{Cascaded PID Control}: The estimated state and reference setpoints are fed into the cascaded control loops. The difference (error) is processed through the outer angle loop and then the inner rate loop to generate torque commands.
+    \item \textbf{Actuator Mapping}: The torque commands are passed to the motor mixer, which calculates the required speed for each individual motor based on the airframe geometry.
+    \item \textbf{Hardware Output}: Final commands are converted into PWM signals and sent to the Electronic Speed Controllers (ESCs).
+\end{enumerate}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        node distance=1cm and 1.2cm,
+        stage/.style={draw, rectangle, minimum width=2.8cm, minimum height=0.8cm, align=center, fill=white, font=\small},
+        arrow/.style={->, thick, >=stealth}
+    ]
+
+    % Stages
+    \node[stage] (sensing) {1. Sensing\\(Raw IMU/Mag)};
+    \node[stage, right=of sensing] (estimation) {2. Estimation\\(Fusion/Filter)};
+    \node[stage, right=of estimation] (control) {3. Control\\(Cascaded PID)};
+    \node[stage, right=of control] (actuation) {4. Actuation\\(Motor Mixing)};
+
+    \node[stage, below=0.8cm of control] (rc) {Command Input\\(iBus Setpoints)};
+
+    % Primary Flow
+    \draw[arrow] (sensing) -- (estimation);
+    \draw[arrow] (estimation) -- (control);
+    \draw[arrow] (control) -- (actuation);
+    \draw[arrow] (rc) -- (control);
+
+    % Feedback Loop (Adjusted vertically to avoid Command Input box)
+    \draw[arrow, dashed] (actuation.south) -- ++(0,-0.5) -- ++(-12.5,0) |- (sensing.south);
+    \node[below, font=\tiny\itshape, color=gray] at ($(sensing.south)+(4.5,-0.6)$) {Physical Feedback Loop};
+
+    \end{tikzpicture}
+    \caption{Sequential data flow pipeline of the Vayu system, from sensor acquisition to physical actuation.}
+    \label{fig:data_flow_pipeline}
+\end{figure}
+
+\subsection{Synchronization and Buffering}
+
+To maintain data integrity across different execution frequencies, Vayu utilizes structured buffers and shared variables managed by VAIOS. For instance, the IMU task updates its buffer at 1 kHz, while the telemetry task may sample this data at 100 Hz. Synchronization holds ensure that the control loops always operate on the most recent and coherent snapshot of the system state, preventing race conditions or data tearing.
+
+The data flow begins with sensor acquisition at the hardware level. Sensors such as the IMU, magnetometer, barometer, and GPS generate measurements of physical quantities, which are accessed through the Hardware Abstraction Layer (NavHAL). These measurements are time-stamped and made available to the higher-level modules in a consistent format.
+
+The acquired sensor data is then processed by the state estimation module. This stage combines measurements from multiple sensors to compute an estimate of the system state, including orientation, angular velocity, and position. High-frequency inertial measurements provide short-term dynamics, while lower-frequency sensors contribute to long-term stability and drift correction.
+
+The estimated state is used by the control module to compute control actions. Based on the desired reference inputs (e.g., target orientation or angular rates), the control system evaluates the error and generates appropriate control signals using cascaded control loops. The inner loops operate on angular velocity, while outer loops regulate orientation.
+
+These control signals are then passed to the motor mixing module, which converts abstract control inputs (roll, pitch, yaw, and thrust) into actuator-specific commands. The resulting outputs are transmitted through NavHAL to the hardware layer, where they are applied to motors or other actuators.
+
+In parallel, the communication module exchanges data with external systems. Telemetry data, including sensor readings and system states, is transmitted outward, while command inputs and configuration updates are received and integrated into the control pipeline.
+
+This flow can be summarized as:
+
+\begin{center}
+\texttt{Sensors → Estimation → Control → Mixing → Actuation}
+\end{center}
+
+Figure~\ref{fig:data_flow} illustrates the end-to-end data flow within the Vayu system.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        block/.style={draw, rectangle, minimum width=3cm, minimum height=1cm, align=center},
+        arrow/.style={->, thick}
+    ]
+
+    \node[block] (sensor) {Sensors};
+    \node[block, right=0.5cm of sensor] (est) {State Estimation};
+    \node[block, right=0.5cm of est] (control) {Control};
+    \node[block, right=0.5cm of control] (mix) {Mixing};
+    \node[block, right=0.5cm of mix] (act) {Actuators};
+
+    \node[block, below=0.5cm of control] (comm) {Communication};
+
+    \draw[arrow] (sensor) -- (est);
+    \draw[arrow] (est) -- (control);
+    \draw[arrow] (control) -- (mix);
+    \draw[arrow] (mix) -- (act);
+
+    \draw[arrow] (comm) -- (control);
+
+    \end{tikzpicture}
+    \caption{Data flow pipeline from sensor acquisition to actuator output}
+    \label{fig:data_flow}
+\end{figure}
+
+This structured data flow ensures a clear separation between different processing stages, enabling modular design and simplifying debugging and system analysis. Each stage operates on well-defined inputs and outputs, allowing independent development and optimization of system components.

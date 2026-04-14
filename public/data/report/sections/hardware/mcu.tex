@@ -1,0 +1,32 @@
+\section{Microcontroller Unit (MCU)}
+\label{sec:mcu}
+
+The Vayu flight control system is built around the STM32F401RE microcontroller, based on the ARM Cortex-M4 architecture. This microcontroller provides a balance between computational capability, peripheral availability, and real-time performance, making it well-suited for embedded flight control applications.
+
+The Cortex-M4 core operates at high clock frequencies and includes a hardware floating - point unit (FPU), which enables efficient execution of mathematical operations required for sensor fusion and control algorithms. This is particularly beneficial for real-time attitude estimation and PID-based control loops.
+
+The microcontroller integrates multiple on-chip memory resources, including Flash for program storage and SRAM for runtime data. These memory resources are sufficient to support the modular architecture of the Vayu stack, including sensor processing, control logic, communication, and logging functionalities.
+
+A key aspect of the MCU selection is the availability of rich peripheral interfaces, which are essential for interfacing with sensors, communication modules, and actuators:
+
+\begin{itemize}
+    \item \textbf{Timers}:  
+    Advanced timer peripherals are used to generate high-resolution PWM signals for motor control. These timers also support precise timing required for deterministic execution of control loops.
+
+    \item \textbf{Communication Interfaces}:  
+    The MCU provides multiple UART, SPI, and I2C interfaces. UART is used for radio control input (iBus) and telemetry, while SPI and I2C are used for sensor interfacing and peripheral expansion.
+
+    \item \textbf{Interrupt System}:  
+    The nested vectored interrupt controller (NVIC) enables low-latency interrupt handling, which is critical for time-sensitive operations such as sensor sampling and task scheduling.
+
+    \item \textbf{Debug Interface}:  
+    A Serial Wire Debug (SWD) interface is provided for programming and debugging, allowing efficient development and testing of the system.
+\end{itemize}
+
+The MCU clocking system is configured using both high-speed and low-speed oscillators. An external high-speed crystal is used for accurate system timing, while a low-speed crystal supports auxiliary timing functions. This configuration ensures stable and precise timing behavior required for real-time control.
+
+From a system architecture perspective, the microcontroller serves as the execution backbone of the Vayu stack. The hardware peripherals are abstracted through the NavHAL layer, enabling portability across different platforms. At the same time, the availability of timers, interrupts, and communication interfaces allows the VAIOS execution layer to implement deterministic scheduling and low-latency task execution.
+
+While the STM32F401RE provides a balanced platform for the current implementation, future iterations of the system are planned to transition to higher-performance microcontrollers such as the STM32H7 series. This transition is motivated by the need for increased computational capability, enhanced peripheral bandwidth, and support for more advanced algorithms such as extended Kalman filtering and multi-sensor fusion.
+
+Overall, the chosen microcontroller platform aligns with the current system requirements while maintaining a clear upgrade path for future scalability.

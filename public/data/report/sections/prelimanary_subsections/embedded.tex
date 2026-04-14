@@ -1,0 +1,145 @@
+\section{Embedded System}
+\label{sec:embedded}
+
+An embedded system is a specialized computing system designed to perform a specific set of functions within a larger system. Unlike general-purpose computing systems, embedded systems are tailored for dedicated tasks and are often tightly coupled with the hardware they control. These systems are commonly found in domains such as robotics, automotive systems, consumer electronics, and aerospace applications.
+
+Embedded systems are characterized by several key properties. First, they are typically \textit{resource-constrained}, operating with limited processing power, memory, and energy availability. This necessitates efficient software design and careful resource management. Second, they often operate under \textit{real-time constraints}, where tasks must be completed within strict timing deadlines to ensure correct system behavior. In control systems such as flight controllers, this includes maintaining consistent control loop frequencies and minimizing timing jitter.
+
+Another important characteristic is \textit{deterministic execution}. Embedded systems are expected to behave predictably under defined conditions, with minimal variation in execution timing. This is particularly critical in safety-sensitive applications, where unpredictable behavior can lead to system instability or failure.
+
+Embedded systems are also \textit{hardware-dependent}, meaning that the software is closely tied to the underlying microcontroller architecture and peripheral interfaces. This tight coupling can make portability across different hardware platforms challenging without appropriate abstraction layers.
+
+Finally, embedded systems are often designed for \textit{continuous operation} and must be robust against faults. They are expected to operate reliably over extended periods, often in constrained or harsh environments, with minimal human intervention.
+
+These characteristics collectively influence the design and implementation of embedded software systems, particularly in applications requiring high reliability and real-time performance.
+
+\subsection{Typical Embedded System Architecture}
+
+A typical embedded system is organized around a microcontroller unit (MCU) that integrates processing, memory, and peripheral interfaces to interact with the physical environment. The architecture is designed to efficiently acquire data from sensors, process it using application-specific logic, and generate outputs to drive actuators, all under strict resource and timing constraints.
+
+At its core, the microcontroller executes program instructions stored in non-volatile memory (Flash), while runtime data is maintained in volatile memory (SRAM). The MCU provides a variety of on-chip peripherals that enable interaction with external components. These include communication interfaces such as I2C, SPI, and UART, general-purpose input/output (GPIO), timers, analog-to-digital converters (ADC), and pulse-width modulation (PWM) units.
+
+Sensors interface with the system through these peripherals, providing measurements of physical quantities such as acceleration, angular velocity, pressure, and position. The embedded software processes this data to estimate system state and compute appropriate control actions. These outputs are then applied to actuators, such as motors and servos, typically through PWM signals or other hardware-driven interfaces.
+
+To support efficient and responsive operation, embedded systems rely on mechanisms such as interrupts and direct memory access (DMA). Interrupts allow the processor to respond to asynchronous events with low latency, while DMA enables high-throughput data transfers without continuous CPU involvement. These mechanisms are essential for maintaining deterministic behavior and meeting real-time requirements.
+
+While this architecture provides a flexible and powerful interface to hardware, it also introduces significant hardware dependency. Software developed for a specific microcontroller is often tightly coupled to its peripheral set, register layout, and communication interfaces. This tight coupling makes portability across different hardware platforms challenging and increases development complexity.
+
+To address these challenges, modern embedded systems adopt structured abstraction layers that decouple application logic from hardware-specific details. This approach enables portability, improves maintainability, and simplifies system design. The concept and role of such abstraction are discussed in the section~\ref{sec:hal} on Hardware Abstraction Layers (HAL).
+
+Figure~\ref{fig:embedded_arch} illustrates the internal architecture and peripheral interconnections within a representative microcontroller unit. It is important to note that this diagram is a high-level representation and is specific to a particular class of MCUs (e.g., STM32). The exact architecture may vary across different microcontroller families.
+
+\begin{figure}[H]
+    \centering
+    \hspace*{-1.5cm}
+    \begin{tikzpicture}[
+        node distance=0.2cm and 0.5cm,
+        block/.style={draw, rectangle, minimum width=1.4cm, minimum height=0.8cm, align=center, fill=white, font=\small},
+        mcu_box/.style={draw, rectangle, minimum width=11.5cm, minimum height=6cm, dashed, label={[shift={(0,-0.6)}]above:\textbf{Microcontroller Unit}}},
+        bus/.style={draw, line width=1pt, <->, color=secondary!80},
+        ext/.style={draw, rectangle, fill=primary!5, minimum width=1.4cm, minimum height=0.8cm, align=center, font=\small}
+    ]
+
+    % MCU Container
+    \node[mcu_box] (soc) {};
+
+    % Internal Components - Top Row (Processing)
+    \node[block, fill=primary!15] (cpu) at ([yshift=-1.2cm]soc.north) {Processor Core};
+    \node[block, left=of cpu] (nvic) {Interrupts};
+    \node[block, right=of cpu] (dma) {DMA Controller};
+
+    % Internal Bus - Horizontal Strip
+    \node[draw, thick, rectangle, minimum width=8.5cm, minimum height=0.5cm, fill=secondary!10, below=0.4cm of cpu] (main_bus) {};
+    \node[font=\small\bfseries, color=secondary] at (main_bus.center) {Internal System Bus (AHB / APB)};
+
+    % Mid Row - Memory and Communication
+    \node[block, below left=0.4cm and -1.5cm of main_bus] (flash) {Flash Memory\\(Code)};
+    \node[block, right=of flash] (sram) {SRAM\\(Data / Stack)};
+    \node[block, right=of sram] (comms) {Communication\\(UART, SPI, I2C)};
+
+    % Bottom Row - Control, Analog and Power
+    \node[block, below=0.4cm of flash] (timers) {Timers / PWM\\(Actuator Ctrl)};
+    \node[block, right=of timers] (analog) {ADC / DAC / GPIO};
+    \node[block, right=of analog] (power) {Power Management\\(LDO / PMIC)};
+
+    % External Components - Far Outside
+    \node[ext, left=2.0cm of main_bus] (sensors) {External Sensors\\(IMU, GPS, Etc.)};
+    \node[ext, right=2.0cm of main_bus] (actuators) {Actuators\\(Motors, Servos)};
+
+    % Interconnections - Internal
+    \draw[bus] (cpu.south) -- (cpu.south |- main_bus.north);
+    \draw[<->, thick] (nvic.east) -- (cpu.west);
+    \draw[bus] (dma.south) -- (dma.south |- main_bus.north);
+    
+    % Mid Row Connections
+    \draw[bus] (flash.north) -- (flash.north |- main_bus.south);
+    \draw[bus] (sram.north) -- (sram.north |- main_bus.south);
+    \draw[bus] (comms.north) -- (comms.north |- main_bus.south);
+
+    % Bottom Row - Orthogonal Routing Around Mid Row Blocks
+    % timers -> bus (via left margin)
+    \draw[bus] (timers.west) -- ++(-0.4cm,0) |- ([yshift=-0.2cm]main_bus.west);
+    
+    % analog -> bus (via gap between sram and comms)
+    \draw[bus] (analog.north) -- ++(0,0.3cm) -- ++(1.0cm, 0) -- ++(0, 0.5cm) -- ([xshift=0.8cm]main_bus.south);
+    
+    % power -> bus (via right margin)
+    \draw[bus] (power.east) -- ++(0.2cm,0) |- ([yshift=-0.2cm]main_bus.east);
+
+    % Interconnections - External (Clean horizontal paths, higher to avoid routes)
+    \draw[->, thick, dashed] (sensors.east) -- (sensors.east -| soc.west);
+    \draw[->, thick, dashed] ([yshift=0.6cm]soc.east) -- (actuators.west);
+    \draw[->, thick, stealth-, dashed] (soc.south) -- ++(0,-0.2) node[below] {VCC / GND (System Power)};
+
+    \end{tikzpicture}
+    \caption{Internal architecture and peripheral interconnections of a representative microcontroller unit}
+    \label{fig:embedded_arch}
+\end{figure}
+
+\subsection{Execution Model}
+
+The execution model of an embedded system defines how software tasks are scheduled and executed over time to interact with hardware and meet system requirements. Unlike general-purpose computing systems, embedded systems must operate under strict timing constraints, where predictable and deterministic execution is essential for correct system behavior.
+
+At the simplest level, embedded systems may follow a \textit{bare-metal} execution model, where the application runs in a continuous loop, often referred to as the superloop. In this model, tasks such as sensor reading, state estimation, control computation, and actuator updates are executed sequentially. While this approach is simple and efficient, it becomes difficult to manage as system complexity increases, especially when multiple tasks with different timing requirements must be handled.
+
+To improve responsiveness, embedded systems rely on \textit{interrupt-driven execution}. Interrupts allow the processor to temporarily suspend the current task and execute a specific handler in response to asynchronous events such as sensor data availability, communication requests, or timer triggers. This mechanism enables low-latency response to critical events and is fundamental to real-time embedded systems.
+
+A key requirement in many embedded applications, particularly in control systems, is \textit{deterministic timing}. Tasks must be executed at well-defined intervals, such as fixed-frequency control loops (e.g., hundreds of Hz to several kHz). Variations in execution timing, known as jitter, can degrade system performance and, in extreme cases, lead to instability.
+
+As system complexity grows, managing multiple concurrent activities using only loops and interrupts becomes increasingly challenging. This leads to the adoption of structured scheduling mechanisms, where tasks are organized based on priority and timing requirements. These systems may implement cooperative or preemptive scheduling to ensure that critical tasks are executed within their deadlines.
+
+Real-time operating systems (RTOS) provide a formal framework for such execution models. They enable task scheduling, synchronization, and resource management in a controlled and predictable manner. RTOS-based systems allow developers to define multiple tasks with specific priorities, ensuring that time-critical operations such as control loops and sensor processing are executed reliably.
+
+The choice of execution model has a direct impact on system performance, responsiveness, and maintainability. In high-performance embedded applications such as flight control systems, a well-designed execution model is essential to ensure stable control, efficient resource utilization, and scalability as system complexity increases. The role of RTOS in enabling such structured execution is discussed in the section~\ref{sec:rtos}.
+
+\subsection{I/O and Peripheral Interfaces}
+
+Input/Output (I/O) and peripheral interfaces form the primary means by which an embedded system interacts with the external world. These interfaces enable the acquisition of sensor data and the transmission of control signals to actuators, making them fundamental to the operation of any embedded control system.
+
+Microcontrollers integrate a variety of on-chip peripherals to support communication and signal processing. Common digital communication interfaces include Inter-Integrated Circuit (I2C), Serial Peripheral Interface (SPI), and Universal Asynchronous Receiver-Transmitter (UART). These interfaces are widely used to connect sensors such as inertial measurement units (IMUs), barometers, and GPS modules, as well as external devices for communication and debugging.
+
+In addition to digital interfaces, microcontrollers provide analog peripherals such as Analog-to-Digital Converters (ADC) and Digital-to-Analog Converters (DAC). ADCs are used to convert analog sensor signals into digital values that can be processed by the system, while DACs (less commonly used in control systems) enable the generation of analog output signals.
+
+General-purpose input/output (GPIO) pins provide flexible digital interfacing capabilities, allowing the system to read binary inputs or control external devices. Timers and pulse-width modulation (PWM) units are particularly important in control applications, where they are used to generate precise timing signals and drive actuators such as motors and servos.
+
+Efficient use of these peripherals often involves hardware features such as interrupts and Direct Memory Access (DMA), which enable low-latency and high-throughput data transfer without excessive CPU intervention. This is especially important in systems that require high-frequency data acquisition and real-time response.
+
+Despite their versatility, peripheral interfaces are inherently hardware-specific. Differences in register layouts, configuration procedures, and peripheral capabilities across microcontroller families introduce significant complexity in software development. As a result, directly interacting with peripherals can lead to tightly coupled and non-portable code.
+
+\subsection{Limitations and Design Challenges}
+
+Despite their efficiency and suitability for dedicated tasks, embedded systems present several inherent limitations and design challenges. These constraints significantly influence system architecture, software design, and overall reliability.
+
+One of the primary limitations of embedded systems is their \textit{resource-constrained nature}. Microcontrollers typically have limited processing capability, memory, and storage compared to general-purpose computing systems. This requires careful optimization of both software and hardware usage to ensure efficient operation without exceeding available resources.
+
+Another critical challenge is meeting \textit{real-time requirements}. Many embedded applications, particularly control systems, depend on precise timing guarantees. Tasks such as sensor acquisition, state estimation, and control computation must be executed within strict deadlines. Any delay or variation in execution timing (jitter) can degrade system performance and may lead to instability in closed-loop systems.
+
+\textit{Hardware dependency} further complicates embedded system development. Software is often tightly coupled to specific microcontroller architectures, peripheral configurations, and register-level implementations. This lack of portability makes it difficult to reuse code across different hardware platforms and increases development effort when adapting systems to new devices.
+
+\textit{Concurrency and synchronization} also pose significant challenges. Embedded systems frequently handle multiple tasks such as communication, sensing, and control simultaneously. Managing these tasks efficiently without introducing race conditions, deadlocks, or priority inversion requires careful system design, particularly in real-time environments.
+
+Another limitation is the difficulty of \textit{debugging and testing}. Embedded systems operate in constrained and often hardware-dependent environments, making traditional debugging techniques less effective. Observability is limited, and reproducing faults—especially those related to timing or concurrency—can be challenging.
+
+Finally, embedded systems must ensure \textit{robustness and reliability}, often operating continuously in real-world conditions with minimal supervision. Fault tolerance, safe failure modes, and recovery mechanisms are essential, particularly in safety-critical applications such as autonomous systems.
+
+These challenges highlight the need for structured system design approaches that improve modularity, portability, and maintainability. Abstraction mechanisms, standardized interfaces, and well-defined execution models play a crucial role in addressing these issues. In particular, hardware abstraction layers provide a means to isolate application logic from hardware-specific complexity, enabling scalable and adaptable system development.

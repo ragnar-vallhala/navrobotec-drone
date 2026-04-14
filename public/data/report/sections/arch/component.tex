@@ -1,0 +1,74 @@
+\section{System Components}
+\label{sec:component}
+
+The stack is composed of a set of functional components that collectively process sensor data, estimate system state, and generate actuator commands. These components are organized to reflect the logical flow of information through the system while maintaining a clear separation of responsibilities.
+ 
+At a high level, the system consists of the following core modules:
+
+\begin{itemize}
+   \item \textbf{Sensor Interface (BMX160)}:  
+    This module initializes and manages the 6-axis IMU (accelerometer and gyroscope) along with the magnetometer. It acquires raw sensor measurements at high frequency ($>1.5$ kHz) and provides time-consistent data to the estimation module. 
+    Future iterations of the system will incorporate redundant IMU configurations to improve reliability and fault tolerance.
+
+    \item \textbf{RC Command Interface (iBus)}:  
+    This module decodes input signals from the radio receiver (e.g., FlySky iBus protocol) and generates pilot-defined setpoints for roll, pitch, yaw, and thrust. These inputs act as external references for the control system. 
+    Support for additional protocols such as PPM and SBUS is planned to improve compatibility with a wider range of receivers.
+
+    \item \textbf{State Estimation (Sensor Fusion)}:  
+    The estimation module processes raw sensor data to compute the vehicle's attitude. Lightweight nonlinear observers, such as Mahony or complementary filters, are employed to fuse gyroscope and accelerometer measurements, ensuring robustness against noise and drift. 
+    The architecture is designed to accommodate more advanced estimation techniques, such as Extended Kalman Filters, in future iterations.
+
+    \item \textbf{Cascaded PID Control}:  
+    The control system is implemented as a cascaded architecture consisting of an outer angle loop and an inner rate loop. The outer loop regulates orientation, while the inner loop regulates angular velocity, enabling fast response and stable control.
+
+    \item \textbf{Actuation and Motor Output}:  
+    This module translates control outputs into actuator-specific commands. It applies a mixing strategy to map roll, pitch, yaw, and thrust commands to individual motor PWM signals, supporting configurations such as X4 multi-rotor systems.
+\end{itemize}
+
+These components operate as a coordinated pipeline within the VAIOS execution environment. Time-critical modules such as sensor acquisition, estimation, and control are executed deterministically, while auxiliary functionalities such as telemetry and monitoring operate asynchronously.
+
+Figure~\ref{fig:system_components} illustrates the logical organization and interaction of these components within the Vayu control stack.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        node distance=1.2cm and 1.5cm,
+        block/.style={draw, rectangle, minimum width=2.6cm, minimum height=0.9cm, align=center, fill=white, font=\small},
+        arrow/.style={->, thick, >=stealth}
+    ]
+
+    % Main Architecture Pipeline
+    \node[block] (fusion) {State\\Estimation};
+    \node[block, left=of fusion, yshift=0.8cm] (bmx) {Sensors\\(BMX160)};
+    \node[block, left=of fusion, yshift=-0.8cm] (rc) {RC Input\\(iBus)};
+    
+    \node[block, right=of fusion] (angle) {Angle Control\\(Outer PID)};
+    \node[block, below=of angle] (rate) {Rate Control\\(Inner PID)};
+    \node[block, below=of rate] (mix) {Motor Mixing\\\& PWM};
+
+    \node[block, below=of fusion, yshift=-0.8cm] (comm) {Telemetry\\\& Monitoring};
+
+    % Connections
+    \draw[arrow] (bmx.east) -- ++(0.4,0) |- (fusion.west);
+    \draw[arrow] (rc.east) -- ++(0.4,0) -| (angle.south west);
+    
+    \draw[arrow] (fusion.east) -- (angle.west);
+    \draw[arrow] (fusion.east) -- ++(0.5,0) |- (rate.west);
+    
+    \draw[arrow] (angle.south) -- (rate.north);
+    \draw[arrow] (rate.south) -- (mix.north);
+    
+    \draw[arrow] (fusion.south) -- (comm.north);
+    \draw[arrow] (rate.west) -- ++(-0.5,0) |- (comm.east);
+
+    % Labels
+    \node[above=0.2cm, font=\tiny\bfseries\itshape, color=gray] at (bmx.north) {Inputs};
+    \node[above=0.2cm, font=\tiny\bfseries\itshape, color=gray] at (angle.north) {Control Loop};
+    \node[right=0.2cm, font=\tiny\bfseries\itshape, color=gray] at (mix.east) {Actuation};
+
+    \end{tikzpicture}
+    \caption{Logical organization and data flow between core components of the Vayu control stack.}
+    \label{fig:system_components}
+\end{figure}
+
+This component-based organization enables a clear separation between sensing, estimation, control, and actuation, forming a scalable and maintainable foundation for embedded flight control systems.

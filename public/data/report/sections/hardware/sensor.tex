@@ -1,0 +1,34 @@
+\section{Sensors}
+\label{sec:hw_sensor}
+
+The Vayu flight control system employs a multi-sensor architecture to obtain the measurements required for state estimation and control. The design combines high-frequency inertial sensing with lower-frequency environmental and positional measurements, enabling both rapid response and long-term stability in estimation.
+
+\subsection{Inertial Measurement Unit (IMU)}
+
+The primary sensing element in the system is the BMX160, which integrates a 3-axis accelerometer, 3-axis gyroscope, and an onboard magnetometer. The IMU is responsible for providing high-frequency motion data required for real-time attitude estimation and stabilization.
+
+The sensor is interfaced with the microcontroller over I2C or SPI and is sampled at rates exceeding $1.5\,\text{kHz}$. This high sampling rate ensures accurate capture of fast rotational dynamics and minimizes latency in the control loop.
+
+In operation, gyroscope measurements provide short-term angular rate information, while accelerometer measurements serve as a gravity reference for long-term correction. These complementary characteristics form the basis for the sensor fusion algorithms used in the system.
+
+\subsection{Barometric Sensor}
+
+A barometric pressure sensor (e.g., BMP180) is used to estimate altitude. Compared to inertial measurements, barometric data is available at lower update rates but provides a relatively stable estimate of vertical position.
+
+While not directly used in high-frequency control loops, barometric measurements contribute to higher-level state estimation and are particularly useful for altitude stabilization and navigation.
+
+\subsection{Global Positioning System (GPS)}
+
+The system includes support for a GPS module to provide global position and velocity information. GPS measurements are typically available at lower frequencies and are subject to noise and latency; however, they are essential for outdoor navigation and position control.
+
+\subsection{Sensor Integration and Design Considerations}
+
+The sensor subsystem operates across multiple frequency domains. High-rate IMU data drives real-time control and short-term state estimation, while lower-rate sensors such as barometers and GPS provide long-term correction and global reference.
+
+Ensuring consistent sampling, low-latency data acquisition, and signal integrity is critical for reliable system performance. In particular, the quality of IMU measurements is strongly influenced by power stability and electrical noise, necessitating careful hardware design and filtering.
+
+The architecture is designed to support future enhancements in sensing capabilities. Planned iterations include the use of dual 6-axis IMUs to provide redundancy and improve robustness against sensor failure. Additionally, a dedicated external magnetometer is considered to improve heading estimation by reducing interference from onboard electronics.
+
+For low-altitude operation, additional sensors such as Time-of-Flight (ToF) range sensors are planned to provide accurate height estimation in the near-ground region, where barometric measurements are less reliable. Optical flow sensors may also be integrated to estimate planar velocity, enabling improved position stability in GPS-denied environments.
+
+These extensions are aligned with the modular design philosophy of the Vayu system, allowing new sensing modalities to be incorporated without requiring fundamental changes to the overall architecture.

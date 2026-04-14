@@ -1,0 +1,91 @@
+.container {
+  padding: 4rem 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.headerArea {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.headerArea h1 {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+}
+
+.gradientText {
+  background: linear-gradient(135deg, #00e5ff, #0077ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.headerArea p {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+}
+
+.section {
+  margin-bottom: 4rem;
+  padding: 2.5rem;
+  background: var(--bg-elevated);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.section h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+  border-bottom: 1px solid rgba(0, 229, 255, 0.2);
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}
+
+.section p {
+  color: var(--text-secondary);
+  line-height: 1.7;
+  font-size: 1.1rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.card {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 2rem;
+  border-radius: 8px;
+  border-top: 3px solid var(--accent-cyan);
+}
+
+.card h3 {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  color: #fff;
+}
+
+.card p {
+  font-size: 0.95rem;
+  color: #aaa;
+}
+
+.mediaPlaceholder {
+  width: 100%;
+  height: 250px;
+  background: linear-gradient(45deg, #111, #222);
+  border: 1px dashed rgba(0, 229, 255, 0.3);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.5rem;
+  color: #555;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
