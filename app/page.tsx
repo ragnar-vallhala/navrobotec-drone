@@ -10,8 +10,24 @@ import HeroVideo from '../components/HeroVideo';
 const fadeInUp = {
   initial: { opacity: 0, y: 30 },
   whileInView: { opacity: 1, y: 0 },
-  transition: { duration: 0.8, ease: "easeOut" },
+  transition: { duration: 0.8, ease: "easeOut" as const },
   viewport: { once: false, amount: 0.3 }
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2,
+      delayChildren: 0.1
+    }
+  }
+};
+
+const itemVariant = {
+  hidden: { opacity: 0, y: 30 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" as const } }
 };
 
 export default function Home() {
@@ -22,19 +38,25 @@ export default function Home() {
 
         {/* Hero Section */}
         <section className={`${styles.section} ${styles.hero}`}>
-          <motion.div className={styles.heroContent} {...fadeInUp}>
+          <motion.div
+            className={styles.heroContent}
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.3 }}
+          >
             <h1 className={styles.title}>
-              <span>Mastering Autonomy</span>
-              <span>With</span>
-              <span className={styles.greyText}>Vayu Stack.</span>
+              <motion.span variants={itemVariant} style={{ display: 'block' }}>Mastering Autonomy</motion.span>
+              <motion.span variants={itemVariant} style={{ display: 'block' }}>With</motion.span>
+              <motion.span variants={itemVariant} className={styles.greyText} style={{ display: 'block' }}>Vayu Stack.</motion.span>
             </h1>
-            <p className={styles.subtext}>
+            <motion.p className={styles.subtext} variants={itemVariant}>
               The only indigenous drone flight control system that gives you the keys to the hardware. Built from the silicon up for infinite reliability and scale.
-            </p>
-            <div className={styles.ctaGroup}>
+            </motion.p>
+            <motion.div className={styles.ctaGroup} variants={itemVariant}>
               <Link href="/docs" className={styles.primaryBtn}>Documentation</Link>
               <Link href="/contact" className={styles.secondaryBtn}>Contact Us &rarr;</Link>
-            </div>
+            </motion.div>
           </motion.div>
         </section>
 
@@ -65,7 +87,7 @@ export default function Home() {
             </motion.div>
             <div className={styles.grid3}>
               <motion.div className={styles.highlightCard} {...fadeInUp}>
-                <div className={styles.highlightIcon}>⚡</div>
+                <div className={styles.highlightIcon}></div>
                 <h3>Deterministic Execution</h3>
                 <p>Minimizes interrupt jitter with lock-free SPSC queues.</p>
               </motion.div>

@@ -1,9 +1,28 @@
+"use client";
+
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import styles from './Navbar.module.css';
 
 export default function Navbar() {
+    const [isScrolled, setIsScrolled] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > window.innerHeight - 80) {
+                setIsScrolled(true);
+            } else {
+                setIsScrolled(false);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        handleScroll();
+
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
     return (
-        <nav className={styles.navbar}>
+        <nav className={`${styles.navbar} ${isScrolled ? styles.navbarScrolled : ''}`}>
             <div className={styles.container}>
                 <Link href="/" className={styles.logo} style={{ display: 'flex', alignItems: 'center' }}>
                     NAVR

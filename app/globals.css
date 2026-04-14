@@ -1,12 +1,12 @@
 /* Global Styles - Premium Dark Aesthetic */
 :root {
-  --bg-primary: #030303;
-  --bg-secondary: #0a0a0a;
-  --bg-elevated: #111111;
-  --text-primary: #f5f5f5;
-  --text-secondary: #888888;
-  --accent-cyan: #00e5ff;
-  --accent-blue: #0077ff;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-elevated: #e9ecef;
+  --text-primary: #121212;
+  --text-secondary: #555555;
+  --accent-cyan: #0088cc;
+  --accent-blue: #0055ff;
 }
 
 html,
