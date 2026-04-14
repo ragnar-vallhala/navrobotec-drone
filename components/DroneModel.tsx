@@ -48,9 +48,39 @@ function Model() {
     });
 
     const group = useRef<THREE.Group>(null);
+    const rotors = useRef<THREE.Object3D[]>([]);
+
+    useEffect(() => {
+        if (obj) {
+            const foundRotors: THREE.Object3D[] = [];
+            obj.traverse((child: THREE.Object3D) => {
+                if (child.name.toLowerCase().includes('rotor') && !child.name.includes('_2_') && child instanceof THREE.Mesh) {
+                    // Compute local center
+                    child.geometry.computeBoundingBox();
+                    const center = new THREE.Vector3();
+                    child.geometry.boundingBox?.getCenter(center);
+
+                    // Shift geometry to local origin
+                    child.geometry.translate(-center.x, -center.y, -center.z);
+
+                    // Adjust mesh position to keep it in place
+                    child.position.add(center);
+
+                    foundRotors.push(child);
+                }
+            });
+            rotors.current = foundRotors;
+        }
+    }, [obj]);
 
     useFrame((state: any) => {
         if (!group.current) return;
+
+        // Rotate rotors
+        rotors.current.forEach((rotor, i) => {
+            // Alternate rotation direction for realism if multiple
+            rotor.rotation.y += (i % 2 === 0 ? 1 : -1) * 0.8;
+        });
 
         const scrollY = window.scrollY;
         const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
@@ -71,21 +101,28 @@ function Model() {
         // Local progress within the segment
         const segmentProgress = (scrollProgress - startState.scroll) / (endState.scroll - startState.scroll);
 
-        // Base floating effect
-        const floatY = Math.sin(state.clock.elapsedTime) * 0.15;
+        // Stabilization effect (High-frequency micro-adjustments)
+        const t = state.clock.elapsedTime;
+        const jitterX = Math.sin(t * 1.2) * 0.015 + Math.cos(t * 0.7) * 0.01;
+        const jitterY = Math.sin(t * 1.5) * 0.02 + Math.cos(t * 0.5) * 0.01;
+        const jitterZ = Math.sin(t * 0.8) * 0.01;
+
+        const jitterRotX = Math.sin(t * 5) * 0.01;
+        const jitterRotY = Math.cos(t * 1.2) * 0.01;
+        const jitterRotZ = Math.sin(t * 1.4) * 0.015;
 
         // Interpolate Position
         group.current.position.set(
-            THREE.MathUtils.lerp(startState.position[0], endState.position[0], segmentProgress),
-            THREE.MathUtils.lerp(startState.position[1], endState.position[1], segmentProgress) + floatY,
-            THREE.MathUtils.lerp(startState.position[2], endState.position[2], segmentProgress)
+            THREE.MathUtils.lerp(startState.position[0], endState.position[0], segmentProgress) + jitterX,
+            THREE.MathUtils.lerp(startState.position[1], endState.position[1], segmentProgress) + jitterY,
+            THREE.MathUtils.lerp(startState.position[2], endState.position[2], segmentProgress) + jitterZ
         );
 
         // Interpolate Rotation
         group.current.rotation.set(
-            THREE.MathUtils.lerp(startState.rotation[0], endState.rotation[0], segmentProgress),
-            THREE.MathUtils.lerp(startState.rotation[1], endState.rotation[1], segmentProgress),
-            THREE.MathUtils.lerp(startState.rotation[2], endState.rotation[2], segmentProgress)
+            THREE.MathUtils.lerp(startState.rotation[0], endState.rotation[0], segmentProgress) + jitterRotX,
+            THREE.MathUtils.lerp(startState.rotation[1], endState.rotation[1], segmentProgress) + jitterRotY,
+            THREE.MathUtils.lerp(startState.rotation[2], endState.rotation[2], segmentProgress) + jitterRotZ
         );
 
         // Interpolate Scale
