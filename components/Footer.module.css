@@ -1,8 +1,8 @@
 .footer {
-  background-color: #050505;
+  background-color: #1a1a2e;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
   padding: 4rem 0 2rem;
-  color: #a0a0a0;
+  color: #f8cba6;
   margin-top: auto;
 }
 
@@ -19,12 +19,25 @@
 .logo {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #fff;
+  color: #ffffff;
   margin-bottom: 1rem;
 }
 
 .logo span {
   color: #00e5ff;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.logoIcon {
+  animation: spin 8s linear infinite;
 }
 
 .description {
@@ -34,7 +47,7 @@
 
 .links h4,
 .contact h4 {
-  color: #fff;
+  color: #ffffff;
   font-size: 1.1rem;
   margin-bottom: 1.2rem;
 }
@@ -49,14 +62,14 @@
 }
 
 .links a {
-  color: #a0a0a0;
+  color: #f8cba6;
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
 .links a:hover,
 .socials a:hover {
-  color: #00e5ff;
+  color: #e94560;
 }
 
 .contact p {
@@ -64,7 +77,7 @@
 }
 
 .socials a {
-  color: #a0a0a0;
+  color: #f8cba6;
   text-decoration: none;
   font-weight: 500;
   transition: color 0.3s ease;

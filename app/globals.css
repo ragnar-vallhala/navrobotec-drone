@@ -1,12 +1,12 @@
 /* Global Styles - Premium Dark Aesthetic */
 :root {
   --bg-primary: #ffffff;
-  --bg-secondary: #f8f9fa;
-  --bg-elevated: #e9ecef;
-  --text-primary: #121212;
-  --text-secondary: #555555;
-  --accent-cyan: #0088cc;
-  --accent-blue: #0055ff;
+  --bg-secondary: #f9f9f9;
+  --bg-elevated: #ffffff;
+  --text-primary: #1a1a2e;
+  --text-secondary: #0f3460;
+  --accent-cyan: #e94560;
+  --accent-blue: #16213e;
 }
 
 html,
@@ -19,7 +19,7 @@ body {
 body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  font-family: var(--font-geist-sans), Arial, sans-serif;
+  font-family: "Courier New", Courier, monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -41,6 +41,8 @@ h5,
 h6 {
   margin: 0;
   font-weight: 700;
+  font-family: "Times New Roman", Times, serif;
+  letter-spacing: -0.02em;
 }
 
 a {

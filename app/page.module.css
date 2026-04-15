@@ -1,5 +1,5 @@
 .main {
-  background-color: #000;
+  background-color: #fff;
   min-height: 100vh;
 }
 
@@ -44,16 +44,49 @@
   display: block;
 }
 
+.titleAccent {
+  font-size: 7rem;
+  color: #fff;
+  font-weight: 800;
+  line-height: 1.6;
+  letter-spacing: 0.5em;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.titleSecondary {
+  font-size: 3rem;
+  color: #aaa;
+  font-weight: 300;
+  line-height: 1.6;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
 .greyText {
   color: #ccc;
+}
+
+.subtextWrapper {
+  height: 2rem;
+  width: 100%;
+  margin-bottom: 3.5rem;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .subtext {
   font-size: 1.25rem;
   color: #ddd;
-  margin-bottom: 3.5rem;
   line-height: 1.6;
-  max-width: 600px;
+  max-width: 100%;
+  font-family: monospace;
+  white-space: nowrap;
+  position: absolute;
+  left: 0;
+  width: 100%;
+  text-align: center;
 }
 
 /* Common Section styles */
@@ -63,10 +96,31 @@
 }
 
 /* Right aligned sections for storytelling variety */
-.problem,
+.problem {
+  justify-content: space-between;
+  text-align: right;
+  gap: 4rem;
+}
+
 .traction {
   justify-content: flex-end;
   text-align: right;
+}
+
+.sectionImageWrapper {
+  flex: 1;
+  max-width: 55%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.sectionImage {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  object-fit: cover;
 }
 
 .sectionContent {
@@ -143,8 +197,6 @@
 /* Timeline */
 .timeline {
   max-width: 800px;
-  border-left: 1px solid rgba(0, 0, 0, 0.1);
-  padding-left: 3rem;
   display: flex;
   flex-direction: column;
   gap: 5rem;
@@ -152,18 +204,6 @@
 
 .timelineItem {
   position: relative;
-}
-
-.timelineItem::before {
-  content: "";
-  position: absolute;
-  left: -3.35rem;
-  top: 0.5rem;
-  width: 12px;
-  height: 12px;
-  background: var(--accent-cyan);
-  border-radius: 50%;
-  box-shadow: none;
 }
 
 .timelineItem h4 {

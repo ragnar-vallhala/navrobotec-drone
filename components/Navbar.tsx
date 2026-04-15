@@ -26,7 +26,7 @@ export default function Navbar() {
             <div className={styles.container}>
                 <Link href="/" className={styles.logo} style={{ display: 'flex', alignItems: 'center' }}>
                     NAVR
-                    <img src="/logo.svg" alt="O" className={styles.logoIcon} style={{ height: '30px', width: 'auto', display: 'block', filter: 'invert(1)', margin: '0 -6px' }} />
+                    <img src="/logo.svg" alt="O" className={styles.logoIcon} style={{ height: '30px', width: 'auto', display: 'block', margin: '0 -6px' }} />
                     BOTEC
                 </Link>
                 <ul className={styles.navLinks}>

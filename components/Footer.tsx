@@ -6,10 +6,11 @@ export default function Footer() {
         <footer className={styles.footer}>
             <div className={styles.container}>
                 <div className={styles.brand}>
-                    <div className={styles.logo} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <img src="/logo.svg" alt="NAVRobotec Logo" style={{ height: '35px', width: 'auto', display: 'block', filter: 'invert(1)' }} />
-                        NAVRobotec
-                    </div>
+                    <Link href="/" className={styles.logo} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+                        NAVR
+                        <img src="/logo.svg" alt="O" className={styles.logoIcon} style={{ height: '35px', width: 'auto', display: 'block', filter: 'invert(1)', margin: '0 -6px' }} />
+                        BOTEC
+                    </Link>
                     <p className={styles.description}>
                         Indigenous autonomous systems and defense stack.
                     </p>
