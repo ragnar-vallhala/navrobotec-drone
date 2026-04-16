@@ -123,7 +123,10 @@ export default function Home() {
         <section className={styles.visionSectionOuter}>
           <div className={styles.standardContainer}>
             <div className={styles.visionHeader}>
-              <h2 className={styles.visionTitle}>Our Focus.</h2>
+              <motion.h2 className={styles.visionTitle} {...fadeInUp}>Our Focus.</motion.h2>
+              <motion.p className={styles.visionDescription} {...fadeInUp} transition={{ delay: 0.2, duration: 0.8 }}>
+                We are engineering the future of autonomous aviation by focusing on the absolute fundamentals: security at the silicon level, deterministic reliability, and sovereign intelligence. Our mission is to eliminate black boxes and foreign dependencies, ensuring total control for every mission.
+              </motion.p>
             </div>
             <div className={styles.visionGrid}>
               {visionCards.map((card, i) => (
@@ -140,38 +143,6 @@ export default function Home() {
                   </div>
                 </motion.div>
               ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Technology Section */}
-        <section className={`${styles.section} ${styles.highlights}`}>
-          <div className={styles.standardContainer}>
-            <motion.div className={styles.sectionHeader} {...fadeInUp}>
-              <h2>Our Technology.</h2>
-            </motion.div>
-            <div className={styles.grid3}>
-              <motion.div className={styles.highlightCard} {...fadeInUp}>
-                <div className={styles.highlightIcon}>
-                  <Cpu size={40} strokeWidth={1.5} />
-                </div>
-                <h3>NavHAL</h3>
-                <p>Bare-metal Hardware Abstraction Layer mapping directly to silicon registers. Minimal latency, zero RTOS overhead.</p>
-              </motion.div>
-              <motion.div className={styles.highlightCard} {...fadeInUp} transition={{ delay: 0.2, duration: 0.8 }}>
-                <div className={styles.highlightIcon}>
-                  <Navigation size={40} strokeWidth={1.5} />
-                </div>
-                <h3>VaiOS</h3>
-                <p>Deterministic Aviation Operating System. Architected for safety-critical real-time intelligence and execution.</p>
-              </motion.div>
-              <motion.div className={styles.highlightCard} {...fadeInUp} transition={{ delay: 0.4, duration: 0.8 }}>
-                <div className={styles.highlightIcon}>
-                  <Layers size={40} strokeWidth={1.5} />
-                </div>
-                <h3>Vayu</h3>
-                <p>The Sovereign Flight Stack. Total control over autonomous navigation, mission planning, and mission-critical logic.</p>
-              </motion.div>
             </div>
           </div>
         </section>
