@@ -809,12 +809,154 @@
   transform: translateX(10px);
 }
 
-@media (max-width: 768px) {
-  .finalCTAContent h2 {
-    font-size: 3rem;
+@media (max-width: 1024px) {
+  .section {
+    padding: 0 4rem;
   }
+
+  .titleAccent {
+    font-size: 5rem;
+    letter-spacing: 0.3em;
+  }
+
+  .titleSecondary {
+    font-size: 2.5rem;
+  }
+
+  .visionGrid {
+    flex-direction: column;
+    height: auto;
+  }
+  .visionCard {
+    height: 35vh;
+    flex: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 0 var(--section-padding-x);
+  }
+
+  .titleAccent {
+    font-size: 3.5rem;
+    letter-spacing: 0.2em;
+    line-height: 1.2;
+  }
+
+  .titleSecondary {
+    font-size: 1.8rem;
+    letter-spacing: 0.15em;
+  }
+
+  .subtext {
+    font-size: 1rem;
+    white-space: normal;
+  }
+
+  .ctaGroup {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  /* Mission Section Mobile */
+  .missionSection {
+    padding: var(--section-padding-y) 0;
+  }
+
+  .quoteAccent {
+    font-size: 5rem;
+    top: 1rem;
+    left: 0;
+  }
+
+  .quoteText {
+    font-size: 1.25rem;
+    line-height: 1.6;
+  }
+
+  .standardContainer {
+    padding: 0 var(--section-padding-x);
+  }
+
+  .visionHeader {
+    margin-bottom: 3rem;
+  }
+
+  .visionTitle {
+    font-size: 2.8rem;
+  }
+
+  .visionDescription {
+    font-size: 1.1rem;
+  }
+
+  .visionCardOverlay {
+    padding: 1.5rem;
+  }
+
+  .visionCardOverlay h3 {
+    font-size: 1.5rem;
+  }
+
+  /* Join Section Mobile */
+  .joinSection {
+    padding: var(--section-padding-y) 0;
+  }
+
+  .sectionHeaderCenter h2 {
+    font-size: 2.5rem;
+  }
+
+  .joinCard {
+    padding: 2.5rem 1.5rem;
+  }
+
+  .joinCard h4 {
+    font-size: 1.8rem;
+  }
+
+  /* Final CTA Mobile */
+  .finalCTA {
+    min-height: 60vh;
+  }
+
+  .finalCTAContent h2 {
+    font-size: 2.5rem;
+  }
+
   .ctaGroupLarge {
     flex-direction: column;
     gap: 2rem;
+  }
+
+  .stackLayer {
+    padding: 0.75rem 1.25rem;
+    gap: 1.25rem;
+  }
+
+  .stackIcon {
+    padding: 0.5rem;
+  }
+
+  .stackInfo h3 {
+    font-size: 1.1rem;
+  }
+
+  .stackInfo p {
+    font-size: 0.85rem;
+  }
+
+  .carouselGroup {
+    gap: 4rem;
+    padding-right: 4rem;
+  }
+
+  .institutionLogo {
+    height: 40px;
+  }
+
+  .startupUpLogo {
+    height: 60px;
   }
 }

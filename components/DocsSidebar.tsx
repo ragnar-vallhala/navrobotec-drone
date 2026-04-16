@@ -12,22 +12,50 @@ interface DocsSidebarProps {
 
 export default function DocsSidebar({ tree }: { tree: DocSection[] }) {
     const pathname = usePathname();
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     return (
-        <aside className={styles.sidebar}>
-            <div className={styles.sidebarContent}>
-                <h3 className={styles.sidebarTitle}>Vayu Technical Guide</h3>
-                <nav className={styles.nav}>
-                    {tree.map((section) => (
-                        <NavItem key={section.slug} section={section} pathname={pathname} depth={0} />
-                    ))}
-                </nav>
-            </div>
-        </aside>
+        <>
+            <button
+                className={`${styles.leftToggle} ${isSidebarOpen ? styles.toggleOpen : ""}`}
+                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                aria-label="Toggle Documentation Navigation"
+            >
+                {isSidebarOpen ? '❮' : '❯'}
+            </button>
+            <aside className={`${styles.sidebar} ${isSidebarOpen ? styles.sidebarOpen : ""}`}>
+                <div className={styles.sidebarContent}>
+                    <h3 className={styles.sidebarTitle}>Vayu Technical Guide</h3>
+                    <nav className={styles.nav}>
+                        {tree.map((section) => (
+                            <NavItem
+                                key={section.slug}
+                                section={section}
+                                pathname={pathname}
+                                depth={0}
+                                onItemClick={() => setIsSidebarOpen(false)}
+                            />
+                        ))}
+                    </nav>
+                </div>
+                {/* Backdrop for mobile */}
+                {isSidebarOpen && <div className={styles.backdrop} onClick={() => setIsSidebarOpen(false)} />}
+            </aside>
+        </>
     );
 }
 
-function NavItem({ section, pathname, depth }: { section: DocSection; pathname: string; depth: number }) {
+function NavItem({
+    section,
+    pathname,
+    depth,
+    onItemClick
+}: {
+    section: DocSection;
+    pathname: string;
+    depth: number;
+    onItemClick: () => void;
+}) {
     const [isOpen, setIsOpen] = useState(true);
     const hasChildren = section.subsections && section.subsections.length > 0;
     const href = section.slug === 'introduction' ? '/docs' : `/docs/${section.slug}`;
@@ -40,6 +68,7 @@ function NavItem({ section, pathname, depth }: { section: DocSection; pathname: 
                     href={href}
                     className={`${styles.navLink} ${isActive ? styles.active : ""}`}
                     style={{ paddingLeft: `${depth * 1 + 1}rem` }}
+                    onClick={onItemClick}
                 >
                     <div className={styles.dot}></div>
                     {section.title}
@@ -60,7 +89,13 @@ function NavItem({ section, pathname, depth }: { section: DocSection; pathname: 
             {hasChildren && isOpen && (
                 <div className={styles.children}>
                     {section.subsections.map((child) => (
-                        <NavItem key={child.slug} section={child} pathname={pathname} depth={depth + 1} />
+                        <NavItem
+                            key={child.slug}
+                            section={child}
+                            pathname={pathname}
+                            depth={depth + 1}
+                            onItemClick={onItemClick}
+                        />
                     ))}
                 </div>
             )}

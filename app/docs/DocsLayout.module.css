@@ -31,7 +31,9 @@
     background: var(--bg-primary);
   }
   .docsContent {
-    padding: 3rem 2rem;
+    padding: 2rem 1.5rem;
     height: auto;
+    position: static;
+    min-height: calc(100vh - 70px);
   }
 }
