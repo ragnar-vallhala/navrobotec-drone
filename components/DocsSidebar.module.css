@@ -1,19 +1,19 @@
 .sidebar {
   width: 300px;
-  height: auto;
-  min-height: calc(100vh - 80px);
+  height: calc(100vh - 80px);
+  position: sticky;
+  top: 80px;
   border-right: 1px solid rgba(255, 255, 255, 0.05);
-  background: var(--color-dark);
+  background: transparent; /* Parent container handles the background */
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
 }
 
 .sidebarContent {
-  position: sticky;
-  top: 80px;
-  height: calc(100vh - 80px);
-  padding: 2rem 1.5rem;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+  height: auto;
+  padding: 2.5rem 1.5rem;
 }
 
 .sidebarTitle {
@@ -118,5 +118,6 @@
     position: static;
     border-right: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--color-dark);
   }
 }
