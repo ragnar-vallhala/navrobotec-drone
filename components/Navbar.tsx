@@ -2,13 +2,20 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import styles from './Navbar.module.css';
 
 export default function Navbar() {
+    const pathname = usePathname();
     const [isScrolled, setIsScrolled] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => {
+            if (pathname !== '/') {
+                setIsScrolled(true);
+                return;
+            }
+
             if (window.scrollY > window.innerHeight - 80) {
                 setIsScrolled(true);
             } else {
@@ -20,7 +27,8 @@ export default function Navbar() {
         handleScroll();
 
         return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+    }, [pathname]);
+
     return (
         <nav className={`${styles.navbar} ${isScrolled ? styles.navbarScrolled : ''}`}>
             <div className={styles.container}>
@@ -32,8 +40,8 @@ export default function Navbar() {
                 <ul className={styles.navLinks}>
                     <li><Link href="/">HOME</Link></li>
                     <li><Link href="/technology">TECHNOLOGY</Link></li>
-                    <li><Link href="/demo">DEMO</Link></li>
                     <li><Link href="/vision">VISION</Link></li>
+                    <li><Link href="/demo">DEMO</Link></li>
                     <li><Link href="/team">TEAM</Link></li>
                     <li><Link href="/docs">DOCS</Link></li>
                 </ul>

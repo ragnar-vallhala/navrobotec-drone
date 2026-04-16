@@ -1,22 +1,26 @@
 .docsContainer {
   display: flex;
   min-height: 100vh;
-  background-color: #000;
-  padding-top: 80px; /* Space for Navbar */
+  background-color: var(--bg-primary);
+  /* Removed padding-top: 80px */
 }
 
 .docsContent {
   flex: 1;
-  padding: 4rem 2rem;
+  padding: 4rem 4rem; /* Reduced from 6rem */
+  padding-top: 100px; /* Navbar offset (80px) + some breathing room */
 }
 
 .innerContent {
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
 }
 
 @media (max-width: 1024px) {
   .docsContainer {
     flex-direction: column;
+  }
+  .docsContent {
+    padding: 3rem 2rem;
   }
 }
