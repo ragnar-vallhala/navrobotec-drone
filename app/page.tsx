@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { Cpu, Layers, Navigation, Rocket, Zap } from 'lucide-react';
 import styles from './page.module.css';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -33,7 +34,11 @@ const itemVariant = {
 export default function Home() {
   const phrases = ["Unwavering Reliability", "Unmatched Control", "Unrestricted Innovation"];
   const [phraseIndex, setPhraseIndex] = useState(0);
-
+  const visionCards = [
+    { image: '/images/autonomous.jpg', title: 'Sovereign Skies', desc: 'Total indigenous control over every layer of flight — from register to rotor.' },
+    { image: '/images/in-house.jpg', title: 'Bare-Metal Precision', desc: 'NavHAL — our proprietary hardware abstraction layer — mapping directly to the silicon.' },
+    { image: '/images/swarm.webp', title: 'Scalable Autonomy', desc: 'Architected from day one for multi-agent coordination and swarm-scale deployment.' },
+  ];
   useEffect(() => {
     const interval = setInterval(() => {
       setPhraseIndex((prev) => (prev + 1) % phrases.length);
@@ -82,71 +87,139 @@ export default function Home() {
         </section>
 
         {/* Mission Section */}
-        <section className={`${styles.section} ${styles.problem}`}>
-          <motion.div className={styles.sectionImageWrapper} {...fadeInUp}>
-            <img src="/images/autonomous.jpg" alt="Autonomous Drone Technology" className={styles.sectionImage} />
-          </motion.div>
-          <div className={styles.sectionContent}>
-            <motion.div className={styles.sectionHeader} {...fadeInUp}>
-              <h2>Our Mission.</h2>
+        <section className={styles.missionSection}>
+          <div className={styles.standardContainer}>
+            {/* Founder Quote */}
+            <motion.div className={styles.founderQuote} {...fadeInUp}>
+              <span className={styles.quoteAccent}>&ldquo;</span>
+              <blockquote className={styles.quoteText}>
+                We are not building another autopilot. We are building the foundation — a sovereign, silicon-native intelligence that belongs entirely to its operator. No black boxes. No foreign dependencies. Just pure, auditable control.
+              </blockquote>
+              <div className={styles.founderAttrib}>
+                <img src="/images/Ashutosh.jpeg" alt="Ashutosh Vishwakarma" className={styles.founderAvatar} />
+                <span className={styles.founderName}>Ashutosh Vishwakarma</span>
+                <span className={styles.founderTitle}>Founder &amp; Director, NAVRobotec</span>
+              </div>
             </motion.div>
-            <div className={styles.grid2}>
-              <motion.div className={styles.card} {...fadeInUp}>
-                <h3>Sovereign Engineering</h3>
-                <p>We are engineering indigenous, secure, and completely vertically-integrated flight stacks from the silicon up, ensuring absolute sovereignty over critical hardware.</p>
-              </motion.div>
-              <motion.div className={styles.card} {...fadeInUp} transition={{ delay: 0.2, duration: 0.8 }}>
-                <h3>Limitless Potential</h3>
-                <p>By eliminating legacy codebase bloat and restrictive foreign dependencies, we hand you the keys to the hardware—unleashing unrestricted innovation in autonomous aviation.</p>
-              </motion.div>
+
+            {/* Institutional Recognition Carousel */}
+            <motion.div className={styles.logoCarousel} {...fadeInUp} transition={{ delay: 0.2, duration: 0.8 }}>
+              <p className={styles.recognizedBy}>Recognized by Leading Institutions</p>
+              <div className={styles.carouselTrack}>
+                {[1, 2].map((group) => (
+                  <div key={group} className={styles.carouselGroup}>
+                    <img src="/logos/dpiit.png" alt="DPIIT" className={styles.institutionLogo} />
+                    <img src="/logos/i3c.png" alt="I3C" className={styles.institutionLogo} />
+                    <img src="/logos/msme.png" alt="MSME" className={styles.institutionLogo} />
+                    <img src="/logos/startup_up.png" alt="Startup UP" className={`${styles.institutionLogo} ${styles.startupUpLogo}`} />
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Vision Section */}
+        <section className={styles.visionSectionOuter}>
+          <div className={styles.standardContainer}>
+            <div className={styles.visionHeader}>
+              <h2 className={styles.visionTitle}>Our Focus.</h2>
+            </div>
+            <div className={styles.visionGrid}>
+              {visionCards.map((card, i) => (
+                <motion.div
+                  key={i}
+                  className={styles.visionCard}
+                  {...fadeInUp}
+                  transition={{ delay: i * 0.1, duration: 0.8 }}
+                >
+                  <div className={styles.visionCardImage} style={{ backgroundImage: `url(${card.image})` }} />
+                  <div className={styles.visionCardOverlay}>
+                    <h3>{card.title}</h3>
+                    <p>{card.desc}</p>
+                  </div>
+                </motion.div>
+              ))}
             </div>
           </div>
         </section>
 
         {/* Technology Section */}
         <section className={`${styles.section} ${styles.highlights}`}>
-          <div className={styles.sectionContent}>
+          <div className={styles.standardContainer}>
             <motion.div className={styles.sectionHeader} {...fadeInUp}>
               <h2>Our Technology.</h2>
             </motion.div>
             <div className={styles.grid3}>
               <motion.div className={styles.highlightCard} {...fadeInUp}>
-                <div className={styles.highlightIcon}></div>
-                <h3>Deterministic Execution</h3>
-                <p>Minimizes interrupt jitter through highly optimized, lock-free SPSC queue architectures.</p>
+                <div className={styles.highlightIcon}>
+                  <Cpu size={40} strokeWidth={1.5} />
+                </div>
+                <h3>NavHAL</h3>
+                <p>Bare-metal Hardware Abstraction Layer mapping directly to silicon registers. Minimal latency, zero RTOS overhead.</p>
               </motion.div>
               <motion.div className={styles.highlightCard} {...fadeInUp} transition={{ delay: 0.2, duration: 0.8 }}>
-                <h3>Cascaded Control</h3>
-                <p>Delivers absolute precision with high-frequency cascaded processing across both angle and rate loops.</p>
+                <div className={styles.highlightIcon}>
+                  <Navigation size={40} strokeWidth={1.5} />
+                </div>
+                <h3>VaiOS</h3>
+                <p>Deterministic Aviation Operating System. Architected for safety-critical real-time intelligence and execution.</p>
               </motion.div>
               <motion.div className={styles.highlightCard} {...fadeInUp} transition={{ delay: 0.4, duration: 0.8 }}>
-                <h3>Bare-Metal Efficiency</h3>
-                <p>Features our proprietary NavHAL, stripping away RTOS overhead by mapping directly to silicon registers.</p>
+                <div className={styles.highlightIcon}>
+                  <Layers size={40} strokeWidth={1.5} />
+                </div>
+                <h3>Vayu</h3>
+                <p>The Sovereign Flight Stack. Total control over autonomous navigation, mission planning, and mission-critical logic.</p>
               </motion.div>
             </div>
           </div>
         </section>
 
-        {/* Why Join Us Section */}
-        <section className={`${styles.section} ${styles.traction}`}>
-          <div className={styles.sectionContent}>
-            <motion.div className={styles.sectionHeader} {...fadeInUp}>
-              <h2>Why Join Us.</h2>
-              <p className={styles.mutedText}>The Mission</p>
-            </motion.div>
-            <div className={styles.timeline}>
-              <motion.div className={styles.timelineItem} {...fadeInUp}>
-                <h4>Build the Unbuilt</h4>
-                <p>Work on entirely sovereign flight control systems and avionics. Reject legacy bloat and shape the future of autonomous navigation from the ground up.</p>
+        {/* Join the Mission Section */}
+        <section className={styles.joinSection}>
+          <div className={styles.standardContainer}>
+            <div className={styles.joinInner}>
+              <motion.div className={styles.sectionHeaderCenter} {...fadeInUp}>
+                <p className={styles.mutedTextAccent}>Join the Mission</p>
+                <h2>Help Us Build the Future of Sovereign Skies.</h2>
               </motion.div>
-              <motion.div className={styles.timelineItem} {...fadeInUp} transition={{ delay: 0.2, duration: 0.8 }}>
-                <h4>Solve Hard Problems</h4>
-                <p>We deal with real-time hardware constraints, high-frequency PID loops, and deep silicon-level bare-metal coding every single day. Average is not an option.</p>
-              </motion.div>
+
+              <div className={styles.joinGrid}>
+                <motion.div className={styles.joinCard} {...fadeInUp}>
+                  <div className={styles.joinCardIcon}>
+                    <Rocket size={40} strokeWidth={1.5} />
+                  </div>
+                  <h4>Build the Unbuilt</h4>
+                  <p>Work on entirely sovereign flight control systems and avionics. Reject legacy bloat and shape the future of autonomous navigation from the ground up.</p>
+                </motion.div>
+                <motion.div className={styles.joinCard} {...fadeInUp} transition={{ delay: 0.2, duration: 0.8 }}>
+                  <div className={styles.joinCardIcon}>
+                    <Zap size={40} strokeWidth={1.5} />
+                  </div>
+                  <h4>Solve Hard Problems</h4>
+                  <p>We deal with real-time hardware constraints, high-frequency PID loops, and deep silicon-level bare-metal coding every single day. Average is not an option.</p>
+                </motion.div>
+              </div>
             </div>
           </div>
         </section>
-      </div>
+
+        {/* Final CTA Section */}
+        <section className={styles.finalCTA}>
+          <div className={styles.finalCTAOverlay} />
+          <div className={styles.standardContainer}>
+            <motion.div className={styles.finalCTAContent} {...fadeInUp}>
+              <p className={styles.mutedTextAccent}>Ready to Lead?</p>
+              <h2>The Future of Autonomous Aviation is Sovereign.</h2>
+              <div className={styles.ctaGroupLarge}>
+                <Link href="/contact" className={styles.primaryBtnLarge}>Start Your Mission</Link>
+                <Link href="/technology" className={styles.secondaryTextBtn}>Explore our Stack &rarr;</Link>
+              </div>
+            </motion.div>
+          </div>
+        </section >
+      </div >
     </>
   );
 }

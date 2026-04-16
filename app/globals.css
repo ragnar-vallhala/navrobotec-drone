@@ -1,12 +1,37 @@
-/* Global Styles - Premium Dark Aesthetic */
+/* Global Styles - NAVRobotec Design System */
 :root {
-  --bg-primary: #ffffff;
-  --bg-secondary: #f9f9f9;
-  --bg-elevated: #ffffff;
-  --text-primary: #1a1a2e;
-  --text-secondary: #0f3460;
-  --accent-cyan: #e94560;
-  --accent-blue: #16213e;
+  /* ---- Colors ---- */
+  --color-dark: #1a1a2e; /* Darkest: navbar, footer, hero overlay */
+  --color-dark-mid: #16213e; /* Mid-dark: secondary surfaces */
+  --color-dark-elevated: #0f3460; /* Elevated dark: cards, accents on dark */
+  --color-white: #ffffff;
+  --color-off-white: #f9f9f9;
+  --color-peach: #f8cba6; /* Secondary text on dark backgrounds */
+  --color-accent: #e94560; /* Primary accent: hover, highlights, CTA */
+
+  /* ---- Semantic aliases (maps to above) ---- */
+  --bg-primary: var(--color-white);
+  --bg-secondary: var(--color-off-white);
+  --bg-dark: var(--color-dark);
+  --text-primary: var(--color-dark);
+  --text-secondary: var(--color-dark-elevated);
+  --text-on-dark: var(--color-white);
+  --text-muted-dark: var(--color-peach);
+  --accent-cyan: var(--color-accent);
+  --accent-blue: var(--color-dark-mid);
+
+  /* ---- Fonts ---- */
+  --font-serif: "Times New Roman", Times, serif;
+  --font-mono: var(--font-poppins), sans-serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+
+  /* ---- Borders ---- */
+  --border-light: 1px solid rgba(0, 0, 0, 0.1);
+  --border-dark: 1px solid rgba(255, 255, 255, 0.05);
+
+  /* ---- Shadows ---- */
+  --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.1);
+  --shadow-text: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
 html,
@@ -19,7 +44,7 @@ body {
 body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  font-family: "Courier New", Courier, monospace;
+  font-family: var(--font-mono);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -29,7 +54,7 @@ body {
 }
 
 .content-wrapper {
-  min-height: calc(100vh - 80px); /* Account for navbar */
+  min-height: calc(100vh - 80px);
   padding-top: 80px;
 }
 
@@ -41,7 +66,7 @@ h5,
 h6 {
   margin: 0;
   font-weight: 700;
-  font-family: "Times New Roman", Times, serif;
+  font-family: var(--font-serif);
   letter-spacing: -0.02em;
 }
 
