@@ -18,8 +18,14 @@ export async function GET(
     return new NextResponse("TikZ code not found", { status: 404 });
   }
 
-  const cacheDir = path.join(process.cwd(), "public/docs/diagrams");
-  const cachePath = path.join(cacheDir, `${hash}.svg`);
+  const cacheDir = path.join(
+    /* turbopackIgnore: true */ process.cwd(),
+    "public/docs/diagrams",
+  );
+  const cachePath = path.join(
+    /* turbopackIgnore: true */ cacheDir,
+    `${hash}.svg`,
+  );
 
   // Return cached version if exists
   if (fs.existsSync(cachePath)) {

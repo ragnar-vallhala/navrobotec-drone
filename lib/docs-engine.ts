@@ -90,13 +90,16 @@ function buildDocTree(filePath: string, baseSlug = ""): DocSection | null {
   for (const match of inputs) {
     let inputPath = match[1];
     // Handle cases where inputPath is relative to the root or sections/
-    let fullInputPath = path.resolve(path.dirname(filePath), inputPath);
+    let fullInputPath = path.resolve(
+      /* turbopackIgnore: true */ path.dirname(filePath),
+      inputPath,
+    );
     if (!fullInputPath.endsWith(".tex")) fullInputPath += ".tex";
 
     // Recovery logic for common report structure
     if (!fs.existsSync(fullInputPath)) {
       fullInputPath = path.resolve(
-        "/home/ragnar/Documents/Drone/report/",
+        /* turbopackIgnore: true */ "/home/ragnar/Documents/Drone/report/",
         inputPath,
       );
       if (!fullInputPath.endsWith(".tex")) fullInputPath += ".tex";
@@ -142,7 +145,7 @@ export function getDocStructure(): DocSection[] {
   for (const key in labelRegistry) delete labelRegistry[key];
 
   for (const file of rootFiles) {
-    const fullPath = path.join(REPORT_PATH, file);
+    const fullPath = path.join(/* turbopackIgnore: true */ REPORT_PATH, file);
     const section = buildDocTree(fullPath);
     if (section) structure.push(section);
   }
@@ -170,7 +173,7 @@ export function parseLatex(tex: string, baseDir: string): string {
 
   // Resolve \input{path}
   content = content.replace(/\\input\{([^}]+)\}/g, (match, inputPath) => {
-    let fullPath = path.resolve(baseDir, inputPath);
+    let fullPath = path.resolve(/* turbopackIgnore: true */ baseDir, inputPath);
     if (!fullPath.endsWith(".tex")) fullPath += ".tex";
 
     if (fs.existsSync(fullPath)) {
@@ -464,10 +467,7 @@ export function parseTikz(tex: string): TikzDiagram {
         } else if (atTarget.includes(",")) {
           const coords = atTarget
             .split(",")
-            .map((c) => parseFloat(c.replace(/[()]/g, "").trim()));
-          if (coords.length === 2) {
-            [x, y] = coords;
-          }
+            .map((v: string) => parseFloat(v.replace(/[()]/g, "").trim()));
         }
 
         if (atOptions) {
@@ -579,7 +579,7 @@ export function parseTikz(tex: string): TikzDiagram {
           const [dx, dy] = rawCoord
             .replace(/[cm\s()]/g, "")
             .split(",")
-            .map((v) => parseFloat(v) || 0);
+            .map((v: string) => parseFloat(v) || 0);
           accX += dx;
           accY += dy;
           current = {
@@ -596,7 +596,9 @@ export function parseTikz(tex: string): TikzDiagram {
           if (current.shift) {
             const sm = current.shift.match(/shift=\{?\(([^)]+)\)\}?/);
             if (sm) {
-              const [sx, sy] = sm[1].split(",").map((v) => parseFloat(v) || 0);
+              const [sx, sy] = sm[1]
+                .split(",")
+                .map((v: string) => parseFloat(v) || 0);
               accX = sx;
               accY = sy;
             }
