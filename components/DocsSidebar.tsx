@@ -27,6 +27,14 @@ export default function DocsSidebar({ tree }: { tree: DocSection[] }) {
                 <div className={styles.sidebarContent}>
                     <h3 className={styles.sidebarTitle}>Vayu Technical Guide</h3>
                     <nav className={styles.nav}>
+                        <Link
+                            href="/docs"
+                            className={`${styles.navLink} ${pathname === '/docs' ? styles.active : ""}`}
+                            onClick={() => setIsSidebarOpen(false)}
+                        >
+                            <div className={styles.dot}></div>
+                            Latest Reports
+                        </Link>
                         {tree.map((section) => (
                             <NavItem
                                 key={section.slug}
@@ -58,7 +66,7 @@ function NavItem({
 }) {
     const [isOpen, setIsOpen] = useState(true);
     const hasChildren = section.subsections && section.subsections.length > 0;
-    const href = section.slug === 'introduction' ? '/docs' : `/docs/${section.slug}`;
+    const href = `/docs/${section.slug}`;
     const isActive = pathname === href;
 
     return (

@@ -1,12 +1,8 @@
 .docsContainer {
   display: flex;
   min-height: 100vh;
-  /* Visual extension of the sidebar background */
-  background: linear-gradient(
-    to right,
-    var(--color-dark) 300px,
-    var(--bg-primary) 300px
-  );
+  justify-content: center;
+  background: var(--bg-primary);
 }
 
 .docsContent {
