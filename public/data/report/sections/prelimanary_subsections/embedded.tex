@@ -49,8 +49,7 @@ Figure~\ref{fig:embedded_arch} illustrates the internal architecture and periphe
     \node[block, right=of cpu] (dma) {DMA Controller};
 
     % Internal Bus - Horizontal Strip
-    \node[draw, thick, rectangle, minimum width=8.5cm, minimum height=0.5cm, fill=secondary!10, below=0.4cm of cpu] (main_bus) {};
-    \node[font=\small\bfseries, color=secondary] at (main_bus.center) {Internal System Bus (AHB / APB)};
+    \node[draw, thick, rectangle, minimum width=8.5cm, minimum height=0.5cm, fill=secondary!10, below=0.4cm of cpu] (main_bus) {Internal System Bus (AHB / APB)};
 
     % Mid Row - Memory and Communication
     \node[block, below left=0.4cm and -1.5cm of main_bus] (flash) {Flash Memory\\(Code)};

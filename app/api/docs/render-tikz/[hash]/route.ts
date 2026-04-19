@@ -39,7 +39,7 @@ export async function GET(
     const texContent = `
 \\documentclass[tikz,border=10pt]{standalone}
 \\usepackage{tikz}
-\\usetikzlibrary{shapes,arrows,positioning,calc}
+\\usetikzlibrary{shapes,arrows,arrows.meta,positioning,calc,fit,chains,scopes}
 \\begin{document}
 \\begin{tikzpicture}${tikzCode}\\end{tikzpicture}
 \\end{document}

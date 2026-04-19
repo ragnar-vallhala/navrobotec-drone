@@ -3,6 +3,7 @@ import styles from "../DocsPage.module.css";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { TikZRenderer } from "@/components/TikZRenderer";
 
 export default async function DynamicDocPage({
     params,
@@ -39,16 +40,36 @@ function DocRenderer({ section, prev, next }: { section: any; prev: any; next: a
         return `<img src="/api/docs/render-tikz/${hash}" alt="Technical Diagram" class="tikz-svg" />`;
     });
 
+    // Split by the parsed tikz container
+    // Our parser generates: <div class="tikz-parsed-container" data-diagram='...'></div>
+    const parts = html.split(/<div class="tikz-parsed-container" data-diagram='([\s\S]*?)'><\/div>/g);
+
     return (
         <article className={styles.article}>
             <header className={styles.header}>
                 <h1 className={styles.title}>{section.title}</h1>
             </header>
 
-            <div
-                className={styles.content}
-                dangerouslySetInnerHTML={{ __html: html }}
-            />
+            <div className={styles.content}>
+                {parts.map((part, index) => {
+                    if (index % 2 === 0) {
+                        return (
+                            <div
+                                key={`part-${index}`}
+                                dangerouslySetInnerHTML={{ __html: part }}
+                            />
+                        );
+                    } else {
+                        try {
+                            const diagramData = JSON.parse(part.replace(/&apos;/g, "'"));
+                            return <TikZRenderer key={`tikz-${index}`} diagram={diagramData} />;
+                        } catch (e) {
+                            console.error("Failed to parse diagram data:", e);
+                            return <pre key={`err-${index}`}>[Error rendering diagram]</pre>;
+                        }
+                    }
+                })}
+            </div>
 
             <footer className={styles.footer}>
                 <div className={styles.pagination}>

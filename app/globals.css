@@ -111,3 +111,51 @@ a {
 .animateFadeIn {
   animation: fadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* LaTeX References */
+.latex-ref {
+  color: var(--color-accent);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px dashed var(--color-accent);
+  transition: all 0.2s ease;
+}
+
+.latex-ref:hover {
+  background: rgba(233, 69, 96, 0.05);
+  border-bottom-style: solid;
+}
+
+.broken-ref {
+  color: #ff4d4d;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+/* LaTeX Figures & Captions */
+.latex-figure {
+  margin: 3rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+figcaption {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  text-align: center;
+  max-width: 80%;
+  line-height: 1.5;
+}
+
+figcaption::before {
+  content: "Figure: ";
+  font-weight: 700;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+}
