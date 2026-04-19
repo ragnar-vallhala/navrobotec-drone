@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import crypto from "crypto";
 
 const REPORT_PATH = "/home/ragnar/Documents/Drone/report/sections/";
 
@@ -199,6 +200,8 @@ export function convertToHtml(tex: string): string {
     /\\begin\{tikzpicture\}\s*(\[[\s\S]*?\])?\s*([\s\S]*?)\\end\{tikzpicture\}/g,
     (match, options, tikzCode) => {
       const fullCode = (options || "") + (tikzCode || "");
+      const hash = crypto.createHash("md5").update(fullCode).digest("hex");
+      tikzCache[hash] = fullCode;
       const diagram = parseTikz(fullCode);
 
       if (options) {
@@ -701,4 +704,8 @@ export function tikzToMermaid(tex: string): string {
   });
 
   return mmd;
+}
+
+export function getTikzCode(hash: string): string | undefined {
+  return tikzCache[hash];
 }
