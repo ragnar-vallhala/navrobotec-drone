@@ -1,9 +1,5 @@
-import { getFlattenedDocs, convertToHtml } from "@/lib/docs-engine";
 import styles from "../DocsPage.module.css";
-import { notFound } from "next/navigation";
-import Link from "next/link";
-import { ChevronLeft, ChevronRight, FileText, Download } from "lucide-react";
-import { TikZRenderer } from "@/components/TikZRenderer";
+import { FileText, Download } from "lucide-react";
 
 export default async function DynamicDocPage() {
     return <ReportsLanding />;
