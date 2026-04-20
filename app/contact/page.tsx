@@ -29,7 +29,7 @@ export default function Contact() {
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', alignItems: 'center' }}>
                         <motion.a
-                            href="mailto:contact@navrobotec.com"
+                            href="mailto:support@navrobotec.com"
                             {...fadeInUp}
                             transition={{ delay: 0.4 }}
                             style={{
@@ -40,11 +40,11 @@ export default function Contact() {
                                 fontFamily: 'var(--font-mono)'
                             }}
                         >
-                            📧 contact@navrobotec.com
+                            support@navrobotec.com
                         </motion.a>
 
                         <motion.div {...fadeInUp} transition={{ delay: 0.6 }}>
-                            <Link href="https://linkedin.com" style={{
+                            <Link href="https://www.linkedin.com/company/107500953" style={{
                                 fontSize: '1.2rem',
                                 color: 'var(--text-secondary)',
                                 fontWeight: '600',
@@ -52,7 +52,7 @@ export default function Contact() {
                                 borderBottom: '2px solid var(--color-accent)',
                                 paddingBottom: '4px'
                             }}>
-                                💼 Connect on LinkedIn
+                                Connect on LinkedIn
                             </Link>
                         </motion.div>
                     </div>
