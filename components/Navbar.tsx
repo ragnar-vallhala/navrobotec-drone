@@ -3,7 +3,34 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
+import SplitText from './SplitText';
 import styles from './Navbar.module.css';
+
+const NavLink = ({ href, children, isContact }: { href: string, children: string, isContact?: boolean }) => {
+    const [isHovered, setIsHovered] = useState(false);
+    const pathname = usePathname();
+    const isActive = pathname === href;
+
+    return (
+        <Link 
+            href={href} 
+            className={isContact ? styles.contactBtn : styles.navLinkWrapper}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+        >
+            <SplitText isHovered={isHovered || isActive}>{children}</SplitText>
+            {!isContact && (
+                <motion.div 
+                    className={styles.underline}
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: (isHovered || isActive) ? 1 : 0 }}
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                />
+            )}
+        </Link>
+    );
+};
 
 export default function Navbar() {
     const pathname = usePathname();
@@ -54,15 +81,15 @@ export default function Navbar() {
 
                 <div className={`${styles.navContent} ${isMenuOpen ? styles.navContentOpen : ''}`}>
                     <ul className={styles.navLinks}>
-                        <li><Link href="/">HOME</Link></li>
-                        <li><Link href="/technology">TECHNOLOGY</Link></li>
-                        <li><Link href="/vision">VISION</Link></li>
-                        <li><Link href="/demo">DEMO</Link></li>
-                        <li><Link href="/team">TEAM</Link></li>
-                        <li><Link href="/docs">DOCS</Link></li>
+                        <li><NavLink href="/">HOME</NavLink></li>
+                        <li><NavLink href="/technology">TECHNOLOGY</NavLink></li>
+                        <li><NavLink href="/vision">VISION</NavLink></li>
+                        <li><NavLink href="/demo">DEMO</NavLink></li>
+                        <li><NavLink href="/team">TEAM</NavLink></li>
+                        <li><NavLink href="/docs">DOCS</NavLink></li>
                     </ul>
                     <div className={styles.cta}>
-                        <Link href="/contact" className={styles.contactBtn}>Contact</Link>
+                        <NavLink href="/contact" isContact>CONTACT</NavLink>
                     </div>
                 </div>
             </div>

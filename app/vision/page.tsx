@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { motion } from 'framer-motion';
 import styles from '../shared.module.css';
 
@@ -10,49 +11,68 @@ const fadeInUp = {
     transition: { duration: 0.8 }
 };
 
+const visionNarrative = [
+  {
+    kicker: "The Paradigm Shift",
+    headline: "Breaking the Black Box.",
+    description: "Modern autonomous systems rely on bloated, opaque frameworks. We are shifting away from blind assembly toward true engineering, stripping away unnecessary complexity to reveal pure function."
+  },
+  {
+    kicker: "Our Achievement",
+    headline: "Total Architectural Ownership.",
+    description: "An indigenous, first-principles approach. We do not just use the system; we own every layer from the silicon up. Uncompromising transparency. Absolute deterministic control."
+  },
+  {
+    kicker: "The Horizon",
+    headline: "Beyond Flight.",
+    description: "Vayu is the beginning. We are establishing a universal, scalable foundation not just for drones, but for the next generation of embedded intelligence and autonomous robotics."
+  }
+];
+
 export default function Vision() {
     return (
         <div className={styles.container}>
             <div className={styles.standardContainer}>
                 <div className={styles.headerArea}>
-                    <motion.h1 {...fadeInUp}>Company <span className={styles.gradientText}>Vision.</span></motion.h1>
-                    <motion.p {...fadeInUp} transition={{ delay: 0.2 }}>The roadmap to sovereign autonomous technology.</motion.p>
+                    <motion.h1 {...fadeInUp}>The <span className={styles.gradientText}>Vision.</span></motion.h1>
+                    <motion.p {...fadeInUp} transition={{ delay: 0.2 }}>Our mission to redefine autonomous intelligence.</motion.p>
                 </div>
 
-                <section className={styles.section}>
-                    <motion.h2 {...fadeInUp}>Sovereignty in Autonomy</motion.h2>
-                    <motion.p {...fadeInUp} transition={{ delay: 0.2 }}>
-                        We are committed to building 100% indigenous autonomous systems. Reliance on global open-source giants creates
-                        a black box effect that limits the ability of defense and enterprise to truly own their platform capabilities.
-                    </motion.p>
-                </section>
-
-                <section className={styles.section}>
-                    <motion.h2 {...fadeInUp}>The Problem at Scale</motion.h2>
-                    <motion.p {...fadeInUp} transition={{ delay: 0.2 }}>
-                        Today's drones operate on bloated software stacks designed to support thousands of different hardware configurations.
-                        The result is a labyrinth of abstractions that compromise performance, reliability, and security at critical moments.
-                    </motion.p>
-                </section>
-
-                <section className={styles.section}>
-                    <motion.h2 {...fadeInUp}>Our Approach: Vertical Integration</motion.h2>
-                    <motion.p {...fadeInUp} transition={{ delay: 0.2 }}>
-                        By developing our own hardware abstraction (NavHAL), execution environment (VAIOS), and control logic (Vayu),
-                        we achieve deep hardware-software synergy. This vertical integration allows for determinism and performance
-                        impossible with fragmented stacks.
-                    </motion.p>
-                </section>
-
-                <section className={styles.section}>
-                    <motion.h2 {...fadeInUp}>Long-Term Horizon</motion.h2>
-                    <motion.p {...fadeInUp} transition={{ delay: 0.2 }}>
-                        Vayu is not just a drone controller. It is becoming a universal, scalable platform for all autonomous mobility:
-                        from aerial swarms to ground robotics and advanced defense interception systems.
-                    </motion.p>
-                </section>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8rem', marginTop: '4rem', paddingBottom: '8rem' }}>
+                    {visionNarrative.map((item, index) => (
+                        <section key={index} style={{ maxWidth: '800px' }}>
+                            <motion.span 
+                                {...fadeInUp}
+                                style={{ 
+                                    color: 'var(--color-accent)', 
+                                    fontFamily: 'var(--font-mono)', 
+                                    fontSize: '0.9rem', 
+                                    letterSpacing: '0.2em', 
+                                    textTransform: 'uppercase',
+                                    display: 'block',
+                                    marginBottom: '1rem'
+                                }}
+                            >
+                                {item.kicker}
+                            </motion.span>
+                            <motion.h2 
+                                {...fadeInUp} 
+                                transition={{ delay: 0.1 }}
+                                style={{ fontSize: '3rem', marginBottom: '1.5rem', lineHeight: '1.1' }}
+                            >
+                                {item.headline}
+                            </motion.h2>
+                            <motion.p 
+                                {...fadeInUp} 
+                                transition={{ delay: 0.2 }}
+                                style={{ fontSize: '1.25rem', color: 'var(--text-secondary)', lineHeight: '1.6' }}
+                            >
+                                {item.description}
+                            </motion.p>
+                        </section>
+                    ))}
+                </div>
             </div>
         </div>
     );
 }
-

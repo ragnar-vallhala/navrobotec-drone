@@ -64,15 +64,26 @@
 }
 
 .overview {
-  background: var(--bg-dark);
+  background: var(--bg-primary);
   padding: 10rem 0;
   margin-bottom: 0;
-  color: var(--text-on-dark);
+  color: var(--text-primary);
 }
 
 .overview h2,
 .overview p {
-  color: var(--text-on-dark);
+  color: var(--text-primary);
+}
+
+.architectureDark {
+  background: var(--bg-primary);
+  padding: 10rem 0;
+  margin-bottom: 0;
+  width: 100%;
+}
+
+.architectureDark h2 {
+  color: var(--text-primary) !important;
 }
 
 /* Stack Diagram styles */

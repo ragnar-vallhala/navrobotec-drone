@@ -3,6 +3,8 @@
 import { motion } from 'framer-motion';
 import { Cpu, Layers, Navigation, Zap } from 'lucide-react';
 import Link from 'next/link';
+import ArchitectureStack from '@/components/ArchitectureStack';
+import DataFlowPipeline from '@/components/DataFlowPipeline';
 import styles from './page.module.css';
 
 const fadeInUp = {
@@ -33,55 +35,17 @@ export default function Technology() {
                 </div>
             </section>
 
-            <div className={styles.standardContainer}>
-                <section className={`${styles.techSection} ${styles.architecture}`}>
-                    <motion.h2 {...fadeInUp}>System Architecture</motion.h2>
-                    <div className={styles.stackDiagram}>
-                        <motion.div className={styles.stackLayer} {...fadeInUp} transition={{ delay: 0.6 }}>
-                            <div className={styles.stackIcon}><Navigation size={24} /></div>
-                            <div className={styles.stackInfo}>
-                                <h3>Vayu Flight Stack</h3>
-                                <p>Sovereign autonomy components, high-level guidance, and mission planning engine.</p>
-                            </div>
-                        </motion.div>
-                        <div className={styles.stackConnector} />
-                        <motion.div className={styles.stackLayer} {...fadeInUp} transition={{ delay: 0.4 }}>
-                            <div className={styles.stackIcon}><Layers size={24} /></div>
-                            <div className={styles.stackInfo}>
-                                <h3>VaiOS (Execution Layer)</h3>
-                                <p>Real-time scheduler and deterministic environment architected for safety-critical intelligence.</p>
-                            </div>
-                        </motion.div>
-                        <div className={styles.stackConnector} />
-                        <motion.div className={styles.stackLayer} {...fadeInUp} transition={{ delay: 0.2 }}>
-                            <div className={styles.stackIcon}><Cpu size={24} /></div>
-                            <div className={styles.stackInfo}>
-                                <h3>NavHAL</h3>
-                                <p>Bare-metal Hardware Abstraction Layer ensuring silicon-agnostic core stack execution.</p>
-                            </div>
-                        </motion.div>
-                        <div className={styles.stackConnector} />
-                        <motion.div className={styles.stackLayer} {...fadeInUp}>
-                            <div className={styles.stackIcon}><Zap size={24} /></div>
-                            <div className={styles.stackInfo}>
-                                <h3>The Hardware Foundation</h3>
-                                <p>Custom PCB architecture, STM32 MCU, and high-frequency IMU sensors mapping directly to the stack.</p>
-                            </div>
-                        </motion.div>
-                    </div>
-                </section>
+            <section className={`${styles.techSection} ${styles.architectureDark}`}>
+                <div className={styles.standardContainer}>
+                    <motion.h2 {...fadeInUp} className="text-white">System Architecture</motion.h2>
+                    <ArchitectureStack />
+                </div>
+            </section>
 
+            <div className={styles.standardContainer}>
                 <section className={`${styles.techSection} ${styles.dataFlow}`}>
                     <motion.h2 {...fadeInUp}>Data Flow Pipeline</motion.h2>
-                    <div className={styles.flowDiagram}>
-                        <div className={styles.flowNode}>Sensors</div>
-                        <div className={styles.flowArrow}>→</div>
-                        <div className={styles.flowNode}>Estimation</div>
-                        <div className={styles.flowArrow}>→</div>
-                        <div className={styles.flowNode}>Control</div>
-                        <div className={styles.flowArrow}>→</div>
-                        <div className={styles.flowNode}>Actuation</div>
-                    </div>
+                    <DataFlowPipeline />
                 </section>
 
                 <section className={`${styles.techSection} ${styles.controlSystem}`}>

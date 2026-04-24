@@ -7,13 +7,8 @@
 
 .docsContent {
   flex: 1;
-  height: calc(100vh - 80px);
-  position: sticky;
-  top: 80px;
-  overflow-y: auto;
-  overscroll-behavior: auto; /* Allows reveal of footer once bottom is reached */
   padding: 4rem 4rem;
-  padding-top: 2rem; /* Reduced top padding since it's already offset by sticky top */
+  padding-top: 2rem;
 }
 
 .innerContent {

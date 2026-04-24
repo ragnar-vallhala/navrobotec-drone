@@ -19,8 +19,11 @@
 
 /* HERO SECTION */
 .hero {
-  min-height: 100vh;
+  min-height: 80vh; /* Shorter hero to let content flow into white section */
+  margin-top: -80px;
+  padding-top: 80px;
   justify-content: center;
+  padding-bottom: 0;
 }
 
 .heroContent {
@@ -29,6 +32,8 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
+  position: relative;
+  z-index: 2; /* Ensure content is above video */
 }
 
 .title {
@@ -45,7 +50,7 @@
 }
 
 .titleAccent {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 7rem;
   color: var(--color-white);
   font-weight: 800;
@@ -55,7 +60,7 @@
 }
 
 .titleSecondary {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 3rem;
   color: var(--color-peach);
   font-weight: 300;
@@ -69,9 +74,10 @@
 }
 
 .subtextWrapper {
-  height: 2rem;
+  height: 2.5rem;
   width: 100%;
-  margin-bottom: 3.5rem;
+  margin-top: 6rem; /* More space above the changing words */
+  margin-bottom: 2rem;
   position: relative;
   display: flex;
   justify-content: center;
@@ -79,9 +85,10 @@
 }
 
 .subtext {
-  font-size: 1.25rem;
-  font-family: var(--font-mono);
-  color: var(--color-peach);
+  font-size: 1.5rem;
+  font-family: var(--font-sans);
+  color: var(--color-dark); /* Changed to black */
+  font-weight: 600;
   line-height: 1.6;
   max-width: 100%;
   white-space: nowrap;
@@ -89,6 +96,8 @@
   left: 0;
   width: 100%;
   text-align: center;
+  letter-spacing: 2px;
+  text-transform: uppercase;
 }
 
 /* =========================================
@@ -102,9 +111,14 @@
 /* Founder Quote */
 .founderQuote {
   position: relative;
-  max-width: 860px;
-  margin: 0 auto 7rem auto;
+  max-width: 900px;
+  margin: 0 auto 10rem auto;
   text-align: center;
+  background: var(--color-white);
+  padding: 5rem 4rem;
+  border-radius: 24px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
 }
 
 /* Institutional Recognition Carousel */
@@ -187,7 +201,7 @@
 }
 
 .quoteAccent {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 8rem;
   color: var(--color-accent);
   line-height: 0;
@@ -198,7 +212,7 @@
 }
 
 .quoteText {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 1.65rem;
   font-weight: 400;
   font-style: italic;
@@ -228,7 +242,7 @@
 }
 
 .founderName {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: 1.1rem;
   letter-spacing: 0.05em;
@@ -258,7 +272,7 @@
 }
 
 .visionTitle {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 4rem;
   font-weight: 700;
   color: var(--text-on-dark);
@@ -272,6 +286,13 @@
   opacity: 0.7;
   line-height: 1.75;
   font-weight: 400;
+}
+
+.vision.ctaGroup {
+  display: flex;
+  gap: 2rem;
+  margin-top: 2rem;
+  z-index: 10;
 }
 
 .visionGrid {
@@ -336,7 +357,7 @@
 }
 
 .visionCardOverlay h3 {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 1.8rem;
   font-weight: 700;
   color: var(--color-white);
@@ -588,7 +609,8 @@
 
 .mutedTextAccent {
   color: var(--color-accent);
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
+  font-weight: 700;
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 3px;
@@ -604,36 +626,88 @@
 
 .joinCard {
   background: var(--color-white);
-  padding: 3.5rem;
-  border-radius: 20px;
-  border: var(--border-light);
+  padding: 4rem;
+  border-radius: 24px; /* Equally rounded on all sides */
+  border: 1px solid rgba(0, 0, 0, 0.05);
   text-align: left;
-  transition: all 0.4s ease;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.joinCard::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--color-accent) 0%, transparent 40%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 0;
 }
 
 .joinCard:hover {
-  transform: translateY(-10px);
-  border-color: var(--color-accent);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  transform: translateY(-12px) scale(1.02);
+  border-color: rgba(233, 69, 96, 0.2);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.1);
+}
+
+.joinCard:hover::before {
+  opacity: 0.05;
 }
 
 .joinCardIcon {
-  font-size: 2.5rem;
-  margin-bottom: 2rem;
-  color: var(--color-accent);
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(233, 69, 96, 0.05);
+  border-radius: 16px;
+  position: relative;
+  z-index: 1;
+  transition: all 0.5s ease;
+}
+
+.cardSvg {
+  width: 32px;
+  height: 32px;
+  filter: invert(34%) sepia(85%) saturate(2250%) hue-rotate(331deg) brightness(94%) contrast(96%); /* var(--color-accent) */
+  transition: transform 0.5s ease;
+}
+
+.joinCard:hover .joinCardIcon {
+  background: var(--color-accent);
+}
+
+.joinCard:hover .cardSvg {
+  filter: brightness(0) invert(1);
+  transform: scale(1.1);
+}
+
+.cardContent {
+  position: relative;
+  z-index: 1;
 }
 
 .joinCard h4 {
+  font-family: var(--font-sans);
   font-size: 2.2rem;
-  margin-bottom: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 1.25rem;
   color: var(--text-primary);
+  letter-spacing: -1px;
+  text-transform: none;
 }
 
 .joinCard p {
   color: var(--text-secondary);
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   line-height: 1.8;
+  opacity: 0.85;
 }
 
 .joinCTA {
@@ -680,32 +754,43 @@
 }
 
 .primaryBtn {
-  color: var(--color-white);
+  color: var(--color-dark); /* Changed to black */
   letter-spacing: 1px;
+  position: relative;
+  font-weight: 700;
 }
 
 .primaryBtn::before {
   content: "[ ";
-  color: var(--color-peach);
+  color: var(--color-dark); /* Changed to black */
+  opacity: 0.5;
 }
 .primaryBtn::after {
   content: " ]";
-  color: var(--color-peach);
+  color: var(--color-dark); /* Changed to black */
+  opacity: 0.5;
 }
 .primaryBtn:hover::before,
 .primaryBtn:hover::after {
   color: var(--color-accent);
+  opacity: 1;
+}
+
+.primaryBtn:hover {
+  color: var(--color-accent);
 }
 
 .secondaryBtn {
-  color: var(--color-peach);
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  font-size: 0.9rem;
+  color: var(--color-dark); /* Changed to black */
+  letter-spacing: 1px;
+  font-weight: 700;
+  opacity: 0.8;
+  transition: all 0.3s ease;
 }
 
 .secondaryBtn:hover {
-  color: var(--color-white);
+  color: var(--color-accent);
+  opacity: 1;
 }
 
 /* Hero Video */
@@ -715,7 +800,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -1;
+  z-index: 0; /* Changed from -1 to avoid being hidden by content-wrapper */
   overflow: hidden;
   background-color: var(--color-dark);
 }
@@ -750,9 +835,12 @@
   justify-content: center;
   background-image: url("/images/far_away.jpg");
   background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
+  background-position: 65% 25%;
+  /* background-attachment: fixed; */
   overflow: hidden;
+  border-top-left-radius: 40px;
+  border-top-right-radius: 40px;
+  padding: 10rem 0;
 }
 
 .finalCTAOverlay {
@@ -780,7 +868,9 @@
 }
 
 .finalCTAContent h2 {
+  font-family: var(--font-sans); /* Industrial Sans-Serif font */
   font-size: 4.5rem;
+  font-weight: 800;
   color: var(--text-on-dark);
   max-width: 900px;
   line-height: 1.1;
@@ -797,8 +887,8 @@
 .secondaryTextBtn {
   color: var(--color-white);
   text-decoration: none;
-  font-family: var(--font-mono);
-  font-weight: 500;
+  font-family: var(--font-sans);
+  font-weight: 600;
   font-size: 1.1rem;
   transition: all 0.3s ease;
   opacity: 0.8;

@@ -159,17 +159,21 @@ export default function Home() {
               <div className={styles.joinGrid}>
                 <motion.div className={styles.joinCard} {...fadeInUp}>
                   <div className={styles.joinCardIcon}>
-                    <Rocket size={40} strokeWidth={1.5} />
+                    <img src="/logos/card1.svg" alt="Build" className={styles.cardSvg} />
                   </div>
-                  <h4>Build the Unbuilt</h4>
-                  <p>Work on entirely sovereign flight control systems and avionics. Reject legacy bloat and shape the future of autonomous navigation from the ground up.</p>
+                  <div className={styles.cardContent}>
+                    <h4>Build the Unbuilt</h4>
+                    <p>Work on entirely sovereign flight control systems and avionics. Reject legacy bloat and shape the future of autonomous navigation from the ground up.</p>
+                  </div>
                 </motion.div>
                 <motion.div className={styles.joinCard} {...fadeInUp} transition={{ delay: 0.2, duration: 0.8 }}>
                   <div className={styles.joinCardIcon}>
-                    <Zap size={40} strokeWidth={1.5} />
+                    <img src="/logos/card2.svg" alt="Solve" className={styles.cardSvg} />
                   </div>
-                  <h4>Solve Hard Problems</h4>
-                  <p>We deal with real-time hardware constraints, high-frequency PID loops, and deep silicon-level bare-metal coding every single day. Average is not an option.</p>
+                  <div className={styles.cardContent}>
+                    <h4>Solve Hard Problems</h4>
+                    <p>We deal with real-time hardware constraints, high-frequency PID loops, and deep silicon-level bare-metal coding every single day. Average is not an option.</p>
+                  </div>
                 </motion.div>
               </div>
             </div>

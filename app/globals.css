@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 /* Global Styles - NAVRobotec Design System */
 :root {
   /* ---- Colors ---- */
@@ -21,7 +23,7 @@
   --accent-blue: var(--color-dark-mid);
 
   /* ---- Fonts ---- */
-  --font-serif: "Times New Roman", Times, serif;
+  --font-serif: "Georgia", serif;
   --font-mono: var(--font-poppins), sans-serif;
   --font-sans: var(--font-inter), system-ui, sans-serif;
 
@@ -37,6 +39,13 @@
   --section-padding-x: 8rem;
   --section-padding-y: 8rem;
   --container-max-width: 1200px;
+}
+
+@theme {
+  --color-accent: var(--color-accent);
+  --color-dark: var(--color-dark);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
 }
 
 @media (max-width: 1200px) {
@@ -64,7 +73,7 @@ body {
 }
 
 body {
-  background-color: var(--bg-primary);
+  background-color: var(--color-dark);
   color: var(--text-primary);
   font-family: var(--font-mono);
   -webkit-font-smoothing: antialiased;
@@ -78,6 +87,7 @@ body {
 .content-wrapper {
   min-height: calc(100vh - 80px);
   padding-top: 80px;
+  background-color: var(--bg-primary);
 }
 
 h1,
@@ -88,7 +98,7 @@ h5,
 h6 {
   margin: 0;
   font-weight: 700;
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   letter-spacing: -0.02em;
 }
 
@@ -158,4 +168,29 @@ figcaption::before {
   text-transform: uppercase;
   font-size: 0.8rem;
   letter-spacing: 1px;
+}
+/* Custom Scrollbar - Ultra Thin Minimalist */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent);
+}
+
+/* Firefox Support */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.1) var(--color-dark);
 }
