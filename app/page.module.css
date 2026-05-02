@@ -34,6 +34,7 @@
   text-align: center;
   position: relative;
   z-index: 2; /* Ensure content is above video */
+  margin-top: 8rem;
 }
 
 .title {
@@ -87,7 +88,7 @@
 .subtext {
   font-size: 1.5rem;
   font-family: var(--font-sans);
-  color: var(--color-dark); /* Changed to black */
+  color: var(--color-white); /* Changed to black */
   font-weight: 600;
   line-height: 1.6;
   max-width: 100%;
@@ -362,7 +363,6 @@
   font-weight: 700;
   color: var(--color-white);
   margin-bottom: 0.75rem;
-  white-space: nowrap;
   transition: font-size 0.6s ease;
 }
 
@@ -375,13 +375,11 @@
   font-size: 0.9rem;
   color: var(--color-white);
   line-height: 1.6;
-  opacity: 0.7;
-  transition:
-    opacity 0.6s ease,
-    max-width 0.6s ease;
+  opacity: 0;
   max-width: 0;
   overflow: hidden;
   white-space: nowrap;
+  transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .visionCard:hover p {
@@ -398,6 +396,12 @@
   .visionCard {
     height: 35vh;
     flex: none !important;
+  }
+  .visionCardOverlay p {
+    opacity: 0.85;
+    max-width: 100%;
+    white-space: normal;
+    overflow: visible;
   }
 }
 
@@ -421,11 +425,19 @@
 }
 
 /* Layout Containers */
-.standardContainer {
-  max-width: 1200px;
+.standardContainer,
+.wideContainer {
   margin: 0 auto;
   padding: 0 4rem;
   width: 100%;
+}
+
+.standardContainer {
+  max-width: 1200px;
+}
+
+.wideContainer {
+  max-width: 1440px;
 }
 
 .sectionHeader h2 {
@@ -605,6 +617,7 @@
   color: var(--text-primary);
   max-width: 800px;
   margin-top: 1rem;
+  margin-bottom: 2rem;
 }
 
 .mutedTextAccent {
@@ -616,9 +629,13 @@
   letter-spacing: 3px;
 }
 
+.textAccent {
+  color: var(--color-accent);
+}
+
 .joinGrid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 3rem;
   width: 100%;
   margin-bottom: 5rem;
@@ -626,8 +643,8 @@
 
 .joinCard {
   background: var(--color-white);
-  padding: 4rem;
-  border-radius: 24px; /* Equally rounded on all sides */
+  padding: 3.5rem 2.5rem;
+  border-radius: 24px;
   border: 1px solid rgba(0, 0, 0, 0.05);
   text-align: left;
   transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
@@ -672,19 +689,19 @@
   transition: all 0.5s ease;
 }
 
-.cardSvg {
-  width: 32px;
-  height: 32px;
-  filter: invert(34%) sepia(85%) saturate(2250%) hue-rotate(331deg) brightness(94%) contrast(96%); /* var(--color-accent) */
-  transition: transform 0.5s ease;
+.cardIcon {
+  width: 28px;
+  height: 28px;
+  color: var(--color-accent);
+  transition: all 0.5s ease;
 }
 
 .joinCard:hover .joinCardIcon {
   background: var(--color-accent);
 }
 
-.joinCard:hover .cardSvg {
-  filter: brightness(0) invert(1);
+.joinCard:hover .cardIcon {
+  color: var(--color-white);
   transform: scale(1.1);
 }
 
@@ -754,7 +771,7 @@
 }
 
 .primaryBtn {
-  color: var(--color-dark); /* Changed to black */
+  color: var(--color-white); /* Changed to black */
   letter-spacing: 1px;
   position: relative;
   font-weight: 700;
@@ -781,7 +798,7 @@
 }
 
 .secondaryBtn {
-  color: var(--color-dark); /* Changed to black */
+  color: var(--color-white); /* Changed to black */
   letter-spacing: 1px;
   font-weight: 700;
   opacity: 0.8;

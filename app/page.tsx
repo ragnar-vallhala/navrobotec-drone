@@ -35,9 +35,9 @@ export default function Home() {
   const phrases = ["Unwavering Reliability", "Unmatched Control", "Unrestricted Innovation"];
   const [phraseIndex, setPhraseIndex] = useState(0);
   const visionCards = [
-    { image: '/images/autonomous.jpg', title: 'Sovereign Skies', desc: 'Total indigenous control over every layer of flight — from register to rotor.' },
-    { image: '/images/in-house.jpg', title: 'Bare-Metal Precision', desc: 'NavHAL — our proprietary hardware abstraction layer — mapping directly to the silicon.' },
-    { image: '/images/swarm.webp', title: 'Scalable Autonomy', desc: 'Architected from day one for multi-agent coordination and swarm-scale deployment.' },
+    { image: '/images/autonomous.jpg', title: 'True Autonomy', desc: 'Human-centric intelligence that eliminates the need for manual piloting. Interact via audio-visual cues and assign complex tasks that drones execute independently.' },
+    { image: '/images/swarm.webp', title: 'Dynamic Swarms', desc: 'Unified multi-agent coordination where drones communicate, self-localize, and collaboratively plan to execute mission objectives as a single, cohesive entity.' },
+    { image: '/images/in-house.jpg', title: 'Sovereign Software', desc: 'Zero-dependency architecture built from the ground up. By eliminating third-party weak links and implementing high-grade testing, we ensure mission-critical reliability.' },
   ];
   useEffect(() => {
     const interval = setInterval(() => {
@@ -125,7 +125,7 @@ export default function Home() {
             <div className={styles.visionHeader}>
               <motion.h2 className={styles.visionTitle} {...fadeInUp}>Our Focus.</motion.h2>
               <motion.p className={styles.visionDescription} {...fadeInUp} transition={{ delay: 0.2, duration: 0.8 }}>
-                We are engineering the future of autonomous aviation by focusing on the absolute fundamentals: security at the silicon level, deterministic reliability, and sovereign intelligence. Our mission is to eliminate black boxes and foreign dependencies, ensuring total control for every mission.
+                We are redefining the boundaries of flight through three core pillars: human-centric autonomy, collaborative swarm intelligence, and a totally sovereign software stack. Our mission is to eliminate black boxes and foreign dependencies, ensuring total control for every mission.
               </motion.p>
             </div>
             <div className={styles.visionGrid}>
@@ -149,30 +149,39 @@ export default function Home() {
 
         {/* Join the Mission Section */}
         <section className={styles.joinSection}>
-          <div className={styles.standardContainer}>
+          <div className={styles.wideContainer}>
             <div className={styles.joinInner}>
               <motion.div className={styles.sectionHeaderCenter} {...fadeInUp}>
                 <p className={styles.mutedTextAccent}>Join the Mission</p>
-                <h2>Help Us Build the Future of Sovereign Skies.</h2>
+                <h2>Help Us Build the Future of Autonomous Skies.</h2>
               </motion.div>
 
               <div className={styles.joinGrid}>
                 <motion.div className={styles.joinCard} {...fadeInUp}>
                   <div className={styles.joinCardIcon}>
-                    <img src="/logos/card1.svg" alt="Build" className={styles.cardSvg} />
+                    <Cpu className={styles.cardIcon} />
                   </div>
                   <div className={styles.cardContent}>
-                    <h4>Build the Unbuilt</h4>
-                    <p>Work on entirely sovereign flight control systems and avionics. Reject legacy bloat and shape the future of autonomous navigation from the ground up.</p>
+                    <h4>Developers</h4>
+                    <p>Contribute to and improve core modules like NavHAL and VAIOS. Leverage our sovereign stack to build your own high-performance projects.</p>
+                  </div>
+                </motion.div>
+                <motion.div className={styles.joinCard} {...fadeInUp} transition={{ delay: 0.1, duration: 0.8 }}>
+                  <div className={styles.joinCardIcon}>
+                    <Rocket className={styles.cardIcon} />
+                  </div>
+                  <div className={styles.cardContent}>
+                    <h4>Manufacturers</h4>
+                    <p>Partner with us to co-develop custom hardware or join our pilot program to integrate sovereign intelligence into your fleet.</p>
                   </div>
                 </motion.div>
                 <motion.div className={styles.joinCard} {...fadeInUp} transition={{ delay: 0.2, duration: 0.8 }}>
                   <div className={styles.joinCardIcon}>
-                    <img src="/logos/card2.svg" alt="Solve" className={styles.cardSvg} />
+                    <Zap className={styles.cardIcon} />
                   </div>
                   <div className={styles.cardContent}>
-                    <h4>Solve Hard Problems</h4>
-                    <p>We deal with real-time hardware constraints, high-frequency PID loops, and deep silicon-level bare-metal coding every single day. Average is not an option.</p>
+                    <h4>Investors</h4>
+                    <p>Fuel the mission to redefine autonomous aviation. Help us scale this sovereign initiative and bring high-grade navigation to the global market.</p>
                   </div>
                 </motion.div>
               </div>
@@ -186,10 +195,10 @@ export default function Home() {
           <div className={styles.standardContainer}>
             <motion.div className={styles.finalCTAContent} {...fadeInUp}>
               <p className={styles.mutedTextAccent}>Ready to Lead?</p>
-              <h2>The Future of Autonomous Aviation is Sovereign.</h2>
+              <h2>The Future of Autonomy is <span className={`${styles.textAccent}`}>Here.</span></h2>
               <div className={styles.ctaGroupLarge}>
                 <Link href="/contact" className={styles.primaryBtnLarge}>Start Your Mission</Link>
-                <Link href="/technology" className={styles.secondaryTextBtn}>Explore our Stack &rarr;</Link>
+                <Link href="/blogs" className={styles.secondaryTextBtn}>Explore our Stack &rarr;</Link>
               </div>
             </motion.div>
           </div>

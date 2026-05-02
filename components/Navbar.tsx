@@ -82,10 +82,10 @@ export default function Navbar() {
                 <div className={`${styles.navContent} ${isMenuOpen ? styles.navContentOpen : ''}`}>
                     <ul className={styles.navLinks}>
                         <li><NavLink href="/">HOME</NavLink></li>
-                        <li><NavLink href="/technology">TECHNOLOGY</NavLink></li>
                         <li><NavLink href="/vision">VISION</NavLink></li>
                         <li><NavLink href="/demo">DEMO</NavLink></li>
                         <li><NavLink href="/team">TEAM</NavLink></li>
+                        <li><NavLink href="/blogs">BLOGS</NavLink></li>
                         <li><NavLink href="/docs">DOCS</NavLink></li>
                     </ul>
                     <div className={styles.cta}>

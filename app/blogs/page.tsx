@@ -14,12 +14,12 @@ const fadeInUp = {
     transition: { duration: 0.8 }
 };
 
-export default function Technology() {
+export default function Blogs() {
     return (
         <div className={styles.container}>
             <div className={styles.standardContainer}>
                 <div className={styles.headerArea}>
-                    <motion.h1 {...fadeInUp}>The Technology Stack.</motion.h1>
+                    <motion.h1 {...fadeInUp}>Vayu Blogs.</motion.h1>
                     <motion.p {...fadeInUp} transition={{ delay: 0.2 }}>The absolute foundation of autonomous supremacy.</motion.p>
                 </div>
             </div>

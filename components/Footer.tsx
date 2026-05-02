@@ -92,7 +92,7 @@ export default function Footer() {
                 </div>
                 <div className={styles.links}>
                     <FooterHeading>QUICK LINKS</FooterHeading>
-                    <FooterLink href="/technology">Technology</FooterLink>
+                    <FooterLink href="/blogs">Blogs</FooterLink>
                     <FooterLink href="/vision">Vision</FooterLink>
                     <FooterLink href="/team">Team</FooterLink>
                 </div>
