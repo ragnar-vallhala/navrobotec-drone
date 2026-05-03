@@ -96,8 +96,8 @@ export default function Home() {
                 We are not building another autopilot. We are building the foundation — a sovereign, silicon-native intelligence that belongs entirely to its operator. No black boxes. No foreign dependencies. Just pure, auditable control.
               </blockquote>
               <div className={styles.founderAttrib}>
-                <img src="/images/Ashutosh.jpeg" alt="Ashutosh Vishwakarma" className={styles.founderAvatar} />
-                <span className={styles.founderName}>Ashutosh Vishwakarma</span>
+                <img src="/nipun.jpeg" alt="Nipun Singh" className={styles.founderAvatar} />
+                <span className={styles.founderName}>Nipun Singh</span>
                 <span className={styles.founderTitle}>Founder &amp; Director, NAVRobotec</span>
               </div>
             </motion.div>
