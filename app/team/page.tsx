@@ -60,19 +60,7 @@ export default function Team() {
                     </motion.div>
                 </div>
 
-                <div className={styles.headerArea} style={{ marginTop: '6rem' }}>
-                    <motion.h2 {...fadeInUp}>Mentorship.</motion.h2>
-                </div>
 
-                <div className={styles.grid}>
-                    <motion.div className={styles.card} {...fadeInUp}>
-                        <h3>Dr. Vijay K. Pal</h3>
-                        <p>
-                            <strong>Technical Advisor</strong><br />
-                            Providing critical guidance in control systems design, dynamic modeling, and autonomous navigation architectures.
-                        </p>
-                    </motion.div>
-                </div>
             </div>
         </div>
     );
