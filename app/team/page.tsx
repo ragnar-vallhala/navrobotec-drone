@@ -21,27 +21,54 @@ export default function Team() {
 
                 <div className={styles.grid}>
                     <motion.div className={styles.card} {...fadeInUp}>
-                        <h3>Ashutosh Vishwakarma</h3>
+                        <div className={styles.cardHeader}>
+                            <img src="/images/nipun.jpeg" alt="Nipun Singh" className={styles.avatar} />
+                            <div className={styles.memberInfo}>
+                                <h3>Nipun Singh</h3>
+                                <strong>Founder & Director</strong>
+                            </div>
+                        </div>
                         <p>
-                            <strong>Founder & Core Hardware Engineer</strong><br />
-                            Embedded systems developer and controls theory specialist.
-                            Responsible for the VAIOS architecture, NavHAL implementation, and cascaded PID tuning.
+                            Leading the strategic vision and operations of NAVRobotec. Focused on scaling autonomous intelligence and establishing a foundation for secure, independent aviation.
                         </p>
                     </motion.div>
 
                     <motion.div className={styles.card} {...fadeInUp} transition={{ delay: 0.2 }}>
-                        <h3>Core Team</h3>
+                        <div className={styles.cardHeader}>
+                            <img src="/images/Ashutosh.jpeg" alt="Ashutosh Vishwakarma" className={styles.avatar} />
+                            <div className={styles.memberInfo}>
+                                <h3>Ashutosh Vishwakarma</h3>
+                                <strong>Founder & Core Hardware</strong>
+                            </div>
+                        </div>
                         <p>
-                            Currently scaling the core group. Looking for brilliant embedded developers, AI/ML engineers for computer vision,
-                            and aerospace engineers to join the project.
+                            Embedded systems developer and controls theory specialist. Responsible for VAIOS architecture, NavHAL implementation, and core flight stabilization logic.
                         </p>
                     </motion.div>
 
                     <motion.div className={styles.card} {...fadeInUp} transition={{ delay: 0.4 }}>
-                        <h3>Mentorship</h3>
+                        <div className={styles.cardHeader}>
+                            <img src="/images/vibhu.png" alt="Vibhu Gupta" className={styles.avatar} />
+                            <div className={styles.memberInfo}>
+                                <h3>Vibhu Gupta</h3>
+                                <strong>Core Software Engineer</strong>
+                            </div>
+                        </div>
                         <p>
-                            <strong>Dr. Vijay K. Pal</strong>
-                            <br />
+                            Specializing in computer vision and collaborative swarm intelligence. Developing the perception layers and multi-agent coordination protocols for the Vayu stack.
+                        </p>
+                    </motion.div>
+                </div>
+
+                <div className={styles.headerArea} style={{ marginTop: '6rem' }}>
+                    <motion.h2 {...fadeInUp}>Mentorship.</motion.h2>
+                </div>
+
+                <div className={styles.grid}>
+                    <motion.div className={styles.card} {...fadeInUp}>
+                        <h3>Dr. Vijay K. Pal</h3>
+                        <p>
+                            <strong>Technical Advisor</strong><br />
                             Providing critical guidance in control systems design, dynamic modeling, and autonomous navigation architectures.
                         </p>
                     </motion.div>
@@ -50,4 +77,3 @@ export default function Team() {
         </div>
     );
 }
-
