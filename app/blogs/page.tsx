@@ -1,28 +1,97 @@
-'use client';
-
-import { motion } from 'framer-motion';
+import fs from 'fs';
+import path from 'path';
+import matter from 'gray-matter';
+import Link from 'next/link';
 import styles from './page.module.css';
+import sharedStyles from '../shared.module.css';
+import { Calendar, ArrowRight } from 'lucide-react';
 
-const fadeInUp = {
-    initial: { opacity: 0, y: 30 },
-    whileInView: { opacity: 1, y: 0 },
-    viewport: { once: true },
-    transition: { duration: 0.8 }
+export const metadata = {
+    title: 'VAYU Blogs | NAVRobotec',
+    description: 'Insights into sovereign autonomous flight, embedded real-time software, and the future of Indian robotics.',
 };
 
-export default function Blogs() {
+export default async function BlogsPage() {
+    const blogsDirectory = path.join(process.cwd(), 'public/blogs');
+    let posts: any[] = [];
+    
+    try {
+        const files = fs.readdirSync(blogsDirectory);
+        posts = files
+            .filter(filename => filename.endsWith('.md'))
+            .map(filename => {
+                const slug = filename.replace('.md', '');
+                const filePath = path.join(blogsDirectory, filename);
+                const fileContents = fs.readFileSync(filePath, 'utf8');
+                const { data } = matter(fileContents);
+
+                return {
+                    slug,
+                    frontmatter: data,
+                };
+            })
+            .filter(post => post.frontmatter.title);
+            
+        posts.sort((a, b) => (new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime()));
+    } catch (e) {
+        posts = [];
+    }
+
     return (
-        <div className={styles.container}>
-            <div className={styles.standardContainer}>
-                <div className={styles.headerArea} style={{ minHeight: '60vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                    <motion.h1 {...fadeInUp}>Vayu Blogs.</motion.h1>
-                    <motion.p {...fadeInUp} transition={{ delay: 0.2 }} style={{ fontSize: '2rem', marginTop: '2rem', color: 'var(--color-accent)', fontWeight: 700, letterSpacing: '0.1em' }}>
-                        COMING SOON
-                    </motion.p>
-                    <motion.p {...fadeInUp} transition={{ delay: 0.4 }} style={{ maxWidth: '600px', margin: '1rem auto' }}>
-                        We are currently documenting our engineering journey and technical breakthroughs. Stay tuned for deep dives into autonomous intelligence.
-                    </motion.p>
+        <div className={sharedStyles.container} style={{ minHeight: '100vh' }}>
+            <div className={sharedStyles.standardContainer}>
+                <div className={sharedStyles.headerArea}>
+                    <h1>Engineering <span className={sharedStyles.gradientText}>Journal.</span></h1>
+                    <p>
+                        Documenting our architecture, research, and milestones in building autonomous, sovereign intelligence.
+                    </p>
                 </div>
+
+                {posts.length === 0 ? (
+                    <div style={{ padding: '4rem 0', opacity: 0.5 }}>
+                        <p>Initializing intelligence protocols. No logs available yet.</p>
+                    </div>
+                ) : (
+                    <div style={{ 
+                        display: 'grid', 
+                        gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', 
+                        gap: '3rem',
+                    }}>
+                        {posts.map((post) => (
+                            <Link key={post.slug} href={`/blogs/${post.slug}`} className={styles.blogCard}>
+                                {post.frontmatter.coverImage && (
+                                    <div className={styles.blogCardImageWrapper}>
+                                        <img 
+                                            src={post.frontmatter.coverImage} 
+                                            alt={post.frontmatter.title} 
+                                            className={styles.blogCardImage}
+                                        />
+                                        <div className={styles.blogCardOverlay} />
+                                    </div>
+                                )}
+                                
+                                <div className={styles.blogCardContent}>
+                                    <div className={styles.blogCardMeta}>
+                                        <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                            <Calendar size={14} />
+                                            {post.frontmatter.date}
+                                        </span>
+                                    </div>
+
+                                    <h3 className={styles.blogCardTitle}>{post.frontmatter.title}</h3>
+                                    
+                                    <p className={styles.blogCardExcerpt}>
+                                        {post.frontmatter.excerpt}
+                                    </p>
+
+                                    <div className={styles.blogCardCTA}>
+                                        Read Article <ArrowRight size={16} />
+                                    </div>
+                                </div>
+                            </Link>
+                        ))}
+                    </div>
+                )}
             </div>
         </div>
     );

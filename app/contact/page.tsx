@@ -50,22 +50,7 @@ export default function Contact() {
                 <div className={styles.headerArea}>
                     <motion.h1 {...fadeInUp}>Get in <span className={styles.gradientText}>Touch.</span></motion.h1>
                     <motion.p {...fadeInUp} transition={{ delay: 0.2 }}>
-                        We are actively looking for <span className={contactStyles.linkWrapper}>
-                            <Link href="/investors" className={contactStyles.highlightLink}>investors and partners</Link>
-                            <span className={contactStyles.clickMe}>
-                                <svg width="80" height="50" viewBox="0 0 80 50" className={contactStyles.curvedArrow}>
-                                    <path 
-                                        d="M75,35 C60,45 30,45 5,5 M5,5 L12,8 M5,5 L8,15" 
-                                        fill="none" 
-                                        stroke="currentColor" 
-                                        strokeWidth="2.5" 
-                                        strokeLinecap="round" 
-                                        strokeLinejoin="round"
-                                    />
-                                </svg>
-                                click me!
-                            </span>
-                        </span>.
+                        We are open to collaborations, developer integrations, and general inquiries.
                     </motion.p>
                 </div>
 
