@@ -51,7 +51,7 @@ export default function Team() {
                             <img src="/images/vibhu.png" alt="Vibhu Gupta" className={styles.avatar} />
                             <div className={styles.memberInfo}>
                                 <h3>Vibhu Gupta</h3>
-                                <strong>Core Software Engineer</strong>
+                                <strong>Founder & Director</strong>
                             </div>
                         </div>
                         <p>
