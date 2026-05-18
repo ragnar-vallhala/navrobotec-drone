@@ -1,0 +1,14 @@
+\section{Sensor Interface}
+\label{sec:vayu_sensor}
+
+The sensor interface in Vayu is responsible for acquiring raw data from onboard sensors and making it available to downstream subsystems such as state estimation and control. This layer abstracts the underlying hardware communication details while ensuring timely and reliable data delivery.
+
+The system currently utilizes a Bosch BMX160 inertial measurement unit and a Bosch BMP180 barometric pressure sensor. Both sensors are interfaced over a shared I2C bus managed through NavHAL. The BMX160 provides accelerometer, gyroscope, and magnetometer data required for orientation estimation, while the BMP180 supplies pressure-based altitude information.
+
+High-frequency IMU data acquisition is implemented using a DMA-driven approach. Sensor reads are initiated over I2C, and upon completion of each DMA transfer, an interrupt is generated to trigger the next read operation. This creates a continuous acquisition loop that minimizes CPU involvement and ensures consistent sampling at high rates. By offloading data transfer to DMA, the system reduces latency and avoids blocking execution of other tasks.
+
+In contrast, lower-frequency sensors such as the BMP180 are accessed through periodic task execution. These sensors do not require continuous high-rate sampling and are read at intervals appropriate to their role in the system. This distinction allows efficient utilization of system resources while maintaining adequate data freshness.
+
+Acquired sensor data is stored in shared buffers, enabling decoupling between acquisition and processing stages. Estimation tasks consume data from these buffers without directly interacting with hardware, allowing sensor drivers to remain independent of higher-level logic. This design improves modularity and simplifies integration of additional sensors in the future.
+
+Initialization of sensors is performed during system startup, where communication interfaces are configured and device-specific parameters are set. Once initialized, sensor tasks operate continuously within the execution framework, providing a steady stream of data for the rest of the system.

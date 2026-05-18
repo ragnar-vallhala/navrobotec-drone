@@ -1,0 +1,38 @@
+<p>Safety is a critical aspect of embedded control systems, particularly in applications such as aerial robotics where system failures can lead to physical damage or hazardous situations. A robust system must be capable of detecting abnormal conditions and responding in a controlled manner to prevent escalation.</p>
+<h3 id="failure-modes">Failure Modes</h3>
+<p>Embedded flight systems can encounter various types of failures, including:</p>
+<ul>
+<li><p><strong>Sensor Failures</strong>: Faulty or inconsistent sensor readings due to hardware malfunction, noise, or environmental interference.</p></li>
+<li><p><strong>Actuator Failures</strong>: Loss of control over motors or servos, which can directly affect system stability.</p></li>
+<li><p><strong>Communication Loss</strong>: Interruption of communication with remote controllers or ground stations.</p></li>
+<li><p><strong>Software Faults</strong>: Unexpected behavior due to bugs, race conditions, or incorrect state estimation.</p></li>
+</ul>
+<p>Identifying these failure modes is the first step toward designing effective safety mechanisms.</p>
+<h3 id="fault-detection">Fault Detection</h3>
+<p>To ensure safe operation, the system must continuously monitor its internal state and sensor inputs. Fault detection mechanisms may include:</p>
+<ul>
+<li><p>Threshold-based checks on sensor values and system states</p></li>
+<li><p>Consistency checks between multiple sensors (e.g., comparing accelerometer and gyroscope estimates)</p></li>
+<li><p>Monitoring of communication timeouts</p></li>
+<li><p>Detection of actuator saturation or abnormal control outputs</p></li>
+</ul>
+<p>Early detection of anomalies allows the system to take corrective action before instability occurs.</p>
+<h3 id="failsafe-mechanisms">Failsafe Mechanisms</h3>
+<p>Failsafe mechanisms define how the system responds when a fault is detected. These responses are designed to minimize risk and maintain system safety.</p>
+<p>Common failsafe strategies include:</p>
+<ul>
+<li><p><strong>Disarm</strong>: Immediately disable actuators to prevent unintended motion.</p></li>
+<li><p><strong>Hover / Stabilize</strong>: Maintain a stable state using available sensor data when partial failures occur.</p></li>
+<li><p><strong>Return-to-Home (RTH)</strong>: Navigate the system back to a predefined safe location in case of communication loss.</p></li>
+<li><p><strong>Controlled Shutdown</strong>: Gradually reduce system activity to avoid abrupt transitions.</p></li>
+</ul>
+<p>The choice of failsafe strategy depends on system capabilities and the nature of the detected fault.</p>
+<h3 id="design-considerations-1">Design Considerations</h3>
+<p>Designing safety mechanisms involves balancing responsiveness and reliability. Key considerations include:</p>
+<ul>
+<li><p><strong>Latency of Detection</strong>: Faults must be detected quickly to prevent escalation.</p></li>
+<li><p><strong>False Positives</strong>: Overly sensitive detection may trigger unnecessary failsafe actions.</p></li>
+<li><p><strong>System Redundancy</strong>: Multiple sensors or fallback mechanisms can improve reliability.</p></li>
+<li><p><strong>Graceful Degradation</strong>: The system should maintain partial functionality when possible, rather than failing abruptly.</p></li>
+</ul>
+<p>A well-designed safety framework ensures that the system can handle unexpected conditions in a predictable and controlled manner, forming an essential component of reliable embedded systems.</p>

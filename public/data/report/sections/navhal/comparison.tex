@@ -1,0 +1,24 @@
+\section{Comparison with Existing HALs}
+\label{sec:navhal_comparison}
+
+This section compares NavHAL with commonly used hardware abstraction layers, including STM32 HAL, Arduino, and low-level (LL) register access. The comparison is based on key factors relevant to embedded system development, including performance, abstraction overhead, determinism, flexibility, and ease of use.
+
+Unlike low-level register programming, which provides maximum performance at the cost of portability and maintainability, higher-level frameworks such as STM32 HAL and Arduino improve developer productivity but introduce additional runtime overhead and reduced control over hardware behavior. As demonstrated in Section~\ref{sec:navhal_performance}, these trade-offs can significantly impact execution efficiency and timing predictability in real-time applications.
+
+NavHAL is designed to bridge this gap by providing a high-level, portable abstraction while retaining performance characteristics equivalent to direct register access. This is achieved through compile-time specialization, minimal call depth, and the elimination of runtime dispatch mechanisms.
+
+\subsection{Performance and Overhead}
+
+NavHAL achieves performance comparable to LL implementations while significantly outperforming STM32 HAL and Arduino in all evaluated benchmarks. Unlike conventional HALs, which introduce layered abstractions and runtime checks, NavHAL resolves hardware interactions at compile time, eliminating unnecessary overhead.
+
+\subsection{Determinism and Real-Time Behavior}
+
+Deterministic execution is critical in time-sensitive applications such as robotics and flight control systems. NavHAL exhibits consistent execution timing in non-interrupt conditions and bounded latency under interrupt-driven scenarios. In contrast, higher-level frameworks such as Arduino introduce significant variability due to internal abstraction layers and runtime handling.
+
+\subsection{Abstraction vs Control}
+
+STM32 HAL and Arduino prioritize ease of use and portability but often abstract away hardware details, limiting fine-grained control. LL access provides full control but at the cost of code complexity and reduced portability. NavHAL maintains a balance by exposing a clean abstraction while preserving direct access to hardware capabilities.
+
+\subsection{Scalability and Maintainability}
+
+NavHAL is designed to scale across different microcontrollers and platforms through compile-time configuration. This approach avoids code duplication and reduces maintenance overhead, unlike traditional HALs that often rely on extensive conditional logic and device-specific implementations.

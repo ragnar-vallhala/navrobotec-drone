@@ -1,0 +1,101 @@
+\section{Scheduler Design}
+\label{sec:vaios_scheduler_design}
+
+VAIOS employs a preemptive, priority-based scheduling strategy with round-robin execution among tasks of equal priority. The scheduler is designed to provide deterministic task selection with minimal overhead, making it suitable for real-time embedded systems. The flow is shown in Fig.~\ref{fig:vaios_scheduler_flow}.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        node distance=0.5cm,
+        start_stop/.style={draw, ellipse, minimum width=2.5cm, minimum height=0.7cm, align=center, fill=red!10, font=\tiny\bfseries},
+        activity/.style={draw, rectangle, rounded corners=2pt, minimum width=3.2cm, minimum height=0.8cm, align=center, fill=blue!5, font=\tiny},
+        decision/.style={draw, diamond, aspect=2, minimum width=2.8cm, minimum height=1cm, align=center, fill=orange!10, font=\tiny},
+        arrow/.style={-Latex, thick}
+    ]
+
+    % Nodes
+    \node[start_stop] (start) {Scheduler Trigger\\ \scriptsize (Tick, Block, Yield, ISR)};
+    \node[activity, below=of start] (save) {Save Current Task Context\\ \scriptsize (Stack registers, update TCB->sp)};
+    \node[activity, below=of save] (find) {Find Highest Priority Ready Queue\\ \scriptsize (Scan bitmask)};
+    \node[decision, below=of find] (ready) {Is any\\task ready?};
+    \node[activity, right=1.5cm of ready] (idle) {Select Idle Task};
+    \node[activity, below=of ready, yshift=-0.3cm] (select) {Select Next Task from Queue\\ \scriptsize (Pop from head of list)};
+    \node[decision, below=of select, yshift=-0.1cm] (rr) {Round Robin\\Required?};
+    \node[activity, right=1.5cm of rr] (rotate) {Rotate Ready List\\ \scriptsize (Time slice expiry)};
+    \node[activity, below=of rr, yshift=-0.3cm] (load) {Load Next Task Context\\ \scriptsize (Restore registers, update PSP)};
+    \node[start_stop, below=of load] (end) {Resume Execution\\ \scriptsize (Exception Return)};
+
+    % Paths
+    \draw[arrow] (start) -- (save);
+    \draw[arrow] (save) -- (find);
+    \draw[arrow] (find) -- (ready);
+    \draw[arrow] (ready) -- node[left, font=\tiny] {Yes} (select);
+    \draw[arrow] (ready) -- node[above, font=\tiny] {No} (idle);
+    \draw[arrow] (idle.east) -- +(0.8,0) |- (load.east);
+    \draw[arrow] (select) -- (rr);
+    \draw[arrow] (rr) -- node[left, font=\tiny] {No} (load);
+    \draw[arrow] (rr) -- node[above, font=\tiny] {Yes} (rotate);
+    \draw[arrow] (rotate.east) -- +(0.8,0) |- (load.east);
+    \draw[arrow] (load) -- (end);
+
+    \end{tikzpicture}
+    \caption{Operational flowchart of the VAIOS preemptive scheduler illustrating context management and priority-based selection logic.}
+    \label{fig:vaios_scheduler_flow}
+\end{figure}
+
+Tasks are organized into multiple ready queues, one for each priority level. The system supports a fixed range of priorities, where higher numerical values correspond to higher scheduling priority. Each ready queue is implemented as a linked list, allowing tasks of the same priority to be scheduled in a round-robin manner. When a running task exhausts its time slice or yields execution, it is reinserted at the end of its corresponding ready queue, ensuring fair execution among tasks with equal priority. The structure is shown in Fig.~\ref{fig:vaios_queues}.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        priority_box/.style={draw, rectangle, minimum width=2.8cm, minimum height=0.6cm, align=center, fill=gray!10, font=\tiny\bfseries},
+        task_box/.style={draw, rectangle, rounded corners=2pt, minimum width=1.5cm, minimum height=0.6cm, align=center, fill=blue!5, font=\tiny},
+        bitmap_node/.style={draw, rectangle, minimum size=0.5cm, align=center, font=\tiny\ttfamily},
+        arrow/.style={-Latex, thick},
+        dots/.style={draw=none, minimum size=0.5cm}
+    ]
+
+    % Bitmap
+    \node[bitmap_node, fill=green!20] (bm3) at (0,0) {1};
+    \node[bitmap_node, right=-\pgflinewidth of bm3] (bm2) {0};
+    \node[bitmap_node, right=-\pgflinewidth of bm2, fill=green!20] (bm1) {1};
+    \node[bitmap_node, right=-\pgflinewidth of bm1] (bm0) {0};
+    \node[left=0.2cm of bm3, font=\tiny\bfseries] {Priority Bitmap:};
+    \node[below=2pt of bm3, font=\tiny] {P3};
+    \node[below=2pt of bm2, font=\tiny] {P2};
+    \node[below=2pt of bm1, font=\tiny] {P1};
+    \node[below=2pt of bm0, font=\tiny] {P0};
+
+    % Queues
+    \node[priority_box, below=1.2cm of bm3, xshift=1.4cm] (q3) {Priority 3 (High)};
+    \node[priority_box, below=0.8cm of q3] (q2) {Priority 2 (Empty)};
+    \node[priority_box, below=0.8cm of q2] (q1) {Priority 1};
+    \node[priority_box, below=0.8cm of q1] (q0) {Priority 0 (Idle)};
+
+    % Connected Tasks
+    \node[task_box, right=0.8cm of q3] (t3_1) {Task A};
+    \node[task_box, right=0.5cm of t3_1] (t3_2) {Task B};
+    \draw[arrow] (q3) -- (t3_1);
+    \draw[arrow] (t3_1) -- (t3_2);
+
+    \node[task_box, right=0.8cm of q1] (t1_1) {Task C};
+    \draw[arrow] (q1) -- (t1_1);
+
+    \node[task_box, right=0.8cm of q0] (t0_1) {Idle Task};
+    \draw[arrow] (q0) -- (t0_1);
+
+    % Selection Arrow
+    \draw[arrow, red, thick, dashed] (bm3.south) -- +(0,-0.4) -| (q3.west) node[near end, left, font=\tiny\bfseries, xshift=-0.1cm] {Highest Ready Task};
+
+    \end{tikzpicture}
+    \caption{Priority-based ready queue structure in VAIOS. The scheduler uses a bitmap to identify the highest active queue, ensuring deterministic task selection complexity.}
+    \label{fig:vaios_queues}
+\end{figure}
+
+To enable efficient selection of the next task, VAIOS maintains a bitmap that tracks which priority levels have ready tasks. This allows the scheduler to identify the highest-priority ready task without scanning all queues. The highest active priority is determined by inspecting this bitmap, after which the corresponding ready queue is accessed to select the next task. This approach significantly reduces scheduling overhead and ensures predictable behavior.
+
+The scheduling process is triggered by system events such as time slice expiration, task blocking, or explicit yield requests. When a scheduling event occurs, the current task is evaluated and, if still runnable, returned to the appropriate ready queue. The scheduler then selects the next task based on priority and queue ordering, updates its state to RUNNING, and performs a context switch.
+
+Time slicing is configurable through compile-time parameters and applies to tasks within the same priority level. This allows developers to balance fairness and responsiveness based on application requirements. Higher-priority tasks always preempt lower-priority tasks, ensuring that critical operations receive immediate processor time.
+
+The scheduler also integrates with delayed and blocked task management. Tasks in the DELAYED state are periodically checked against the system tick and moved back to the ready queues when their delay expires. Similarly, tasks waiting on synchronization primitives are transitioned from the BLOCKED state to READY when the required condition is satisfied.

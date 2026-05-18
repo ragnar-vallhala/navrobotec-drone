@@ -1,2 +1,22 @@
 \chapter{VAIOS}
 \label{chap:vaios}
+
+VAIOS is the runtime layer of the Vayu system, designed to provide deterministic execution, efficient task management, and essential system services for real-time embedded applications. While NavHAL abstracts the underlying hardware and Vayu defines the higher-level flight control logic, VAIOS acts as the core system layer that coordinates execution across tasks, manages resources, and ensures predictable system behavior.
+
+The design of VAIOS is centered around the requirements of time-critical systems such as drone flight controllers, where latency, determinism, and reliability are more important than general-purpose flexibility. Unlike conventional operating systems, VAIOS avoids complex and heavyweight abstractions, instead adopting a minimal and tightly controlled architecture tailored for embedded environments. It provides a preemptive scheduler, inter-task communication mechanisms, dynamic memory management, and system-level services such as file system access and logging.
+
+A key focus of VAIOS is maintaining low overhead while enabling modularity. Features such as priority-based scheduling with round-robin execution, efficient context switching using hardware-supported mechanisms, and a configurable system design allow it to scale across different applications without compromising performance. Additionally, support for simulation through semihosting enables development and testing in environments where hardware may not be available.
+
+This chapter presents the design and implementation of VAIOS, covering its architecture, scheduling model, task management, memory system, communication primitives, and integration with the Vayu flight control stack. Together, these components form a cohesive runtime environment that bridges low-level hardware interaction and high-level application logic.
+
+\input{sections/vaios/overview}
+\input{sections/vaios/design_goals}
+\input{sections/vaios/architecture}
+\input{sections/vaios/task_model}
+\input{sections/vaios/scheduler_design}
+\input{sections/vaios/timing_management}
+\input{sections/vaios/intertask_communication}
+\input{sections/vaios/memory_management}
+\input{sections/vaios/vayu_integration}
+\input{sections/vaios/performance}
+\input{sections/vaios/limitations}

@@ -1,0 +1,32 @@
+<p>The stack implements a deterministic, high-frequency data flow pipeline designed to minimize latency and ensure consistent control performance. Data moves through the system in a structured sequence of sensing, estimation, command processing, and actuation.</p>
+<h3 id="data-processing-pipeline">Data Processing Pipeline</h3>
+<p>The core data flow follows a strictly defined path as illustrated in Figure <a href="/docs/architecture/dataflow#fig:data_flow_pipeline">3.3</a>:</p>
+<ol>
+<li><p><strong>Sensor Acquisition</strong>: Raw measurements are read from the BMX160 IMU and Magnetometer. These values are buffered and low-pass filtered to remove high-frequency noise.</p></li>
+<li><p><strong>State Estimation</strong>: The filtered measurements are processed by the sensor fusion module (e.g., Mahony filter) to compute the vehicle’s current orientation (Roll, Pitch, Yaw).</p></li>
+<li><p><strong>Command Input Processing</strong>: Concurrently, RC commands are received and decoded from the iBus receiver. These inputs define the desired setpoints for the vehicle’s attitude and thrust.</p></li>
+<li><p><strong>Cascaded PID Control</strong>: The estimated state and reference setpoints are fed into the cascaded control loops. The difference (error) is processed through the outer angle loop and then the inner rate loop to generate torque commands.</p></li>
+<li><p><strong>Actuator Mapping</strong>: The torque commands are passed to the motor mixer, which calculates the required speed for each individual motor based on the airframe geometry.</p></li>
+<li><p><strong>Hardware Output</strong>: Final commands are converted into PWM signals and sent to the Electronic Speed Controllers (ESCs).</p></li>
+</ol>
+<figure id="fig:data_flow_pipeline">
+<img src="/docs/diagrams/tikz-f2254e1125da.svg" />
+<figcaption>Sequential data flow pipeline of the Vayu system, from sensor acquisition to physical actuation.</figcaption>
+</figure>
+<h3 id="synchronization-and-buffering">Synchronization and Buffering</h3>
+<p>To maintain data integrity across different execution frequencies, Vayu utilizes structured buffers and shared variables managed by VAIOS. For instance, the IMU task updates its buffer at 1 kHz, while the telemetry task may sample this data at 100 Hz. Synchronization holds ensure that the control loops always operate on the most recent and coherent snapshot of the system state, preventing race conditions or data tearing.</p>
+<p>The data flow begins with sensor acquisition at the hardware level. Sensors such as the IMU, magnetometer, barometer, and GPS generate measurements of physical quantities, which are accessed through the Hardware Abstraction Layer (NavHAL). These measurements are time-stamped and made available to the higher-level modules in a consistent format.</p>
+<p>The acquired sensor data is then processed by the state estimation module. This stage combines measurements from multiple sensors to compute an estimate of the system state, including orientation, angular velocity, and position. High-frequency inertial measurements provide short-term dynamics, while lower-frequency sensors contribute to long-term stability and drift correction.</p>
+<p>The estimated state is used by the control module to compute control actions. Based on the desired reference inputs (e.g., target orientation or angular rates), the control system evaluates the error and generates appropriate control signals using cascaded control loops. The inner loops operate on angular velocity, while outer loops regulate orientation.</p>
+<p>These control signals are then passed to the motor mixing module, which converts abstract control inputs (roll, pitch, yaw, and thrust) into actuator-specific commands. The resulting outputs are transmitted through NavHAL to the hardware layer, where they are applied to motors or other actuators.</p>
+<p>In parallel, the communication module exchanges data with external systems. Telemetry data, including sensor readings and system states, is transmitted outward, while command inputs and configuration updates are received and integrated into the control pipeline.</p>
+<p>This flow can be summarized as:</p>
+<div class="center">
+<p><code>Sensors → Estimation → Control → Mixing → Actuation</code></p>
+</div>
+<p>Figure <a href="/docs/architecture/dataflow#fig:data_flow">3.4</a> illustrates the end-to-end data flow within the Vayu system.</p>
+<figure id="fig:data_flow">
+<img src="/docs/diagrams/tikz-2094f9192dce.svg" />
+<figcaption>Data flow pipeline from sensor acquisition to actuator output</figcaption>
+</figure>
+<p>This structured data flow ensures a clear separation between different processing stages, enabling modular design and simplifying debugging and system analysis. Each stage operates on well-defined inputs and outputs, allowing independent development and optimization of system components.</p>

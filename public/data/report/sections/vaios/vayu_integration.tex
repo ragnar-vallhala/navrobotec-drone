@@ -1,0 +1,14 @@
+\section{Integration with Vayu}
+\label{sec:vaios_vayu_integration}
+
+VAIOS serves as the execution backbone for the Vayu system, providing the runtime environment in which all application logic is organized and executed. Within Vayu, system functionality is decomposed into a set of tasks, each responsible for a specific operation such as sensor handling, control computation, communication, or system services.
+
+At system startup, VAIOS is initialized with the required hardware configuration through NavHAL, after which essential tasks are created and scheduled. These tasks typically include core system functions that persist throughout execution, such as control loops, sensor data acquisition, and communication interfaces. Additional tasks may be created dynamically during runtime for specific operations such as calibration, diagnostics, or boot-time checks, and may terminate once their purpose is fulfilled.
+
+Each task operates independently within the scheduling framework, allowing concurrent execution of multiple system components. For example, storage-related operations can be handled by dedicated tasks that interact with the virtual file system, while computation-heavy tasks such as control algorithms run at higher priorities to ensure timely execution. The use of task-level abstraction enables clear separation of responsibilities and simplifies system design.
+
+The integration also demonstrates how system services provided by VAIOS are utilized in practice. Tasks can perform file operations through the VFS layer, interact with hardware via NavHAL, and use IPC mechanisms for synchronization and data exchange. In the provided example, a dedicated task performs storage benchmarking by writing and reading data through the VFS interface while periodically yielding to maintain system responsiveness. This illustrates how long-running operations can coexist with other system activities without blocking execution.
+
+The lifecycle of tasks in Vayu varies depending on their role. Persistent tasks, such as control and communication modules, remain active throughout system operation, while transient tasks, such as calibration routines or initialization checks, execute once and terminate. Resource cleanup for completed tasks is handled by the system, ensuring efficient memory utilization without disrupting active components.
+
+Overall, the integration of VAIOS with Vayu enables a modular and scalable system design, where functionality is expressed in terms of interacting tasks. This approach provides flexibility in extending system capabilities while maintaining predictable execution behavior required for real-time applications.

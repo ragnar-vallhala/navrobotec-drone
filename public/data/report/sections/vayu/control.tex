@@ -1,0 +1,77 @@
+\section{Control System}
+\label{sec:vayu_control}
+
+The control system in Vayu generates actuator commands required to stabilize and control the drone based on estimated state and user inputs. It is implemented as a cascaded architecture consisting of an outer attitude loop and an inner rate loop, operating at different frequencies to balance stability and responsiveness.
+
+\subsection{Control Architecture}
+
+The system follows a hierarchical structure where the attitude controller computes desired angular rates, which are then tracked by the rate controller. This separation enables robust stabilization while allowing intuitive control through orientation commands.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        block/.style={rectangle, draw=black, thick, minimum width=2.8cm, minimum height=1cm, align=center},
+        arrow/.style={->, thick}
+    ]
+
+    \node[block] (input) {RC Input};
+    \node[block, right=0.5cm of input] (att) {Attitude Controller \\ (250 Hz)};
+    \node[block, right=0.5cm of att] (rate) {Rate Controller \\ (1 kHz)};
+    \node[block, right=0.5cm of rate] (motor) {Motor Outputs};
+
+    \draw[arrow] (input) -- (att);
+    \draw[arrow] (att) -- (rate);
+    \draw[arrow] (rate) -- (motor);
+
+    \node[block, below=0.5cm of rate] (gyro) {Gyroscope};
+    \node[block, below=0.5cm of att] (ori) {Orientation};
+
+    \draw[arrow] (gyro.north) -- (rate.south);
+    \draw[arrow] (ori.north) -- (att.south);
+
+    \end{tikzpicture}
+    \caption{Cascaded control structure in Vayu.}
+\end{figure}
+
+The attitude controller converts user commands into target angles and computes desired angular rates using PID control. The rate controller then tracks these target rates using gyroscope feedback and produces control outputs for each axis.
+
+\subsection{PID Controller Formulation}
+
+The controller output is computed as:
+\[
+u = K_p e + K_i \int e\,dt + K_d \frac{d}{dt}(-y) + K_{ff} \dot{r}
+\]
+
+where $e = r - y$ is the error between setpoint and measurement.
+
+\subsection{Implementation Details}
+
+The implementation incorporates several practical enhancements:
+
+\textbf{Derivative on Measurement:}
+\[
+D = -K_d \frac{y(t) - y(t - dt)}{dt}
+\]
+This avoids derivative kick during rapid setpoint changes.
+
+\textbf{Low-Pass Filtering:}
+\[
+D_f = D_f + \alpha (D - D_f), \quad \alpha = \frac{dt}{dt + RC}
+\]
+
+\textbf{Integral Anti-Windup:}
+\[
+I = \text{clamp}(I + K_i e dt, -I_{\max}, I_{\max})
+\]
+
+Integration is limited when actuator saturation occurs to prevent windup.
+
+\textbf{Feedforward Term:}  
+A feedforward component based on setpoint rate improves responsiveness.
+
+\textbf{Multi-Rate Execution:}  
+The rate loop operates at approximately 1\,kHz for fast stabilization, while the attitude loop runs at approximately 250\,Hz for smoother control.
+
+\subsection{Data Flow Between Controllers}
+
+The attitude controller produces desired angular rates which are passed to the rate controller through a lock-free buffer mechanism, ensuring non-blocking communication between task. The rate controller then computes final control outputs using real-time gyroscope measurements.

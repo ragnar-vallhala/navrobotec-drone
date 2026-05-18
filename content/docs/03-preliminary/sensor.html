@@ -1,0 +1,27 @@
+<p>Sensors form the primary interface between an embedded system and the physical environment. In aerial robotics and embedded control systems, sensors provide measurements of physical quantities such as acceleration, angular velocity, magnetic field, pressure, and position. These measurements are essential for estimating the state of the system and enabling closed-loop control.</p>
+<h3 id="types-of-sensors">Types of Sensors</h3>
+<p>Flight control systems typically rely on a combination of sensors, each providing complementary information:</p>
+<ul>
+<li><p><strong>Inertial Measurement Unit (IMU)</strong>: An IMU consists of accelerometers and gyroscopes. Accelerometers measure linear acceleration, including the effect of gravity, while gyroscopes measure angular velocity. IMUs provide high-frequency data and are fundamental for attitude estimation and stabilization.</p></li>
+<li><p><strong>Magnetometer</strong>: Measures the Earth’s magnetic field and is commonly used for heading (yaw) estimation. It helps correct long-term drift in orientation estimates derived from gyroscopes.</p></li>
+<li><p><strong>Barometer</strong>: Measures atmospheric pressure and is used to estimate altitude. It provides relatively low-frequency but stable altitude information.</p></li>
+<li><p><strong>Global Positioning System (GPS)</strong>: Provides global position and velocity estimates. GPS measurements are typically low-frequency and subject to noise and delay but are essential for navigation.</p></li>
+</ul>
+<p>Each sensor has its own characteristics in terms of accuracy, noise, update rate, and reliability. As a result, no single sensor can provide a complete and accurate estimate of the system state.</p>
+<h3 id="sensor-characteristics">Sensor Characteristics</h3>
+<p>Sensor measurements are inherently imperfect and are affected by various sources of error:</p>
+<ul>
+<li><p><strong>Noise</strong>: Random variations in sensor readings, often modeled as stochastic processes. Noise limits the precision of measurements and must be filtered.</p></li>
+<li><p><strong>Bias</strong>: A constant or slowly varying offset in sensor output. For example, gyroscope bias can lead to drift in orientation estimation over time.</p></li>
+<li><p><strong>Scale Factor Errors</strong>: Deviations in the proportionality between the measured signal and the actual physical quantity.</p></li>
+<li><p><strong>Drift</strong>: Accumulated error over time, particularly significant in integration-based measurements such as those from gyroscopes.</p></li>
+</ul>
+<p>Understanding these characteristics is essential for designing reliable estimation and control algorithms.</p>
+<h3 id="sensor-fusion">Sensor Fusion</h3>
+<p>Due to the limitations of individual sensors, modern embedded systems employ <em>sensor fusion</em> techniques to combine measurements from multiple sources and obtain a more accurate and robust estimate of the system state.</p>
+<p>In flight control systems, sensor fusion typically combines high-frequency IMU data with lower-frequency but more stable measurements such as those from magnetometers, barometers, or GPS. For example, gyroscope measurements provide short-term orientation changes, while accelerometer and magnetometer data help correct long-term drift.</p>
+<p>Sensor fusion algorithms aim to balance responsiveness and stability by leveraging the strengths of different sensors. These algorithms may range from simple complementary filters to more advanced techniques such as Kalman filters and nonlinear observers. The general architecture of such a fusion system is illustrated in Figure <a href="/docs/preliminary/sensor#fig:sensor_fusion">2.5</a>.</p>
+<figure id="fig:sensor_fusion">
+<img src="/docs/diagrams/tikz-ba36b706c4a3.svg" />
+<figcaption>Architecture of a sensor fusion system combining disparate data sources into a unified state estimate</figcaption>
+</figure>

@@ -1,0 +1,58 @@
+\section{Communication and Telemetry}
+\label{sec:vayu_telemetry}
+
+The communication subsystem in Vayu enables interaction between the flight controller and external systems, including remote control input, command processing, and real-time telemetry transmission. It is designed to handle both low-latency control input and structured data exchange without interfering with time-critical control tasks.
+
+\subsection{Remote Control Input}
+
+User input is received using the iBus protocol over UART with DMA-based reception. A circular DMA buffer is used to continuously capture incoming data, minimizing CPU overhead and ensuring reliable reception at high update rates.
+
+Incoming bytes are parsed incrementally, and valid frames are extracted and stored in shared buffers for use by control tasks. A normalization stage converts raw channel values into standardized control inputs, including deadband handling and scaling.
+
+The system also integrates state management with RC input. Arming and disarming logic is derived from switch positions and throttle levels, enabling safe transitions between system states such as standby, armed, and failsafe. :contentReference[oaicite:0]{index=0}
+
+\subsection{Command Processing}
+
+In addition to RC input, Vayu supports command-based communication through a packet-based protocol. Incoming packets are decoded and dispatched based on type, allowing execution of system-level commands.
+
+Supported commands include:
+\begin{itemize}
+    \item Heartbeat synchronization
+    \item Device identification
+    \item Sensor calibration (e.g., IMU calibration)
+    \item Runtime task management
+\end{itemize}
+
+Certain commands dynamically create or terminate tasks, enabling flexible runtime behavior without requiring system restart.
+
+\subsection{Telemetry Architecture}
+
+Telemetry is transmitted using a structured packet-based protocol over a configurable communication channel. Data is organized into different packet types, allowing selective transmission of system information.
+
+The telemetry system operates on a multi-rate schedule, where different data streams are transmitted at different frequencies:
+
+\begin{itemize}
+    \item High-frequency IMU data (compressed and full)
+    \item Attitude estimates
+    \item RC input data
+    \item Motor outputs
+    \item Control loop diagnostics (PID data)
+    \item System state and status
+    \item Logging data
+\end{itemize}
+
+This design ensures efficient bandwidth utilization while prioritizing critical information.
+
+\subsection{Adaptive Data Streaming}
+
+To reduce bandwidth usage while maintaining data fidelity, the system employs delta compression for high-rate sensor data. Instead of transmitting full values every cycle, differences between successive samples are encoded using reduced precision formats.
+
+Full data frames are transmitted periodically to maintain synchronization, while intermediate updates use compressed representations. This approach balances accuracy and communication efficiency.
+
+\subsection{Logging Integration}
+
+The telemetry subsystem is tightly integrated with the logging system. Log messages are buffered and transmitted as part of the telemetry stream, enabling real-time debugging and monitoring without disrupting control execution.
+
+\subsection{System Behavior}
+
+The communication system is designed to operate asynchronously with respect to control tasks. Input processing, command handling, and telemetry transmission are handled by dedicated tasks running at lower priorities. This ensures that communication overhead does not interfere with time-critical operations such as control loops.

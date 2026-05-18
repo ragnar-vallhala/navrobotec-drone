@@ -1,0 +1,64 @@
+\section{Architecture of NavHAL}
+\label{sec:navhal_architecture}
+
+NavHAL is structured as a statically configured abstraction layer that separates hardware interaction across three orthogonal domains: processor architecture, vendor-specific implementation, and board-level configuration. This separation enables fine-grained hardware control while maintaining portability and scalability.
+
+At a high level, NavHAL consists of a unified interface layer built on top of an architecture-specific core, which is specialized through three components: \textit{core}, \textit{vendor}, and \textit{board}. These components are selected at build time, ensuring that only the required implementation is included in the final binary.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        node distance=0.4cm,
+        box/.style={draw, rectangle, minimum width=5cm, minimum height=0.4cm, align=center, font=\small, rounded corners=2pt},
+        layer/.style={draw, rectangle, fill=blue!5, minimum width=5cm, minimum height=0.4cm, align=center, font=\small\bfseries, rounded corners=2pt},
+        impl/.style={draw, rectangle, fill=gray!10, minimum width=5cm, minimum height=0.4cm, align=center, font=\small},
+        arrow/.style={-Latex, thick}
+    ]
+
+    \node[layer] (api) {NavHAL Interface (Unified API)};
+    \node[box, below=of api] (core) {Core Layer (Architecture-Specific Logic)};
+    
+    \node[impl, below left=0.4cm and 0.25cm of core] (proc) {Processor Layer\\(e.g., Cortex-M4)};
+    \node[impl, below=of core] (vendor) {Vendor Layer\\(e.g., STM32)};
+    \node[impl, below right=0.4cm and 0.25cm of core] (board) {Board Layer\\(e.g., Nucleo-F401RE)};
+
+    \node[impl, below=0.4cm of vendor] (hw) {Hardware (Registers / Peripherals)};
+
+    \draw[arrow] (api) -- (core);
+    \draw[arrow] (core) -- (proc);
+    \draw[arrow] (core) -- (vendor);
+    \draw[arrow] (core) -- (board);
+    \draw[arrow] (proc) -- (hw);
+    \draw[arrow] (vendor) -- (hw);
+    \draw[arrow] (board) -- (hw);
+
+    \end{tikzpicture}
+    \caption{NavHAL architecture illustrating separation across processor, vendor, and board layers.}
+\end{figure}
+
+The \textbf{Interface Layer} provides a consistent and hardware-agnostic API for peripherals such as GPIO, UART, I2C, SPI, and timers. It defines the contract used by upper layers without exposing implementation details.
+
+The \textbf{Core Layer} contains architecture-specific logic and implements the functional behavior of peripherals. It translates API calls into hardware operations using definitions provided by the vendor and board layers.
+
+The architecture is further decomposed into three domains:
+
+\begin{itemize}
+    \item \textbf{Processor Layer:}  
+    Implements architecture-level features such as startup routines, interrupt handling, and low-level execution primitives (e.g., Cortex-M4 support).
+
+    \item \textbf{Vendor Layer:}  
+    Defines microcontroller-specific details including register mappings, memory layouts, and peripheral structures. It enables direct access to hardware registers.
+
+    \item \textbf{Board Layer:}  
+    Provides board-level configuration such as pin mappings and default peripheral assignments, allowing application code to remain independent of physical layouts.
+\end{itemize}
+
+This separation allows independent evolution of each domain. Supporting a new board requires only board-level changes, while adapting to a different microcontroller primarily affects the vendor layer.
+
+The abstraction is resolved at compile time through build configuration parameters (processor, vendor, and board). This eliminates unused components and reduces binary size.
+
+To maintain efficiency, the design minimizes runtime indirection. Public APIs remain lightweight, while internal operations rely on inline functions and macros. As a result, most interactions map closely to direct register access.
+
+NavHAL operates as a stateless access layer and does not enforce resource ownership or concurrency control. These responsibilities are delegated to the execution layer (e.g., VAIOS) when present, allowing NavHAL to remain lightweight and flexible.
+
+Overall, the architecture combines structured abstraction with direct hardware access, enabling portability without sacrificing performance.

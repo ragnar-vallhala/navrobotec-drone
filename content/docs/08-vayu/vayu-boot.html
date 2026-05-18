@@ -1,0 +1,32 @@
+<p>The system initialization and boot flow in Vayu defines the sequence of operations that transition the system from power-on to a fully operational state. This process ensures that hardware, system services, and application tasks are correctly initialized before entering normal operation.</p>
+<h3 id="initialization-sequence">Initialization Sequence</h3>
+<p>System startup begins with low-level hardware configuration, followed by initialization of system services and application components. The sequence is structured to ensure that all dependencies are satisfied before tasks begin execution.</p>
+<p>The initialization flow proceeds as follows:</p>
+<ol>
+<li><p><strong>Clock Configuration:</strong> The system clock is configured using the phase-locked loop (PLL) to achieve the required operating frequency. This ensures consistent timing for all subsystems.</p></li>
+<li><p><strong>Core System Initialization:</strong> VAIOS is initialized using a configuration structure that defines system behavior, including clock handling and peripheral setup.</p></li>
+<li><p><strong>Peripheral Initialization:</strong> Hardware interfaces such as I2C and UART are initialized through NavHAL. This includes setting up DMA for sensor acquisition and communication channels.</p></li>
+<li><p><strong>Subsystem Initialization:</strong> Core subsystems including logging, system state management, sensor interfaces, and communication buffers are initialized.</p></li>
+<li><p><strong>Task Creation:</strong> System and application tasks are created and registered with the scheduler. These include control tasks, sensor acquisition tasks, communication handlers, and auxiliary tasks.</p></li>
+<li><p><strong>Timer Setup:</strong> Periodic timer callbacks are configured to support time-based operations and high-frequency timing requirements.</p></li>
+<li><p><strong>Scheduler Start:</strong> The VAIOS scheduler is started, after which all task execution is managed by the RTOS.</p></li>
+</ol>
+<h3 id="boot-task-and-system-checks">Boot Task and System Checks</h3>
+<p>A dedicated boot task performs system validation checks during startup. This task is responsible for verifying that critical components are functioning correctly before enabling normal operation.</p>
+<p>The boot checks include:</p>
+<ul>
+<li><p>System clock validation</p></li>
+<li><p>Storage subsystem availability</p></li>
+<li><p>Basic system readiness verification</p></li>
+</ul>
+<p>The results of these checks are accumulated into a boot status register, which is used to determine the final system state.</p>
+<p>If all required checks pass, the system transitions to a standby state, indicating readiness for operation. If any check fails, the system enters a failsafe state to prevent unsafe behavior.</p>
+<h3 id="state-transition">State Transition</h3>
+<p>The system state progresses through a well-defined sequence:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">INIT</mtext><mo>→</mo><mtext mathvariant="normal">STANDBY</mtext><mo>→</mo><mtext mathvariant="normal">ARMED</mtext></mrow><annotation encoding="application/x-tex">\text{INIT} \rightarrow \text{STANDBY} \rightarrow \text{ARMED}</annotation></semantics></math></p>
+<p>During initialization, the system remains in the <em>INIT</em> state until all boot checks are completed. Once validated, it transitions to <em>STANDBY</em>, where it awaits user input. The transition to the <em>ARMED</em> state is controlled by external input (e.g., RC commands).</p>
+<h3 id="task-activation">Task Activation</h3>
+<p>After the scheduler starts, all created tasks begin execution based on their assigned priorities. High-priority tasks such as control loops and sensor acquisition become active immediately, while lower-priority tasks handle communication, logging, and background operations.</p>
+<p>The boot task terminates itself after completing initialization, ensuring that it does not consume system resources during normal operation.</p>
+<h3 id="system-behavior-3">System Behavior</h3>
+<p>The structured initialization flow ensures that all components are properly configured before entering real-time execution. By separating initialization, validation, and runtime operation, the system maintains robustness and avoids undefined behavior during startup.</p>

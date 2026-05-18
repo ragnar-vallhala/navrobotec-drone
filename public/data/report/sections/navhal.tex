@@ -1,2 +1,81 @@
 \chapter{NavHAL}
 \label{chap:navhal}
+
+NavHAL is a core component of the Vayu flight control stack, responsible for providing a deterministic and structured interface between the underlying hardware platform and higher-level software layers.
+
+Unlike conventional hardware abstraction layers that act as thin wrappers over vendor-provided drivers, NavHAL is designed as a compile-time configured system abstraction. It enforces consistency, portability, and predictable execution by defining a unified contract for all hardware interactions, while avoiding unnecessary runtime overhead.
+
+Traditional embedded stacks often rely on layered abstractions consisting of vendor HALs, middleware, and optional RTOS components. While these approaches simplify development, they introduce hidden execution costs, increase system complexity, and make timing behavior difficult to reason about—an undesirable property in real-time flight control systems.
+
+NavHAL addresses these limitations by adopting a minimal and deterministic design philosophy. It provides direct yet controlled access to hardware through memory-mapped register abstractions, lightweight APIs, and modular subsystems. All implementations are selected at compile time, ensuring that only the required components are included in the final binary, thereby reducing both code size and runtime overhead.
+
+A key design principle of NavHAL is execution-layer independence. The abstraction layer operates natively in bare-metal environments while remaining compatible with higher-level execution frameworks such as VAIOS. This allows system designers to choose between fully deterministic bare-metal execution and structured multitasking without modifying the underlying hardware interface.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        node distance=0.7cm,
+        box/.style={draw, rectangle, minimum width=4cm, minimum height=0.7cm, align=center, font=\small, rounded corners=2pt},
+        silicon/.style={draw, rectangle, fill=gray!10, minimum width=4cm, minimum height=0.7cm, align=center, font=\small\bfseries, rounded corners=2pt},
+        app/.style={draw, rectangle, fill=blue!5, minimum width=4cm, minimum height=0.7cm, align=center, font=\small\bfseries, rounded corners=2pt},
+        arrow/.style={-Latex, thick}
+    ]
+
+    % --- Conventional Stack ---
+    \node[app] (appL) {Application Layer};
+    \node[box, below=of appL] (rtosL) {Optional RTOS\\/\\Middleware};
+    \node[box, below=of rtosL] (wrapperL) {HAL Wrapper (Heavy)};
+    \node[box, below=of wrapperL] (vendorL) {Vendor Drivers / HAL\\(Heavyweight)};
+    \node[silicon, below=of vendorL] (siliconL) {Silicon / Registers};
+
+    \draw[arrow] (appL) -- (rtosL);
+    \draw[arrow] (rtosL) -- (wrapperL);
+    \draw[arrow] (wrapperL) -- (vendorL);
+    \draw[arrow] (vendorL) -- (siliconL);
+
+    % Bloat Boundary Box
+    \draw[red!50, thick, dashed, rounded corners=5pt] 
+        ($(rtosL.north west)+(-0.35,0.3)$) rectangle ($(vendorL.south east)+(0.35,-0.3)$);
+    \node[anchor=west, font=\tiny\bfseries\color{red!70}] at ($(vendorL.east)+(0.4,0)$) 
+        {\parbox{2cm}{Layered Overhead\\(Often Unnecessary)}};
+    
+    \node[above=0.4cm of appL, font=\small\bfseries\color{secondary}] {Conventional Stacked Approach};
+
+    % --- NavHAL Stack ---
+    \node[app, right=5.5cm of appL] (appR) {Application Layer};
+    \node[box, below=0.7cm of appR, dashed, fill=green!5, draw=green!60] (vaiosR) {VAIOS (RTOS)\\ \scriptsize (Modular / Optional)};
+    \node[box, below=1.2cm of vaiosR, fill=primary!10, draw=primary, thick, minimum height=1cm] (navhalR) {NavHAL Core\\(Deterministic Contract)};
+    \node[silicon, below=1.45cm of navhalR] (siliconR) {Silicon / Registers};
+
+    % Standard path
+    \draw[arrow] (appR) -- (vaiosR);
+    \draw[arrow] (vaiosR) -- (navhalR);
+    \draw[arrow] (navhalR) -- (siliconR);
+    
+    % Baremetal shortcut
+    \draw[arrow, blue!60, bend left=45] (appR.east) to node[midway, right, xshift=0.1cm, font=\tiny\bfseries] {Baremetal Mode} (navhalR.east);
+
+    \node[above=0.4cm of appR, font=\small\bfseries\color{primary}] {NavHAL Modular Design};
+
+    % Comparison separator
+    \node at ($(appL)!0.46!(appR) + (0,-2.5)$) {\Large\bfseries vs.};
+
+    \end{tikzpicture}
+    \caption{Comparison between conventional layered HAL architectures and the NavHAL design. NavHAL eliminates unnecessary abstraction layers and supports both bare-metal execution and optional RTOS integration without compromising determinism.}
+    \label{fig:navhal_architecture_comparison}
+\end{figure}
+
+This chapter presents the motivation, design goals, architecture, and implementation details of NavHAL. It further discusses its integration with the VAIOS execution layer and compares it with existing abstraction approaches.
+
+\input{sections/navhal/motivation}
+\input{sections/navhal/design_goals}
+\input{sections/navhal/architecture}
+\input{sections/navhal/interface_design}
+\input{sections/navhal/peripheral_abstractions}
+\input{sections/navhal/resource_management}
+\input{sections/navhal/timing_determinism}
+\input{sections/navhal/portability_model}
+\input{sections/navhal/vaios_integration}
+\input{sections/navhal/performance}
+\input{sections/navhal/comparison}
+\input{sections/navhal/summary}

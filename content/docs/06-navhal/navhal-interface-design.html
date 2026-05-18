@@ -1,0 +1,55 @@
+<p>The interface design of NavHAL is centered around simplicity, consistency, and explicit control over hardware behavior. The API is intentionally designed to provide a development experience similar to high-level frameworks, while preserving the determinism and performance required in real-time embedded systems.</p>
+<h3 class="unnumbered" id="design-principles">Design Principles</h3>
+<p>The following principles guide the API design:</p>
+<ul>
+<li><p><strong>Simplicity:</strong> APIs are designed to be minimal and intuitive, reducing the amount of boilerplate required for common operations.</p></li>
+<li><p><strong>Consistency:</strong> All peripherals follow a uniform naming and usage pattern, enabling developers to interact with different modules using a predictable interface.</p></li>
+<li><p><strong>Explicit Configuration:</strong> Hardware configuration is always performed explicitly by the user, avoiding hidden initialization or implicit behavior.</p></li>
+<li><p><strong>Low Overhead:</strong> APIs are implemented as lightweight functions, with internal operations resolved using inline functions and macros to minimize runtime cost.</p></li>
+<li><p><strong>Hardware Abstraction:</strong> Peripheral identifiers and configurations abstract underlying hardware details, allowing code to remain portable across platforms.</p></li>
+</ul>
+<h3 class="unnumbered" id="api-structure">API Structure</h3>
+<p>NavHAL follows a consistent naming convention across all modules:</p>
+<div class="center">
+<p><code>hal_&lt;peripheral&gt;_&lt;operation&gt;</code></p>
+</div>
+<p>Examples include:</p>
+<ul>
+<li><p><code>hal_gpio_setmode()</code></p></li>
+<li><p><code>hal_gpio_digitalwrite()</code></p></li>
+<li><p><code>hal_uart_init()</code></p></li>
+<li><p><code>hal_i2c_read()</code></p></li>
+</ul>
+<p>This structure ensures that all peripherals expose a uniform and predictable interface.</p>
+<h3 class="unnumbered" id="example-gpio-interface">Example: GPIO Interface</h3>
+<p>A representative example of the API design is shown below:</p>
+<div class="sourceCode" id="cb1" data-language="C" data-caption="Example LED blink using NavHAL"><pre class="sourceCode objectivec"><code class="sourceCode objectivec"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define CORTEX_M4</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;navhal.h&quot;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    systick_init<span class="op">(</span><span class="dv">1000</span><span class="op">);</span> <span class="co">// 1 ms tick</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    hal_gpio_setmode<span class="op">(</span>GPIO_PA05<span class="op">,</span> GPIO_OUTPUT<span class="op">,</span> GPIO_PUPD_NONE<span class="op">);</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        hal_gpio_digitalwrite<span class="op">(</span>GPIO_PA05<span class="op">,</span> GPIO_HIGH<span class="op">);</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        delay_ms<span class="op">(</span><span class="dv">100</span><span class="op">);</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        hal_gpio_digitalwrite<span class="op">(</span>GPIO_PA05<span class="op">,</span> GPIO_LOW<span class="op">);</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        delay_ms<span class="op">(</span><span class="dv">100</span><span class="op">);</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>This example highlights key characteristics of the interface:</p>
+<ul>
+<li><p><strong>Readable and Minimal:</strong> The code closely resembles high-level frameworks, reducing the learning curve.</p></li>
+<li><p><strong>Explicit Timing Control:</strong> System timing is initialized explicitly using <code>systick_init()</code>, ensuring predictable behavior.</p></li>
+<li><p><strong>Abstract Pin Representation:</strong> Identifiers such as <code>GPIO_PA05</code> abstract the underlying hardware mapping, enabling portability.</p></li>
+<li><p><strong>Deterministic Execution:</strong> No hidden scheduling or background processes are involved; all operations are directly controlled by the application.</p></li>
+</ul>
+<h3 class="unnumbered" id="compile-time-resolution">Compile-Time Resolution</h3>
+<p>NavHAL APIs are designed such that most hardware-specific details are resolved at compile time. Peripheral identifiers are represented as compile-time constants, which are translated into register-level operations through inline functions and macros within the core and vendor layers.</p>
+<p>This approach ensures that API usage does not introduce significant runtime overhead, and that generated code remains close to hand-written low-level implementations.</p>
+<h3 class="unnumbered" id="design-trade-offs">Design Trade-offs</h3>
+<p>To maintain simplicity and performance, NavHAL avoids introducing complex configuration objects or runtime polymorphism. While this reduces flexibility in dynamic scenarios, it ensures predictable behavior and minimal overhead, which are critical in embedded flight control systems.</p>
+<p>Additionally, NavHAL does not manage resource ownership or concurrency. These responsibilities are delegated to the execution layer when required, allowing the API to remain lightweight and execution-model agnostic.</p>

@@ -266,6 +266,12 @@
     align-items: center;
   }
 
+  /* .email/.phone are flex rows — text-align doesn't reach them */
+  .email,
+  .phone {
+    justify-content: center;
+  }
+
   .socials {
     justify-content: center;
   }

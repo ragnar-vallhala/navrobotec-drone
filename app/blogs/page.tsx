@@ -52,11 +52,7 @@ export default async function BlogsPage() {
                         <p>Initializing intelligence protocols. No logs available yet.</p>
                     </div>
                 ) : (
-                    <div style={{ 
-                        display: 'grid', 
-                        gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', 
-                        gap: '3rem',
-                    }}>
+                    <div className={styles.blogGrid}>
                         {posts.map((post) => (
                             <Link key={post.slug} href={`/blogs/${post.slug}`} className={styles.blogCard}>
                                 {post.frontmatter.coverImage && (

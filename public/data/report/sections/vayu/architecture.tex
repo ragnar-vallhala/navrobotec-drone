@@ -1,0 +1,45 @@
+\section{System Architecture}
+\label{sec:vayu_architecture}
+
+The architecture of Vayu is organized as a layered and data-driven pipeline, where information flows from sensors to control algorithms and finally to actuator outputs. Each stage of the system is implemented as a set of modular components that interact through well-defined interfaces, enabling clear separation of responsibilities and ease of extension.
+
+At a high level, the system can be viewed as a sequence of processing stages: sensor acquisition, state estimation, control computation, and actuation. Supporting subsystems such as communication and logging operate alongside this pipeline without interfering with time-critical operations.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        block/.style={rectangle, draw=black, thick, minimum width=2.8cm, minimum height=1cm, align=center},
+        arrow/.style={->, thick}
+    ]
+
+    \node[block] (sensor) {Sensors \\ (BMX160, BMP180)};
+    \node[block, right=0.5cm of sensor] (estimation) {State Estimation \\ (Complementary, Mahony)};
+    \node[block, right=0.5cm of estimation] (control) {Control \\ (Rate \& Attitude)};
+    \node[block, right=0.5cm of control] (actuation) {Actuation \\ (PWM Outputs)};
+
+    \draw[arrow] (sensor) -- (estimation);
+    \draw[arrow] (estimation) -- (control);
+    \draw[arrow] (control) -- (actuation);
+
+    \node[block, below=0.5cm of control] (comm) {Communication \\ (iBus, UART)};
+    \node[block, below=0.5cm of estimation] (logging) {Logging \\ (VFS, SD Card)};
+
+    \draw[arrow] (comm.north) -- (control.south);
+    \draw[arrow] (estimation.south) -- (logging.north);
+
+    \end{tikzpicture}
+    \caption{High-level architecture of the Vayu flight control system showing the flow from sensing to actuation along with supporting subsystems.}
+    \label{fig:vayu_architecture}
+\end{figure}
+
+Sensor acquisition forms the first stage of the pipeline. High-frequency inertial data from the BMX160 is continuously updated using a DMA-driven loop, ensuring minimal latency and consistent sampling. Additional sensor inputs, such as barometric pressure from the BMP180, are integrated at lower frequencies to provide complementary information.
+
+The estimation stage processes raw sensor data to compute the system state, including orientation. Multiple estimation algorithms are supported, such as complementary filtering and Mahony filtering, allowing trade-offs between computational cost and accuracy. This stage provides the necessary inputs for downstream control logic.
+
+Control is implemented as a hierarchy of loops operating at different frequencies. A high-frequency rate control loop ensures rapid stabilization by directly regulating angular velocities, while a lower-frequency attitude control loop computes desired rates based on orientation. This separation enables both responsiveness and stability in the control system.
+
+The actuation stage converts control outputs into hardware signals that drive the motors. In the current implementation, pulse-width modulation (PWM) signals are generated using hardware timers, providing precise and deterministic control of motor outputs.
+
+Supporting subsystems operate alongside the main control pipeline. Communication modules handle remote control input using the iBus protocol and provide telemetry through UART interfaces. Logging and storage are managed through the VFS layer, enabling persistent recording of system data without interfering with real-time execution.
+
+Overall, the architecture of Vayu emphasizes modularity and clear data flow, allowing individual subsystems to be developed, tested, and extended independently while maintaining a cohesive and efficient flight control system.

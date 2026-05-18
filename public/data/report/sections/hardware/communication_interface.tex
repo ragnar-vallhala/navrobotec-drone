@@ -18,26 +18,120 @@ Universal Asynchronous Receiver-Transmitter (UART) interfaces are used for commu
     UART interfaces are also used for transmitting system data to external devices for monitoring, logging, and debugging.
 \end{itemize}
 
+In the current hardware implementation, two UART ports are exposed. One is dedicated to radio control input, while the other is used for wired telemetry communication with the ground control system (Navigator). This separation ensures reliable handling of control inputs and system monitoring without resource contention.
+
+Future iterations of the system aim to offload telemetry communication to a low-frequency wireless link (e.g., 868\,MHz), enabling long-range communication with the ground control system. This transition will free a UART interface for dedicated GPS usage or additional peripherals.
+
+Additionally, USB-based communication (USB CDC) is planned to provide a reliable wired serial interface for debugging, configuration, and data logging, reducing dependency on UART-based connections during development.
+
 UART is chosen for these applications due to its simplicity, low overhead, and wide compatibility with external devices.
 
 \subsection{I2C Interface}
 
-The Inter-Integrated Circuit (I2C) interface is used for communication with low- to moderate-speed peripherals. In the Vayu system, I2C is used to interface with sensors such as the IMU and barometric pressure sensor.
+The Inter-Integrated Circuit (I2C) interface is used for communication with low- to moderate-speed peripherals. In the Vayu system, I2C is primarily used to interface with sensors such as the IMU and barometric pressure sensor.
 
-The shared bus structure of I2C allows multiple devices to be connected using a minimal number of wires, making it suitable for compact embedded designs. However, its relatively lower data rate compared to SPI is considered during system design to ensure it meets the timing requirements of the application.
+The shared bus structure of I2C allows multiple devices to be connected using a minimal number of wires, making it well-suited for compact embedded designs. However, its relatively lower data rate compared to SPI is taken into account during system design to ensure that timing requirements for sensor acquisition are met.
+
+In the current hardware implementation, a single I2C bus (I2C1) is exposed across four external ports, enabling connection of multiple peripherals. This configuration supports flexibility in sensor placement and simplifies hardware integration.
+
+Future iterations of the system will expand this design to include multiple I2C buses (e.g., I2C1 and I2C2), each exposed across multiple ports. This separation allows distribution of peripherals across independent buses, reducing bus contention and improving reliability and scalability as additional sensors are integrated.
+
+The I2C interface thus provides a balance between simplicity and expandability, aligning with the modular design philosophy of the Vayu platform.
 
 \subsection{SPI Interface}
 
-The Serial Peripheral Interface (SPI) provides high-speed, full-duplex communication and is used for peripherals that require faster data transfer. In the system, SPI is utilized for components such as external storage (e.g., microSD card) and may also be used for high-speed sensor interfacing.
+The Serial Peripheral Interface (SPI) provides high-speed, full-duplex communication and is used for peripherals that require low-latency data transfer and high bandwidth. In the Vayu system, SPI is intended for high-performance sensor interfacing and communication modules.
 
-SPI offers higher throughput and lower latency compared to I2C, making it suitable for applications involving large data transfers or high-frequency sampling.
+In the current hardware revision, the SPI interface is exposed but not actively utilized by the primary sensing pipeline. External storage, such as the microSD card, is interfaced using the dedicated SDIO peripheral of the microcontroller instead of SPI, enabling higher data throughput and more efficient data logging.
+
+An 868\,MHz RF communication module is planned to operate over the SPI bus, enabling long-range telemetry with the ground control system. In future iterations, the SPI architecture will be further structured into multiple buses. The primary SPI bus (SPI1) will be reserved for internal high-speed peripherals such as next-generation IMUs, ensuring low-latency and high-bandwidth data acquisition.
+
+A secondary SPI bus (SPI2) will be exposed externally through multiple ports, each with dedicated chip-select (CS) lines. This configuration enables simultaneous integration of multiple SPI-based peripherals, such as RF modules and external sensors, without bus contention.
+
+The separation of SPI buses into internal and external domains ensures efficient resource allocation, improved signal integrity, and scalability for future system enhancements.
+
+\subsection{SDIO Interface}
+
+The Secure Digital Input Output (SDIO) interface is used in the Vayu system to connect an onboard microSD card for high-speed data logging. Unlike SPI-based storage, SDIO provides significantly higher data throughput and supports multi-bit data transfer, making it well-suited for recording high-frequency flight data.
+
+The SD card is interfaced directly with the microcontroller's dedicated SDIO peripheral, allowing efficient data transfer with minimal CPU overhead. This enables continuous logging of sensor data, control states, and system diagnostics without interfering with time-critical control tasks.
+
+The use of SDIO ensures that large volumes of data can be recorded reliably, which is essential for post-flight analysis, debugging, and system identification. It also supports future extensions such as onboard data buffering and black-box logging.
+
+By offloading high-bandwidth storage operations to the SDIO interface, the system preserves other communication buses (such as SPI and UART) for real-time sensing and control applications.
+
+\subsection{USB CDC Interface}
+
+The Vayu system includes support for USB Communication Device Class (CDC), enabling the microcontroller to present itself as a virtual serial port when connected to a host system.
+
+This interface is primarily used for debugging, configuration, and data monitoring during development. It provides a reliable and high-speed communication channel compared to traditional UART-based connections.
+
+In addition to development use, USB CDC enables direct interfacing with an onboard computer when present. This allows exchange of data between the flight controller and higher-level processing units, such as vision-based navigation systems or companion computers.
+
+The USB interface supports bidirectional communication, making it suitable for tasks such as parameter tuning, real-time telemetry, firmware updates, and integration with external processing pipelines.
+
+By incorporating USB CDC, the system enhances both development efficiency and extensibility, supporting advanced use cases beyond basic flight control.
 
 \subsection{Debug and Programming Interface}
 
 A Serial Wire Debug (SWD) interface is provided for programming and debugging the microcontroller. This interface enables firmware development, real-time debugging, and system diagnostics during both development and testing phases.
 
-\subsection{Design Considerations}
+\subsection{Communication Design Considerations}
 
-The communication architecture is designed to support concurrent data exchange across multiple interfaces. Careful allocation of peripherals ensures that time-critical communication, such as IMU data acquisition and control input, does not conflict with lower-priority tasks like telemetry or logging.
+The communication architecture of the Vayu system is designed with a strong emphasis on determinism, resource isolation, and scalability. Given the real-time nature of flight control systems, careful allocation of communication interfaces is essential to ensure that time-critical data paths remain unaffected by auxiliary operations.
 
-Additionally, the system exposes communication interfaces through dedicated connectors, enabling easy integration of external modules and future expansion. This aligns with the modular design philosophy of the Vayu platform.
+A key consideration in the design is the separation of communication roles across different interfaces. Critical inputs such as radio control signals are isolated on dedicated UART channels, ensuring low-latency and reliable reception. Similarly, sensor communication over I2C is structured to meet timing requirements while maintaining simplicity in hardware design.
+
+High-bandwidth and non-time-critical data flows, such as logging and debugging, are offloaded to dedicated interfaces like SDIO and USB CDC. The use of SDIO for onboard storage enables efficient high-speed data logging without occupying general-purpose communication buses. Likewise, USB CDC provides a robust and high-throughput channel for development, debugging, and interaction with external computing systems.
+
+The architecture also anticipates future communication requirements. Planned integration of long-range telemetry using low-frequency RF (e.g., 868\,MHz) allows offloading of telemetry traffic from UART interfaces, freeing resources for additional peripherals such as GPS. Similarly, the separation of SPI buses into internal and external domains enables high-speed peripherals to operate without contention while maintaining expandability.
+
+Scalability and modularity are further enhanced through the exposure of multiple communication ports, allowing flexible integration of sensors, communication modules, and companion systems. This modular approach ensures that new functionalities can be incorporated without significant redesign of the core system.
+
+Overall, the communication design reflects a balance between real-time performance, efficient resource utilization, and future extensibility, forming a robust foundation for both current operation and system evolution.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        node distance=2cm,
+        mcu/.style={draw, rectangle, minimum width=3.5cm, minimum height=3.5cm, align=center, fill=yellow!10, font=\bfseries, rounded corners=2pt},
+        port/.style={draw, rectangle, minimum width=2.5cm, minimum height=0.7cm, align=center, fill=white, font=\tiny, rounded corners=2pt},
+        bus/.style={-Latex, thick, primary!60},
+        label/.style={font=\fontsize{6}{7}\selectfont\itshape, color=gray}
+    ]
+
+    % MCU
+    \node[mcu] (stm32) {STM32F401RE\\(ARM Cortex-M4)};
+
+    % UART Ports
+    \node[port, left=2.5cm of stm32, yshift=1.2cm] (rc) {RC Input Port\\(iBus/PPM)};
+    \node[port, left=2.5cm of stm32] (telemetry) {Telemetry Port\\(Ground Control)};
+    \node[port, left=2.5cm of stm32, yshift=-1.2cm] (gps_port) {GPS Port\\(Expansion)};
+
+    % I2C/SPI Ports
+    \node[port, right=2.5cm of stm32, yshift=1.2cm] (i2c_bus) {4x I2C Ports\\(Sensor Bus)};
+    \node[port, right=2.5cm of stm32, yshift=-1.2cm] (expansion) {SPI Expansion\\(Future RF/Sensors)};
+
+    % SDIO
+    \node[port, right=2.5cm of stm32] (sd_slot) {microSD Slot\\(High-speed Logging)};
+
+    % USB/Debug
+    \node[port, above=1.5cm of stm32] (usb_port) {USB CDC Port\\(GCS/Debug)};
+    \node[port, below=1.5cm of stm32] (swd_port) {SWD Header\\(Programming)};
+
+    % Connections
+    \draw[bus] (rc.east) -- ([yshift=1.2cm]stm32.west) node[midway, label, above] {UART1};
+    \draw[bus] (telemetry.east) -- ([yshift=0cm]stm32.west) node[midway, label, above] {UART2};
+    \draw[bus] (gps_port.east) -- ([yshift=-12mm]stm32.west) node[midway, label, above] {UARTx};
+
+    \draw[bus] ([yshift=1.2cm]stm32.east) -- (i2c_bus.west) node[midway, label, above] {I2C1};
+    \draw[bus] ([yshift=0cm]stm32.east) -- (sd_slot.west) node[midway, label, above] {SDIO};
+    \draw[bus] ([yshift=-12mm]stm32.east) -- (expansion.west) node[midway, label, above] {SPI2};
+
+    \draw[bus] (usb_port.south) -- (stm32.north) node[midway, label, left] {USB};
+    \draw[bus] (swd_port.north) -- (stm32.south) node[midway, label, left] {SWD};
+
+    \end{tikzpicture}
+    \caption{Mapping of communication interfaces and physical ports on the Vayu flight controller.}
+    \label{fig:communication_ports}
+\end{figure}

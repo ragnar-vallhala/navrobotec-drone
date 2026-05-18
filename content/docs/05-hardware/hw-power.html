@@ -1,0 +1,28 @@
+<p>The power management subsystem of the Vayu flight control platform is responsible for providing stable and efficient voltage regulation to all system components. Given the sensitivity of sensors and the real-time requirements of control algorithms, maintaining clean and reliable power rails is critical for system performance.</p>
+<h3 id="power-architecture">Power Architecture</h3>
+<p>The system is powered from an external supply, typically a battery source, which is regulated through a two-stage power conversion architecture.</p>
+<p>Figure <a href="/docs/hardware/hw-power#fig:power_architecture">4.5</a> illustrates the two-stage regulation approach used to provide stable power rails to the system.</p>
+<figure id="fig:power_architecture">
+<img src="/docs/diagrams/tikz-a579e74c0534.svg" />
+<figcaption>Two-stage power regulation architecture with integrated battery monitoring via the PDB, providing real-time diagnostics to the MCU.</figcaption>
+</figure>
+<p>In the first stage, a switching regulator (buck converter) is used to step down the input voltage to a stable 5V rail. This stage is implemented using a high-efficiency regulator, enabling the system to handle varying input voltages while minimizing power loss. Additionally, the system can be powered via a 5V input from an external Battery Elimination Circuit (BEC) integrated within the Electronic Speed Controllers (ESCs). This provides a redundant or alternative power source for the 5V rail, particularly useful in secondary system testing or when the main battery-fed regulator is not active.</p>
+<p>In the second stage, a linear regulator (LDO) is used to derive a clean 3.3V rail from the 5V supply. This 3.3V rail powers sensitive components such as the microcontroller and sensor modules.</p>
+<h3 id="noise-and-signal-integrity">Noise and Signal Integrity</h3>
+<p>Switching regulators, while efficient, introduce high-frequency noise into the power supply. To mitigate this, the two-stage regulation approach isolates noise-sensitive components by using the LDO to provide a cleaner supply.</p>
+<p>Decoupling capacitors are placed close to power pins of the microcontroller and sensors to filter high-frequency noise and ensure stable voltage levels during transient load conditions.</p>
+<p>This is particularly important for the IMU, where power supply noise can directly affect measurement accuracy and degrade estimation performance.</p>
+<h3 id="power-distribution">Power Distribution</h3>
+<p>The regulated power rails are distributed across the system to support different subsystems, including the microcontroller, sensors, communication interfaces, and peripheral modules.</p>
+<p>Careful routing and grounding practices are followed to minimize voltage drops and electromagnetic interference. Analog and digital components are supplied through stable rails to ensure consistent operation under dynamic load conditions.</p>
+<h3 id="battery-monitoring-and-power-diagnostics">Battery Monitoring and Power Diagnostics</h3>
+<p>In addition to voltage regulation, the Vayu system incorporates battery monitoring capabilities to track power consumption and ensure safe operation during flight.</p>
+<p>The system is designed to measure both battery voltage and current consumption, enabling real-time estimation of power usage. This information is critical for implementing features such as low-battery warnings, failsafe triggers, and flight time estimation.</p>
+<p>A dedicated power distribution board (PDB) integrates a monitoring integrated circuit that provides voltage sensing, current measurement, and coulomb counting functionality. Coulomb counting enables accurate estimation of remaining battery capacity by integrating current consumption over time, offering a more reliable metric than voltage-based estimation alone.</p>
+<p>The PDB communicates with the microcontroller via the I2C interface, allowing periodic acquisition of power-related data within the system. This integration ensures that battery diagnostics can be incorporated into higher-level system monitoring and decision-making processes.</p>
+<p>Battery monitoring data can be used by the control system to enforce safety constraints, such as initiating controlled landing during low-power conditions or limiting system load under high current draw.</p>
+<p>Future extensions may include integration of advanced battery management features such as state-of-charge (SoC) estimation, temperature monitoring, and predictive power modeling.</p>
+<p>Overall, the inclusion of battery monitoring enhances system reliability, safety, and operational awareness, making it a critical component of the overall flight control platform.</p>
+<h3 id="design-considerations-1">Design Considerations</h3>
+<p>The power system is designed to balance efficiency, stability, and simplicity. The use of a switching regulator ensures efficient energy conversion, while the LDO provides clean power for critical components.</p>
+<p>Overall, the power management subsystem plays a crucial role in ensuring the stability and accuracy of the Vayu flight control system by providing reliable and low-noise power to all components.</p>

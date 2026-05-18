@@ -49,10 +49,10 @@ export default function Home() {
   return (
     <>
       <div className={styles.container}>
-        <HeroVideo />
-
         {/* Hero Section */}
         <section className={`${styles.section} ${styles.hero}`}>
+          <HeroVideo />
+
           <motion.div
             className={styles.heroContent}
             variants={staggerContainer}

@@ -1,2 +1,18 @@
 \chapter{Conclusion}
 \label{chap:conclusion}
+
+This work presented the design and implementation of a complete, indigenous flight control stack consisting of NavHAL, VAIOS, and Vayu. The system was developed with the objective of achieving full control over the embedded stack while maintaining modularity, real-time performance, and scalability.
+
+The motivation for this work originated from practical challenges encountered while working with existing drone platforms. Extending system functionality, such as implementing secure telemetry, required complex external workarounds involving additional hardware and software layers. These experiences highlighted the limitations of current approaches, where developers are often constrained by rigid architectures and forced to build around the system rather than within it.
+
+In response to these challenges, this work adopts a first-principles approach to system design. NavHAL provides a lightweight and deterministic hardware abstraction layer, enabling direct interaction with microcontroller peripherals without unnecessary overhead. VAIOS builds on this foundation to deliver a preemptive real-time operating system with priority-based scheduling, task isolation, and efficient inter-task communication. Together, these layers establish a controlled and predictable execution environment.
+
+Vayu, the flight control layer, integrates sensing, estimation, control, and actuation into a cohesive system. By structuring functionality as coordinated real-time tasks, the system achieves clear separation of concerns while maintaining deterministic behavior. The use of multi-rate control loops, DMA-driven sensor acquisition, and optimized communication and logging mechanisms enables efficient and responsive operation suitable for embedded flight control applications.
+
+A key outcome of this work is the demonstration that high-performance flight control systems can be built from scratch with full ownership of the software stack. By minimizing dependencies on external frameworks and hardware-specific constraints, the system provides greater flexibility, improved transparency, and easier adaptability for new features and applications.
+
+The current implementation establishes a functional and extensible foundation, with core subsystems validated through integrated system execution. However, further work is required to transition the system toward deployment-ready maturity. This includes comprehensive flight testing, enhanced safety and fault-handling mechanisms, and refinement of estimation and control algorithms.
+
+Looking forward, the system is designed to evolve as a broader platform for robotics and autonomous systems. Planned developments include support for additional hardware platforms, advanced state estimation techniques, full flight data logging, and integration of higher-level navigation and mission planning capabilities.
+
+In summary, this work represents a shift from assembly-based development toward building complete systems with full architectural ownership. It provides a structured and scalable foundation for developing indigenous, flexible, and high-performance drone and robotic systems, enabling future advancements in autonomy and embedded intelligence.

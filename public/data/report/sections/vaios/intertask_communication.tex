@@ -1,0 +1,53 @@
+\section{Inter-Task Communication}
+\label{sec:vaios_ipc}
+
+VAIOS provides a set of inter-task communication (IPC) primitives that enable coordination and data exchange between tasks. These mechanisms are designed to support synchronization, resource sharing, and event-driven execution while maintaining predictable behavior in a preemptive environment.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        node distance=2.2cm,
+        task_box/.style={draw, rectangle, rounded corners=3pt, minimum width=2.5cm, minimum height=1cm, align=center, fill=blue!5, font=\small\bfseries},
+        primitive_box/.style={draw, rectangle, minimum width=3.8cm, minimum height=1.2cm, align=center, fill=gray!10, font=\small},
+        wait_box/.style={draw, rectangle, minimum width=2.4cm, minimum height=0.6cm, align=center, fill=red!5, font=\tiny},
+        arrow/.style={-Latex, thick}
+    ]
+
+    % Tasks
+    \node[task_box] (producer) {Task A\\ \scriptsize (Sender)};
+    \node[task_box, right=6cm of producer] (consumer) {Task B\\ \scriptsize (Receiver)};
+
+    % Primitives
+    \node[primitive_box, below=1.5cm of producer, xshift=3cm] (mutex) {\textbf{Mutex / Semaphore}\\ \scriptsize [Binary/Counting/Inheritance]};
+    \node[primitive_box, below=2cm of mutex] (queue) {\textbf{Message Queue}\\ \scriptsize [SPSC / MPMC / Lock-Free]};
+
+    % Wait Queues
+    \node[wait_box, right=1.2cm of mutex] (wait_mutex) {Blocked Task Queue\\ \scriptsize (Wait List)};
+    \node[wait_box, right=1.2cm of queue] (wait_queue) {Blocked Task Queue\\ \scriptsize (Wait List)};
+
+    % Interactions Producer
+    \draw[arrow] (producer.south) -- +(0,-0.8) -| ([xshift=-0.5cm]mutex.north) node[near start, left, font=\tiny, xshift=1.2cm, yshift=0.3cm] {Unlock / Signal};
+    \draw[arrow] ([xshift=-0.6cm]producer.south) -- +(0,-3.0) -| ([xshift=-0.5cm]queue.north) node[near start, left, font=\tiny, xshift=-0.2cm, yshift=-0.2cm] {Enqueue Data};
+
+    % Interactions Consumer
+    \draw[arrow] (consumer.south) -- +(0,-0.8) -| ([xshift=0.5cm]mutex.north) node[near start, right, font=\tiny, xshift=0.2cm, yshift=0.3cm] {Lock / Wait};
+    \draw[arrow] ([xshift=0.6cm]consumer.south) -- +(0,-3.0) -| ([xshift=0.5cm]queue.north) node[near start, right, font=\tiny, xshift=0.2cm, yshift=-0.2cm] {Dequeue Data};
+
+    % Blocking flow
+    \draw[arrow, red, thick, dashed] (mutex.east) -- (wait_mutex.west) node[midway, above, font=\tiny, color=red!80!black, yshift=0.5cm] {Block if Locked};
+    \draw[arrow, red, thick, dashed] (queue.east) -- (wait_queue.west) node[midway, above, font=\tiny, color=red!80!black, yshift=0.5cm] {Wait if Empty};
+
+    \end{tikzpicture}
+    \caption{Interaction model for VAIOS inter-task communication. Tasks coordinate through kernel primitives, with support for blocking operations and automated wait-list management.}
+    \label{fig:vaios_ipc_interaction}
+\end{figure}
+
+The core IPC primitives include binary semaphores, counting semaphores, mutexes, and recursive mutexes. Semaphores are used for signaling and resource counting, allowing tasks to block until a resource becomes available or an event occurs. Mutexes provide mutual exclusion for shared resources, ensuring that only one task can access a critical section at a time. Recursive mutexes extend this behavior by allowing the owning task to acquire the same lock multiple times, maintaining an internal recursion count.
+
+Each synchronization primitive maintains an internal wait queue of tasks that are blocked while attempting to acquire the resource. When a resource becomes available, one of the waiting tasks is unblocked and moved back to the ready state. Blocking operations support optional timeouts, allowing tasks to resume execution if the wait condition is not satisfied within a specified number of ticks.
+
+VAIOS also provides ISR-safe variants of certain IPC operations, allowing interrupt handlers to signal tasks without directly performing complex scheduling operations. These functions defer scheduling decisions to the appropriate context, ensuring that interrupt latency remains low while still enabling responsive task wake-up.
+
+In addition to traditional synchronization primitives, VAIOS includes lock-free queue implementations for efficient data transfer between tasks. Single-producer single-consumer (SPSC) and multi-producer multi-consumer (MPMC) queues are provided to support different communication patterns. These structures enable high-throughput data exchange without requiring locks, making them suitable for performance-critical paths.
+
+All IPC mechanisms are tightly integrated with the scheduler. Tasks that block on synchronization primitives are placed into the appropriate wait queues and are automatically transitioned back to the ready state when conditions are met or timeouts expire. This integration ensures that communication and synchronization are handled efficiently and consistently within the system.

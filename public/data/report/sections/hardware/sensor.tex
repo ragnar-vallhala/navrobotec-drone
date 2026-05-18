@@ -5,21 +5,47 @@ The Vayu flight control system employs a multi-sensor architecture to obtain the
 
 \subsection{Inertial Measurement Unit (IMU)}
 
-The primary sensing element in the system is the BMX160, which integrates a 3-axis accelerometer, 3-axis gyroscope, and an onboard magnetometer. The IMU is responsible for providing high-frequency motion data required for real-time attitude estimation and stabilization.
+The primary sensing element in the system is the BMX160, which integrates a 3-axis accelerometer, 3-axis gyroscope, and an onboard magnetometer. The IMU provides high-frequency motion data required for real-time attitude estimation and stabilization.
 
-The sensor is interfaced with the microcontroller over I2C or SPI and is sampled at rates exceeding $1.5\,\text{kHz}$. This high sampling rate ensures accurate capture of fast rotational dynamics and minimizes latency in the control loop.
+The accelerometer supports configurable measurement ranges (e.g., $\pm2g$ to $\pm16g$), while the gyroscope provides angular rate measurements typically in the range of $\pm125^\circ/s$ to $\pm2000^\circ/s$. These configurable ranges allow the sensor to be tuned based on the expected motion dynamics of the system.
 
-In operation, gyroscope measurements provide short-term angular rate information, while accelerometer measurements serve as a gravity reference for long-term correction. These complementary characteristics form the basis for the sensor fusion algorithms used in the system.
+The sensor is interfaced with the microcontroller over I2C or SPI, with SPI preferred for higher throughput and lower latency. In the current implementation, the IMU is sampled at rates exceeding $1.5\,\text{kHz}$, enabling accurate capture of fast rotational dynamics and minimizing delay in the control loop.
+
+The BMX160 also includes an internal digital filtering stage and FIFO buffering, which can be used to reduce noise and manage high-rate data streams efficiently. These features help maintain consistent sampling and reduce processor overhead.
+
+In operation, gyroscope measurements provide short-term angular rate information with high temporal resolution, while accelerometer measurements serve as a gravity reference for long-term correction. The magnetometer provides heading information, although its accuracy can be affected by local magnetic disturbances.
+
+In the current implementation, an Adafruit BMX160-based 9-axis IMU module is used, interfaced over I2C. The inertial sensors operate at an output data rate (ODR) of approximately $1600\,\text{Hz}$, while the magnetometer operates at a lower rate of approximately $100\,\text{Hz}$. This configuration enables high-frequency attitude estimation while maintaining lower-rate heading updates.
+
+Future iterations of the system will transition to higher-performance IMUs, including devices from the STMicroelectronics ISM family and newer Bosch sensor families. These upgrades will utilize SPI interfaces for improved bandwidth and reduced latency, along with the use of a dedicated external magnetometer to improve heading accuracy and reduce susceptibility to onboard magnetic interference.
+
+These complementary sensing modalities form the basis for the sensor fusion algorithms used in the system, enabling robust and drift-compensated attitude estimation.
 
 \subsection{Barometric Sensor}
 
-A barometric pressure sensor (e.g., BMP180) is used to estimate altitude. Compared to inertial measurements, barometric data is available at lower update rates but provides a relatively stable estimate of vertical position.
+A barometric pressure sensor is used to estimate altitude by measuring atmospheric pressure and converting it into height information. Compared to inertial measurements, barometric data is available at lower update rates but provides a relatively stable estimate of vertical position.
+
+In the current implementation, a BMP180 sensor is used, interfaced over I2C. The sensor provides pressure measurements at moderate rates, which are sufficient for altitude estimation and slow vertical dynamics.
 
 While not directly used in high-frequency control loops, barometric measurements contribute to higher-level state estimation and are particularly useful for altitude stabilization and navigation.
 
+Future iterations of the system will transition to more advanced sensors such as the BMP384. These newer sensors offer improved resolution, lower noise, and higher sampling rates, enabling more accurate and responsive altitude estimation.
+
+The integration of barometric data with inertial measurements allows the system to compensate for drift in vertical estimation while maintaining smooth and stable altitude control.
+
 \subsection{Global Positioning System (GPS)}
 
-The system includes support for a GPS module to provide global position and velocity information. GPS measurements are typically available at lower frequencies and are subject to noise and latency; however, they are essential for outdoor navigation and position control.
+The system includes support for a GPS module to provide global position and velocity information. In the current implementation, a u-blox M9N module is used, interfaced with the microcontroller over UART.
+
+A dedicated UART port is exposed on the hardware platform to facilitate direct connection of the GPS module. This design allows flexibility in module selection and simplifies integration without requiring modifications to the core system.
+
+The M9N provides multi-constellation GNSS support (e.g., GPS, GLONASS, Galileo), improving positioning accuracy and reliability in diverse operating environments. Typical update rates range from 5--10\,Hz, with support for higher rates depending on configuration.
+
+GPS measurements are inherently lower in frequency and are subject to noise and latency; however, they provide absolute position and velocity references that are essential for navigation and position control in outdoor environments.
+
+While GPS data is not suitable for high-frequency control loops, it plays a critical role in higher-level state estimation by correcting long-term drift in position estimates derived from inertial sensors.
+
+The integration of GPS with inertial measurements enables the system to achieve both short-term responsiveness and long-term accuracy, forming the basis for robust navigation capabilities.
 
 \subsection{Sensor Integration and Design Considerations}
 
@@ -29,6 +55,47 @@ Ensuring consistent sampling, low-latency data acquisition, and signal integrity
 
 The architecture is designed to support future enhancements in sensing capabilities. Planned iterations include the use of dual 6-axis IMUs to provide redundancy and improve robustness against sensor failure. Additionally, a dedicated external magnetometer is considered to improve heading estimation by reducing interference from onboard electronics.
 
-For low-altitude operation, additional sensors such as Time-of-Flight (ToF) range sensors are planned to provide accurate height estimation in the near-ground region, where barometric measurements are less reliable. Optical flow sensors may also be integrated to estimate planar velocity, enabling improved position stability in GPS-denied environments.
+For low-altitude operation, additional sensors such as Time-of-Flight (ToF) range sensors are planned to provide accurate height estimation in the near-ground region, where barometric measurements are less reliable. This is particularly useful for achieving smooth landing and takeoff behavior.
+
+Optical flow sensors may also be integrated to estimate planar velocity, enabling improved position stability in GPS-denied or low-altitude environments where GPS performance is degraded.
 
 These extensions are aligned with the modular design philosophy of the Vayu system, allowing new sensing modalities to be incorporated without requiring fundamental changes to the overall architecture.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        node distance=2cm,
+        block/.style={draw, rectangle, minimum width=5cm, minimum height=5cm, align=left, font=\small, rounded corners=5pt},
+        header/.style={font=\bfseries\color{primary}, align=center},
+        item/.style={font=\fontsize{9}{10}\selectfont, align=left},
+        arrow/.style={-Latex, line width=1.5pt, primary!50}
+    ]
+
+    % Current Suite
+    \node[block, fill=blue!5] (current) {};
+    \node[header, anchor=north, yshift=-0.3cm] at (current.north) {Current Sensor Suite\\(v0.0.3)};
+    \node[item, anchor=north, yshift=-1.5cm] at (current.north) {
+        $\bullet$ BMX160 (9-axis IMU) [I2C]\\
+        $\bullet$ BMP180 (Barometer) [I2C]\\
+        $\bullet$ M9N (GNSS) [UART]
+    };
+
+    % Future Extensions
+    \node[block, fill=green!5, right=2.5cm of current] (future) {};
+    \node[header, anchor=north, yshift=-0.3cm] at (future.north) {Planned Extensions};
+    \node[item, anchor=north, yshift=-1.5cm] at (future.north) {
+        $\bullet$ ISM/Bosch IMUs [SPI]\\
+        $\bullet$ BMP384 (Barometer)\\
+        $\bullet$ Dual Redundant IMUs\\
+        $\bullet$ External Magnetometer\\
+        $\bullet$ ToF Range Sensor\\
+        $\bullet$ Optical Flow Sensor
+    };
+
+    % Path
+    \draw[arrow] (current.east) -- (future.west) node[midway, above, font=\tiny\bfseries, color=primary] {UPGRADE PATH};
+
+    \end{tikzpicture}
+    \caption{Overview of the current sensor implementation and the planned roadmap for enhanced sensing capabilities.}
+    \label{fig:sensor_roadmap}
+\end{figure}

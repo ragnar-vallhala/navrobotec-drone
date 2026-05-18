@@ -1,0 +1,19 @@
+<p>NavHAL is structured as a statically configured abstraction layer that separates hardware interaction across three orthogonal domains: processor architecture, vendor-specific implementation, and board-level configuration. This separation enables fine-grained hardware control while maintaining portability and scalability.</p>
+<p>At a high level, NavHAL consists of a unified interface layer built on top of an architecture-specific core, which is specialized through three components: <em>core</em>, <em>vendor</em>, and <em>board</em>. These components are selected at build time, ensuring that only the required implementation is included in the final binary.</p>
+<figure>
+<img src="/docs/diagrams/tikz-e9cdd0c0ac7c.svg" />
+<figcaption>NavHAL architecture illustrating separation across processor, vendor, and board layers.</figcaption>
+</figure>
+<p>The <strong>Interface Layer</strong> provides a consistent and hardware-agnostic API for peripherals such as GPIO, UART, I2C, SPI, and timers. It defines the contract used by upper layers without exposing implementation details.</p>
+<p>The <strong>Core Layer</strong> contains architecture-specific logic and implements the functional behavior of peripherals. It translates API calls into hardware operations using definitions provided by the vendor and board layers.</p>
+<p>The architecture is further decomposed into three domains:</p>
+<ul>
+<li><p><strong>Processor Layer:</strong> Implements architecture-level features such as startup routines, interrupt handling, and low-level execution primitives (e.g., Cortex-M4 support).</p></li>
+<li><p><strong>Vendor Layer:</strong> Defines microcontroller-specific details including register mappings, memory layouts, and peripheral structures. It enables direct access to hardware registers.</p></li>
+<li><p><strong>Board Layer:</strong> Provides board-level configuration such as pin mappings and default peripheral assignments, allowing application code to remain independent of physical layouts.</p></li>
+</ul>
+<p>This separation allows independent evolution of each domain. Supporting a new board requires only board-level changes, while adapting to a different microcontroller primarily affects the vendor layer.</p>
+<p>The abstraction is resolved at compile time through build configuration parameters (processor, vendor, and board). This eliminates unused components and reduces binary size.</p>
+<p>To maintain efficiency, the design minimizes runtime indirection. Public APIs remain lightweight, while internal operations rely on inline functions and macros. As a result, most interactions map closely to direct register access.</p>
+<p>NavHAL operates as a stateless access layer and does not enforce resource ownership or concurrency control. These responsibilities are delegated to the execution layer (e.g., VAIOS) when present, allowing NavHAL to remain lightweight and flexible.</p>
+<p>Overall, the architecture combines structured abstraction with direct hardware access, enabling portability without sacrificing performance.</p>

@@ -161,3 +161,26 @@
 .memberInfo h3 {
   margin-bottom: 0.25rem;
 }
+
+@media (max-width: 768px) {
+  .container {
+    padding: 5rem 0;
+  }
+
+  .standardContainer {
+    padding: 0 1.5rem;
+  }
+
+  .headerArea {
+    margin-bottom: 4rem;
+  }
+
+  .headerArea h1 {
+    font-size: 2.5rem;
+    overflow-wrap: break-word;
+  }
+
+  .headerArea p {
+    font-size: 1.1rem;
+  }
+}

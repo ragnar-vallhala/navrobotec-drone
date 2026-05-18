@@ -16,6 +16,7 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  min-width: 0; /* allow grid item to shrink below content width */
 }
 
 .infoCard {
@@ -46,6 +47,7 @@
   color: var(--color-dark);
   font-weight: 700;
   margin: 0;
+  overflow-wrap: break-word; /* break long tokens like the email address */
 }
 
 .formColumn {
@@ -54,6 +56,7 @@
   border-radius: 24px;
   border: 1px solid rgba(0, 0, 0, 0.05);
   box-shadow: var(--shadow-card);
+  min-width: 0; /* allow grid item to shrink below content width */
 }
 
 .contactForm {
@@ -78,6 +81,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  min-width: 0; /* allow grid item to shrink below input intrinsic width */
 }
 
 .formGroup label {
@@ -88,6 +92,8 @@
 
 .formGroup input,
 .formGroup textarea {
+  width: 100%; /* override the input's intrinsic size-based width */
+  min-width: 0;
   padding: 1rem 1.25rem;
   border-radius: 12px;
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -95,6 +101,10 @@
   font-family: inherit;
   font-size: 1rem;
   transition: all 0.2s ease;
+}
+
+.formGroup textarea {
+  resize: vertical;
 }
 
 .formGroup input:focus,

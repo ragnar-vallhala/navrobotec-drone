@@ -1,0 +1,12 @@
+\section{Overview}
+\label{sec:vaios_overview}
+
+VAIOS provides a structured runtime environment for managing execution and system services in embedded applications. It is organized around a set of core subsystems that together define how tasks are scheduled, how resources are managed, and how different parts of the system interact.
+
+At the kernel level, VAIOS implements a preemptive scheduler with multiple priority levels and time-sliced execution within each level. Tasks are maintained in priority-specific ready queues, enabling efficient selection of the next task to execute. Context switching is performed using hardware-supported mechanisms, ensuring low overhead during task transitions.
+
+The system supports a well-defined task lifecycle, including ready, running, blocked, delayed, and terminated states. Separate stacks are allocated for each task, allowing independent execution and simplifying context management. Delayed and blocked tasks are maintained in dedicated lists, with periodic updates ensuring timely wake-up and rescheduling.
+
+VAIOS also provides a set of system services required for building complete applications. These include inter-task communication primitives such as semaphores and mutexes, dynamic memory allocation with safety checks, and a virtual file system interface for interacting with storage devices. These components are designed to operate cohesively within the scheduler framework.
+
+Configuration is handled at compile time through a centralized set of macros, allowing system parameters such as time slice duration, memory limits, and feature flags to be tailored to specific use cases. This approach keeps the runtime lean while enabling flexibility across different deployments.

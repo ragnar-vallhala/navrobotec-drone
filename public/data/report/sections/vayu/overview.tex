@@ -1,0 +1,12 @@
+\section{Overview}
+\label{sec:vayu_overview}
+
+Vayu organizes the flight control system as a set of interacting subsystems that collectively implement the sensing-to-actuation pipeline required for stable flight. Each subsystem is responsible for a specific function, such as sensor acquisition, state estimation, control computation, or output generation, and communicates with others through well-defined interfaces.
+
+Sensor data is acquired from onboard devices, including the BMX160 inertial measurement unit and the BMP180 barometric sensor, using hardware interfaces provided by NavHAL. High-frequency IMU data is continuously updated using a DMA-driven acquisition loop, while lower-rate sensors are accessed periodically. This data is then processed by estimation modules to compute orientation and other state variables required for control.
+
+Control logic is structured into multiple loops operating at different frequencies. A high-frequency rate control loop handles rapid stabilization using gyroscope data, while a lower-frequency attitude control loop computes desired rates based on orientation estimates. These control outputs are translated into motor commands and applied through hardware timers, enabling precise actuator control.
+
+Execution is managed through VAIOS, where each subsystem operates as an independent task. Time-critical tasks are assigned higher priority and use periodic delays to maintain consistent execution rates. Less critical operations, such as communication, telemetry, and logging, are handled by lower-priority tasks, ensuring that core control functionality remains unaffected under load.
+
+Communication with external systems is supported through UART-based interfaces. Remote control input is received using the iBus protocol, while telemetry and debugging data can be transmitted over serial channels. Additionally, the system supports data logging through the VFS layer, enabling persistent storage of flight data for analysis.
