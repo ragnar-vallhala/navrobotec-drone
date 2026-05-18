@@ -20,27 +20,35 @@ Figure~\ref{fig:power_architecture} illustrates the two-stage regulation approac
 
     % Nodes
     \node[input] (bat) {Battery};
-    \node[block, right=1.2cm of bat, fill=blue!5] (buck) {Buck Converter\\(TPS562200)};
-    \node[block, right=1.2cm of buck, fill=green!5] (ldo) {Linear Regulator\\(LDO)};
-    \node[block, below right=0.5cm and 0.2cm of bat, fill=orange!5] (bec) {ESC BEC\\(5V Input)};
+    \node[block, right=1.0cm of bat, fill=red!5] (pdb) {PDB Monitoring\\(V/I Sensing)};
+    \node[block, right=1.0cm of pdb, fill=blue!5] (buck) {Buck Converter\\(TPS562200)};
+    \node[block, right=1.0cm of buck, fill=green!5] (ldo) {Linear Regulator\\(LDO)};
+    
+    % Secondary nodes
+    \node[block, below=1.0cm of pdb, fill=orange!5] (bec) {ESC BEC\\(5V Input)};
     
     % Consumer nodes
-    \node[block, above right=0.3cm and 1.2cm of buck] (periph) {Peripherals\\(5V Rails)};
+    \node[block, above right=0.3cm and 1.0cm of buck] (periph) {Peripherals\\(5V Rails)};
     \node[block, right=1.2cm of ldo] (mcu_sens) {MCU \& Sensors\\(3.3V Rails)};
 
     % Connections
-    \draw[arrow] (bat) -- (buck) node[midway, above, font=\tiny] {VBAT};
+    \draw[arrow] (bat) -- (pdb) node[midway, above, font=\tiny] {VBAT};
+    \draw[arrow] (pdb) -- (buck) node[midway, above, font=\tiny] {VBAT};
     \draw[line] (buck) -- (ldo) node[midway, above, font=\tiny, xshift=0.2cm] (junction) {5V};
     \draw[arrow] (buck.east) -- ++(0.4,0) |- (periph.west) node[pos=0.2, right, yshift=0.25cm, font=\tiny] {5V};
     \draw[arrow] (ldo) -- (mcu_sens) node[midway, above, font=\tiny] {3.3V};
     \draw[arrow] (bec.east) -| (junction.south) node[pos=0.25, right, font=\tiny, yshift=-1.1cm] {5V Alt.};
+    
+    % Monitoring Link
+    \draw[arrow, dashed, primary] (pdb.north) -- ++(0,1.5) -| (mcu_sens.north) 
+        node[pos=0.25, above, font=\tiny\bfseries] {I2C Diagnostics (Voltage, Current, Capacity)};
 
     % Labels
     \node[below=0.2cm of buck, font=\tiny\itshape, color=gray] {Stage 1: High Efficiency};
     \node[below=0.2cm of ldo, font=\tiny\itshape, color=gray] {Stage 2: Low Noise};
 
     \end{tikzpicture}
-    \caption{Two-stage power regulation architecture showing voltage step-down from battery to 5V and subsequent filtration for sensitive 3.3V components.}
+    \caption{Two-stage power regulation architecture with integrated battery monitoring via the PDB, providing real-time diagnostics to the MCU.}
     \label{fig:power_architecture}
 \end{figure}
 
@@ -62,10 +70,24 @@ The regulated power rails are distributed across the system to support different
 
 Careful routing and grounding practices are followed to minimize voltage drops and electromagnetic interference. Analog and digital components are supplied through stable rails to ensure consistent operation under dynamic load conditions.
 
+\subsection{Battery Monitoring and Power Diagnostics}
+
+In addition to voltage regulation, the Vayu system incorporates battery monitoring capabilities to track power consumption and ensure safe operation during flight.
+
+The system is designed to measure both battery voltage and current consumption, enabling real-time estimation of power usage. This information is critical for implementing features such as low-battery warnings, failsafe triggers, and flight time estimation.
+
+A dedicated power distribution board (PDB) integrates a monitoring integrated circuit that provides voltage sensing, current measurement, and coulomb counting functionality. Coulomb counting enables accurate estimation of remaining battery capacity by integrating current consumption over time, offering a more reliable metric than voltage-based estimation alone.
+
+The PDB communicates with the microcontroller via the I2C interface, allowing periodic acquisition of power-related data within the system. This integration ensures that battery diagnostics can be incorporated into higher-level system monitoring and decision-making processes.
+
+Battery monitoring data can be used by the control system to enforce safety constraints, such as initiating controlled landing during low-power conditions or limiting system load under high current draw.
+
+Future extensions may include integration of advanced battery management features such as state-of-charge (SoC) estimation, temperature monitoring, and predictive power modeling.
+
+Overall, the inclusion of battery monitoring enhances system reliability, safety, and operational awareness, making it a critical component of the overall flight control platform.
+
 \subsection{Design Considerations}
 
 The power system is designed to balance efficiency, stability, and simplicity. The use of a switching regulator ensures efficient energy conversion, while the LDO provides clean power for critical components.
-
-Future iterations of the hardware may incorporate additional power monitoring and protection mechanisms, such as current sensing and fault detection, to enhance system reliability.
 
 Overall, the power management subsystem plays a crucial role in ensuring the stability and accuracy of the Vayu flight control system by providing reliable and low-noise power to all components.

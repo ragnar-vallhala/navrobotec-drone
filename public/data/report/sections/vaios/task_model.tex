@@ -1,0 +1,56 @@
+\section{Task Model}
+\label{sec:vaios_task_model}
+
+VAIOS follows a task-based execution model, where each unit of execution is represented as an independent task managed by the kernel. Each task is described by a Task Control Block (TCB), which stores all information required for scheduling, context switching, and lifecycle management.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        base_node/.style={draw, rectangle, minimum width=5cm, minimum height=0.55cm, align=left, font=\scriptsize\ttfamily, fill=white},
+        brace/.style={decoration={brace, raise=5pt}, decorate, thick}
+    ]
+
+    % TCB Stack
+    \node[base_node, fill=blue!5] (sp) {uint32\_t *sp;           \hfill // PSP};
+    \node[base_node, below=-\pgflinewidth of sp] (mem) {uint32\_t *mem\_block;    \hfill // Base};
+    \node[base_node, below=-\pgflinewidth of mem] (arg) {void *arg;              \hfill // Arg};
+    \node[base_node, below=-\pgflinewidth of arg] (entry) {void (*en)(void *); \hfill // Entry};
+    
+    \node[base_node, below=-\pgflinewidth of entry, fill=green!5] (ss) {uint32\_t stack\_size;    \hfill // Size};
+    \node[base_node, below=-\pgflinewidth of ss] (tid) {uint32\_t task\_id;       \hfill // ID};
+    
+    \node[base_node, below=-\pgflinewidth of tid, fill=orange!5] (dt) {uint32\_t delay\_ticks;   \hfill // Wake};
+    \node[base_node, below=-\pgflinewidth of dt] (tr) {uint32\_t ticks\_run;     \hfill // Stats};
+    
+    \node[base_node, below=-\pgflinewidth of tr, fill=cyan!5] (pr) {uint32\_t priority;      \hfill // Cur};
+    \node[base_node, below=-\pgflinewidth of pr] (bp) {uint32\_t base\_priority; \hfill // Base};
+    \node[base_node, below=-\pgflinewidth of bp] (st) {Task\_Status status;     \hfill // State};
+    
+    \node[base_node, below=-\pgflinewidth of st, fill=red!5] (ws) {void *wait\_sem;         \hfill // Block};
+    
+    \node[base_node, below=-\pgflinewidth of ws, fill=gray!10] (nxt) {struct TCB *next;       \hfill // Link};
+    \node[base_node, below=-\pgflinewidth of nxt] (prv) {struct TCB *prev;       \hfill // Link};
+    \node[base_node, below=-\pgflinewidth of prv] (mag) {uint32\_t magic;          \hfill // Magic};
+
+    % Braces & Labels on Right
+    \draw[brace] (sp.north east) -- (entry.south east) node[midway, right=10pt, align=left, font=\tiny\bfseries] {Execution Context};
+    \draw[brace] (ss.north east) -- (tid.south east) node[midway, right=10pt, align=left, font=\tiny\bfseries] {Static Metadata};
+    \draw[brace] (dt.north east) -- (tr.south east) node[midway, right=10pt, align=left, font=\tiny\bfseries] {Scheduling \& Stats};
+    \draw[brace] (pr.north east) -- (st.south east) node[midway, right=10pt, align=left, font=\tiny\bfseries] {Priority \& State};
+    \draw[brace] (ws.north east) -- (ws.south east) node[midway, right=10pt, align=left, font=\tiny\bfseries] {Synchronization};
+    \draw[brace] (nxt.north east) -- (mag.south east) node[midway, right=10pt, align=left, font=\tiny\bfseries] {Linking \& Integrity};
+
+    \end{tikzpicture}
+    \caption{Memory layout of the VAIOS Task Control Block (TCB) showing field groupings by functional role.}
+    \label{fig:vaios_tcb}
+\end{figure}
+
+The TCB , shown in Fig.~\ref{fig:vaios_tcb}, maintains the execution context of a task, including the current stack pointer, stack memory base, entry function, and argument. It also stores scheduling-related metadata such as priority, delay information, and runtime statistics. Additional fields are used for tracking synchronization state, linking tasks within scheduling lists, and ensuring system integrity through sanity checks. This structure enables efficient context switching and flexible task management while keeping all relevant task information localized.
+
+Each task is allocated a separate stack at creation time using the system memory allocator. The stack is initialized to simulate an exception return frame, allowing the task to start execution through the same mechanism used during context switching. This design ensures a uniform execution model and simplifies the scheduler implementation. Stack isolation also prevents interference between tasks and allows independent execution.
+
+The lifecycle of a task is defined through a set of states: \textit{READY}, \textit{RUNNING}, \textit{BLOCKED}, \textit{DELAYED}, and \textit{TERMINATED}. Tasks in the READY state are maintained in priority-specific queues and are eligible for execution. The RUNNING state corresponds to the currently executing task. Tasks enter the BLOCKED state when waiting for synchronization primitives such as semaphores or mutexes, while the DELAYED state is used for time-based suspension using system ticks. Once execution is complete or explicitly terminated, tasks transition to the TERMINATED state and are later cleaned up by the system.
+
+Task creation involves allocating memory for both the TCB and its stack, initializing the execution context, and inserting the task into the appropriate ready queue. The system maintains separate lists for ready, blocked, and delayed tasks, allowing efficient state transitions and scheduling decisions. Tasks can be dynamically delayed, blocked, or unblocked through kernel APIs, enabling flexible control over execution flow.
+
+An idle task is always present in the system and is scheduled when no other tasks are ready to execute. In addition to occupying the processor during idle periods, it performs background operations such as reclaiming memory from terminated tasks, ensuring that resource cleanup does not interfere with active task execution.

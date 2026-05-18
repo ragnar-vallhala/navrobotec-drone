@@ -1,91 +1,190 @@
-\contentsline {chapter}{Abstract}{4}{chapter*.2}%
-\contentsline {chapter}{\numberline {1}Introduction}{5}{chapter.1}%
-\contentsline {chapter}{\numberline {2}Preliminaries}{7}{chapter.2}%
-\contentsline {section}{\numberline {2.1}Embedded System}{7}{section.2.1}%
-\contentsline {subsection}{\numberline {2.1.1}Typical Embedded System Architecture}{8}{subsection.2.1.1}%
-\contentsline {subsection}{\numberline {2.1.2}Execution Model}{9}{subsection.2.1.2}%
-\contentsline {subsection}{\numberline {2.1.3}I/O and Peripheral Interfaces}{10}{subsection.2.1.3}%
-\contentsline {subsection}{\numberline {2.1.4}Limitations and Design Challenges}{10}{subsection.2.1.4}%
-\contentsline {section}{\numberline {2.2}Hardware Abstraction Layer}{11}{section.2.2}%
-\contentsline {section}{\numberline {2.3}Real-Time Operating System}{12}{section.2.3}%
-\contentsline {section}{\numberline {2.4}Coordinate System}{14}{section.2.4}%
-\contentsline {subsection}{\numberline {2.4.1}Reference Frames}{14}{subsection.2.4.1}%
-\contentsline {subsection}{\numberline {2.4.2}Coordinate Transformations}{14}{subsection.2.4.2}%
-\contentsline {subsection}{\numberline {2.4.3}Attitude Representation}{15}{subsection.2.4.3}%
-\contentsline {subsection}{\numberline {2.4.4}Relevance to Control Systems}{15}{subsection.2.4.4}%
-\contentsline {section}{\numberline {2.5}Sensor}{16}{section.2.5}%
-\contentsline {subsection}{\numberline {2.5.1}Types of Sensors}{16}{subsection.2.5.1}%
-\contentsline {subsection}{\numberline {2.5.2}Sensor Characteristics}{16}{subsection.2.5.2}%
-\contentsline {subsection}{\numberline {2.5.3}Sensor Fusion}{17}{subsection.2.5.3}%
-\contentsline {section}{\numberline {2.6}Control}{17}{section.2.6}%
-\contentsline {subsection}{\numberline {2.6.1}Feedback Control}{17}{subsection.2.6.1}%
-\contentsline {subsection}{\numberline {2.6.2}Proportional-Integral-Derivative (PID) Control}{18}{subsection.2.6.2}%
-\contentsline {subsection}{\numberline {2.6.3}Cascaded Control Architecture}{18}{subsection.2.6.3}%
-\contentsline {subsection}{\numberline {2.6.4}Actuator Command Generation}{18}{subsection.2.6.4}%
-\contentsline {subsection}{\numberline {2.6.5}Practical Considerations}{19}{subsection.2.6.5}%
-\contentsline {section}{\numberline {2.7}Communication}{19}{section.2.7}%
-\contentsline {subsection}{\numberline {2.7.1}Communication Interfaces}{19}{subsection.2.7.1}%
-\contentsline {subsection}{\numberline {2.7.2}Communication Protocols}{20}{subsection.2.7.2}%
-\contentsline {subsection}{\numberline {2.7.3}Telemetry and Command Systems}{20}{subsection.2.7.3}%
-\contentsline {subsection}{\numberline {2.7.4}Design Considerations}{20}{subsection.2.7.4}%
-\contentsline {section}{\numberline {2.8}Safety}{21}{section.2.8}%
-\contentsline {subsection}{\numberline {2.8.1}Failure Modes}{21}{subsection.2.8.1}%
-\contentsline {subsection}{\numberline {2.8.2}Fault Detection}{21}{subsection.2.8.2}%
-\contentsline {subsection}{\numberline {2.8.3}Failsafe Mechanisms}{21}{subsection.2.8.3}%
-\contentsline {subsection}{\numberline {2.8.4}Design Considerations}{22}{subsection.2.8.4}%
-\contentsline {chapter}{\numberline {3}System Architecture}{23}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Overview}{23}{section.3.1}%
-\contentsline {section}{\numberline {3.2}Layered Architecture}{24}{section.3.2}%
-\contentsline {section}{\numberline {3.3}System Components}{25}{section.3.3}%
-\contentsline {section}{\numberline {3.4}Data Flow}{26}{section.3.4}%
-\contentsline {subsection}{\numberline {3.4.1}Data Processing Pipeline}{26}{subsection.3.4.1}%
-\contentsline {subsection}{\numberline {3.4.2}Synchronization and Buffering}{27}{subsection.3.4.2}%
-\contentsline {section}{\numberline {3.5}Execution Model}{28}{section.3.5}%
-\contentsline {subsection}{\numberline {3.5.1}Task Scheduling and Priorities}{28}{subsection.3.5.1}%
-\contentsline {subsection}{\numberline {3.5.2}Execution Timing Diagram}{29}{subsection.3.5.2}%
-\contentsline {subsection}{\numberline {3.5.3}Deterministic Guarantees}{29}{subsection.3.5.3}%
-\contentsline {section}{\numberline {3.6}Design Principles}{29}{section.3.6}%
-\contentsline {subsection}{\numberline {3.6.1}Architectural Pillars}{29}{subsection.3.6.1}%
-\contentsline {section}{\numberline {3.7}Comparison}{30}{section.3.7}%
-\contentsline {section}{\numberline {3.8}Summary}{31}{section.3.8}%
-\contentsline {chapter}{\numberline {4}Hardware}{32}{chapter.4}%
-\contentsline {section}{\numberline {4.1}System Overview}{32}{section.4.1}%
-\contentsline {section}{\numberline {4.2}Microcontroller Unit (MCU)}{33}{section.4.2}%
-\contentsline {section}{\numberline {4.3}Sensors}{34}{section.4.3}%
-\contentsline {subsection}{\numberline {4.3.1}Inertial Measurement Unit (IMU)}{34}{subsection.4.3.1}%
-\contentsline {subsection}{\numberline {4.3.2}Barometric Sensor}{35}{subsection.4.3.2}%
-\contentsline {subsection}{\numberline {4.3.3}Global Positioning System (GPS)}{35}{subsection.4.3.3}%
-\contentsline {subsection}{\numberline {4.3.4}Sensor Integration and Design Considerations}{35}{subsection.4.3.4}%
-\contentsline {section}{\numberline {4.4}Communication Interfaces}{36}{section.4.4}%
-\contentsline {subsection}{\numberline {4.4.1}UART Interfaces}{36}{subsection.4.4.1}%
-\contentsline {subsection}{\numberline {4.4.2}I2C Interface}{36}{subsection.4.4.2}%
-\contentsline {subsection}{\numberline {4.4.3}SPI Interface}{36}{subsection.4.4.3}%
-\contentsline {subsection}{\numberline {4.4.4}Debug and Programming Interface}{36}{subsection.4.4.4}%
-\contentsline {subsection}{\numberline {4.4.5}Design Considerations}{37}{subsection.4.4.5}%
-\contentsline {section}{\numberline {4.5}Actuation and Motor Control}{37}{section.4.5}%
-\contentsline {subsection}{\numberline {4.5.1}PWM-Based Actuation}{37}{subsection.4.5.1}%
-\contentsline {subsection}{\numberline {4.5.2}Motor Configuration and Mixing}{37}{subsection.4.5.2}%
-\contentsline {subsection}{\numberline {4.5.3}Timing and Control Requirements}{38}{subsection.4.5.3}%
-\contentsline {subsection}{\numberline {4.5.4}Design Considerations}{38}{subsection.4.5.4}%
-\contentsline {section}{\numberline {4.6}Power Management}{38}{section.4.6}%
-\contentsline {subsection}{\numberline {4.6.1}Power Architecture}{38}{subsection.4.6.1}%
-\contentsline {subsection}{\numberline {4.6.2}Noise and Signal Integrity}{39}{subsection.4.6.2}%
-\contentsline {subsection}{\numberline {4.6.3}Power Distribution}{39}{subsection.4.6.3}%
-\contentsline {subsection}{\numberline {4.6.4}Design Considerations}{39}{subsection.4.6.4}%
-\contentsline {section}{\numberline {4.7}Hardware-Software Co-design}{39}{section.4.7}%
-\contentsline {subsection}{\numberline {4.7.1}Mapping of Hardware Resources to Software Modules}{40}{subsection.4.7.1}%
-\contentsline {subsection}{\numberline {4.7.2}Role of NavHAL}{40}{subsection.4.7.2}%
-\contentsline {subsection}{\numberline {4.7.3}Execution Support through Hardware Features}{41}{subsection.4.7.3}%
-\contentsline {subsection}{\numberline {4.7.4}Design Alignment and Scalability}{41}{subsection.4.7.4}%
-\contentsline {section}{\numberline {4.8}Design Considerations}{41}{section.4.8}%
-\contentsline {subsection}{\numberline {4.8.1}Real-Time Constraints}{41}{subsection.4.8.1}%
-\contentsline {subsection}{\numberline {4.8.2}Signal Integrity and Noise Management}{42}{subsection.4.8.2}%
-\contentsline {subsection}{\numberline {4.8.3}Modularity and Expandability}{42}{subsection.4.8.3}%
-\contentsline {subsection}{\numberline {4.8.4}Scalability and Upgrade Path}{42}{subsection.4.8.4}%
-\contentsline {subsection}{\numberline {4.8.5}Debugging and Development Support}{42}{subsection.4.8.5}%
-\contentsline {subsection}{\numberline {4.8.6}Hardware–Software Alignment}{42}{subsection.4.8.6}%
-\contentsline {chapter}{\numberline {5}NavHAL}{43}{chapter.5}%
-\contentsline {chapter}{\numberline {6}VAIOS}{44}{chapter.6}%
-\contentsline {chapter}{\numberline {7}Vayu}{45}{chapter.7}%
-\contentsline {chapter}{\numberline {8}Results}{46}{chapter.8}%
-\contentsline {chapter}{\numberline {9}Conclusion}{47}{chapter.9}%
+\contentsline {chapter}{Abstract}{6}{chapter*.2}%
+\contentsline {chapter}{\numberline {1}Introduction}{7}{chapter.1}%
+\contentsline {chapter}{\numberline {2}Preliminaries}{9}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Embedded System}{9}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}Typical Embedded System Architecture}{10}{subsection.2.1.1}%
+\contentsline {subsection}{\numberline {2.1.2}Execution Model}{11}{subsection.2.1.2}%
+\contentsline {subsection}{\numberline {2.1.3}I/O and Peripheral Interfaces}{12}{subsection.2.1.3}%
+\contentsline {subsection}{\numberline {2.1.4}Limitations and Design Challenges}{12}{subsection.2.1.4}%
+\contentsline {section}{\numberline {2.2}Hardware Abstraction Layer}{13}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Real-Time Operating System}{15}{section.2.3}%
+\contentsline {section}{\numberline {2.4}Coordinate System}{16}{section.2.4}%
+\contentsline {subsection}{\numberline {2.4.1}Reference Frames}{16}{subsection.2.4.1}%
+\contentsline {subsection}{\numberline {2.4.2}Coordinate Transformations}{16}{subsection.2.4.2}%
+\contentsline {subsection}{\numberline {2.4.3}Attitude Representation}{17}{subsection.2.4.3}%
+\contentsline {subsection}{\numberline {2.4.4}Relevance to Control Systems}{17}{subsection.2.4.4}%
+\contentsline {section}{\numberline {2.5}Sensor}{18}{section.2.5}%
+\contentsline {subsection}{\numberline {2.5.1}Types of Sensors}{18}{subsection.2.5.1}%
+\contentsline {subsection}{\numberline {2.5.2}Sensor Characteristics}{19}{subsection.2.5.2}%
+\contentsline {subsection}{\numberline {2.5.3}Sensor Fusion}{19}{subsection.2.5.3}%
+\contentsline {section}{\numberline {2.6}Control}{20}{section.2.6}%
+\contentsline {subsection}{\numberline {2.6.1}Feedback Control}{20}{subsection.2.6.1}%
+\contentsline {subsection}{\numberline {2.6.2}Proportional-Integral-Derivative (PID) Control}{20}{subsection.2.6.2}%
+\contentsline {subsection}{\numberline {2.6.3}Cascaded Control Architecture}{20}{subsection.2.6.3}%
+\contentsline {subsection}{\numberline {2.6.4}Actuator Command Generation}{21}{subsection.2.6.4}%
+\contentsline {subsection}{\numberline {2.6.5}Practical Considerations}{21}{subsection.2.6.5}%
+\contentsline {section}{\numberline {2.7}Communication}{21}{section.2.7}%
+\contentsline {subsection}{\numberline {2.7.1}Communication Interfaces}{21}{subsection.2.7.1}%
+\contentsline {subsection}{\numberline {2.7.2}Communication Protocols}{22}{subsection.2.7.2}%
+\contentsline {subsection}{\numberline {2.7.3}Telemetry and Command Systems}{22}{subsection.2.7.3}%
+\contentsline {subsection}{\numberline {2.7.4}Design Considerations}{23}{subsection.2.7.4}%
+\contentsline {section}{\numberline {2.8}Safety}{23}{section.2.8}%
+\contentsline {subsection}{\numberline {2.8.1}Failure Modes}{23}{subsection.2.8.1}%
+\contentsline {subsection}{\numberline {2.8.2}Fault Detection}{24}{subsection.2.8.2}%
+\contentsline {subsection}{\numberline {2.8.3}Failsafe Mechanisms}{24}{subsection.2.8.3}%
+\contentsline {subsection}{\numberline {2.8.4}Design Considerations}{24}{subsection.2.8.4}%
+\contentsline {chapter}{\numberline {3}System Architecture}{25}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Overview}{25}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Layered Architecture}{26}{section.3.2}%
+\contentsline {section}{\numberline {3.3}System Components}{27}{section.3.3}%
+\contentsline {section}{\numberline {3.4}Data Flow}{28}{section.3.4}%
+\contentsline {subsection}{\numberline {3.4.1}Data Processing Pipeline}{28}{subsection.3.4.1}%
+\contentsline {subsection}{\numberline {3.4.2}Synchronization and Buffering}{29}{subsection.3.4.2}%
+\contentsline {section}{\numberline {3.5}Execution Model}{30}{section.3.5}%
+\contentsline {subsection}{\numberline {3.5.1}Task Scheduling and Priorities}{30}{subsection.3.5.1}%
+\contentsline {subsection}{\numberline {3.5.2}Execution Timing Diagram}{31}{subsection.3.5.2}%
+\contentsline {subsection}{\numberline {3.5.3}Deterministic Guarantees}{31}{subsection.3.5.3}%
+\contentsline {section}{\numberline {3.6}Design Principles}{31}{section.3.6}%
+\contentsline {subsection}{\numberline {3.6.1}Architectural Pillars}{32}{subsection.3.6.1}%
+\contentsline {section}{\numberline {3.7}Comparison}{33}{section.3.7}%
+\contentsline {section}{\numberline {3.8}Summary}{33}{section.3.8}%
+\contentsline {chapter}{\numberline {4}Hardware}{35}{chapter.4}%
+\contentsline {section}{\numberline {4.1}System Overview}{35}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Microcontroller Unit (MCU)}{36}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Sensors}{37}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}Inertial Measurement Unit (IMU)}{38}{subsection.4.3.1}%
+\contentsline {subsection}{\numberline {4.3.2}Barometric Sensor}{38}{subsection.4.3.2}%
+\contentsline {subsection}{\numberline {4.3.3}Global Positioning System (GPS)}{39}{subsection.4.3.3}%
+\contentsline {subsection}{\numberline {4.3.4}Sensor Integration and Design Considerations}{39}{subsection.4.3.4}%
+\contentsline {section}{\numberline {4.4}Communication Interfaces}{40}{section.4.4}%
+\contentsline {subsection}{\numberline {4.4.1}UART Interfaces}{40}{subsection.4.4.1}%
+\contentsline {subsection}{\numberline {4.4.2}I2C Interface}{41}{subsection.4.4.2}%
+\contentsline {subsection}{\numberline {4.4.3}SPI Interface}{41}{subsection.4.4.3}%
+\contentsline {subsection}{\numberline {4.4.4}SDIO Interface}{42}{subsection.4.4.4}%
+\contentsline {subsection}{\numberline {4.4.5}USB CDC Interface}{42}{subsection.4.4.5}%
+\contentsline {subsection}{\numberline {4.4.6}Debug and Programming Interface}{42}{subsection.4.4.6}%
+\contentsline {subsection}{\numberline {4.4.7}Communication Design Considerations}{42}{subsection.4.4.7}%
+\contentsline {section}{\numberline {4.5}Actuation and Motor Control}{43}{section.4.5}%
+\contentsline {subsection}{\numberline {4.5.1}PWM-Based Actuation}{44}{subsection.4.5.1}%
+\contentsline {subsection}{\numberline {4.5.2}Motor Configuration and Mixing}{44}{subsection.4.5.2}%
+\contentsline {subsection}{\numberline {4.5.3}Timing and Control Requirements}{44}{subsection.4.5.3}%
+\contentsline {subsection}{\numberline {4.5.4}Design Considerations}{45}{subsection.4.5.4}%
+\contentsline {section}{\numberline {4.6}Power Management}{45}{section.4.6}%
+\contentsline {subsection}{\numberline {4.6.1}Power Architecture}{45}{subsection.4.6.1}%
+\contentsline {subsection}{\numberline {4.6.2}Noise and Signal Integrity}{46}{subsection.4.6.2}%
+\contentsline {subsection}{\numberline {4.6.3}Power Distribution}{46}{subsection.4.6.3}%
+\contentsline {subsection}{\numberline {4.6.4}Battery Monitoring and Power Diagnostics}{46}{subsection.4.6.4}%
+\contentsline {subsection}{\numberline {4.6.5}Design Considerations}{47}{subsection.4.6.5}%
+\contentsline {section}{\numberline {4.7}PCB Design and Fabrication}{47}{section.4.7}%
+\contentsline {subsection}{\numberline {4.7.1}PCB Design}{47}{subsection.4.7.1}%
+\contentsline {subsection}{\numberline {4.7.2}Fabrication and Assembly}{48}{subsection.4.7.2}%
+\contentsline {section}{\numberline {4.8}Hardware-Software Co-design}{49}{section.4.8}%
+\contentsline {subsection}{\numberline {4.8.1}Mapping of Hardware Resources to Software Modules}{49}{subsection.4.8.1}%
+\contentsline {subsection}{\numberline {4.8.2}Role of NavHAL}{50}{subsection.4.8.2}%
+\contentsline {subsection}{\numberline {4.8.3}Execution Support through Hardware Features}{50}{subsection.4.8.3}%
+\contentsline {subsection}{\numberline {4.8.4}Design Alignment and Scalability}{50}{subsection.4.8.4}%
+\contentsline {section}{\numberline {4.9}Design Considerations}{50}{section.4.9}%
+\contentsline {subsection}{\numberline {4.9.1}Real-Time Constraints}{51}{subsection.4.9.1}%
+\contentsline {subsection}{\numberline {4.9.2}Signal Integrity and Noise Management}{51}{subsection.4.9.2}%
+\contentsline {subsection}{\numberline {4.9.3}Modularity and Expandability}{51}{subsection.4.9.3}%
+\contentsline {subsection}{\numberline {4.9.4}Scalability and Upgrade Path}{51}{subsection.4.9.4}%
+\contentsline {subsection}{\numberline {4.9.5}Debugging and Development Support}{51}{subsection.4.9.5}%
+\contentsline {subsection}{\numberline {4.9.6}Hardware–Software Alignment}{52}{subsection.4.9.6}%
+\contentsline {subsection}{\numberline {4.9.7}System Reliability and Safety}{52}{subsection.4.9.7}%
+\contentsline {chapter}{\numberline {5}NavHAL}{53}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Motivation}{54}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Design Goals}{55}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Architecture of NavHAL}{56}{section.5.3}%
+\contentsline {section}{\numberline {5.4}Interface Design (APIs)}{57}{section.5.4}%
+\contentsline {section}{\numberline {5.5}Peripheral Abstractions}{59}{section.5.5}%
+\contentsline {section}{\numberline {5.6}Resource Management}{61}{section.5.6}%
+\contentsline {section}{\numberline {5.7}Timing and Determinism}{62}{section.5.7}%
+\contentsline {section}{\numberline {5.8}Portability Model}{64}{section.5.8}%
+\contentsline {section}{\numberline {5.9}Integration with VAIOS}{67}{section.5.9}%
+\contentsline {section}{\numberline {5.10}Performance Evaluation}{68}{section.5.10}%
+\contentsline {subsection}{\numberline {5.10.1}GPIO Toggle Performance}{69}{subsection.5.10.1}%
+\contentsline {subsection}{\numberline {5.10.2}Determinism and Jitter}{70}{subsection.5.10.2}%
+\contentsline {subsection}{\numberline {5.10.3}Interrupt Overhead}{71}{subsection.5.10.3}%
+\contentsline {subsection}{\numberline {5.10.4}Design Principles}{71}{subsection.5.10.4}%
+\contentsline {section}{\numberline {5.11}Comparison with Existing HALs}{72}{section.5.11}%
+\contentsline {subsection}{\numberline {5.11.1}Performance and Overhead}{72}{subsection.5.11.1}%
+\contentsline {subsection}{\numberline {5.11.2}Determinism and Real-Time Behavior}{72}{subsection.5.11.2}%
+\contentsline {subsection}{\numberline {5.11.3}Abstraction vs Control}{72}{subsection.5.11.3}%
+\contentsline {subsection}{\numberline {5.11.4}Scalability and Maintainability}{72}{subsection.5.11.4}%
+\contentsline {section}{\numberline {5.12}Summary}{73}{section.5.12}%
+\contentsline {chapter}{\numberline {6}VAIOS}{74}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Overview}{74}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Design Goals}{75}{section.6.2}%
+\contentsline {section}{\numberline {6.3}System Architecture}{76}{section.6.3}%
+\contentsline {section}{\numberline {6.4}Task Model}{77}{section.6.4}%
+\contentsline {section}{\numberline {6.5}Scheduler Design}{78}{section.6.5}%
+\contentsline {section}{\numberline {6.6}Timing and Tick Management}{80}{section.6.6}%
+\contentsline {section}{\numberline {6.7}Inter-Task Communication}{81}{section.6.7}%
+\contentsline {section}{\numberline {6.8}Memory Management}{82}{section.6.8}%
+\contentsline {section}{\numberline {6.9}Integration with Vayu}{83}{section.6.9}%
+\contentsline {section}{\numberline {6.10}Performance Analysis}{84}{section.6.10}%
+\contentsline {subsection}{\numberline {6.10.1}Experimental Platform}{85}{subsection.6.10.1}%
+\contentsline {subsection}{\numberline {6.10.2}Benchmark Summary}{85}{subsection.6.10.2}%
+\contentsline {section}{\numberline {6.11}Limitations and Future Work}{87}{section.6.11}%
+\contentsline {chapter}{\numberline {7}Vayu}{88}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Overview}{88}{section.7.1}%
+\contentsline {section}{\numberline {7.2}System Architecture}{89}{section.7.2}%
+\contentsline {section}{\numberline {7.3}Execution Model}{90}{section.7.3}%
+\contentsline {section}{\numberline {7.4}Sensor Interface}{91}{section.7.4}%
+\contentsline {section}{\numberline {7.5}State Estimation}{91}{section.7.5}%
+\contentsline {subsection}{\numberline {7.5.1}Accelerometer and Magnetometer Estimation}{92}{subsection.7.5.1}%
+\contentsline {subsection}{\numberline {7.5.2}Complementary Filter}{92}{subsection.7.5.2}%
+\contentsline {subsection}{\numberline {7.5.3}Mahony Filter}{92}{subsection.7.5.3}%
+\contentsline {subsection}{\numberline {7.5.4}Implementation Considerations}{93}{subsection.7.5.4}%
+\contentsline {section}{\numberline {7.6}Control System}{93}{section.7.6}%
+\contentsline {subsection}{\numberline {7.6.1}Control Architecture}{93}{subsection.7.6.1}%
+\contentsline {subsection}{\numberline {7.6.2}PID Controller Formulation}{94}{subsection.7.6.2}%
+\contentsline {subsection}{\numberline {7.6.3}Implementation Details}{94}{subsection.7.6.3}%
+\contentsline {subsection}{\numberline {7.6.4}Data Flow Between Controllers}{94}{subsection.7.6.4}%
+\contentsline {section}{\numberline {7.7}Actuation and Output}{94}{section.7.7}%
+\contentsline {subsection}{\numberline {7.7.1}Motor Mixing}{95}{subsection.7.7.1}%
+\contentsline {subsection}{\numberline {7.7.2}Output Normalization}{95}{subsection.7.7.2}%
+\contentsline {subsection}{\numberline {7.7.3}Throttle Handling}{95}{subsection.7.7.3}%
+\contentsline {subsection}{\numberline {7.7.4}Hardware Output}{95}{subsection.7.7.4}%
+\contentsline {subsection}{\numberline {7.7.5}System Behavior}{95}{subsection.7.7.5}%
+\contentsline {section}{\numberline {7.8}Communication and Telemetry}{96}{section.7.8}%
+\contentsline {subsection}{\numberline {7.8.1}Remote Control Input}{96}{subsection.7.8.1}%
+\contentsline {subsection}{\numberline {7.8.2}Command Processing}{96}{subsection.7.8.2}%
+\contentsline {subsection}{\numberline {7.8.3}Telemetry Architecture}{96}{subsection.7.8.3}%
+\contentsline {subsection}{\numberline {7.8.4}Adaptive Data Streaming}{97}{subsection.7.8.4}%
+\contentsline {subsection}{\numberline {7.8.5}Logging Integration}{97}{subsection.7.8.5}%
+\contentsline {subsection}{\numberline {7.8.6}System Behavior}{97}{subsection.7.8.6}%
+\contentsline {section}{\numberline {7.9}Data Logging and Storage}{97}{section.7.9}%
+\contentsline {subsection}{\numberline {7.9.1}File-Based Logging Architecture}{97}{subsection.7.9.1}%
+\contentsline {subsection}{\numberline {7.9.2}Preallocation and Deterministic Writes}{98}{subsection.7.9.2}%
+\contentsline {subsection}{\numberline {7.9.3}Circular Logging Mechanism}{98}{subsection.7.9.3}%
+\contentsline {subsection}{\numberline {7.9.4}Thread-Safe Operation}{98}{subsection.7.9.4}%
+\contentsline {subsection}{\numberline {7.9.5}Integration with System Components}{98}{subsection.7.9.5}%
+\contentsline {subsection}{\numberline {7.9.6}Future Extensions}{99}{subsection.7.9.6}%
+\contentsline {subsection}{\numberline {7.9.7}System Behavior}{99}{subsection.7.9.7}%
+\contentsline {section}{\numberline {7.10}System Initialization and Boot Flow}{99}{section.7.10}%
+\contentsline {subsection}{\numberline {7.10.1}Initialization Sequence}{99}{subsection.7.10.1}%
+\contentsline {subsection}{\numberline {7.10.2}Boot Task and System Checks}{100}{subsection.7.10.2}%
+\contentsline {subsection}{\numberline {7.10.3}State Transition}{100}{subsection.7.10.3}%
+\contentsline {subsection}{\numberline {7.10.4}Task Activation}{100}{subsection.7.10.4}%
+\contentsline {subsection}{\numberline {7.10.5}System Behavior}{101}{subsection.7.10.5}%
+\contentsline {section}{\numberline {7.11}Task Organization}{101}{section.7.11}%
+\contentsline {subsection}{\numberline {7.11.1}Task Classification}{101}{subsection.7.11.1}%
+\contentsline {subsection}{\numberline {7.11.2}Task Prioritization}{102}{subsection.7.11.2}%
+\contentsline {subsection}{\numberline {7.11.3}Inter-Task Communication}{102}{subsection.7.11.3}%
+\contentsline {subsection}{\numberline {7.11.4}Task Lifecycle}{102}{subsection.7.11.4}%
+\contentsline {subsection}{\numberline {7.11.5}Execution Characteristics}{102}{subsection.7.11.5}%
+\contentsline {subsection}{\numberline {7.11.6}System Behavior}{102}{subsection.7.11.6}%
+\contentsline {section}{\numberline {7.12}Extensibility}{103}{section.7.12}%
+\contentsline {subsection}{\numberline {7.12.1}Modular Architecture}{103}{subsection.7.12.1}%
+\contentsline {subsection}{\numberline {7.12.2}Configurable Components}{103}{subsection.7.12.2}%
+\contentsline {subsection}{\numberline {7.12.3}Task-Based Expansion}{103}{subsection.7.12.3}%
+\contentsline {subsection}{\numberline {7.12.4}Hardware Abstraction}{104}{subsection.7.12.4}%
+\contentsline {subsection}{\numberline {7.12.5}Storage and Data Expansion}{104}{subsection.7.12.5}%
+\contentsline {subsection}{\numberline {7.12.6}Communication Flexibility}{104}{subsection.7.12.6}%
+\contentsline {subsection}{\numberline {7.12.7}System Evolution}{104}{subsection.7.12.7}%
+\contentsline {section}{\numberline {7.13}Current Status and Roadmap}{104}{section.7.13}%
+\contentsline {subsection}{\numberline {7.13.1}Current Status}{104}{subsection.7.13.1}%
+\contentsline {subsection}{\numberline {7.13.2}Roadmap}{105}{subsection.7.13.2}%
+\contentsline {subsection}{\numberline {7.13.3}Development Direction}{105}{subsection.7.13.3}%
+\contentsline {chapter}{\numberline {8}Conclusion}{106}{chapter.8}%

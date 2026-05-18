@@ -1,0 +1,78 @@
+\section{Timing and Determinism}
+\label{sec:navhal_timing_determinism}
+
+Deterministic execution is a fundamental requirement in flight control systems, where control loops operate at high frequencies and depend on predictable timing behavior. NavHAL is designed to ensure that hardware interactions exhibit bounded and analyzable execution characteristics.
+
+\subsection*{Deterministic Execution Model}
+
+NavHAL achieves determinism by eliminating sources of runtime variability commonly found in traditional abstraction layers. Specifically:
+
+\begin{itemize}
+    \item No dynamic memory allocation
+    \item No runtime peripheral discovery or lookup
+    \item No internal scheduling or blocking abstractions
+    \item No hidden background processes
+\end{itemize}
+
+All hardware interactions are resolved through direct register access, ensuring that the execution cost of each operation is fixed and predictable.
+
+\subsection*{Compile-Time Resolution}
+
+Peripheral selection and configuration are resolved at compile time. This removes the need for runtime decision-making, ensuring that:
+
+\begin{itemize}
+    \item Code paths are static and analyzable
+    \item Instruction count remains consistent across executions
+    \item Branching overhead is minimized
+\end{itemize}
+
+As a result, the timing behavior of API calls can be estimated directly from the generated machine code.
+
+\subsection*{Direct Register Access}
+
+NavHAL maps all peripheral operations directly to memory-mapped registers using inline functions and macros. For example, GPIO operations reduce to a small number of register writes without intermediate layers.
+
+This approach ensures:
+\begin{itemize}
+    \item Constant-time execution for most operations
+    \item Minimal instruction overhead
+    \item Absence of function call chains or indirect dispatch
+\end{itemize}
+
+\subsection*{Interrupt Handling Model}
+
+Interrupt handling in NavHAL follows a lightweight and predictable structure. The abstraction layer provides:
+
+\begin{itemize}
+    \item Direct enable/disable control over NVIC interrupts
+    \item Static callback registration through function pointers
+    \item A centralized handler that dispatches to user-defined callbacks
+\end{itemize}
+
+Since interrupt vectors are resolved statically and callback invocation is a direct function call, interrupt latency remains bounded and consistent.
+
+\subsection*{Cycle-Level Measurement Support}
+
+NavHAL provides access to the Cortex-M Data Watchpoint and Trace (DWT) unit, enabling cycle-accurate timing measurement. This allows developers to:
+
+\begin{itemize}
+    \item Measure execution time of critical sections
+    \item Validate timing constraints of control loops
+    \item Profile performance without external instrumentation
+\end{itemize}
+
+Such capabilities are essential for verifying real-time behavior in embedded systems.
+
+\subsection*{Execution-Layer Separation}
+
+NavHAL does not introduce scheduling or concurrency mechanisms that could affect timing behavior. When used in conjunction with an execution layer such as VAIOS, task scheduling and synchronization are handled externally.
+
+This separation ensures that:
+\begin{itemize}
+    \item Hardware access latency remains independent of scheduling policies
+    \item Timing characteristics of peripheral operations are preserved
+\end{itemize}
+
+\subsection*{Determinism in Practice}
+
+Due to the combination of compile-time configuration, direct register access, and absence of runtime abstraction overhead, most NavHAL operations execute in a small and fixed number of instructions. This makes the system suitable for high-frequency control loops where timing jitter must be minimized.

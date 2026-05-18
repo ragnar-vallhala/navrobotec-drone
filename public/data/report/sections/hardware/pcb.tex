@@ -1,0 +1,50 @@
+\section{PCB Design and Fabrication}
+\label{sec:pcb_design}
+
+The physical implementation of the Vayu flight control system is realized through a custom-designed printed circuit board (PCB). The design emphasizes compactness, signal integrity, and reliable power distribution, ensuring compatibility with the real-time and noise-sensitive requirements of flight control systems.
+
+\subsection{PCB Design}
+
+The PCB was designed using KiCad, an open-source electronics design automation (EDA) suite. Figure~\ref{fig:kicad_pcb} shows the 3D representation of the board design, highlighting the integration of the STM32F4 microcontroller, sensor interfaces, communication ports, and power management circuitry.
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.44\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{img/kicad.png}
+        \caption{3D visualization of the Vayu PCB design in KiCad.}
+        \label{fig:kicad_pcb}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{img/trace_pcb.png}
+        \caption{Detailed trace layout and routing of the Vayu flight controller PCB.}
+        \label{fig:trace_pcb_side}
+    \end{minipage}
+\end{figure}
+
+The PCB employs a two-layer design. Critical high-speed and noise-sensitive signals, such as IMU communication lines and clock traces, are routed with minimal length and proper grounding to reduce electromagnetic interference (EMI).
+
+Power traces are designed with sufficient width to handle current requirements, particularly for the 5V and 3.3V rails. Dedicated ground planes are used to ensure stable reference potentials and improve signal integrity across the board.
+
+Component placement is carefully optimized to minimize noise coupling. Sensitive components such as the IMU are placed away from switching regulators and high-current paths, reducing measurement disturbances. Decoupling capacitors are positioned close to power pins of the microcontroller and sensors to suppress high-frequency noise.
+
+Connector placement is arranged to support modularity and ease of integration, with clearly exposed interfaces for UART, I2C, SPI, and power connections.
+
+\subsection{Fabrication and Assembly}
+
+Following the design phase, the PCB was fabricated and assembled. The final board integrates all system components, including the microcontroller, sensor interfaces, communication ports, and power management circuitry, into a compact and lightweight form factor suitable for drone applications.
+
+Figure~\ref{fig:real_pcb} shows the assembled hardware.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.4\textwidth]{img/real_pcb.jpeg}
+    \caption{The fabricated and assembled Vayu flight control board.}
+    \label{fig:real_pcb}
+\end{figure}
+
+The assembled board was tested for electrical continuity, power stability, and interface functionality. Successful integration of all subsystems validates the hardware design and provides a stable platform for the Vayu flight control stack.
+
+The PCB design reflects a balance between compact layout, electrical robustness, and modular expandability, ensuring that the hardware platform can support both current implementation and future system enhancements.

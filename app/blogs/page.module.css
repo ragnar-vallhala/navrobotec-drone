@@ -187,6 +187,14 @@
   font-weight: bold;
 }
 
+.blogGrid {
+  display: grid;
+  /* min(100%, 350px) keeps each track from exceeding the container width,
+     so cards collapse to a single column on phones instead of overflowing */
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 350px), 1fr));
+  gap: 3rem;
+}
+
 .blogCard {
   background: var(--color-white);
   border-radius: 24px;

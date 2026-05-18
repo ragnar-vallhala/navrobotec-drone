@@ -1,0 +1,135 @@
+\section{Performance Evaluation}
+\label{sec:navhal_performance}
+
+The performance of NavHAL was evaluated using a set of micro-benchmarks on an STM32F401RE microcontroller. All experiments were conducted on March 20, 2026. Measurements were obtained using the Cortex-M4 Data Watchpoint and Trace (DWT) cycle counter, enabling cycle-accurate timing independent of clock frequency. This ensures that the reported results reflect intrinsic software overhead rather than variations in processor frequency.
+
+\subsection{GPIO Toggle Performance}
+
+A GPIO pin was toggled for 100,000 iterations across multiple abstraction layers.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    ybar,
+    bar width=25pt,
+    width=\columnwidth,
+    height=5cm,
+    ylabel={Cycles per Pulse},
+    symbolic x coords={LL, NavHAL, STM32 HAL, Arduino},
+    xtick=data,
+    ymin=0, ymax=125,
+    enlarge y limits={upper, 0.1},
+    enlarge x limits=0.15,
+    nodes near coords,
+    nodes near coords style={font=\scriptsize},
+    grid=both,
+]
+\addplot[fill=primary!80, draw=primary] coordinates {(LL,5) (NavHAL,5) (STM32 HAL,26) (Arduino,100)};
+\end{axis}
+\end{tikzpicture}
+\caption{GPIO toggle performance across abstraction layers.}
+\label{fig:gpio_perf}
+\end{figure}
+
+The GPIO toggle benchmark, shown in Fig.~\ref{fig:gpio_perf}, captures the fundamental cost of interacting with hardware, where a single pulse consists of one SET and one RESET operation. Direct register access achieves a cost of 5 cycles per pulse, which represents the hardware-imposed lower bound for this operation and serves as a baseline for comparison. NavHAL achieves the same execution cost of 5 cycles, indicating that its abstraction introduces no additional overhead. This equivalence suggests that all abstraction layers in NavHAL are resolved at compile time, allowing the generated code to directly map to hardware operations without intermediate penalties. In contrast, the STM32 HAL implementation requires 26 cycles per pulse, which is approximately five times higher than the baseline. This additional cost can be attributed to the layered design of the HAL, including function call overhead, parameter validation, and generalized handling of peripheral configurations. Arduino exhibits the highest cost at 100 cycles per pulse, corresponding to nearly twenty times the baseline. This significant overhead arises from its highly abstracted and generic programming model, which relies on runtime handling and does not provide direct mapping to hardware registers.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    ybar,
+    bar width=30pt,
+    width=\columnwidth,
+    height=5cm,
+    ylabel={Cycles per Call},
+    symbolic x coords={Inline, NavHAL, LL},
+    xtick=data,
+    ymin=0, ymax=25,
+    enlarge y limits={upper, 0.1},
+    enlarge x limits=0.2,
+    nodes near coords,
+    nodes near coords style={font=\scriptsize},
+    grid=both,
+]
+\addplot[fill=secondary!60, draw=secondary] coordinates {(Inline,2) (NavHAL,18) (LL,10)};
+\end{axis}
+\end{tikzpicture}
+\caption{Function call overhead comparison.}
+\label{fig:call_overhead}
+\end{figure}
+
+Inline operations incur minimal cost, with execution requiring only 2 cycles, shown in Fig.~\ref{fig:call_overhead}, which effectively represents the lower bound for function execution when the compiler eliminates call overhead through inlining. In contrast, non-inlined function calls introduce additional latency due to stack operations, parameter passing, and control transfer. The LL implementation incurs a cost of 10 cycles per call, reflecting the overhead of a standard function invocation with minimal abstraction. NavHAL, when not inlined, requires 18 cycles per call, indicating a higher overhead compared to LL due to its abstraction layers. However, this overhead remains modest and is primarily attributable to controlled function wrapping and interface design rather than excessive layering. Importantly, NavHAL mitigates this cost through the use of aggressive inlining in performance-critical paths, ensuring that frequently executed operations approach the lower bound observed for inline execution. These results highlight that while function calls inherently introduce overhead, careful design choices such as limiting call depth and leveraging compile-time inlining enable NavHAL to maintain efficient execution without sacrificing abstraction.
+
+\subsection{Determinism and Jitter}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    ybar,
+    bar width=25pt,
+    width=\columnwidth,
+    height=5cm,
+    ylabel={Maximum Cycles},
+    symbolic x coords={LL, NavHAL-NoIRQ, NavHAL-IRQ, Arduino},
+    xtick=data,
+    ymin=0, ymax=240,
+    enlarge y limits={upper, 0.1},
+    enlarge x limits=0.15,
+    nodes near coords,
+    nodes near coords style={font=\scriptsize},
+    grid=both,
+]
+\addplot[fill=primary!60, draw=primary] coordinates {(LL,5) (NavHAL-NoIRQ,5) (NavHAL-IRQ,41) (Arduino,187)};
+\end{axis}
+\end{tikzpicture}
+\caption{Worst-case execution latency (jitter).}
+\label{fig:jitter}
+\end{figure}
+
+Deterministic execution is critical for real-time systems, where consistent timing guarantees are required for reliable operation. As shown in Fig.~\ref{fig:jitter}, both direct register access (LL) and NavHAL without interrupts exhibit constant execution time at 5 cycles, indicating fully deterministic behavior in the absence of external interference. When interrupts are enabled, NavHAL demonstrates bounded latency, with execution time increasing up to 41 cycles. This variation represents interrupt-induced jitter and remains within a predictable and controlled range. In contrast, Arduino exhibits significantly higher variability, with worst-case latency reaching 187 cycles, reflecting both interrupt effects and additional overhead from its abstraction model. The results indicate that the jitter observed in NavHAL arises solely from interrupt preemption rather than intrinsic software overhead, thereby preserving deterministic behavior under controlled conditions while maintaining predictable bounds in interrupt-driven scenarios.
+
+\subsection{Interrupt Overhead}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    ybar,
+    bar width=15pt,
+    width=\columnwidth,
+    height=5cm,
+    ylabel={Cycles},
+    symbolic x coords={NavHAL, STM32 HAL, Arduino},
+    xtick=data,
+    ymin=0, ymax=240,
+    enlarge y limits={upper, 0.1},
+    enlarge x limits=0.25,
+    legend style={font=\scriptsize, at={(0.02,0.98)}, anchor=north west},
+    nodes near coords,
+    nodes near coords style={font=\scriptsize},
+    grid=both,
+]
+\addplot[fill=primary!80, draw=primary] coordinates {(NavHAL,33) (STM32 HAL,46) (Arduino,187)};
+\addplot[fill=secondary!40, draw=secondary] coordinates {(NavHAL,16) (STM32 HAL,18) (Arduino,159)};
+\legend{Latency, Overhead}
+\end{axis}
+\end{tikzpicture}
+\caption{Interrupt latency and dispatch overhead.}
+\label{fig:interrupt}
+\end{figure}
+
+Interrupt latency directly affects responsiveness in real-time control systems, as it determines how quickly the system can react to external events. As shown in Fig.~\ref{fig:interrupt}, NavHAL exhibits a latency of 33 cycles with an additional dispatch overhead of approximately 16 cycles, resulting in a low overall interrupt handling cost. STM32 HAL shows slightly higher latency at 46 cycles and a comparable overhead of 18 cycles, reflecting the impact of its layered abstraction and generalized interrupt handling mechanisms. In contrast, Arduino demonstrates significantly higher latency at 187 cycles and a substantial overhead of 159 cycles, indicating considerable delay introduced by its abstraction model and runtime handling. These results highlight that NavHAL maintains efficient interrupt handling comparable to low-level implementations while minimizing additional overhead. Such low and predictable interrupt costs are essential for maintaining responsiveness and stability in time-critical applications, whereas the significantly higher overhead observed in Arduino can adversely impact control loop performance and system determinism.
+
+\subsection{Design Principles}
+
+The performance characteristics of NavHAL are achieved through the following design principles:
+
+\begin{itemize}
+    \item \textbf{Compile-time specialization:} Hardware configuration is resolved at compile time, eliminating runtime branching.
+    \item \textbf{Direct register access:} Peripheral interaction is performed through memory-mapped structures without intermediate abstraction layers.
+    \item \textbf{Inline critical paths:} Frequently executed operations are implemented as inline functions.
+    \item \textbf{Minimal call depth:} API functions are designed to avoid deep call hierarchies.
+    \item \textbf{No dynamic dispatch:} The absence of virtual functions or runtime lookup ensures predictable execution.
+\end{itemize}

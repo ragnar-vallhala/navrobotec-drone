@@ -1,0 +1,96 @@
+\section{Interface Design (APIs)}
+\label{sec:navhal_interface_design}
+
+The interface design of NavHAL is centered around simplicity, consistency, and explicit control over hardware behavior. The API is intentionally designed to provide a development experience similar to high-level frameworks, while preserving the determinism and performance required in real-time embedded systems.
+
+\subsection*{Design Principles}
+
+The following principles guide the API design:
+
+\begin{itemize}
+    \item \textbf{Simplicity:}  
+    APIs are designed to be minimal and intuitive, reducing the amount of boilerplate required for common operations.
+
+    \item \textbf{Consistency:}  
+    All peripherals follow a uniform naming and usage pattern, enabling developers to interact with different modules using a predictable interface.
+
+    \item \textbf{Explicit Configuration:}  
+    Hardware configuration is always performed explicitly by the user, avoiding hidden initialization or implicit behavior.
+
+    \item \textbf{Low Overhead:}  
+    APIs are implemented as lightweight functions, with internal operations resolved using inline functions and macros to minimize runtime cost.
+
+    \item \textbf{Hardware Abstraction:}  
+    Peripheral identifiers and configurations abstract underlying hardware details, allowing code to remain portable across platforms.
+\end{itemize}
+
+\subsection*{API Structure}
+
+NavHAL follows a consistent naming convention across all modules:
+
+\begin{center}
+\texttt{hal\_<peripheral>\_<operation>}
+\end{center}
+
+Examples include:
+
+\begin{itemize}
+    \item \texttt{hal\_gpio\_setmode()}
+    \item \texttt{hal\_gpio\_digitalwrite()}
+    \item \texttt{hal\_uart\_init()}
+    \item \texttt{hal\_i2c\_read()}
+\end{itemize}
+
+This structure ensures that all peripherals expose a uniform and predictable interface.
+
+\subsection*{Example: GPIO Interface}
+
+A representative example of the API design is shown below:
+
+\begin{lstlisting}[language=C, caption={Example LED blink using NavHAL}]
+#define CORTEX_M4
+#include "navhal.h"
+
+int main(void)
+{
+    systick_init(1000); // 1 ms tick
+
+    hal_gpio_setmode(GPIO_PA05, GPIO_OUTPUT, GPIO_PUPD_NONE);
+
+    while (1)
+    {
+        hal_gpio_digitalwrite(GPIO_PA05, GPIO_HIGH);
+        delay_ms(100);
+        hal_gpio_digitalwrite(GPIO_PA05, GPIO_LOW);
+        delay_ms(100);
+    }
+}
+\end{lstlisting}
+
+This example highlights key characteristics of the interface:
+
+\begin{itemize}
+    \item \textbf{Readable and Minimal:}  
+    The code closely resembles high-level frameworks, reducing the learning curve.
+
+    \item \textbf{Explicit Timing Control:}  
+    System timing is initialized explicitly using \texttt{systick\_init()}, ensuring predictable behavior.
+
+    \item \textbf{Abstract Pin Representation:}  
+    Identifiers such as \texttt{GPIO\_PA05} abstract the underlying hardware mapping, enabling portability.
+
+    \item \textbf{Deterministic Execution:}  
+    No hidden scheduling or background processes are involved; all operations are directly controlled by the application.
+\end{itemize}
+
+\subsection*{Compile-Time Resolution}
+
+NavHAL APIs are designed such that most hardware-specific details are resolved at compile time. Peripheral identifiers are represented as compile-time constants, which are translated into register-level operations through inline functions and macros within the core and vendor layers.
+
+This approach ensures that API usage does not introduce significant runtime overhead, and that generated code remains close to hand-written low-level implementations.
+
+\subsection*{Design Trade-offs}
+
+To maintain simplicity and performance, NavHAL avoids introducing complex configuration objects or runtime polymorphism. While this reduces flexibility in dynamic scenarios, it ensures predictable behavior and minimal overhead, which are critical in embedded flight control systems.
+
+Additionally, NavHAL does not manage resource ownership or concurrency. These responsibilities are delegated to the execution layer when required, allowing the API to remain lightweight and execution-model agnostic.

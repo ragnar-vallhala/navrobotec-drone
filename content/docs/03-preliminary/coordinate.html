@@ -1,0 +1,39 @@
+<p>In embedded control systems, particularly in aerial robotics, the representation of position, orientation, and motion is fundamentally dependent on the choice of coordinate systems. A clear definition of coordinate frames and their transformations is essential for accurate state estimation and control.</p>
+<h3 id="reference-frames">Reference Frames</h3>
+<p>A <em>reference frame</em> defines a coordinate system with respect to which the position and orientation of an object are measured. In flight control systems, two primary reference frames are commonly used:</p>
+<ul>
+<li><p><strong>Inertial Frame (World Frame)</strong>: A fixed reference frame, typically aligned with the Earth. In many applications, the North-East-Down (NED) convention is used, where:</p>
+<ul>
+<li><p>X-axis points toward the North</p></li>
+<li><p>Y-axis points toward the East</p></li>
+<li><p>Z-axis points downward</p></li>
+</ul></li>
+<li><p><strong>Body Frame</strong>: A moving reference frame attached to the vehicle. Its axes are defined relative to the drone:</p>
+<ul>
+<li><p>X-axis points forward</p></li>
+<li><p>Y-axis points to the right</p></li>
+<li><p>Z-axis points downward</p></li>
+</ul></li>
+</ul>
+<p>The body frame moves and rotates with the vehicle, while the inertial frame remains fixed. Sensor measurements are typically obtained in the body frame, whereas navigation and control objectives are often defined in the inertial frame.</p>
+<h3 id="coordinate-transformations">Coordinate Transformations</h3>
+<p>To relate quantities between different frames, coordinate transformations are required. These transformations are typically represented using rotation matrices or equivalent representations. A rotation matrix <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mo>∈</mo><mi>S</mi><mi>O</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>3</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">R \in SO(3)</annotation></semantics></math> describes the orientation of the body frame with respect to the inertial frame and allows vectors to be transformed between frames.</p>
+<p>If <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>𝐯</mi><mi>b</mi></msub><annotation encoding="application/x-tex">\mathbf{v}_b</annotation></semantics></math> represents a vector in the body frame, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>𝐯</mi><mi>i</mi></msub><annotation encoding="application/x-tex">\mathbf{v}_i</annotation></semantics></math> represents the same vector in the inertial frame, then:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>𝐯</mi><mi>i</mi></msub><mo>=</mo><mi>R</mi><mspace width="0.167em"></mspace><msub><mi>𝐯</mi><mi>b</mi></msub></mrow><annotation encoding="application/x-tex">\mathbf{v}_i = R \, \mathbf{v}_b</annotation></semantics></math></p>
+<p>These transformations are essential for interpreting sensor data and applying control laws in a consistent reference frame.</p>
+<h3 id="attitude-representation">Attitude Representation</h3>
+<p>The orientation of a rigid body in three-dimensional space, referred to as its <em>attitude</em>, can be represented using several methods. The most common representations include Euler angles, rotation matrices, and quaternions.</p>
+<ul>
+<li><p><strong>Euler Angles</strong>: Orientation is described using three sequential rotations, typically roll, pitch, and yaw. While intuitive, Euler angles suffer from singularities (gimbal lock) and are not well-suited for continuous rotational dynamics.</p></li>
+<li><p><strong>Rotation Matrices</strong>: A 3×3 orthonormal matrix representing orientation. Rotation matrices are free from singularities but require more computational resources and must maintain orthogonality.</p></li>
+<li><p><strong>Quaternions</strong>: A compact and numerically stable representation of orientation using four parameters. Quaternions avoid singularities and are widely used in real-time systems for attitude estimation and control.</p></li>
+</ul>
+<p>In practical flight control systems, quaternions are commonly used for internal computations due to their stability and efficiency, while Euler angles may be used for interpretation and user interaction.</p>
+<h3 id="relevance-to-control-systems">Relevance to Control Systems</h3>
+<p>Accurate representation of coordinate frames and attitude is critical for transforming sensor measurements into meaningful state estimates. For example, inertial measurements obtained from an IMU in the body frame must be transformed into the inertial frame for tasks such as stabilization and navigation.</p>
+<p>Similarly, control algorithms often compute desired orientations or angular rates in a specific frame, requiring consistent transformation between reference frames. Errors in these transformations can lead to incorrect state estimation and unstable control behavior.</p>
+<p>Thus, a well-defined coordinate system framework forms the foundation for sensor fusion, state estimation, and control in embedded flight systems. Figure <a href="/docs/preliminary/coordinate#fig:coordinate_frames">2.4</a> illustrates the relationship between the fixed inertial frame and the drone’s body frame, along with the convention for Euler angle rotations.</p>
+<figure id="fig:coordinate_frames">
+<img src="/docs/diagrams/tikz-cf21f3085a5e.svg" />
+<figcaption>Refined 3D coordinate systems showing the Inertial (NED) and Body frames side-by-side.</figcaption>
+</figure>

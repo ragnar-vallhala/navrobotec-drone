@@ -53,7 +53,7 @@ Each hardware component in the system is accessed through a corresponding softwa
         \hline
         \textbf{Hardware Component} & \textbf{Interface} & \textbf{Software Module} \\
         \hline
-        BMX160 IMU & I2C / SPI & Sensor Task \\
+        BMX160 IMU & I2C & Sensor Task \\
         \hline
         Barometer (BMP180) & I2C & Sensor Module \\
         \hline
@@ -63,7 +63,7 @@ Each hardware component in the system is accessed through a corresponding softwa
         \hline
         PWM Outputs (ESC) & Timer & Motor Control Task \\
         \hline
-        SD Card & SPI / SDIO & Logging Module \\
+        SD Card & SDIO & Logging Module \\
         \hline
     \end{tabular}
     \caption{Mapping between hardware components and software modules}

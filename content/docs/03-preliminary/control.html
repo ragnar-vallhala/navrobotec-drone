@@ -1,0 +1,34 @@
+<p>Control systems are responsible for regulating the behavior of a system to achieve desired performance objectives. In embedded flight systems, control algorithms use estimated system states—such as orientation, angular velocity, and position—to compute actuator commands that stabilize and guide the vehicle.</p>
+<h3 id="feedback-control">Feedback Control</h3>
+<p>Most embedded control systems operate using <em>feedback control</em>, where the current state of the system is continuously measured and compared against a desired reference. The difference between the desired state and the measured state, known as the <em>error</em>, is used to compute corrective actions.</p>
+<p>Feedback control enables the system to compensate for disturbances, model uncertainties, and sensor noise, making it essential for stable operation in dynamic environments.</p>
+<h3 id="proportional-integral-derivative-pid-control">Proportional-Integral-Derivative (PID) Control</h3>
+<p>One of the most widely used control strategies in embedded systems is the Proportional-Integral-Derivative (PID) controller. A PID controller computes the control input based on three components:</p>
+<ul>
+<li><p><strong>Proportional (P)</strong>: Produces an output proportional to the current error. It provides immediate corrective action but may lead to steady-state error.</p></li>
+<li><p><strong>Integral (I)</strong>: Accumulates the error over time to eliminate steady-state error. However, excessive integral action can lead to overshoot and instability.</p></li>
+<li><p><strong>Derivative (D)</strong>: Responds to the rate of change of the error, providing damping and improving system stability. It is sensitive to noise and often requires filtering.</p></li>
+</ul>
+<p>The control input <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>u</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">u(t)</annotation></semantics></math> is given by:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>u</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><msub><mi>K</mi><mi>p</mi></msub><mi>e</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><msub><mi>K</mi><mi>i</mi></msub><msubsup><mo>∫</mo><mn>0</mn><mi>t</mi></msubsup><mi>e</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>τ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mspace width="0.167em"></mspace><mi>d</mi><mi>τ</mi><mo>+</mo><msub><mi>K</mi><mi>d</mi></msub><mfrac><mrow><mi>d</mi><mi>e</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">u(t) = K_p e(t) + K_i \int_{0}^{t} e(\tau)\,d\tau + K_d \frac{de(t)}{dt}</annotation></semantics></math></p>
+<p>where <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>e</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">e(t)</annotation></semantics></math> is the error and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mi>p</mi></msub><mo>,</mo><msub><mi>K</mi><mi>i</mi></msub><mo>,</mo><msub><mi>K</mi><mi>d</mi></msub></mrow><annotation encoding="application/x-tex">K_p, K_i, K_d</annotation></semantics></math> are the controller gains.</p>
+<h3 id="cascaded-control-architecture">Cascaded Control Architecture</h3>
+<p>In flight control systems, a single control loop is often insufficient to achieve stable and responsive behavior. Instead, a <em>cascaded control architecture</em> is used, where multiple control loops operate at different levels.</p>
+<p>A typical structure consists of:</p>
+<ul>
+<li><p><strong>Outer Loop (Angle Control)</strong>: Regulates the desired orientation (roll, pitch, yaw) by computing target angular rates.</p></li>
+<li><p><strong>Inner Loop (Rate Control)</strong>: Regulates angular velocity using gyroscope measurements and generates actuator commands.</p></li>
+</ul>
+<p>The inner loop operates at a higher frequency and provides fast response, while the outer loop operates at a lower frequency and ensures stability with respect to the desired orientation.</p>
+<h3 id="actuator-command-generation">Actuator Command Generation</h3>
+<p>The outputs of the control system must be translated into actuator commands. In multi-rotor systems, this involves mapping control inputs (e.g., roll, pitch, yaw, and thrust) to individual motor outputs through a process known as <em>motor mixing</em>.</p>
+<p>This mapping ensures that the combined effect of all actuators produces the desired forces and torques on the vehicle.</p>
+<h3 id="practical-considerations">Practical Considerations</h3>
+<p>In real-world embedded systems, several practical factors influence control performance:</p>
+<ul>
+<li><p><strong>Sampling Rate</strong>: Control loops must run at sufficiently high frequencies to ensure responsiveness and stability.</p></li>
+<li><p><strong>Noise and Filtering</strong>: Sensor noise affects derivative terms and requires filtering techniques to maintain stability.</p></li>
+<li><p><strong>Saturation</strong>: Actuator limits can lead to saturation, which may cause integral windup and degraded performance.</p></li>
+<li><p><strong>Tuning</strong>: Proper tuning of controller gains is essential for achieving desired performance and stability.</p></li>
+</ul>
+<p>Designing an effective control system requires balancing responsiveness, stability, and robustness under varying operating conditions. These principles form the foundation for the control strategies implemented in embedded flight systems.</p>

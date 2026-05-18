@@ -1,22 +1,20 @@
 import styles from "./DocsLayout.module.css";
-// import DocsSidebar from "@/components/DocsSidebar";
-// import { getDocStructure } from "@/lib/docs-engine";
+import DocsNav from "@/components/DocsNav";
+import { getChapters } from "@/lib/docs";
 
 export default function DocsLayout({
-    children,
+  children,
 }: {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }) {
-    // const structure = getDocStructure();
+  const chapters = getChapters();
 
-    return (
-        <div className={styles.docsContainer}>
-            {/* <DocsSidebar tree={structure} /> */}
-            <main className={styles.docsContent}>
-                <div className={styles.innerContent}>
-                    {children}
-                </div>
-            </main>
-        </div>
-    );
+  return (
+    <div className={styles.docsContainer}>
+      <DocsNav chapters={chapters} />
+      <main className={styles.docsContent}>
+        <div className={styles.innerContent}>{children}</div>
+      </main>
+    </div>
+  );
 }

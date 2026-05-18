@@ -1,0 +1,37 @@
+<p>NavHAL adopts a minimal and explicit approach to resource management, prioritizing determinism and low overhead over dynamic flexibility. Unlike traditional abstraction layers that manage hardware resources through runtime allocation or centralized control, NavHAL delegates resource ownership and coordination to the application or execution layer.</p>
+<h3 class="unnumbered" id="static-resource-binding">Static Resource Binding</h3>
+<p>All hardware resources in NavHAL are bound at compile time. Peripheral instances such as GPIO pins, UART ports, I2C buses, and timers are selected through configuration parameters and encoded identifiers.</p>
+<p>This approach ensures that:</p>
+<ul>
+<li><p>No runtime allocation or initialization of resources is required</p></li>
+<li><p>Peripheral mappings are fixed and known at build time</p></li>
+<li><p>Binary size is minimized by excluding unused components</p></li>
+</ul>
+<p>As a result, resource access remains predictable and free from dynamic overhead.</p>
+<h3 class="unnumbered" id="no-implicit-ownership-model">No Implicit Ownership Model</h3>
+<p>NavHAL does not enforce ownership or locking mechanisms for hardware resources. Multiple modules can access the same peripheral without restriction at the abstraction layer.</p>
+<p>This design avoids:</p>
+<ul>
+<li><p>Mutexes or synchronization primitives within the HAL</p></li>
+<li><p>Hidden state or resource tracking</p></li>
+<li><p>Runtime arbitration logic</p></li>
+</ul>
+<p>Instead, it provides direct access to hardware, leaving coordination responsibility to higher layers.</p>
+<h3 class="unnumbered" id="execution-layer-responsibility">Execution-Layer Responsibility</h3>
+<p>In systems where concurrency is present (e.g., when using VAIOS), resource management is handled externally. The execution layer is responsible for:</p>
+<ul>
+<li><p>Preventing conflicting access to shared peripherals</p></li>
+<li><p>Scheduling tasks that interact with hardware</p></li>
+<li><p>Ensuring safe interaction across multiple execution contexts</p></li>
+</ul>
+<p>This separation keeps NavHAL lightweight while allowing flexible system design.</p>
+<h3 class="unnumbered" id="deterministic-access-model">Deterministic Access Model</h3>
+<p>By avoiding dynamic allocation and runtime arbitration, NavHAL ensures that all hardware interactions have predictable execution characteristics. Each operation directly translates to register-level access, with no hidden delays or blocking behavior introduced by the abstraction layer.</p>
+<h3 class="unnumbered" id="design-trade-offs-1">Design Trade-offs</h3>
+<p>The chosen approach trades centralized resource management for simplicity and performance. While this requires careful coordination at the application or execution layer, it provides:</p>
+<ul>
+<li><p>Lower latency and reduced overhead</p></li>
+<li><p>Greater transparency in hardware interaction</p></li>
+<li><p>Full control over peripheral usage patterns</p></li>
+</ul>
+<p>This model aligns with the requirements of real-time systems, where predictability and efficiency are often more critical than dynamic flexibility.</p>

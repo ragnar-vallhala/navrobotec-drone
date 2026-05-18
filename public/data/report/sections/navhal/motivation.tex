@@ -1,0 +1,39 @@
+\section{Motivation}
+\label{sec:navhal_motivation}
+
+Embedded flight control systems require precise timing, efficient execution, and direct interaction with hardware peripherals. The choice of hardware abstraction layer (HAL) plays a crucial role in achieving these requirements.
+
+High-level frameworks such as the Arduino ecosystem prioritize ease of development. They provide simple and intuitive APIs that enable rapid prototyping. However, this abstraction hides low-level details, limiting control over hardware behavior and introducing execution overhead that is difficult to quantify. This lack of visibility and control makes such frameworks unsuitable for time-critical control systems.
+
+In contrast, vendor-provided HALs expose detailed access to peripherals and enable efficient use of hardware resources. While this allows high-performance implementations, these frameworks are often complex, tightly coupled to specific microcontroller families, and difficult to scale or port across platforms.
+
+These two approaches represent opposing design philosophies—one optimized for simplicity and the other for control and performance—leaving a gap in between that is not adequately addressed by existing solutions.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Feature} & \textbf{Arduino Framework} & \textbf{Vendor HAL} & \textbf{NavHAL} \\
+\hline
+Ease of Use & High & Low & High \\
+\hline
+Performance & Low & High & High \\
+\hline
+Hardware Control & Limited & Extensive & Controlled \\
+\hline
+Portability & Moderate & Low & High \\
+\hline
+Determinism & Low & Moderate & High \\
+\hline
+Abstraction Overhead & High & Moderate & Low \\
+\hline
+Learning Curve & Low & High & Moderate \\
+\hline
+\end{tabular}
+\caption{Comparison of abstraction approaches highlighting differences in usability, control, and performance.}
+\label{tab:hal_comparison}
+\end{table}
+
+NavHAL is designed to address this gap by providing a structured interface that maintains low-level control while simplifying interaction with hardware. It achieves this through compile-time configuration, consistent APIs, and direct mapping to underlying peripherals.
+
+The design enables predictable execution, reduced overhead, and improved portability without introducing additional runtime complexity. At the same time, it remains flexible enough to operate independently in bare-metal systems or alongside higher-level execution frameworks such as VAIOS.

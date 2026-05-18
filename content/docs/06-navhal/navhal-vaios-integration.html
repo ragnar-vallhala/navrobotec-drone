@@ -1,0 +1,35 @@
+<p>NavHAL is designed to operate independently of any execution framework and does not require a real-time operating system for its functionality. As a result, its integration with VAIOS is minimal and well-defined, ensuring a clear separation between hardware access and execution control.</p>
+<p>Unlike tightly coupled HAL-RTOS designs, NavHAL does not embed scheduling logic, synchronization mechanisms, or task management within its implementation. All peripheral operations exposed by NavHAL remain identical whether the system is running in bare-metal mode or under VAIOS.</p>
+<h3 class="unnumbered" id="interaction-model">Interaction Model</h3>
+<p>When VAIOS is used, NavHAL functions are invoked within tasks managed by the scheduler, in the same manner as they would be called in a bare-metal loop. This ensures that:</p>
+<ul>
+<li><p>No changes are required in NavHAL APIs when transitioning between execution models</p></li>
+<li><p>Peripheral access semantics remain consistent</p></li>
+<li><p>Timing behavior is preserved and controlled externally by the scheduler</p></li>
+</ul>
+<figure id="fig:navhal_vaios_integration">
+<img src="/docs/diagrams/tikz-29b98c3885a9.svg" />
+<figcaption>Interaction model between VAIOS and NavHAL illustrating functional boundaries and integration points.</figcaption>
+</figure>
+<h3 class="unnumbered" id="defined-integration-points">Defined Integration Points</h3>
+<p>The interaction between NavHAL and VAIOS is limited to a small number of well-defined mechanisms:</p>
+<ul>
+<li><p><strong>System Tick (SysTick):</strong> The SysTick interrupt is used by VAIOS as the primary timing source for scheduling. NavHAL provides the low-level configuration, while VAIOS utilizes it for task management.</p></li>
+<li><p><strong>PendSV Interrupt:</strong> PendSV is used by VAIOS for context switching. NavHAL exposes interrupt control and handler linkage, allowing VAIOS to implement its scheduling mechanism without modifying HAL internals.</p></li>
+<li><p><strong>Interrupt Callback Mechanism:</strong> NavHAL provides a generic interrupt attachment interface (<code>hal_interrupt_attach_callback</code>), which VAIOS uses to bind scheduler-related handlers and peripheral-driven events.</p></li>
+<li><p><strong>Communication Interfaces (UART/USB):</strong> Peripheral drivers such as UART (and future USB CDC) are used by VAIOS for logging, telemetry, and debugging. NavHAL handles the hardware interaction, while VAIOS defines how and when data is processed.</p></li>
+</ul>
+<h3 class="unnumbered" id="concurrency-model">Concurrency Model</h3>
+<p>NavHAL itself does not implement any concurrency control mechanisms such as mutexes, locks, or resource arbitration. This design choice ensures minimal overhead and deterministic behavior.</p>
+<p>When VAIOS is present:</p>
+<ul>
+<li><p>Task scheduling and concurrency management are handled entirely by VAIOS</p></li>
+<li><p>Prevention of concurrent peripheral access is the responsibility of the execution layer</p></li>
+<li><p>NavHAL remains a stateless access layer with no knowledge of task context</p></li>
+</ul>
+<h3 class="unnumbered" id="design-implication">Design Implication</h3>
+<p>This separation results in a clean architectural boundary:</p>
+<div class="center">
+<p><code>NavHAL → Hardware Access VAIOS → Execution Control</code></p>
+</div>
+<p>NavHAL focuses solely on efficient and deterministic interaction with hardware, while VAIOS manages when and how these interactions occur.</p>

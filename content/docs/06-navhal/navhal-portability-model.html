@@ -1,0 +1,95 @@
+<p>NavHAL achieves portability through structured separation of hardware concerns and compile-time specialization. Instead of relying on runtime abstraction layers, the system follows a clear adaptation flow where only the required components are implemented or replaced based on the target platform.</p>
+<h3 class="unnumbered" id="porting-flow-overview">Porting Flow Overview</h3>
+<p>Portability in NavHAL follows a layered adaptation path:</p>
+<div class="center">
+<p><code>Application → Interface → Core → Vendor → Board → Hardware</code></p>
+</div>
+<figure id="fig:navhal_portability_model">
+<img src="/docs/diagrams/tikz-87cbe281e8b0.svg" />
+<figcaption>Portability model of NavHAL illustrating the vertical adaptation stack. Only the lower layers are modified when porting between boards, MCUs, or architectures.</figcaption>
+</figure>
+<p>The application and interface layers remain unchanged. Porting is performed by adapting the lower layers depending on what changes in the hardware platform.</p>
+<h3 class="unnumbered" id="case-1-porting-to-a-new-board-same-mcu">Case 1: Porting to a New Board (Same MCU)</h3>
+<p>When the microcontroller remains the same but the physical board changes, only the <strong>board layer</strong> needs to be updated.</p>
+<p><strong>Flow:</strong></p>
+<ul>
+<li><p>Define board-specific pin mappings (e.g., mapping logical pins to actual GPIOs)</p></li>
+<li><p>Configure default peripherals (LEDs, communication ports, etc.)</p></li>
+<li><p>Update linker script if memory layout differs</p></li>
+</ul>
+<p><strong>Impact:</strong></p>
+<ul>
+<li><p>No changes required in core or vendor layers</p></li>
+<li><p>No changes required in application code</p></li>
+</ul>
+<p>This is the simplest portability case and enables reuse of the entire software stack across different hardware layouts.</p>
+<h3 class="unnumbered" id="case-2-porting-to-a-new-microcontroller-same-architecture">Case 2: Porting to a New Microcontroller (Same Architecture)</h3>
+<p>When moving to a different microcontroller within the same architecture (e.g., STM32F401 → STM32F411), the <strong>vendor layer</strong> is adapted.</p>
+<p><strong>Flow:</strong></p>
+<ul>
+<li><p>Define register base addresses and peripheral mappings</p></li>
+<li><p>Update memory layout and peripheral availability</p></li>
+<li><p>Provide vendor-specific definitions required by the core layer</p></li>
+</ul>
+<p>The core layer continues to use these definitions to implement peripheral behavior.</p>
+<p><strong>Impact:</strong></p>
+<ul>
+<li><p>Core logic remains unchanged</p></li>
+<li><p>Board layer may require minor updates</p></li>
+<li><p>Application code remains unchanged</p></li>
+</ul>
+<p>This separation allows reuse of peripheral logic while adapting only low-level hardware details.</p>
+<h3 class="unnumbered" id="case-3-porting-to-a-new-architecture">Case 3: Porting to a New Architecture</h3>
+<p>When targeting a completely different processor architecture (e.g., moving from Cortex-M4 to another architecture), a new <strong>core layer</strong> must be implemented.</p>
+<p><strong>Flow:</strong></p>
+<ul>
+<li><p>Implement architecture-specific startup code and interrupt handling</p></li>
+<li><p>Provide core implementations for all common HAL APIs</p></li>
+<li><p>Integrate vendor-specific register definitions for the new platform</p></li>
+</ul>
+<p><strong>Impact:</strong></p>
+<ul>
+<li><p>Vendor and board layers are built on top of the new core</p></li>
+<li><p>Interface remains unchanged</p></li>
+<li><p>Application code remains unchanged</p></li>
+</ul>
+<p>Although this is the most involved step, it is performed once per architecture and reused across multiple platforms.</p>
+<h3 class="unnumbered" id="compile-time-binding">Compile-Time Binding</h3>
+<p>All portability decisions are resolved at compile time through build configuration parameters such as:</p>
+<ul>
+<li><p>Target processor (core)</p></li>
+<li><p>Vendor family</p></li>
+<li><p>Board configuration</p></li>
+</ul>
+<p>The build system includes only the selected implementations, ensuring:</p>
+<ul>
+<li><p>No runtime branching or hardware detection</p></li>
+<li><p>Reduced binary size</p></li>
+<li><p>Direct mapping to hardware</p></li>
+</ul>
+<h3 class="unnumbered" id="key-observation">Key Observation</h3>
+<p>In all cases, the upper layers of the system remain unchanged. Portability is achieved by replacing only the minimal required layer:</p>
+<div class="center">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><strong>Change Type</strong></th>
+<th style="text-align: center;"><strong>Layer Modified</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">New Board</td>
+<td style="text-align: center;">Board Layer</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">New MCU (same arch)</td>
+<td style="text-align: center;">Vendor Layer</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">New Architecture</td>
+<td style="text-align: center;">Core Layer</td>
+</tr>
+</tbody>
+</table>
+</div>

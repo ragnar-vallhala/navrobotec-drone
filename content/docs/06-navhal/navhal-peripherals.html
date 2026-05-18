@@ -1,0 +1,50 @@
+<p>NavHAL provides a uniform abstraction model across all hardware peripherals, enabling consistent interaction patterns while maintaining low-level control and minimal runtime overhead. Each peripheral module follows a common design structure that separates interface, implementation, and hardware mapping.</p>
+<h3 class="unnumbered" id="design-pattern">Design Pattern</h3>
+<p>All peripherals in NavHAL follow a consistent abstraction pattern:</p>
+<div class="center">
+<p><code>Identifier → Macro Resolution → Register Access</code></p>
+</div>
+<p>Peripheral identifiers (e.g., GPIO pins, UART instances) are represented as compile-time constants. These identifiers encode sufficient information to determine the associated hardware resource.</p>
+<p>At compile time, these identifiers are resolved through macros and inline functions into direct register-level operations. This eliminates the need for runtime lookup tables or dynamic dispatch mechanisms.</p>
+<h3 class="unnumbered" id="reference-implementation-gpio">Reference Implementation: GPIO</h3>
+<p>The GPIO module serves as a representative example of this abstraction model.</p>
+<p>GPIO pins are defined as encoded identifiers, where the port and pin number are embedded within a single value. Helper macros extract this information:</p>
+<ul>
+<li><p><code>GPIO_GET_PORT(pin)</code> → resolves to the memory-mapped GPIO register block</p></li>
+<li><p><code>GPIO_GET_PIN(pin)</code> → extracts the pin index within the port</p></li>
+</ul>
+<p>This enables direct register access as shown below:</p>
+<div class="sourceCode" id="cb2" data-language="C"><pre class="sourceCode objectivec"><code class="sourceCode objectivec"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dt">static</span> inline <span class="dt">void</span> hal_gpio_digitalwrite<span class="op">(</span>hal_gpio_pin pin<span class="op">,</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                                         hal_gpio_state state<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">if</span> <span class="op">(</span>state<span class="op">)</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    GPIO_GET_PORT<span class="op">(</span>pin<span class="op">)-&gt;</span>BSRR <span class="op">=</span> <span class="op">(</span><span class="dv">1U</span> <span class="op">&lt;&lt;</span> GPIO_GET_PIN<span class="op">(</span>pin<span class="op">));</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">else</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    GPIO_GET_PORT<span class="op">(</span>pin<span class="op">)-&gt;</span>BSRR <span class="op">=</span> <span class="op">(</span><span class="dv">1U</span> <span class="op">&lt;&lt;</span> <span class="op">(</span>GPIO_GET_PIN<span class="op">(</span>pin<span class="op">)</span> <span class="op">+</span> <span class="dv">16</span><span class="op">));</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>The resulting compiled code closely matches hand-written register-level implementations, ensuring minimal overhead.</p>
+<p>More complex configuration operations, such as setting pin modes or alternate functions, are implemented as standard functions in the core layer, combining readability with efficiency.</p>
+<h3 class="unnumbered" id="consistency-across-peripherals">Consistency Across Peripherals</h3>
+<p>This abstraction pattern is consistently applied across all supported peripherals, including UART, I2C, SPI, timers, and others. Each module:</p>
+<ul>
+<li><p>Uses compile-time identifiers to represent hardware instances</p></li>
+<li><p>Resolves hardware access through macros and inline functions</p></li>
+<li><p>Provides a uniform API naming convention</p></li>
+<li><p>Avoids runtime indirection and dynamic memory usage</p></li>
+</ul>
+<p>This consistency reduces cognitive load and allows developers to interact with different peripherals using a predictable interface.</p>
+<h3 class="unnumbered" id="generic-interface-selection">Generic Interface Selection</h3>
+<p>For certain peripherals, such as UART, NavHAL supports multiple variants of an operation (e.g., writing a single byte, buffer, or structured data). To maintain a clean and unified API, NavHAL leverages C11 <code>_Generic</code> macros to select the appropriate implementation at compile time.</p>
+<p>This enables usage such as:</p>
+<div class="sourceCode" id="cb3" data-language="C"><pre class="sourceCode objectivec"><code class="sourceCode objectivec"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>hal_uart_write<span class="op">(</span>uart<span class="op">,</span> data<span class="op">);</span></span></code></pre></div>
+<p>where the underlying function is resolved based on the type of <code>data</code>. This approach avoids function overloading limitations in C while preserving type safety and eliminating runtime branching.</p>
+<h3 class="unnumbered" id="performance-characteristics">Performance Characteristics</h3>
+<p>The peripheral abstraction model is designed to introduce minimal runtime overhead. Key characteristics include:</p>
+<ul>
+<li><p>Compile-time resolution of peripheral identifiers</p></li>
+<li><p>Direct mapping to memory-mapped registers</p></li>
+<li><p>Use of inline functions for performance-critical operations</p></li>
+<li><p>Absence of dynamic dispatch or lookup tables</p></li>
+</ul>
+<p>As a result, the generated machine code closely resembles manually written low-level implementations, making NavHAL suitable for performance-critical embedded applications.</p>
+<h3 class="unnumbered" id="scalability">Scalability</h3>
+<p>The abstraction model scales naturally to additional peripherals and hardware platforms. New peripherals can be integrated by following the same pattern, while new architectures or microcontrollers can be supported by extending the core and vendor layers without modifying the interface.</p>

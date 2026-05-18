@@ -1,0 +1,74 @@
+\section{Task Organization}
+\label{sec:vayu_tasks}
+
+Vayu organizes system functionality as a collection of independent tasks executed within the VAIOS scheduling framework. Each task is responsible for a specific subsystem, allowing clear separation of concerns and predictable execution behavior.
+
+\subsection{Task Classification}
+
+Tasks in Vayu can be broadly classified into three categories based on their role in the system:
+
+\textbf{Control Tasks:}  
+These tasks implement the core flight control pipeline and are assigned higher priorities to ensure timely execution. They include:
+\begin{itemize}
+    \item Attitude controller task
+    \item Rate controller task
+    \item Motor output task
+\end{itemize}
+
+These tasks operate at high frequencies and are critical for maintaining system stability.
+
+\textbf{Sensor and Data Acquisition Tasks:}  
+These tasks are responsible for collecting and preparing data required by the control system. They include:
+\begin{itemize}
+    \item IMU acquisition task (DMA-driven)
+    \item RC input processing task
+\end{itemize}
+
+Sensor tasks ensure continuous data availability while minimizing CPU overhead.
+
+\textbf{Communication and Auxiliary Tasks:}  
+These tasks handle non-critical operations such as communication, telemetry, logging, and system services:
+\begin{itemize}
+    \item Communication processor task
+    \item Telemetry task
+    \item Logging and storage tasks
+    \item Heartbeat and monitoring tasks
+\end{itemize}
+
+These tasks run at lower priorities and are designed to operate without interfering with control loops.
+
+\subsection{Task Prioritization}
+
+Task priorities are assigned based on timing requirements. Control tasks are given higher priority to ensure minimal latency, while communication and background tasks are assigned lower priorities. Sensor acquisition tasks may use a combination of hardware-driven mechanisms (e.g., DMA) and task scheduling to balance efficiency and responsiveness.
+
+This priority-based organization ensures that time-critical operations are executed deterministically, even under system load.
+
+\subsection{Inter-Task Communication}
+
+Tasks communicate using shared buffers and lock-free data structures. For example, the attitude controller passes target rates to the rate controller through a single-producer single-consumer (SPSC) queue, enabling efficient and non-blocking data transfer.
+
+Similarly, sensor data and telemetry information are exchanged through dedicated buffers, allowing decoupling between producers and consumers. This design prevents delays in one subsystem from propagating to others.
+
+\subsection{Task Lifecycle}
+
+Tasks in Vayu follow different lifecycle patterns depending on their role:
+
+\begin{itemize}
+    \item \textbf{Persistent tasks:}  
+    Core tasks such as control, sensor acquisition, and communication run continuously throughout system operation.
+
+    \item \textbf{Transient tasks:}  
+    Certain tasks, such as boot checks or calibration routines, are created dynamically and terminate after completing their function.
+\end{itemize}
+
+Dynamic task creation allows the system to adapt to runtime requirements without increasing baseline resource usage.
+
+\subsection{Execution Characteristics}
+
+Each task operates as a periodic loop using delay-based scheduling. Combined with the preemptive scheduler, this ensures that higher-priority tasks resume execution immediately upon wake-up, minimizing jitter and maintaining consistent timing.
+
+The use of separate stacks for each task ensures isolation and simplifies context management, while the scheduling framework guarantees fair execution among tasks of the same priority.
+
+\subsection{System Behavior}
+
+The task-based organization enables Vayu to execute multiple subsystems concurrently while maintaining clear boundaries between them. By assigning responsibilities to individual tasks and coordinating them through structured communication, the system achieves both modularity and real-time performance.

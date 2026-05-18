@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "convert:docs": "node scripts/convert-docs.mjs",
+    "predev": "node scripts/convert-docs.mjs",
     "dev": "next dev",
+    "prebuild": "node scripts/convert-docs.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"

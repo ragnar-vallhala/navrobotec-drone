@@ -18,26 +18,43 @@
 
 ## Typography
 
-### Headings — Times New Roman
+All fonts are loaded via `next/font/google` in `app/layout.tsx` and exposed as
+CSS variables. Reference them through the semantic tokens below — never hardcode
+a family name.
 
-- Font: `"Times New Roman", Times, serif`
+| Token          | Font (variable)            | Usage                                                  |
+| -------------- | -------------------------- | ------------------------------------------------------ |
+| `--font-sans`  | Inter (`--font-inter`)     | All `h1`–`h6` headings, hero titles, primary UI text   |
+| `--font-mono`  | Poppins (`--font-poppins`) | All body copy — `body`, `p`, `span`, subtext, captions |
+| `--font-serif` | Georgia (system serif)     | Editorial section/blog titles for contrast             |
+
+### Headings — Inter
+
+- Token: `var(--font-sans)`
 - Weight: `700` (Bold)
 - Letter-spacing: `-0.02em` globally; individual overrides apply in hero
 - Usage: All `h1`–`h6` elements
 
-### Body — Courier New
+### Body — Poppins
 
-- Font: `"Courier New", Courier, monospace`
-- Weight: `400` (Regular)
+- Token: `var(--font-mono)`
+- Weight: `400` (Regular); loaded weights `300`–`700`
 - Usage: All `body`, `p`, `span`, subtext, captions
+
+### Accent Fonts
+
+- **Outfit** (`--font-outfit`, weight `900`) — display wordmark in the footer logo lockup
+- **Caveat** (`--font-caveat`) — handwritten-style accent text (e.g. contact page)
 
 ### Hero Typography
 
-| Class                             | Size      | Weight | Letter-spacing     |
-| --------------------------------- | --------- | ------ | ------------------ |
-| `.titleAccent` (VAYU / SKIES)     | `7rem`    | `800`  | `0.5em`            |
-| `.titleSecondary` (MASTERING THE) | `3rem`    | `300`  | `0.3em`            |
-| `.subtext` (cycling tagline)      | `1.25rem` | `400`  | default, monospace |
+All hero text uses `var(--font-sans)` (Inter).
+
+| Class                             | Size     | Weight | Letter-spacing |
+| --------------------------------- | -------- | ------ | -------------- |
+| `.titleAccent` (VAYU / SKIES)     | `7rem`   | `800`  | `0.5em`        |
+| `.titleSecondary` (MASTERING THE) | `3rem`   | `300`  | `0.3em`        |
+| `.subtext` (cycling tagline)      | `1.5rem` | `600`  | `2px`          |
 
 - All hero text is **centered** over the video background
 - `.titleAccent` has `text-shadow: 0 4px 20px rgba(0,0,0,0.4)` for legibility over video

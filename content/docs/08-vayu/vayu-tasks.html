@@ -1,0 +1,42 @@
+<p>Vayu organizes system functionality as a collection of independent tasks executed within the VAIOS scheduling framework. Each task is responsible for a specific subsystem, allowing clear separation of concerns and predictable execution behavior.</p>
+<h3 id="task-classification">Task Classification</h3>
+<p>Tasks in Vayu can be broadly classified into three categories based on their role in the system:</p>
+<p><strong>Control Tasks:</strong> These tasks implement the core flight control pipeline and are assigned higher priorities to ensure timely execution. They include:</p>
+<ul>
+<li><p>Attitude controller task</p></li>
+<li><p>Rate controller task</p></li>
+<li><p>Motor output task</p></li>
+</ul>
+<p>These tasks operate at high frequencies and are critical for maintaining system stability.</p>
+<p><strong>Sensor and Data Acquisition Tasks:</strong> These tasks are responsible for collecting and preparing data required by the control system. They include:</p>
+<ul>
+<li><p>IMU acquisition task (DMA-driven)</p></li>
+<li><p>RC input processing task</p></li>
+</ul>
+<p>Sensor tasks ensure continuous data availability while minimizing CPU overhead.</p>
+<p><strong>Communication and Auxiliary Tasks:</strong> These tasks handle non-critical operations such as communication, telemetry, logging, and system services:</p>
+<ul>
+<li><p>Communication processor task</p></li>
+<li><p>Telemetry task</p></li>
+<li><p>Logging and storage tasks</p></li>
+<li><p>Heartbeat and monitoring tasks</p></li>
+</ul>
+<p>These tasks run at lower priorities and are designed to operate without interfering with control loops.</p>
+<h3 id="task-prioritization">Task Prioritization</h3>
+<p>Task priorities are assigned based on timing requirements. Control tasks are given higher priority to ensure minimal latency, while communication and background tasks are assigned lower priorities. Sensor acquisition tasks may use a combination of hardware-driven mechanisms (e.g., DMA) and task scheduling to balance efficiency and responsiveness.</p>
+<p>This priority-based organization ensures that time-critical operations are executed deterministically, even under system load.</p>
+<h3 id="inter-task-communication">Inter-Task Communication</h3>
+<p>Tasks communicate using shared buffers and lock-free data structures. For example, the attitude controller passes target rates to the rate controller through a single-producer single-consumer (SPSC) queue, enabling efficient and non-blocking data transfer.</p>
+<p>Similarly, sensor data and telemetry information are exchanged through dedicated buffers, allowing decoupling between producers and consumers. This design prevents delays in one subsystem from propagating to others.</p>
+<h3 id="task-lifecycle">Task Lifecycle</h3>
+<p>Tasks in Vayu follow different lifecycle patterns depending on their role:</p>
+<ul>
+<li><p><strong>Persistent tasks:</strong> Core tasks such as control, sensor acquisition, and communication run continuously throughout system operation.</p></li>
+<li><p><strong>Transient tasks:</strong> Certain tasks, such as boot checks or calibration routines, are created dynamically and terminate after completing their function.</p></li>
+</ul>
+<p>Dynamic task creation allows the system to adapt to runtime requirements without increasing baseline resource usage.</p>
+<h3 id="execution-characteristics">Execution Characteristics</h3>
+<p>Each task operates as a periodic loop using delay-based scheduling. Combined with the preemptive scheduler, this ensures that higher-priority tasks resume execution immediately upon wake-up, minimizing jitter and maintaining consistent timing.</p>
+<p>The use of separate stacks for each task ensures isolation and simplifies context management, while the scheduling framework guarantees fair execution among tasks of the same priority.</p>
+<h3 id="system-behavior-4">System Behavior</h3>
+<p>The task-based organization enables Vayu to execute multiple subsystems concurrently while maintaining clear boundaries between them. By assigning responsibilities to individual tasks and coordinating them through structured communication, the system achieves both modularity and real-time performance.</p>

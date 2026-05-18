@@ -1,0 +1,68 @@
+\section{System Initialization and Boot Flow}
+\label{sec:vayu_boot}
+
+The system initialization and boot flow in Vayu defines the sequence of operations that transition the system from power-on to a fully operational state. This process ensures that hardware, system services, and application tasks are correctly initialized before entering normal operation.
+
+\subsection{Initialization Sequence}
+
+System startup begins with low-level hardware configuration, followed by initialization of system services and application components. The sequence is structured to ensure that all dependencies are satisfied before tasks begin execution.
+
+The initialization flow proceeds as follows:
+
+\begin{enumerate}
+    \item \textbf{Clock Configuration:}  
+    The system clock is configured using the phase-locked loop (PLL) to achieve the required operating frequency. This ensures consistent timing for all subsystems.
+
+    \item \textbf{Core System Initialization:}  
+    VAIOS is initialized using a configuration structure that defines system behavior, including clock handling and peripheral setup.
+
+    \item \textbf{Peripheral Initialization:}  
+    Hardware interfaces such as I2C and UART are initialized through NavHAL. This includes setting up DMA for sensor acquisition and communication channels.
+
+    \item \textbf{Subsystem Initialization:}  
+    Core subsystems including logging, system state management, sensor interfaces, and communication buffers are initialized.
+
+    \item \textbf{Task Creation:}  
+    System and application tasks are created and registered with the scheduler. These include control tasks, sensor acquisition tasks, communication handlers, and auxiliary tasks.
+
+    \item \textbf{Timer Setup:}  
+    Periodic timer callbacks are configured to support time-based operations and high-frequency timing requirements.
+
+    \item \textbf{Scheduler Start:}  
+    The VAIOS scheduler is started, after which all task execution is managed by the RTOS.
+\end{enumerate}
+
+\subsection{Boot Task and System Checks}
+
+A dedicated boot task performs system validation checks during startup. This task is responsible for verifying that critical components are functioning correctly before enabling normal operation.
+
+The boot checks include:
+\begin{itemize}
+    \item System clock validation
+    \item Storage subsystem availability
+    \item Basic system readiness verification
+\end{itemize}
+
+The results of these checks are accumulated into a boot status register, which is used to determine the final system state.
+
+If all required checks pass, the system transitions to a standby state, indicating readiness for operation. If any check fails, the system enters a failsafe state to prevent unsafe behavior.
+
+\subsection{State Transition}
+
+The system state progresses through a well-defined sequence:
+
+\[
+\text{INIT} \rightarrow \text{STANDBY} \rightarrow \text{ARMED}
+\]
+
+During initialization, the system remains in the \textit{INIT} state until all boot checks are completed. Once validated, it transitions to \textit{STANDBY}, where it awaits user input. The transition to the \textit{ARMED} state is controlled by external input (e.g., RC commands).
+
+\subsection{Task Activation}
+
+After the scheduler starts, all created tasks begin execution based on their assigned priorities. High-priority tasks such as control loops and sensor acquisition become active immediately, while lower-priority tasks handle communication, logging, and background operations.
+
+The boot task terminates itself after completing initialization, ensuring that it does not consume system resources during normal operation.
+
+\subsection{System Behavior}
+
+The structured initialization flow ensures that all components are properly configured before entering real-time execution. By separating initialization, validation, and runtime operation, the system maintains robustness and avoids undefined behavior during startup.

@@ -1,0 +1,149 @@
+\section{Portability Model}
+\label{sec:navhal_portability_model}
+
+NavHAL achieves portability through structured separation of hardware concerns and compile-time specialization. Instead of relying on runtime abstraction layers, the system follows a clear adaptation flow where only the required components are implemented or replaced based on the target platform.
+
+\subsection*{Porting Flow Overview}
+
+Portability in NavHAL follows a layered adaptation path:
+
+\begin{center}
+\texttt{Application → Interface → Core → Vendor → Board → Hardware}
+\end{center}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        node distance=0.5cm,
+        layer/.style={draw, rectangle, minimum width=6.5cm, minimum height=0.7cm, align=center, font=\small, rounded corners=2pt},
+        hwlayer/.style={draw, rectangle, fill=gray!10, minimum width=6.5cm, minimum height=0.7cm, align=center, font=\small\bfseries, rounded corners=2pt},
+        arrow/.style={-Latex, thick}
+    ]
+
+    \node[layer, fill=blue!5] (app) {Application Logic (Hardware Independent)};
+    \node[layer, below=of app] (api) {NavHAL Unified Interface (APIs)};
+    
+    \node[layer, below=1cm of api] (core) {\textbf{Core Layer} (Arch-specific Behavior)};
+    \node[layer, below=of core] (vendor) {\textbf{Vendor Layer} (MCU Definitions)};
+    \node[layer, below=of vendor] (board) {\textbf{Board Layer} (Pin Configuration)};
+    \node[hwlayer, below=of board] (hw) {Physical Hardware (Silicon)};
+
+    \draw[arrow] (app) -- (api);
+    \draw[arrow] (api) -- (core);
+    \draw[arrow] (core) -- (vendor);
+    \draw[arrow] (vendor) -- (board);
+    \draw[arrow] (board) -- (hw);
+
+    % Cases
+    \node[anchor=west, font=\tiny\bfseries\color{primary}] at ($(board.west)+(-4.5,0)$) {Case 1: Board Update};
+    \node[anchor=west, font=\tiny\bfseries\color{primary}] at ($(vendor.west)+(-4.5,0)$) {Case 2: MCU Update};
+    \node[anchor=west, font=\tiny\bfseries\color{primary}] at ($(core.west)+(-4.5,0)$) {Case 3: Arch Update};
+
+    % Adaptation Zone
+    \draw[decorate, decoration={brace, amplitude=10pt, raise=15pt}, secondary]
+        (core.north east) -- (board.south east)
+        node[midway, right=25pt, font=\small\bfseries, text width=2.5cm] {Adaptation Zone};
+
+    \end{tikzpicture}
+    \caption{Portability model of NavHAL illustrating the vertical adaptation stack. Only the lower layers are modified when porting between boards, MCUs, or architectures.}
+    \label{fig:navhal_portability_model}
+\end{figure}
+
+The application and interface layers remain unchanged. Porting is performed by adapting the lower layers depending on what changes in the hardware platform.
+
+\subsection*{Case 1: Porting to a New Board (Same MCU)}
+
+When the microcontroller remains the same but the physical board changes, only the \textbf{board layer} needs to be updated.
+
+\textbf{Flow:}
+\begin{itemize}
+    \item Define board-specific pin mappings (e.g., mapping logical pins to actual GPIOs)
+    \item Configure default peripherals (LEDs, communication ports, etc.)
+    \item Update linker script if memory layout differs
+\end{itemize}
+
+\textbf{Impact:}
+\begin{itemize}
+    \item No changes required in core or vendor layers
+    \item No changes required in application code
+\end{itemize}
+
+This is the simplest portability case and enables reuse of the entire software stack across different hardware layouts.
+
+\subsection*{Case 2: Porting to a New Microcontroller (Same Architecture)}
+
+When moving to a different microcontroller within the same architecture (e.g., STM32F401 → STM32F411), the \textbf{vendor layer} is adapted.
+
+\textbf{Flow:}
+\begin{itemize}
+    \item Define register base addresses and peripheral mappings
+    \item Update memory layout and peripheral availability
+    \item Provide vendor-specific definitions required by the core layer
+\end{itemize}
+
+The core layer continues to use these definitions to implement peripheral behavior.
+
+\textbf{Impact:}
+\begin{itemize}
+    \item Core logic remains unchanged
+    \item Board layer may require minor updates
+    \item Application code remains unchanged
+\end{itemize}
+
+This separation allows reuse of peripheral logic while adapting only low-level hardware details.
+
+\subsection*{Case 3: Porting to a New Architecture}
+
+When targeting a completely different processor architecture (e.g., moving from Cortex-M4 to another architecture), a new \textbf{core layer} must be implemented.
+
+\textbf{Flow:}
+\begin{itemize}
+    \item Implement architecture-specific startup code and interrupt handling
+    \item Provide core implementations for all common HAL APIs
+    \item Integrate vendor-specific register definitions for the new platform
+\end{itemize}
+
+\textbf{Impact:}
+\begin{itemize}
+    \item Vendor and board layers are built on top of the new core
+    \item Interface remains unchanged
+    \item Application code remains unchanged
+\end{itemize}
+
+Although this is the most involved step, it is performed once per architecture and reused across multiple platforms.
+
+\subsection*{Compile-Time Binding}
+
+All portability decisions are resolved at compile time through build configuration parameters such as:
+
+\begin{itemize}
+    \item Target processor (core)
+    \item Vendor family
+    \item Board configuration
+\end{itemize}
+
+The build system includes only the selected implementations, ensuring:
+
+\begin{itemize}
+    \item No runtime branching or hardware detection
+    \item Reduced binary size
+    \item Direct mapping to hardware
+\end{itemize}
+
+\subsection*{Key Observation}
+
+In all cases, the upper layers of the system remain unchanged. Portability is achieved by replacing only the minimal required layer:
+
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Change Type} & \textbf{Layer Modified} \\
+\hline
+New Board & Board Layer \\
+\hline
+New MCU (same arch) & Vendor Layer \\
+\hline
+New Architecture & Core Layer \\
+\hline
+\end{tabular}
+\end{center}

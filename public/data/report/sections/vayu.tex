@@ -1,2 +1,24 @@
 \chapter{Vayu}
 \label{chap:vayu}
+
+Vayu represents the flight control layer of the system, built on top of NavHAL and VAIOS to provide a complete and functional drone control stack. While NavHAL abstracts the underlying hardware and VAIOS manages execution and system services, Vayu defines the application-level logic that governs sensing, decision-making, and actuation.
+
+The design of Vayu focuses on structuring the flight control problem into well-defined subsystems, each responsible for a specific aspect of system behavior. These subsystems operate as coordinated tasks within a real-time environment, enabling concurrent execution of sensing, estimation, control, and communication processes. This approach allows the system to maintain responsiveness and predictability while handling multiple interacting components.
+
+At its core, Vayu processes data from onboard sensors, estimates the system state, and applies control algorithms to generate actuator commands. These commands are then translated into motor outputs, completing the control loop required for stable flight. Additional functionality such as communication, logging, and system monitoring is integrated into the same framework, allowing the system to operate as a cohesive unit.
+
+This chapter presents the structure and implementation of Vayu, describing how its subsystems interact, how execution is organized, and how real-time constraints are handled within the overall system. The goal is to provide a clear understanding of how the flight control stack is constructed and how it operates in practice.
+
+\input{sections/vayu/overview}
+\input{sections/vayu/architecture}
+\input{sections/vayu/execution}
+\input{sections/vayu/sensor}
+\input{sections/vayu/estimation}
+\input{sections/vayu/control}
+\input{sections/vayu/actuation}
+\input{sections/vayu/telemetry}
+\input{sections/vayu/logging}
+\input{sections/vayu/boot}
+\input{sections/vayu/tasks}
+\input{sections/vayu/extensibility}
+\input{sections/vayu/roadmap}

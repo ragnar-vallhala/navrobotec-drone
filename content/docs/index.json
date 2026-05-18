@@ -1,0 +1,376 @@
+[
+  {
+    "slug": "abstract",
+    "title": "Abstract",
+    "order": 1,
+    "intro": "01-abstract/_intro.html",
+    "sections": []
+  },
+  {
+    "slug": "introduction",
+    "title": "Introduction",
+    "order": 2,
+    "intro": "02-introduction/_intro.html",
+    "sections": []
+  },
+  {
+    "slug": "preliminary",
+    "title": "Preliminaries",
+    "order": 3,
+    "intro": "03-preliminary/_intro.html",
+    "sections": [
+      {
+        "slug": "embedded",
+        "title": "Embedded System",
+        "file": "03-preliminary/embedded.html"
+      },
+      {
+        "slug": "hal",
+        "title": "Hardware Abstraction Layer",
+        "file": "03-preliminary/hal.html"
+      },
+      {
+        "slug": "rtos",
+        "title": "Real-Time Operating System",
+        "file": "03-preliminary/rtos.html"
+      },
+      {
+        "slug": "coordinate",
+        "title": "Coordinate System",
+        "file": "03-preliminary/coordinate.html"
+      },
+      {
+        "slug": "sensor",
+        "title": "Sensor",
+        "file": "03-preliminary/sensor.html"
+      },
+      {
+        "slug": "control",
+        "title": "Control",
+        "file": "03-preliminary/control.html"
+      },
+      {
+        "slug": "communication",
+        "title": "Communication",
+        "file": "03-preliminary/communication.html"
+      },
+      {
+        "slug": "safety",
+        "title": "Safety",
+        "file": "03-preliminary/safety.html"
+      }
+    ]
+  },
+  {
+    "slug": "architecture",
+    "title": "System Architecture",
+    "order": 4,
+    "intro": "04-architecture/_intro.html",
+    "sections": [
+      {
+        "slug": "overview",
+        "title": "Overview",
+        "file": "04-architecture/overview.html"
+      },
+      {
+        "slug": "layered-arch",
+        "title": "Layered Architecture",
+        "file": "04-architecture/layered-arch.html"
+      },
+      {
+        "slug": "component",
+        "title": "System Components",
+        "file": "04-architecture/component.html"
+      },
+      {
+        "slug": "dataflow",
+        "title": "Data Flow",
+        "file": "04-architecture/dataflow.html"
+      },
+      {
+        "slug": "execution",
+        "title": "Execution Model",
+        "file": "04-architecture/execution.html"
+      },
+      {
+        "slug": "design",
+        "title": "Design Principles",
+        "file": "04-architecture/design.html"
+      },
+      {
+        "slug": "comparison",
+        "title": "Comparison",
+        "file": "04-architecture/comparison.html"
+      },
+      {
+        "slug": "summary",
+        "title": "Summary",
+        "file": "04-architecture/summary.html"
+      }
+    ]
+  },
+  {
+    "slug": "hardware",
+    "title": "Hardware",
+    "order": 5,
+    "intro": "05-hardware/_intro.html",
+    "sections": [
+      {
+        "slug": "hw-overview",
+        "title": "System Overview",
+        "file": "05-hardware/hw-overview.html"
+      },
+      {
+        "slug": "mcu",
+        "title": "Microcontroller Unit (MCU)",
+        "file": "05-hardware/mcu.html"
+      },
+      {
+        "slug": "hw-sensor",
+        "title": "Sensors",
+        "file": "05-hardware/hw-sensor.html"
+      },
+      {
+        "slug": "hw-comm",
+        "title": "Communication Interfaces",
+        "file": "05-hardware/hw-comm.html"
+      },
+      {
+        "slug": "hw-actuation",
+        "title": "Actuation and Motor Control",
+        "file": "05-hardware/hw-actuation.html"
+      },
+      {
+        "slug": "hw-power",
+        "title": "Power Management",
+        "file": "05-hardware/hw-power.html"
+      },
+      {
+        "slug": "pcb-design",
+        "title": "PCB Design and Fabrication",
+        "file": "05-hardware/pcb-design.html"
+      },
+      {
+        "slug": "hw-codesign",
+        "title": "Hardware-Software Co-design",
+        "file": "05-hardware/hw-codesign.html"
+      },
+      {
+        "slug": "hw-design",
+        "title": "Design Considerations",
+        "file": "05-hardware/hw-design.html"
+      }
+    ]
+  },
+  {
+    "slug": "navhal",
+    "title": "NavHAL",
+    "order": 6,
+    "intro": "06-navhal/_intro.html",
+    "sections": [
+      {
+        "slug": "navhal-motivation",
+        "title": "Motivation",
+        "file": "06-navhal/navhal-motivation.html"
+      },
+      {
+        "slug": "navhal-design-goals",
+        "title": "Design Goals",
+        "file": "06-navhal/navhal-design-goals.html"
+      },
+      {
+        "slug": "navhal-architecture",
+        "title": "Architecture of NavHAL",
+        "file": "06-navhal/navhal-architecture.html"
+      },
+      {
+        "slug": "navhal-interface-design",
+        "title": "Interface Design (APIs)",
+        "file": "06-navhal/navhal-interface-design.html"
+      },
+      {
+        "slug": "navhal-peripherals",
+        "title": "Peripheral Abstractions",
+        "file": "06-navhal/navhal-peripherals.html"
+      },
+      {
+        "slug": "navhal-resource-management",
+        "title": "Resource Management",
+        "file": "06-navhal/navhal-resource-management.html"
+      },
+      {
+        "slug": "navhal-timing-determinism",
+        "title": "Timing and Determinism",
+        "file": "06-navhal/navhal-timing-determinism.html"
+      },
+      {
+        "slug": "navhal-portability-model",
+        "title": "Portability Model",
+        "file": "06-navhal/navhal-portability-model.html"
+      },
+      {
+        "slug": "navhal-vaios-integration",
+        "title": "Integration with VAIOS",
+        "file": "06-navhal/navhal-vaios-integration.html"
+      },
+      {
+        "slug": "navhal-performance",
+        "title": "Performance Evaluation",
+        "file": "06-navhal/navhal-performance.html"
+      },
+      {
+        "slug": "navhal-comparison",
+        "title": "Comparison with Existing HALs",
+        "file": "06-navhal/navhal-comparison.html"
+      },
+      {
+        "slug": "navhal-summary",
+        "title": "Summary",
+        "file": "06-navhal/navhal-summary.html"
+      }
+    ]
+  },
+  {
+    "slug": "vaios",
+    "title": "VAIOS",
+    "order": 7,
+    "intro": "07-vaios/_intro.html",
+    "sections": [
+      {
+        "slug": "vaios-overview",
+        "title": "Overview",
+        "file": "07-vaios/vaios-overview.html"
+      },
+      {
+        "slug": "vaios-design-goals",
+        "title": "Design Goals",
+        "file": "07-vaios/vaios-design-goals.html"
+      },
+      {
+        "slug": "vaios-architecture",
+        "title": "System Architecture",
+        "file": "07-vaios/vaios-architecture.html"
+      },
+      {
+        "slug": "vaios-task-model",
+        "title": "Task Model",
+        "file": "07-vaios/vaios-task-model.html"
+      },
+      {
+        "slug": "vaios-scheduler-design",
+        "title": "Scheduler Design",
+        "file": "07-vaios/vaios-scheduler-design.html"
+      },
+      {
+        "slug": "vaios-timing",
+        "title": "Timing and Tick Management",
+        "file": "07-vaios/vaios-timing.html"
+      },
+      {
+        "slug": "vaios-ipc",
+        "title": "Inter-Task Communication",
+        "file": "07-vaios/vaios-ipc.html"
+      },
+      {
+        "slug": "vaios-memory",
+        "title": "Memory Management",
+        "file": "07-vaios/vaios-memory.html"
+      },
+      {
+        "slug": "vaios-vayu-integration",
+        "title": "Integration with Vayu",
+        "file": "07-vaios/vaios-vayu-integration.html"
+      },
+      {
+        "slug": "vaios-performance",
+        "title": "Performance Analysis",
+        "file": "07-vaios/vaios-performance.html"
+      },
+      {
+        "slug": "vaios-limitations",
+        "title": "Limitations and Future Work",
+        "file": "07-vaios/vaios-limitations.html"
+      }
+    ]
+  },
+  {
+    "slug": "vayu",
+    "title": "Vayu",
+    "order": 8,
+    "intro": "08-vayu/_intro.html",
+    "sections": [
+      {
+        "slug": "vayu-overview",
+        "title": "Overview",
+        "file": "08-vayu/vayu-overview.html"
+      },
+      {
+        "slug": "vayu-architecture",
+        "title": "System Architecture",
+        "file": "08-vayu/vayu-architecture.html"
+      },
+      {
+        "slug": "vayu-execution",
+        "title": "Execution Model",
+        "file": "08-vayu/vayu-execution.html"
+      },
+      {
+        "slug": "vayu-sensor",
+        "title": "Sensor Interface",
+        "file": "08-vayu/vayu-sensor.html"
+      },
+      {
+        "slug": "vayu-estimation",
+        "title": "State Estimation",
+        "file": "08-vayu/vayu-estimation.html"
+      },
+      {
+        "slug": "vayu-control",
+        "title": "Control System",
+        "file": "08-vayu/vayu-control.html"
+      },
+      {
+        "slug": "vayu-actuation",
+        "title": "Actuation and Output",
+        "file": "08-vayu/vayu-actuation.html"
+      },
+      {
+        "slug": "vayu-telemetry",
+        "title": "Communication and Telemetry",
+        "file": "08-vayu/vayu-telemetry.html"
+      },
+      {
+        "slug": "vayu-logging",
+        "title": "Data Logging and Storage",
+        "file": "08-vayu/vayu-logging.html"
+      },
+      {
+        "slug": "vayu-boot",
+        "title": "System Initialization and Boot Flow",
+        "file": "08-vayu/vayu-boot.html"
+      },
+      {
+        "slug": "vayu-tasks",
+        "title": "Task Organization",
+        "file": "08-vayu/vayu-tasks.html"
+      },
+      {
+        "slug": "vayu-extensibility",
+        "title": "Extensibility",
+        "file": "08-vayu/vayu-extensibility.html"
+      },
+      {
+        "slug": "vayu-roadmap",
+        "title": "Current Status and Roadmap",
+        "file": "08-vayu/vayu-roadmap.html"
+      }
+    ]
+  },
+  {
+    "slug": "conclusion",
+    "title": "Conclusion",
+    "order": 9,
+    "intro": "09-conclusion/_intro.html",
+    "sections": []
+  }
+]

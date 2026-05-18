@@ -1,0 +1,85 @@
+\section{Peripheral Abstractions}
+\label{sec:navhal_peripherals}
+
+NavHAL provides a uniform abstraction model across all hardware peripherals, enabling consistent interaction patterns while maintaining low-level control and minimal runtime overhead. Each peripheral module follows a common design structure that separates interface, implementation, and hardware mapping.
+
+\subsection*{Design Pattern}
+
+All peripherals in NavHAL follow a consistent abstraction pattern:
+
+\begin{center}
+\texttt{Identifier → Macro Resolution → Register Access}
+\end{center}
+
+Peripheral identifiers (e.g., GPIO pins, UART instances) are represented as compile-time constants. These identifiers encode sufficient information to determine the associated hardware resource.
+
+At compile time, these identifiers are resolved through macros and inline functions into direct register-level operations. This eliminates the need for runtime lookup tables or dynamic dispatch mechanisms.
+
+\subsection*{Reference Implementation: GPIO}
+
+The GPIO module serves as a representative example of this abstraction model.
+
+GPIO pins are defined as encoded identifiers, where the port and pin number are embedded within a single value. Helper macros extract this information:
+
+\begin{itemize}
+    \item \texttt{GPIO\_GET\_PORT(pin)} → resolves to the memory-mapped GPIO register block
+    \item \texttt{GPIO\_GET\_PIN(pin)} → extracts the pin index within the port
+\end{itemize}
+
+This enables direct register access as shown below:
+
+\begin{lstlisting}[language=C]
+static inline void hal_gpio_digitalwrite(hal_gpio_pin pin,
+                                         hal_gpio_state state) {
+  if (state)
+    GPIO_GET_PORT(pin)->BSRR = (1U << GPIO_GET_PIN(pin));
+  else
+    GPIO_GET_PORT(pin)->BSRR = (1U << (GPIO_GET_PIN(pin) + 16));
+}
+\end{lstlisting}
+
+The resulting compiled code closely matches hand-written register-level implementations, ensuring minimal overhead.
+
+More complex configuration operations, such as setting pin modes or alternate functions, are implemented as standard functions in the core layer, combining readability with efficiency.
+
+\subsection*{Consistency Across Peripherals}
+
+This abstraction pattern is consistently applied across all supported peripherals, including UART, I2C, SPI, timers, and others. Each module:
+
+\begin{itemize}
+    \item Uses compile-time identifiers to represent hardware instances
+    \item Resolves hardware access through macros and inline functions
+    \item Provides a uniform API naming convention
+    \item Avoids runtime indirection and dynamic memory usage
+\end{itemize}
+
+This consistency reduces cognitive load and allows developers to interact with different peripherals using a predictable interface.
+
+\subsection*{Generic Interface Selection}
+
+For certain peripherals, such as UART, NavHAL supports multiple variants of an operation (e.g., writing a single byte, buffer, or structured data). To maintain a clean and unified API, NavHAL leverages C11 \texttt{\_Generic} macros to select the appropriate implementation at compile time.
+
+This enables usage such as:
+
+\begin{lstlisting}[language=C]
+hal_uart_write(uart, data);
+\end{lstlisting}
+
+where the underlying function is resolved based on the type of \texttt{data}. This approach avoids function overloading limitations in C while preserving type safety and eliminating runtime branching.
+
+\subsection*{Performance Characteristics}
+
+The peripheral abstraction model is designed to introduce minimal runtime overhead. Key characteristics include:
+
+\begin{itemize}
+    \item Compile-time resolution of peripheral identifiers
+    \item Direct mapping to memory-mapped registers
+    \item Use of inline functions for performance-critical operations
+    \item Absence of dynamic dispatch or lookup tables
+\end{itemize}
+
+As a result, the generated machine code closely resembles manually written low-level implementations, making NavHAL suitable for performance-critical embedded applications.
+
+\subsection*{Scalability}
+
+The abstraction model scales naturally to additional peripherals and hardware platforms. New peripherals can be integrated by following the same pattern, while new architectures or microcontrollers can be supported by extending the core and vendor layers without modifying the interface.

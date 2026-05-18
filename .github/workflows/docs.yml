@@ -1,0 +1,50 @@
+name: Convert docs
+
+# Regenerates the HTML docs (content/docs + public/docs) whenever the LaTeX
+# report changes, so the only thing a contributor edits is the LaTeX source.
+
+on:
+  push:
+    paths:
+      - "public/data/report/**"
+      - "scripts/convert-docs.mjs"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install pandoc and TeX Live
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            pandoc \
+            texlive-latex-base \
+            texlive-latex-extra \
+            texlive-pictures \
+            texlive-fonts-recommended \
+            dvisvgm
+
+      - name: Convert LaTeX report to HTML
+        run: node scripts/convert-docs.mjs --force
+
+      - name: Commit regenerated docs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add content/docs public/docs
+          if git diff --cached --quiet; then
+            echo "No documentation changes to commit."
+          else
+            git commit -m "chore(docs): regenerate HTML from LaTeX source [skip ci]"
+            git push
+          fi

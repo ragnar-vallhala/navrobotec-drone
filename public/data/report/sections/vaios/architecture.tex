@@ -1,0 +1,63 @@
+\section{System Architecture}
+\label{sec:vaios_architecture}
+
+VAIOS is organized into a modular architecture that separates core system functionality from hardware-specific implementations. This separation allows the system to remain portable across different microcontroller platforms while maintaining a consistent kernel interface.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        node distance=1.2cm,
+        layer_box/.style={draw, rectangle, rounded corners=3pt, minimum width=10cm, align=center, fill=gray!5},
+        sub_block/.style={draw, rectangle, rounded corners=2pt, minimum width=2.1cm, minimum height=0.8cm, align=center, fill=white, font=\tiny},
+        arrow/.style={-Latex, thick},
+        title/.style={font=\small\bfseries}
+    ]
+
+    % Application Layer
+    \node[layer_box, fill=blue!5, draw=blue!60, minimum height=0.8cm] (app) {\textbf{Application Layer}\\ \scriptsize (Flight Logic, Telemetry, Navigation, Mission Control)};
+
+    % Kernel Layer
+    \node[layer_box, below=of app, minimum height=3cm] (kernel) {};
+    \node[title, anchor=north, yshift=-0.1cm] at (kernel.north) {Kernel Layer (Hardware Independent)};
+    
+    \node[sub_block, below=0.7cm of kernel.north west, anchor=north west, xshift=0.3cm] (sched) {Task Support \&\\Scheduling};
+    \node[sub_block, right=0.3cm of sched] (ipc) {Inter-Task\\Communication};
+    \node[sub_block, right=0.3cm of ipc] (mem) {Memory\\Management};
+    \node[sub_block, right=0.3cm of mem] (vfs) {Virtual File\\System (VFS)};
+    
+    \node[sub_block, below=0.3cm of sched] (sys) {System Calls\\\& Services};
+    \node[sub_block, right=0.3cm of sys] (log) {Logging \&\\Diagnostics};
+    \node[sub_block, right=0.3cm of log] (util) {Utilities \&\\Time Support};
+    \node[sub_block, right=0.3cm of util] (term) {Terminal Interface\\(Interactive CLI)};
+
+    % Portable Layer
+    \node[layer_box, below=of kernel, fill=green!5, draw=green!60, minimum height=1.6cm] (portable) {};
+    \node[title, anchor=north, yshift=-0.1cm] at (portable.north) {Portable Layer (Architecture Dependent)};
+    
+    \node[sub_block, below=0.6cm of portable.north, xshift=-2.4cm] (cm4) {\textbf{Cortex-M4}\\Context Switching\\NVIC / SysTick};
+    \node[sub_block, below=0.6cm of portable.north, xshift=2.4cm] (avr) {\textbf{AVR (8-bit)}\\Timer Config\\IRQ Handling};
+
+    % Hardware Layer
+    \node[layer_box, below=of portable, fill=gray!10, draw=gray!60, minimum height=0.6cm] (hw) {\textbf{Physical Hardware / Silicon}};
+
+    % Connections
+    \draw[arrow] (app) -- (kernel);
+    \draw[arrow] (kernel) -- (portable);
+    \draw[arrow] (portable) -- (hw);
+
+    \end{tikzpicture}
+    \caption{Layered architecture of VAIOS illustrating modular separation between the kernel services and hardware-specific implementations.}
+    \label{fig:vaios_architecture}
+\end{figure}
+
+At a high level, the system is divided into two primary layers: the kernel layer and the portable layer.
+
+The \textbf{kernel layer} contains the core components responsible for task management, scheduling, inter-task communication, memory management, and system services. This layer is hardware-independent and forms the main logic of the operating system. It includes modules for task scheduling and lifecycle management, synchronization primitives such as semaphores and mutexes, dynamic memory allocation, and higher-level services such as the virtual file system and terminal interface. Additional components provide logging, utility functions, and system call handling, enabling structured interaction between different parts of the system.
+
+The \textbf{portable layer} encapsulates all hardware-dependent functionality. This includes context switching, interrupt configuration, and low-level processor-specific operations. Separate implementations are provided for different architectures, such as Cortex-M4 and AVR, allowing the same kernel to be reused across platforms. The portable layer exposes a well-defined interface to the kernel, ensuring that all hardware interactions are localized and can be adapted without modifying core system logic.
+
+Within this structure, execution flow is coordinated between the two layers. The kernel determines scheduling decisions and system behavior, while the portable layer performs the necessary low-level operations such as saving and restoring task context during a switch. This division ensures that performance-critical operations are implemented close to the hardware, while higher-level logic remains clean and maintainable.
+
+System services are integrated into the kernel as modular components rather than tightly coupled subsystems. For example, memory management, inter-task communication, and file system access are implemented as independent modules that interact through well-defined interfaces. This modularity simplifies development and allows individual components to be extended or replaced without affecting the overall system.
+
+Overall, the architecture of VAIOS emphasizes separation of concerns, portability, and modular design. By isolating hardware-specific functionality and organizing system services into clear modules, the system achieves both flexibility and efficiency across different deployment scenarios.

@@ -7,6 +7,10 @@ The actuation subsystem of the Vayu flight control system is responsible for tra
 
 The microcontroller generates pulse-width modulation (PWM) signals using its internal timer peripherals. These signals are routed to ESCs, which regulate the speed of the motors based on the duty cycle of the PWM input.
 
+In the current implementation, conventional PWM (CPWM) is used with an update frequency of approximately $400\,\text{Hz}$, which is compatible with standard ESCs. This frequency provides a balance between control responsiveness and signal stability.
+
+Timer 1, an advanced-control timer, is used for driving the primary four motors. Its enhanced capabilities, such as higher resolution and synchronized channel outputs, make it well-suited for precise multi-channel motor control.
+
 Figure~\ref{fig:actuation_flow} demonstrates the forward control path from the processing unit to the physical actuators.
 
 \begin{figure}[H]
@@ -53,10 +57,14 @@ Actuation is tightly coupled with the control loop and must satisfy strict timin
 
 Low-latency updates are essential to maintain stability, especially in the inner rate control loop, which operates at high frequencies. The use of dedicated hardware timers allows concurrent generation of multiple PWM signals without burdening the CPU.
 
+The synchronization between control loop execution and PWM update ensures that actuator commands are applied consistently, minimizing phase delay in the control system and improving closed-loop stability.
+
 \subsection{Design Considerations}
 
-The actuation system is designed to ensure reliability and scalability. Care is taken to maintain signal integrity between the microcontroller and ESCs, and to ensure that timing jitter is minimized.
+The actuation system is designed to ensure reliability, timing precision, and scalability. Care is taken to maintain signal integrity between the microcontroller and ESCs, and to minimize timing jitter, which can adversely affect control stability.
 
-The modular design also allows for extension to different configurations, including additional motors or alternative actuator types such as servos.
+The use of an advanced timer (TIM1) for primary motor outputs ensures precise and synchronized signal generation, which is critical for balanced thrust and stable flight.
 
-Future enhancements may include support for digital communication protocols with ESCs (e.g., DShot), enabling improved reliability and higher update rates compared to traditional PWM-based control.
+The modular design allows for extension to different configurations, including additional motors or alternative actuator types such as servos.
+
+Future enhancements include support for digital ESC communication protocols such as DShot. Unlike traditional PWM, DShot provides a digital interface with higher update rates, improved noise immunity, and built-in error detection, making it suitable for high-performance flight control applications.

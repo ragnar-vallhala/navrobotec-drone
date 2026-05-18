@@ -1,0 +1,20 @@
+\section{Limitations and Future Work}
+\label{sec:vaios_limitations}
+
+While VAIOS provides a robust and efficient runtime environment for real-time embedded systems, there are several limitations in the current implementation that present opportunities for future improvement.
+
+One of the primary limitations lies in the use of dynamic memory allocation with a linear first-fit strategy. Although block splitting and coalescing are implemented, allocation time is not constant and may increase with heap fragmentation. For highly constrained or safety-critical systems, a fully static or region-based allocation strategy may provide more predictable behavior. Future work includes exploring alternative allocation schemes such as fixed-size block pools or hybrid memory models to improve determinism.
+
+The scheduling system, while efficient, currently supports a fixed number of priority levels and does not include advanced features such as deadline-based scheduling or priority inheritance across all synchronization primitives. Although basic priority management is supported, extending this to more comprehensive real-time scheduling policies could improve responsiveness in complex workloads.
+
+Inter-task communication is implemented using mutexes, semaphores, and lock-free queues; however, higher-level abstractions such as message queues with structured payloads or event groups are not yet fully developed. Expanding the IPC subsystem to include these features would simplify application-level design and improve expressiveness.
+
+The virtual file system currently relies on a global locking mechanism to ensure thread safety. While this simplifies implementation, it limits concurrent file access and may become a bottleneck in I/O-intensive applications. Future improvements could include finer-grained locking or asynchronous I/O mechanisms to enhance performance.
+
+Although VAIOS supports execution in simulated environments through semihosting, this approach is primarily intended for development and debugging and does not accurately reflect real-time performance characteristics. Enhancing simulation capabilities, including better timing emulation and hardware abstraction layers, would improve testing fidelity.
+
+Platform support is currently focused on Cortex-M4 microcontrollers, with ongoing work to extend compatibility to additional STM32 devices and AVR-based platforms. Broadening hardware support will improve portability and accessibility across a wider range of applications.
+
+Finally, while the current system demonstrates stability under benchmark conditions, long-term reliability features such as fault recovery, watchdog integration, and advanced diagnostics can be further developed. These enhancements will be important for deploying VAIOS in production-grade and safety-critical systems.
+
+Overall, these limitations highlight areas for continued development, with a focus on improving determinism, scalability, and system robustness while preserving the simplicity and efficiency of the current design.

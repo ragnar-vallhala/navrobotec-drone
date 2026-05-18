@@ -1,0 +1,53 @@
+\section{Current Status and Roadmap}
+\label{sec:vayu_roadmap}
+
+\subsection{Current Status}
+
+Vayu has reached a functional stage where the core flight control pipeline is fully implemented and operational. The system supports end-to-end execution from sensor acquisition to motor actuation, enabling closed-loop control suitable for real-time applications.
+
+The current implementation includes:
+\begin{itemize}
+    \item Sensor integration using BMX160 (9-axis IMU) and BMP180 (barometer)
+    \item State estimation using complementary and Mahony filters
+    \item Cascaded control system with rate (1\,kHz) and attitude (250\,Hz) loops
+    \item PWM-based motor actuation using hardware timers
+    \item RC input via iBus protocol with DMA-based reception
+    \item Structured telemetry system with multi-rate data streaming
+    \item Persistent logging using VFS with SD card support
+    \item Preemptive RTOS-based execution using VAIOS
+\end{itemize}
+
+The system is capable of stable real-time operation with modular task-based execution. Core subsystems have been tested in isolation and integrated environments, and the overall architecture has been validated through system-level execution.
+
+\subsection{Roadmap}
+
+The development of Vayu is ongoing, with focus on improving robustness, feature completeness, and system scalability. The roadmap is structured into short-term and long-term goals.
+
+\textbf{Short-Term Goals:}
+\begin{itemize}
+    \item Hardware validation through flight testing
+    \item Sensor calibration improvements and automated routines
+    \item Tuning and optimization of control loops
+    \item Enhanced failsafe mechanisms and safety features
+    \item Improved telemetry visualization and ground interface tools
+\end{itemize}
+
+\textbf{Mid-Term Goals:}
+\begin{itemize}
+    \item Integration of additional sensors (e.g., GPS, magnetometer refinement)
+    \item Advanced state estimation techniques
+    \item Flight data recording (blackbox logging)
+    \item Support for additional communication interfaces
+\end{itemize}
+
+\textbf{Long-Term Goals:}
+\begin{itemize}
+    \item Autonomous flight capabilities and navigation stack
+    \item Multi-vehicle coordination and networking
+    \item Expansion to multiple hardware platforms
+    \item Integration with higher-level mission planning systems
+\end{itemize}
+
+\subsection{Development Direction}
+
+The long-term vision of Vayu is to provide a fully indigenous, modular, and high-performance flight control stack that can be adapted across a wide range of applications. Development will continue to focus on maintaining a balance between performance, simplicity, and extensibility, ensuring that the system remains both practical and scalable.

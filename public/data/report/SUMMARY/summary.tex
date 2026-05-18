@@ -1,0 +1,431 @@
+\documentclass[11pt]{article}
+
+% Page layout for compactness
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage[table]{xcolor}
+% Colors from main.tex
+\definecolor{primary}{RGB}{0, 51, 102}
+\definecolor{secondary}{RGB}{102, 102, 102}
+
+% Compact spacing
+\setlength{\parskip}{0.5em}
+\setlength{\parindent}{0pt}
+\titleformat{\section}
+  {\normalfont\Large\bfseries\color{primary}}{\thesection}{1em}{}
+\titleformat{\subsection}
+  {\normalfont\large\bfseries\color{primary}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\normalfont\normalsize\bfseries\color{primary}}{\thesubsubsection}{1em}{}
+
+\titlespacing*{\section}{0pt}{8pt}{4pt}
+\titlespacing*{\subsection}{0pt}{6pt}{2pt}
+\titlespacing*{\subsubsection}{0pt}{4pt}{2pt}
+
+% Header/footer
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small \color{secondary} Vayu Flight Control Stack}
+\fancyhead[R]{\small \color{secondary} Technical Summary}
+\fancyfoot[C]{\color{secondary} \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{secondary}\leaders\hrule height \headrulewidth\hfill}}
+
+% Custom commands
+\newcommand{\vayuname}{\textbf{Vayu}}
+\newcommand{\navhal}{\textbf{NavHAL}}
+\newcommand{\vaios}{\textbf{VAIOS}}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    \vspace*{1cm}
+    
+    \includegraphics[width=0.4\textwidth]{../img/logo.png}\\[2cm]
+    
+    {\Huge \bfseries \color{primary} Vayu Flight Control Stack}\\[0.5cm]
+    {\Large \bfseries \color{secondary} Technical Report Summary}\\[2cm]
+    
+    \vfill
+    
+    {\large \bfseries Prepared by:}\\[0.2cm]
+    {\large Ashutosh Vishwakarma}\\[1cm]
+    
+    {\large 2026}\\[0.5cm]
+    {\large v0.0.1}\\[2cm]
+    
+    \vfill
+    \rule{\textwidth}{1pt}\\[0.4cm]
+    {\small \color{secondary} NAVRobotec Private Limited}
+\end{titlepage}
+
+\newpage
+
+\begin{abstract}
+This document provides a concise summary of the Vayu Flight Control Stack technical report. Vayu is an end-to-end flight control system built on a hardware-agnostic infrastructure comprising NavHAL (Hardware Abstraction Layer) and VAIOS (Real-Time Operating System). The stack emphasizes modularity, deterministic execution, and hardware independence, offering a streamlined alternative to complex open-source platforms like PX4 and ArduPilot. This summary covers the system architecture, core components, performance characteristics, and development roadmap.
+\end{abstract}
+
+\vspace{0.5cm}
+
+%-----------------------------------------------------------------------------
+\section{Introduction and Motivation}
+
+The Vayu flight control stack was developed to address limitations in existing open-source drone platforms, which often introduce unnecessary complexity, hardware lock-in, and limited customization capabilities. The project originated from practical challenges encountered during undergraduate research at IIT Jammu, particularly when attempting to implement secure encrypted telemetry---a feature that required external hardware and complex workarounds in traditional stacks.
+
+\vayuname~adopts a first-principles approach with three primary objectives:
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Modularity:} Clear separation between hardware abstraction, execution management, and control logic.
+    \item \textbf{Determinism:} Predictable real-time execution for stable flight control.
+    \item \textbf{Hardware Independence:} Portability across microcontroller platforms through structured abstraction.
+\end{itemize}
+
+The stack is vertically integrated across three layers: \navhal~(Hardware Abstraction), \vaios~(Execution Environment), and \vayuname~(Flight Control Logic).
+
+%-----------------------------------------------------------------------------
+\section{System Architecture Overview}
+
+\subsection{Layered Design}
+
+The Vayu system follows a four-layer hierarchical architecture:
+
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{Hardware Layer:} Physical components including STM32F401RE MCU, BMX160 IMU, BMP180 barometer, and motor drivers.
+    \item \textbf{NavHAL:} Compile-time configured abstraction providing uniform peripheral interfaces.
+    \item \textbf{VAIOS:} Preemptive RTOS managing task scheduling, timing, and inter-task communication.
+    \item \textbf{Vayu Control Layer:} State estimation, cascaded PID control, and actuation logic.
+\end{enumerate}
+
+\subsection{Core Components}
+
+The system integrates the following functional modules:
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Sensor Interface:} BMX160 9-axis IMU (accelerometer, gyroscope, magnetometer) sampled at $>1.5$~kHz via DMA-driven I2C.
+    \item \textbf{RC Input:} iBus protocol over UART with circular DMA buffering.
+    \item \textbf{State Estimation:} Complementary and Mahony filters for attitude fusion.
+    \item \textbf{Cascaded PID Control:} Outer angle loop (250~Hz) and inner rate loop (1~kHz).
+    \item \textbf{Motor Output:} PWM generation via TIM1 at 400~Hz for quadrotor X4 configuration.
+\end{itemize}
+
+\subsection{Data Flow Pipeline}
+
+Sensor data flows through a deterministic pipeline: Acquisition $\rightarrow$ Estimation $\rightarrow$ Control $\rightarrow$ Mixing $\rightarrow$ Actuation. Time-critical tasks operate at high priority with bounded jitter, while telemetry and logging run asynchronously at lower priorities.
+
+%-----------------------------------------------------------------------------
+\section{NavHAL: Hardware Abstraction Layer}
+
+\navhal~provides a deterministic, compile-time configured interface between hardware and higher-level software. Unlike conventional HALs that introduce runtime overhead, \navhal~achieves \textit{zero-cost abstraction} through inline functions and macro-based register access.
+
+\subsection{Design Principles}
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Compile-Time Specialization:} Processor, vendor, and board selections resolved at build time.
+    \item \textbf{Direct Register Access:} API calls map directly to memory-mapped registers.
+    \item \textbf{No Dynamic Dispatch:} Eliminates virtual functions and runtime lookup tables.
+    \item \textbf{Execution Independence:} Operates identically in bare-metal or RTOS environments.
+\end{itemize}
+
+\subsection{API Structure}
+
+\navhal~follows a consistent naming convention: \texttt{hal\_<peripheral>\_<operation>}. Example GPIO usage:
+
+\begin{verbatim}
+hal_gpio_setmode(GPIO_PA05, GPIO_OUTPUT, GPIO_PUPD_NONE);
+hal_gpio_digitalwrite(GPIO_PA05, GPIO_HIGH);
+\end{verbatim}
+
+\subsection{Performance Evaluation}
+
+Benchmarks on STM32F401RE @ 84~MHz demonstrate \navhal's efficiency:
+
+\begin{table}[H]
+\centering
+\caption{GPIO Toggle Performance Comparison}
+\begin{tabular}{lc}
+\toprule
+\textbf{Abstraction Layer} & \textbf{Cycles per Pulse} \\
+\midrule
+Direct Register Access (LL) & 5 \\
+\textbf{NavHAL} & \textbf{5} \\
+STM32 HAL & 26 \\
+Arduino Framework & 100 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\vspace{-0.5cm}
+
+\begin{table}[H]
+\centering
+\caption{Interrupt Latency Comparison}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Layer} & \textbf{Latency} & \textbf{Dispatch Overhead} \\
+\midrule
+\textbf{NavHAL} & 33 cycles & 16 cycles \\
+STM32 HAL & 46 cycles & 18 cycles \\
+Arduino & 187 cycles & 159 cycles \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Portability Model}
+
+Porting \navhal~requires modifications only at the affected layer:
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{New Board (same MCU):} Update board layer (pin mappings).
+    \item \textbf{New MCU (same architecture):} Update vendor layer (register definitions).
+    \item \textbf{New Architecture:} Implement new core layer (startup, interrupt handling).
+\end{itemize}
+
+%-----------------------------------------------------------------------------
+\section{VAIOS: Real-Time Operating System}
+
+\vaios~provides a lightweight, preemptive execution environment tailored for real-time embedded control. It manages task scheduling, synchronization, memory allocation, and system services.
+
+\subsection{Task Model and Scheduling}
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Task Control Block (TCB):} Stores stack pointer, priority, state, and scheduling metadata.
+    \item \textbf{Priority-Based Preemption:} Higher numerical values indicate higher priority.
+    \item \textbf{Round-Robin within Priority:} Configurable time slicing for equal-priority tasks.
+    \item \textbf{Bitmap-Accelerated Selection:} $O(1)$ identification of highest-priority ready task.
+\end{itemize}
+
+\subsection{Task States}
+
+Tasks transition through: \texttt{READY} $\rightarrow$ \texttt{RUNNING} $\rightarrow$ \texttt{BLOCKED/DELAYED} $\rightarrow$ \texttt{TERMINATED}. An idle task reclaims resources from terminated tasks.
+
+\subsection{Inter-Task Communication}
+
+\vaios~provides:
+\begin{itemize}[leftmargin=*]
+    \item Binary and counting semaphores
+    \item Mutexes (with recursive support)
+    \item Lock-free SPSC/MPMC queues
+    \item ISR-safe signaling variants
+\end{itemize}
+
+\subsection{Memory Management}
+
+A first-fit allocator with block splitting and coalescing manages the heap. All allocations are protected by critical sections. Safety features include magic-value integrity checks and configurable heap watermark monitoring.
+
+\subsection{Performance Summary}
+
+\begin{table}[H]
+\centering
+\caption{VAIOS Benchmark Results (STM32F401RE @ 84~MHz)}
+\begin{tabular}{lc}
+\toprule
+\textbf{Metric} & \textbf{Value} \\
+\midrule
+Context Switch Rate & 3,773 switches/sec \\
+Context Switch Cycles & $\sim$22,000 \\
+Delay Accuracy (100~ms requested) & 101~ms ($\pm1\%$ with 1~ms tick) \\
+FPU sinf Throughput & 250,000 ops/sec \\
+FPU sqrtf Throughput & 333,333 ops/sec \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+%-----------------------------------------------------------------------------
+\section{Vayu: Flight Control Layer}
+
+\vayuname~implements the application-level logic for drone stabilization and control, organized as coordinated tasks within the \vaios~environment.
+
+\subsection{State Estimation}
+
+Two sensor fusion algorithms are available:
+
+\subsubsection{Complementary Filter}
+Combines high-frequency gyroscope integration with low-frequency accelerometer/magnetometer corrections:
+\[
+\theta = \alpha(\theta + \omega \cdot dt) + (1-\alpha)\theta_{\text{acc/mag}}
+\]
+where $\alpha \approx 0.98$ blends the estimates.
+
+\subsubsection{Mahony Filter}
+Quaternion-based nonlinear observer with PI correction:
+\begin{align*}
+\mathbf{e} &= \mathbf{v}_{\text{measured}} \times \mathbf{v}_{\text{estimated}} \\
+\omega_{\text{corrected}} &= \omega + K_p\mathbf{e} + K_i\int \mathbf{e}\,dt \\
+\dot{q} &= \frac{1}{2} q \otimes \omega_{\text{corrected}}
+\end{align*}
+
+\subsection{Cascaded PID Control}
+
+The control architecture uses two nested loops:
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Attitude Controller (250~Hz):} Computes desired angular rates from orientation error.
+    \item \textbf{Rate Controller (1~kHz):} Tracks desired rates using gyroscope feedback.
+\end{itemize}
+
+The PID formulation includes practical enhancements:
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Derivative on Measurement:} Avoids derivative kick on setpoint changes.
+    \item \textbf{Low-Pass Filtering:} Reduces noise amplification in derivative term.
+    \item \textbf{Integral Anti-Windup:} Clamping and back-calculation prevent integrator windup.
+    \item \textbf{Feedforward:} Setpoint rate feedforward improves tracking.
+\end{itemize}
+
+\subsection{Motor Mixing and Actuation}
+
+For an X4 quadrotor configuration, mixing is computed as:
+\begin{align*}
+M_1 &= T - R + P + Y \\
+M_2 &= T - R - P - Y \\
+M_3 &= T + R - P + Y \\
+M_4 &= T + R + P - Y
+\end{align*}
+where $T$ is throttle and $R,P,Y$ are roll, pitch, yaw commands. Outputs are normalized to PWM bounds and applied via TIM1 at 400~Hz.
+
+\subsection{Communication and Telemetry}
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{RC Input:} iBus protocol with DMA circular buffering.
+    \item \textbf{Telemetry:} Multi-rate packet-based streaming with delta compression for high-frequency data.
+    \item \textbf{Command Processing:} Supports heartbeat, identification, calibration, and runtime task management.
+\end{itemize}
+
+\subsection{Data Logging}
+
+File-based logging using the Virtual File System (VFS) layer with SDIO-connected microSD card:
+\begin{itemize}[leftmargin=*]
+    \item Preallocated files ensure deterministic write latency.
+    \item Circular logging prevents storage exhaustion.
+    \item Mutex-protected for thread-safe concurrent access.
+\end{itemize}
+
+\subsection{Task Organization}
+
+\begin{table}[H]
+\centering
+\caption{Task Priority Assignment}
+\begin{tabular}{lll}
+\toprule
+\textbf{Tier} & \textbf{Priority} & \textbf{Tasks} \\
+\midrule
+High & 2 & IMU acquisition (DMA-driven) \\
+Medium & 1 & Attitude/Rate control, Motor output \\
+Low & 0 & Telemetry, Logging, Heartbeat \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+%-----------------------------------------------------------------------------
+\section{Hardware Platform}
+
+The Vayu flight controller is a custom-designed PCB built around the STM32F401RE (Cortex-M4 @ 84~MHz with FPU). Key specifications:
+
+\begin{table}[H]
+\centering
+\caption{Hardware Specifications}
+\begin{tabular}{ll}
+\toprule
+\textbf{Component} & \textbf{Details} \\
+\midrule
+MCU & STM32F401RE, 84~MHz, 512KB Flash, 96KB SRAM \\
+IMU & Bosch BMX160 (9-axis: accel, gyro, mag) \\
+Barometer & Bosch BMP180 \\
+GPS & u-blox M9N (UART) \\
+Storage & microSD via SDIO \\
+Power & Two-stage: Buck (5V) $\rightarrow$ LDO (3.3V) \\
+Interfaces & UART, I2C, SPI, USB CDC, SWD \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The PCB is a 2-layer design created in KiCad, with careful attention to signal integrity, power distribution, and noise isolation for sensitive sensors.
+
+%-----------------------------------------------------------------------------
+\section{Comparison with Existing Stacks}
+
+\begin{table}[H]
+\centering
+\caption{Architectural Comparison}
+\begin{tabular}{p{2.5cm}p{3.5cm}p{3.5cm}}
+\toprule
+\textbf{Aspect} & \textbf{PX4 / ArduPilot} & \textbf{Vayu} \\
+\midrule
+Architecture & Feature-rich, monolithic & Layered, modular \\
+Hardware Support & Broad, vendor-linked & Hardware-agnostic (NavHAL) \\
+Execution Model & General-purpose RTOS (NuttX/ChibiOS) & Custom deterministic scheduler \\
+Complexity & High & Controlled and minimal \\
+Customization & Moderate (complex codebase) & High (modular design) \\
+Abstraction Overhead & Moderate to high & Near-zero (compile-time) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+%-----------------------------------------------------------------------------
+\section{Current Status and Roadmap}
+
+\subsection{Current Status (2026)}
+
+The Vayu stack is fully functional with:
+\begin{itemize}[leftmargin=*]
+    \item End-to-end sensor-to-actuator pipeline operational.
+    \item Stable real-time execution under \vaios.
+    \item Validated core subsystems in integrated testing.
+\end{itemize}
+
+\subsection{Development Roadmap}
+
+\textbf{Short-Term:}
+\begin{itemize}[leftmargin=*]
+    \item Flight testing and hardware validation
+    \item Sensor calibration automation
+    \item Control loop tuning and optimization
+    \item Enhanced failsafe mechanisms
+\end{itemize}
+
+\textbf{Mid-Term:}
+\begin{itemize}[leftmargin=*]
+    \item GPS integration and position control
+    \item Advanced estimation (Extended Kalman Filter)
+    \item Full blackbox flight data recording
+    \item Additional communication interfaces
+\end{itemize}
+
+\textbf{Long-Term:}
+\begin{itemize}[leftmargin=*]
+    \item Autonomous navigation stack
+    \item Multi-vehicle coordination
+    \item Porting to STM32H7 and AVR platforms
+    \item Mission planning integration
+\end{itemize}
+
+%-----------------------------------------------------------------------------
+\section{Conclusion}
+
+The Vayu flight control stack demonstrates a complete, indigenous solution for embedded drone control systems. By combining a zero-overhead hardware abstraction layer (\navhal), a deterministic real-time kernel (\vaios), and a modular flight control application (\vayuname), the system achieves:
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Performance:} Near-register-level efficiency with high-level usability.
+    \item \textbf{Predictability:} Bounded jitter and deterministic task execution.
+    \item \textbf{Portability:} Layered design enabling migration across MCU platforms.
+    \item \textbf{Ownership:} Full control over the entire software stack without external dependencies.
+\end{itemize}
+
+This work establishes a foundation for future development in autonomous aerial systems, prioritizing simplicity, transparency, and adaptability over feature bloat. The modular architecture enables incremental enhancement toward full autonomous capabilities while maintaining the real-time guarantees essential for stable flight.
+
+\vspace{0.5cm}
+\begin{center}
+\rule{0.5\textwidth}{0.4pt}
+\end{center}
+
+\end{document}

@@ -1,0 +1,33 @@
+<p>Vayu is designed with extensibility as a core principle, enabling the system to evolve with new hardware, features, and application requirements without requiring major architectural changes. This is achieved through modular design, clear separation of responsibilities, and configurable system components.</p>
+<h3 id="modular-architecture">Modular Architecture</h3>
+<p>The system is organized into independent subsystems such as sensing, estimation, control, communication, and logging. Each subsystem interacts with others through well-defined interfaces, allowing components to be modified or replaced without affecting the rest of the system.</p>
+<p>For example, sensor drivers are decoupled from estimation algorithms through shared buffers, enabling new sensors to be integrated with minimal changes. Similarly, control algorithms can be extended or replaced while maintaining the same input-output structure.</p>
+<h3 id="configurable-components">Configurable Components</h3>
+<p>Many aspects of the system are configurable at compile time through centralized configuration headers. This includes:</p>
+<ul>
+<li><p>Selection of estimation algorithms (e.g., complementary or Mahony filter)</p></li>
+<li><p>Control gains and limits</p></li>
+<li><p>Scheduling parameters such as task priorities and time slices</p></li>
+<li><p>Logging and telemetry settings</p></li>
+</ul>
+<p>This approach allows the system to be adapted for different use cases without modifying core logic.</p>
+<h3 id="task-based-expansion">Task-Based Expansion</h3>
+<p>The use of a task-oriented execution model enables straightforward addition of new functionality. New features can be implemented as independent tasks and integrated into the system without disrupting existing components.</p>
+<p>Examples of extensible functionality include:</p>
+<ul>
+<li><p>Additional sensors (e.g., GPS, vision modules)</p></li>
+<li><p>Advanced control algorithms</p></li>
+<li><p>Navigation and mission planning modules</p></li>
+<li><p>Diagnostics and monitoring tools</p></li>
+</ul>
+<p>Dynamic task creation further allows certain features, such as calibration or testing routines, to be invoked only when needed.</p>
+<h3 id="hardware-abstraction">Hardware Abstraction</h3>
+<p>NavHAL provides a hardware abstraction layer that isolates Vayu from microcontroller-specific details. This allows the system to be ported across different microcontrollers with minimal changes to higher-level logic.</p>
+<p>Current support focuses on Cortex-M4-based systems, with ongoing work to extend compatibility to additional microcontrollers, including other STM32 variants and AVR-based platforms.</p>
+<h3 id="storage-and-data-expansion">Storage and Data Expansion</h3>
+<p>The logging and VFS infrastructure enables persistent storage of system data, which can be extended to support additional use cases such as full flight data recording, configuration storage, and post-flight analysis.</p>
+<p>Since the storage layer is abstracted through a virtual file system, new storage backends or formats can be integrated without modifying application logic.</p>
+<h3 id="communication-flexibility">Communication Flexibility</h3>
+<p>The communication subsystem supports structured packet-based data exchange and can be extended to support additional interfaces such as wireless communication or higher-level protocols. This enables integration with ground stations, mobile applications, or distributed systems.</p>
+<h3 id="system-evolution">System Evolution</h3>
+<p>The overall design of Vayu supports incremental development. New features can be introduced, tested, and integrated without requiring a redesign of the system. This makes the platform suitable for both experimental development and deployment in evolving applications.</p>

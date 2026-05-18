@@ -1,0 +1,77 @@
+\section{State Estimation}
+\label{sec:vayu_estimation}
+
+The state estimation module in Vayu is responsible for computing the orientation of the system using data from the inertial measurement unit. It fuses accelerometer, gyroscope, and magnetometer measurements to obtain roll, pitch, and yaw angles required by the control system.
+
+Two sensor fusion approaches are implemented: a complementary filter and the Mahony filter. The choice of algorithm is configurable at compile time, allowing the system to balance computational cost and estimation accuracy depending on the application requirements.
+
+\subsection{Accelerometer and Magnetometer Estimation}
+
+The accelerometer and magnetometer provide absolute orientation references. The accelerometer is used to estimate roll and pitch based on the direction of gravity, while the magnetometer provides heading information.
+
+Roll and pitch are computed as:
+\[
+\phi = \tan^{-1}\left(\frac{-a_y}{a_z}\right), \quad
+\theta = -\tan^{-1}\left(\frac{a_x}{\sqrt{a_y^2 + a_z^2}}\right)
+\]
+
+Yaw is computed using tilt-compensated magnetometer measurements:
+\[
+\psi = \tan^{-1}\left(\frac{-m_y'}{m_x'}\right)
+\]
+
+where the magnetometer readings are compensated using the estimated roll and pitch.
+
+These estimates are stable but noisy and are therefore combined with gyroscope integration.
+
+\subsection{Complementary Filter}
+
+The complementary filter combines the short-term stability of gyroscope integration with the long-term stability of accelerometer and magnetometer measurements.
+
+The orientation is updated as:
+\[
+\theta = \alpha \left(\theta + \omega \cdot dt \right) + (1 - \alpha)\theta_{\text{acc/mag}}
+\]
+
+where:
+\begin{itemize}
+    \item $\theta$ is the estimated angle
+    \item $\omega$ is the angular velocity from the gyroscope
+    \item $dt$ is the time step
+    \item $\alpha$ is the blending factor (typically close to 1)
+\end{itemize}
+
+This approach provides a computationally efficient solution suitable for real-time systems, with minimal processing overhead.
+
+\subsection{Mahony Filter}
+
+The Mahony filter is a quaternion-based sensor fusion algorithm that provides improved accuracy by incorporating feedback correction. It estimates orientation using gyroscope integration while correcting drift using accelerometer and magnetometer measurements.
+
+The error between measured and estimated directions is computed as:
+\[
+\mathbf{e} = \mathbf{v}_{\text{measured}} \times \mathbf{v}_{\text{estimated}}
+\]
+
+This error is used to correct the gyroscope measurements:
+\[
+\omega_{\text{corrected}} = \omega + K_p \mathbf{e} + K_i \int \mathbf{e} \, dt
+\]
+
+The quaternion is then updated as:
+\[
+\dot{q} = \frac{1}{2} q \otimes \omega_{\text{corrected}}
+\]
+
+where:
+\begin{itemize}
+    \item $q$ is the orientation quaternion
+    \item $K_p$ and $K_i$ are proportional and integral gains
+\end{itemize}
+
+The quaternion is normalized after each update to maintain numerical stability and is converted to Euler angles for use by the control system.
+
+\subsection{Implementation Considerations}
+
+The time step $dt$ is computed dynamically using the processor cycle counter, allowing accurate integration even under varying execution timing. Sensor measurements are normalized before use to ensure stability of the estimation algorithms.
+
+The complementary filter provides a lightweight solution suitable for lower computational load, while the Mahony filter offers improved robustness and drift correction at the cost of additional computation. The availability of both approaches allows flexibility in adapting the system to different performance requirements.

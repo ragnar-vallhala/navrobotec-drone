@@ -1,0 +1,12 @@
+\section{Timing and Tick Management}
+\label{sec:vaios_timing}
+
+VAIOS uses a periodic system tick to drive time-dependent behavior such as task delays, time slicing, and runtime accounting. The system tick is generated using a hardware timer (typically SysTick on Cortex-M), with the period configured at compile time. Each tick represents a fixed time interval and serves as the base unit for scheduling decisions.
+
+A global tick counter is incremented on every tick interrupt. This counter is used to track delays and determine when suspended tasks should resume execution. Tasks that request a delay specify a duration in ticks, which is converted into an absolute wake-up time. These tasks are moved to a delayed list and remain inactive until their deadline is reached. During scheduling, the system periodically checks this list and transitions expired tasks back to the ready state.
+
+Time slicing is implemented to ensure fair execution among tasks with the same priority. Each task is allowed to execute for a configurable number of ticks before a scheduling decision is triggered. When the time slice expires, a context switch is requested, allowing other tasks of equal priority to execute. This mechanism is controlled through compile-time configuration, enabling adjustment based on application requirements.
+
+The tick system also supports basic runtime statistics. Each task maintains a counter of the total ticks it has executed, allowing coarse-grained monitoring of CPU usage. This information can be used for debugging, profiling, or system analysis.
+
+To minimize overhead, the tick handler performs only essential operations such as incrementing the global tick count and initiating scheduling when required. More complex operations, including task selection and context switching, are deferred to lower-priority handlers. This separation ensures that interrupt latency remains low while maintaining accurate timing behavior.
