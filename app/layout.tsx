@@ -3,6 +3,7 @@ import { Inter, Poppins, Outfit, Caveat } from "next/font/google";
 import "./globals.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { SITE_URL } from "../lib/site";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const poppins = Poppins({
@@ -22,6 +23,7 @@ const caveat = Caveat({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "NAVROBOTEC",
   description: "Man Meets Machine",
 };
