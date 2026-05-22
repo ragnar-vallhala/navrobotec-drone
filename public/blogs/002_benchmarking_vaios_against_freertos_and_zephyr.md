@@ -1,7 +1,7 @@
 ---
 title: "Benchmarking VAIOS Against FreeRTOS and Zephyr"
 date: "May 22, 2026"
-author: "VAYU Team"
+author: "Ashutosh Vishwakarma"
 excerpt: "We measured our in-house real-time operating system against FreeRTOS and Zephyr on the same flight-controller hardware — scheduling, IPC, memory, timing, and footprint. Here is the full set of results."
 coverImage: "/blogs/blog_2.png"
 ---
