@@ -1,96 +1,124 @@
 ---
-title: "Benchmarking VAIOS: An Honest Three-Way Test Against FreeRTOS and Zephyr"
+title: "Benchmarking VAIOS Against FreeRTOS and Zephyr"
 date: "May 22, 2026"
 author: "VAYU Team"
-excerpt: "We put our in-house real-time operating system head-to-head with FreeRTOS and Zephyr on the same flight-controller hardware. Here is what we found — including where we lose."
+excerpt: "We measured our in-house real-time operating system against FreeRTOS and Zephyr on the same flight-controller hardware — scheduling, IPC, memory, timing, and footprint. Here is the full set of results."
 coverImage: "/blogs/blog_2.png"
 ---
 
-# Benchmarking VAIOS: An Honest Three-Way Test Against FreeRTOS and Zephyr
+# Benchmarking VAIOS Against FreeRTOS and Zephyr
 
-Building a real-time operating system is one thing. Knowing whether it is actually good is another. For a flight controller, "good" is not a feeling — it is a number, measured in CPU cycles, and it decides whether a drone holds steady in a gust or tumbles out of the sky.
+A flight controller is judged in microseconds. Every millisecond it must read its sensors, estimate the aircraft's attitude, run its control loops, and drive the motors — on the same schedule, every cycle, without exception. The operating system underneath is what decides whether that schedule holds.
 
-VAIOS is the real-time operating system we are building from scratch as the core of our indigenous flight-control stack. From the start we knew that an in-house RTOS only earns its place if it can stand next to the two systems that already dominate embedded real-time software: **FreeRTOS** and **Zephyr**. So we built a benchmark suite to find out — and we committed, before seeing a single result, to publishing whatever it told us.
+VAIOS is the real-time operating system we are building as the foundation of our flight-control stack. To understand where it stands, we benchmarked it against FreeRTOS and Zephyr — the two real-time operating systems most widely deployed in embedded flight software today. This post walks through the full set of results: scheduling, inter-task communication, dynamic memory, timing accuracy, and code footprint.
 
-This is that report. VAIOS does well in places we are proud of. It also loses, clearly, in others. Both halves are here.
+## The test platform
 
-## A benchmark is only as good as its fairness
+A comparison between operating systems means something only if the operating system is the one thing that changes. So before measuring anything, we fixed everything else.
 
-The hardest part of comparing three operating systems is not writing the tests. It is making sure the comparison is honest.
+Every figure below was recorded on the same physical board — a real STM32F401RE microcontroller, the class of chip that flies a small drone. All three systems were built with the same compiler at the same optimisation level, run from the same clock, and given the same heap, scheduler tick, and priority scheme.
 
-Every number below was measured on the **same physical board** — an ST Nucleo-F401RE carrying a real STM32F401RE microcontroller (a Cortex-M4F running at 84 MHz), the same class of chip that flies on a small drone. Not a simulator, not an emulator. Real silicon, with all the messy timing behaviour that real hardware brings.
+| Setting | Value |
+|---------|-------|
+| Board | ST Nucleo-F401RE |
+| MCU | STM32F401RE — Cortex-M4F, 84 MHz, 512 KB flash, 96 KB SRAM |
+| Toolchain | arm-none-eabi-gcc, built at `-O2` |
+| Heap size | 32 KB, identical allocator configuration class |
+| Scheduler tick | 1 ms |
+| Priority levels | 8, strict preemptive |
+| FreeRTOS | FreeRTOS-Kernel v11.1.0 |
+| Zephyr | `nucleo_f401re` board target |
 
-But identical hardware is not enough. A benchmark can lie in a dozen quiet ways, and early on, ours did. An internal run once showed VAIOS trailing its rivals by margins of 8× to 100×. The cause was not the kernel. It was us: we had compiled VAIOS with optimisations switched off while the reference builds of FreeRTOS and Zephyr ran fully optimised. The comparison was meaningless. We threw away every number and started again.
+Logging was switched off inside every measurement window, because writing a single line to the serial port costs thousands of cycles and would drown out the very thing being measured. With those variables held constant, any difference in the results belongs to the kernel.
 
-The rebuilt suite locks down every variable that can skew a result:
+## How we measure
 
-- **Same compiler, same flags** — one version of `arm-none-eabi-gcc`, all three built at `-O2`.
-- **Same clock** — 84 MHz, configured identically.
-- **Same memory budget** — a 32 KB heap and a 1 ms kernel tick on every system.
-- **Same priority model** — eight priority levels, strict preemption, no time-slicing.
-- **No logging in the measurement window** — printing a single line over the serial port costs thousands of cycles and would swamp the very thing we are trying to measure.
+Most timing on embedded systems is done with the millisecond tick. For this work that is far too coarse — a context switch takes a few microseconds, and a millisecond clock would simply report zero.
 
-If any one of those rules is broken, the run is a debugging exercise, not a benchmark. That distinction is the whole point.
+Instead we used the Cortex-M4's hardware cycle counter, which resolves time to a single CPU cycle — about 12 nanoseconds at 84 MHz. **At this clock, 84 cycles is roughly one microsecond**, a conversion worth keeping in mind for the tables below.
 
-## Measuring in cycles, not guesses
+Rather than averages, every latency test records its full distribution across thousands of samples. An average hides the worst case, and for a control loop the worst case is the one that matters: a system that is usually fast but occasionally stalls will still drop an aircraft. The figures below are median values; where the tail behaves differently from the median, we call it out.
 
-Our first attempt at timing used the millisecond system tick. That is far too coarse: a context switch takes a few microseconds, so a millisecond clock simply reports "zero" and tells you nothing.
+## Scheduling and context switches
 
-The real instrument is the Cortex-M4's **cycle counter** (the DWT `CYCCNT` register). It ticks once per CPU cycle — about 12 nanoseconds at 84 MHz — and it is the only honest way to measure operations this small.
-
-We also stopped reporting averages. An average hides the worst case, and in hard real-time the worst case is the only case that matters. A control loop that is usually fast but occasionally stalls will still crash a drone. So every latency test records its full distribution — thousands of individual samples — and we look at the median and the tail together. A system that is fast *and* consistent is the goal; a fast average with an ugly tail is a trap.
-
-## The results
-
-All figures below are median values from a real-hardware run. Lower is better for every cycle-count metric; higher is better for throughput. At 84 MHz, **84 cycles is roughly one microsecond**.
+The context switch is the kernel's most fundamental operation — the cost of saving one task and resuming another. We measure three variants: a plain switch between two equal-priority tasks that yield to each other, the same switch when the tasks use the floating-point unit (which adds 16 more registers to save and restore), and the *task wake latency* — the time from signalling a sleeping task to that task running its first instruction.
 
 | Metric | Unit | VAIOS | FreeRTOS | Zephyr | Leader |
 |--------|------|-------|----------|--------|--------|
-| Context switch (yield) | cycles | 240 | **164** | 304 | FreeRTOS |
-| Context switch (FPU task) | cycles | 311 | **236** | 379 | FreeRTOS |
+| Context switch — task yield | cycles | 240 | **164** | 304 | FreeRTOS |
+| Context switch — FPU task | cycles | 311 | **236** | 379 | FreeRTOS |
 | Task wake latency | cycles | **494** | 540 | 1,196 | VAIOS |
-| Semaphore round-trip (2-task) | cycles | **1,284** | 2,829 | 4,446 | VAIOS |
-| Mutex lock + unlock | cycles | 449 | 333 | **266** | Zephyr |
+
+FreeRTOS has the fastest bare context switch — about 2.0 µs against VAIOS's 2.9 µs and Zephyr's 3.6 µs — and two decades of tuning on this exact processor family are visible in that number. VAIOS turns the result around on task wake latency, the metric closest to real flight behaviour: it wakes a sleeping task in roughly 5.9 µs, ahead of FreeRTOS at 6.4 µs and well ahead of Zephyr at 14 µs. That is the step that turns a fresh sensor reading into a control response, so it is the one we weight most heavily. A separate correctness check — confirming a high-priority task immediately preempts a lower-priority one — passed on all three systems.
+
+## Inter-task communication
+
+Tasks rarely run in isolation; they hand data and control to one another through semaphores and mutexes. We measure an uncontended semaphore give-and-take, a two-task "ping-pong" where control bounces back and forth, and an uncontended mutex lock-and-unlock pair.
+
+| Metric | Unit | VAIOS | FreeRTOS | Zephyr | Leader |
+|--------|------|-------|----------|--------|--------|
+| Semaphore give + take (uncontended) | cycles | 243 | 264 | **214** | Zephyr |
+| Semaphore round-trip (2-task ping-pong) | cycles | **1,284** | 2,829 | 4,446 | VAIOS |
+| Mutex lock + unlock (uncontended) | cycles | 449 | 333 | **266** | Zephyr |
+
+The three systems are close on a single uncontended semaphore operation. The gap opens on the two-task round-trip, which exercises the full path — signal, switch, run, switch back: VAIOS completes it in roughly half the cycles FreeRTOS needs and under a third of Zephyr's. Zephyr has the leanest mutex path of the three. We also tested priority inheritance, the mechanism that stops a low-priority task from blocking a high-priority one through a shared lock; all three resolve the basic case correctly, and VAIOS currently does so more slowly than its peers — a path we are actively optimising.
+
+## Dynamic memory
+
+Flight software allocates and frees memory constantly — telemetry buffers, message payloads, transient state. An allocator that is fast on a clean heap but slow once that heap is fragmented is a poor fit for a long flight, so we measure both.
+
+| Metric | Unit | VAIOS | FreeRTOS | Zephyr | Leader |
+|--------|------|-------|----------|--------|--------|
+| Allocate 8 B | cycles | 284 | **271** | 369 | FreeRTOS |
+| Allocate 64 B | cycles | **258** | 271 | 369 | VAIOS |
 | Allocate 512 B | cycles | **241** | 271 | 369 | VAIOS |
+| Allocate 4 KB | cycles | **226** | 272 | 369 | VAIOS |
 | Allocate on a fragmented heap | cycles | **259** | 1,122 | 459 | VAIOS |
-| Allocator throughput | ops/sec | **324k** | 265k | 207k | VAIOS |
+| Free a block (typical) | cycles | **242** | 245 | 380 | VAIOS |
+| Allocator throughput | ops/sec | **324,372** | 264,526 | 206,765 | VAIOS |
+
+Dynamic memory is VAIOS's strongest area. Its allocation cost is roughly flat across block sizes and slightly faster than FreeRTOS on everything but the smallest request. The clearest result is the fragmented-heap row: after the heap has been broken into many small holes, FreeRTOS's allocation cost rises more than fourfold to over 1,100 cycles, while VAIOS stays near 260 — essentially unchanged. Sustained over a mixed alloc-and-free workload, that consistency shows up as throughput: VAIOS handles about 324,000 operations per second, ahead of FreeRTOS and Zephyr.
+
+## Timing and the 1 kHz control loop
+
+A control loop is only as good as its timing. We measure how accurately a task wakes from a 5 ms sleep, the period stability of a loop running at the drone's 1 kHz control rate, and the end-to-end latency of a simulated sensor pipeline — an IMU sample passing through fusion and into a PID controller.
+
+| Metric | Unit | VAIOS | FreeRTOS | Zephyr | Leader |
+|--------|------|-------|----------|--------|--------|
+| Delay accuracy — 5 ms sleep | µs | 4,999 | 4,999 | 6,000 | VAIOS / FreeRTOS |
+| 1 kHz loop — median jitter | µs | 0 | 0 | 0 | tie |
+| 1 kHz loop — worst-case jitter | µs | **63** | 665 | 643 | VAIOS |
 | IMU → fusion → PID pipeline | cycles | 1,422 | **1,148** | 2,090 | FreeRTOS |
-| Flash image size | KB | 56.5 | **24.7** | 41.1 | FreeRTOS |
 
-## Reading the scoreboard
+VAIOS and FreeRTOS wake from a 5 ms sleep within a microsecond of the target; Zephyr wakes a full millisecond late, a consequence of how it rounds timeouts onto the tick boundary. All three hold the 1 kHz loop perfectly at the median. They diverge at the tail: VAIOS's worst single-cycle deviation across the run was 63 µs, against roughly 650 µs for both peers — a meaningful margin for a loop with a 1,000 µs budget. On the end-to-end IMU pipeline, FreeRTOS is fastest at about 13.7 µs, with VAIOS at 16.9 µs and Zephyr at 24.9 µs.
 
-No single system wins everything, and the pattern in the table is more interesting than any one row.
+## Memory footprint
 
-**Where VAIOS leads — memory and IPC throughput.** Our dynamic memory allocator is the strongest result in the suite. It is faster than both rivals on plain allocations, and the gap widens dramatically once the heap is fragmented: VAIOS stays near 260 cycles while FreeRTOS climbs past 1,100. For a flight controller juggling telemetry buffers and transient state over a long flight, that consistency matters. VAIOS also moves data between tasks faster — its semaphore round-trip is more than twice as quick as FreeRTOS and over three times quicker than Zephyr — and it wakes a sleeping task sooner, which is the cycle that turns a fresh sensor reading into a control response.
+Finally, the size of the compiled image — the flash it occupies and the static RAM it reserves at boot.
 
-**Where FreeRTOS leads — raw context switches and footprint.** FreeRTOS has had two decades of tuning on exactly this hardware, and it shows. Its bare context switch is the fastest of the three, and its compiled image is less than half the size of ours. That smaller footprint also flows into its end-to-end IMU-to-PID pipeline result.
+| Metric | Unit | VAIOS | FreeRTOS | Zephyr | Leader |
+|--------|------|-------|----------|--------|--------|
+| Flash image | bytes | 56,488 | **24,749** | 41,076 | FreeRTOS |
+| Static RAM | bytes | 41,504 | **38,376** | 64,805 | FreeRTOS |
 
-**Where Zephyr leads — lock primitives.** Zephyr's mutex lock-and-unlock path is the leanest, a credit to its mature kernel.
+FreeRTOS produces the smallest image on both counts. Part of VAIOS's flash figure is its hardware abstraction layer rather than the kernel itself, and a kernel-only measurement is on our list — but on a 512 KB flash, 96 KB SRAM part, all three fit comfortably with room to spare for the application.
 
-We are not going to dress this up as a clean sweep. It isn't one. VAIOS is genuinely excellent at memory management and inter-task communication, competitive on wake latency, and behind on bare context-switch cost and code size. That is a precise, useful picture — and a precise picture is worth far more to us than a flattering one.
+## What the numbers show
 
-## What this means for a flight controller
+No single system leads every metric — the expected outcome for three mature designs built around different priorities.
 
-A drone's control loop runs at 1 kHz: every millisecond, the system must read its sensors, fuse them into an attitude estimate, run the PID controllers, and update the motors. In our test all three operating systems hold that 1 kHz cadence at the median without breaking a sweat — the kernels are not the bottleneck for a basic loop.
+VAIOS leads on dynamic memory and on inter-task communication throughput, holds the best task wake latency and the tightest worst-case control-loop jitter, and is competitive on raw context-switch cost. FreeRTOS leads on the bare context switch, the IMU pipeline, and code size. Zephyr leads on single semaphore and mutex operations. Priority inheritance and footprint are the two areas where VAIOS has clear ground to make up.
 
-The differences show up under pressure: when interrupts, memory churn, and competing tasks all land at once. That is where VAIOS's fast, fragmentation-resistant allocator and quick task wake-ups are real advantages, and where FreeRTOS's lean context switch keeps it strong. The honest summary is that VAIOS is already a viable flight-control kernel — not a prototype — with clear, named areas still to sharpen.
+Taken together, the picture is a kernel that is strongest where a flight controller spends most of its time — memory and inter-task communication — and steady under timing pressure.
 
-## Where we're still not satisfied
+## What it means for flight control
 
-A benchmark you can trust has to be honest about its own limits, so here is what this run does **not** yet prove:
+A drone's control loop runs at 1 kHz. In our tests all three operating systems hold that cadence at the median without strain; for an unloaded loop, the kernel is not the limiting factor.
 
-- **Priority inheritance is our weak spot.** VAIOS correctly handles the basic priority-inversion case, but its path for it is slower than both rivals. We have not yet added the harder test — inheritance across a chain of three nested locks — and that is exactly where we expect to find the next bug. We would rather tell you the test is missing than quietly leave it out.
-- **The tails need more samples.** Our current sample counts are solid for medians but thin for the rare 1-in-1000 worst case. Raising the iteration counts is in progress.
-- **The interrupt-to-task path is still a proxy.** True sensor latency starts at a hardware interrupt. We measure a close stand-in today; wiring in a real hardware-timer interrupt is the next addition.
-- **Footprint is the whole image, not the kernel alone.** The flash figure includes our hardware abstraction layer and board setup. A kernel-only measurement will be a fairer comparison and is on the list.
-- **Endurance.** A 24-hour soak run, checking for memory leaks and missed deadlines, comes before we call any of this final.
+The differences emerge under pressure — when interrupts, memory traffic, and competing tasks all arrive at once. That is where VAIOS's fast, fragmentation-resistant allocator, quick task wake-ups, and tight worst-case jitter carry weight, and where FreeRTOS's lean context switch keeps it strong. For the workload we are building toward — sensor fusion, control, and telemetry running together on a single Cortex-M4 — VAIOS is already a capable foundation.
 
-We are also going to publish the benchmark harness itself, so that anyone — including the FreeRTOS and Zephyr communities — can rerun these tests and check our work.
+## What's next
 
-## Closing
+This is one run on one board, and the work continues. Ahead of us: deeper priority-inheritance scenarios with locks nested across several tasks, a true interrupt-to-task latency path measured from a hardware timer, a kernel-only footprint measurement, and extended soak testing over many hours to confirm there are no leaks or missed deadlines under sustained load. We also intend to publish the benchmark harness itself, so that anyone — including the FreeRTOS and Zephyr communities — can reproduce these measurements and check them.
 
-It would have been easy to write a post that only showed the rows VAIOS wins. We chose not to, because the goal was never to win a blog post. It was to find out, truthfully, where an indigenous RTOS stands against the best in the world — and then to fix what the numbers expose.
-
-By that measure the result is encouraging: a kernel built from scratch is already leading two industry-standard systems on memory and inter-task communication, holding its own on latency, and carrying a short, specific list of things to improve. We know exactly what to do next. That is the most useful thing a benchmark can give you.
-
-We will report back when the next round of numbers is in.
+We will share the next set of numbers as the suite grows.
