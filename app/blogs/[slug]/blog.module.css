@@ -67,7 +67,7 @@
   width: 100%;
   aspect-ratio: 21 / 9;
   object-fit: cover;
-  object-position: center 30%;
+  object-position: center top;
   border-radius: 24px;
   box-shadow: 0 20px 50px rgba(0,0,0,0.05);
   border: 1px solid rgba(0,0,0,0.05);
@@ -140,12 +140,76 @@
   color: var(--text-primary);
 }
 
+/* Tables — used by data-heavy posts (e.g. benchmarks) */
+.markdownContent table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 3rem 0;
+  font-family: var(--font-sans);
+  font-size: 1.05rem;
+}
+
+.markdownContent thead th {
+  text-align: left;
+  font-weight: 700;
+  color: var(--text-primary);
+  border-bottom: 2px solid var(--color-accent);
+  padding: 0.9rem 1rem;
+}
+
+.markdownContent tbody td {
+  padding: 0.85rem 1rem;
+  color: var(--text-secondary);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.markdownContent tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.markdownContent tbody td strong {
+  color: var(--color-accent);
+}
+
+/* Inline + block code */
+.markdownContent code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--bg-secondary);
+  padding: 0.15em 0.4em;
+  border-radius: 6px;
+  color: var(--color-accent);
+}
+
+.markdownContent pre {
+  background: var(--bg-secondary);
+  padding: 1.75rem;
+  border-radius: 16px;
+  overflow-x: auto;
+  margin: 3rem 0;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.markdownContent pre code {
+  background: none;
+  padding: 0;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
 @media (max-width: 768px) {
   .title {
     font-size: 2.5rem;
   }
-  
+
   .markdownContent p {
     font-size: 1.15rem;
+  }
+
+  /* Let wide benchmark tables scroll instead of overflowing */
+  .markdownContent table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
   }
 }
