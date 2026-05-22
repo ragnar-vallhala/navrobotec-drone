@@ -1,20 +1,14 @@
 import styles from "./DocsLayout.module.css";
-import DocsNav from "@/components/DocsNav";
-import { getChapters } from "@/lib/docs";
 
+/**
+ * Outer shell for the /docs hub. The flex container holds either:
+ *   • the hub or a placeholder book page (full-width <main>), or
+ *   • the report book (sidebar + <main>, supplied by /docs/report/layout.tsx).
+ */
 export default function DocsLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const chapters = getChapters();
-
-  return (
-    <div className={styles.docsContainer}>
-      <DocsNav chapters={chapters} />
-      <main className={styles.docsContent}>
-        <div className={styles.innerContent}>{children}</div>
-      </main>
-    </div>
-  );
+  return <div className={styles.docsContainer}>{children}</div>;
 }

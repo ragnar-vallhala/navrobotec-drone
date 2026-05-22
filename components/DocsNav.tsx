@@ -3,21 +3,23 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { List, X, ChevronRight } from "lucide-react";
+import { List, X, ChevronRight, ArrowLeft } from "lucide-react";
 import type { DocChapter } from "@/lib/docs";
 import styles from "./DocsNav.module.css";
 
 /**
- * Documentation sidebar: a fixed, independently-scrolling panel. Each chapter
- * with sections is a collapsible dropdown — the active chapter is expanded by
- * default, and any chapter can be toggled open/closed.
+ * Sidebar for the technical-report book. Each chapter with sections is a
+ * collapsible dropdown — the active chapter is expanded by default, and any
+ * chapter can be toggled open/closed.
+ *
+ * Pathnames inside the report look like /docs/report/<chapter>/<section>.
  */
 export default function DocsNav({ chapters }: { chapters: DocChapter[] }) {
   const pathname = usePathname();
-  // pathname is /docs, /docs/<chapter> or /docs/<chapter>/<section>
   const segments = pathname.split("/");
-  const activeChapter = segments[2];
-  const activeSection = segments[3];
+  // /docs / report / <chapter> / <section>
+  const activeChapter = segments[3];
+  const activeSection = segments[4];
 
   const [open, setOpen] = useState(false); // mobile drawer
   // Per-chapter expand state. Undefined = follow the active chapter.
@@ -41,8 +43,12 @@ export default function DocsNav({ chapters }: { chapters: DocChapter[] }) {
 
       <aside className={`${styles.sidebar} ${open ? styles.open : ""}`}>
         <nav className={styles.nav}>
+          <Link href="/docs" className={styles.backLink} onClick={close}>
+            <ArrowLeft size={13} /> All books
+          </Link>
+
           <Link
-            href="/docs"
+            href="/docs/report"
             className={`${styles.chapterLink} ${
               !activeChapter ? styles.active : ""
             }`}
@@ -59,7 +65,7 @@ export default function DocsNav({ chapters }: { chapters: DocChapter[] }) {
               <div key={c.slug} className={styles.group}>
                 <div className={styles.chapterRow}>
                   <Link
-                    href={`/docs/${c.slug}`}
+                    href={`/docs/report/${c.slug}`}
                     className={`${styles.chapterLink} ${
                       isCurrent && !activeSection ? styles.active : ""
                     }`}
@@ -86,7 +92,7 @@ export default function DocsNav({ chapters }: { chapters: DocChapter[] }) {
                     {c.sections.map((s) => (
                       <Link
                         key={s.slug}
-                        href={`/docs/${c.slug}/${s.slug}`}
+                        href={`/docs/report/${c.slug}/${s.slug}`}
                         className={`${styles.sectionLink} ${
                           isCurrent && activeSection === s.slug
                             ? styles.active
