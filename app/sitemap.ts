@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
-import { getChapters } from "@/lib/docs";
+import { getBooks, getChapters, getTutorials } from "@/lib/docs";
 import { SITE_URL } from "@/lib/site";
 
 /**
@@ -42,18 +42,39 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // No blogs directory — skip.
   }
 
-  // Docs: chapter pages and their section pages.
+  // Docs: book index pages.
   const docRoutes: MetadataRoute.Sitemap = [];
+  for (const book of getBooks()) {
+    docRoutes.push({
+      url: `${SITE_URL}${book.href}`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: book.comingSoon ? 0.5 : 0.8,
+    });
+    // Tutorial pages under each non-report book.
+    if (book.slug !== "report") {
+      for (const tutorial of getTutorials(book.slug)) {
+        docRoutes.push({
+          url: `${SITE_URL}${book.href}/${tutorial.slug}`,
+          lastModified: now,
+          changeFrequency: "monthly",
+          priority: 0.7,
+        });
+      }
+    }
+  }
+
+  // Report book: chapter pages and their section pages.
   for (const chapter of getChapters()) {
     docRoutes.push({
-      url: `${SITE_URL}/docs/${chapter.slug}`,
+      url: `${SITE_URL}/docs/report/${chapter.slug}`,
       lastModified: now,
       changeFrequency: "monthly",
       priority: 0.7,
     });
     for (const section of chapter.sections) {
       docRoutes.push({
-        url: `${SITE_URL}/docs/${chapter.slug}/${section.slug}`,
+        url: `${SITE_URL}/docs/report/${chapter.slug}/${section.slug}`,
         lastModified: now,
         changeFrequency: "monthly",
         priority: 0.6,

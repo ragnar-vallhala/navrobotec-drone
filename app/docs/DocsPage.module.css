@@ -276,6 +276,104 @@
   padding: 3rem 0;
 }
 
+/* ---- Tutorial header meta ---- */
+.tutorialMeta {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-secondary);
+}
+
+.tutorialMetaItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* ---- Book hub grid (docs landing) ---- */
+.bookGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin: 1rem 0 4rem;
+}
+
+.bookCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 2rem 1.75rem;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: var(--color-white);
+  text-decoration: none;
+  color: var(--color-dark);
+  transition: transform 0.25s ease, border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.bookCard:hover {
+  border-color: var(--color-accent);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
+}
+
+.bookCardSoon {
+  opacity: 0.75;
+}
+
+.bookCardSoon:hover {
+  border-color: rgba(0, 0, 0, 0.15);
+  transform: none;
+  box-shadow: none;
+}
+
+.bookKicker {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--color-accent);
+}
+
+.bookTitle {
+  font-family: var(--font-serif);
+  font-size: 1.55rem;
+  line-height: 1.2;
+  margin: 0;
+  color: var(--color-dark);
+}
+
+.bookDesc {
+  color: var(--text-secondary);
+  font-size: 0.98rem;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.bookFooter {
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.bookCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-accent);
+}
+
 /* ---- Rendered chapter HTML (pandoc output) ---- */
 .prose {
   color: var(--text-secondary);

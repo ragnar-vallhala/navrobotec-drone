@@ -6,42 +6,38 @@ import { getChapters, getFlatPages, readDocFile } from "@/lib/docs";
 import styles from "../../DocsPage.module.css";
 
 export function generateStaticParams() {
-  return getChapters().flatMap((c) =>
-    c.sections.map((s) => ({ chapter: c.slug, section: s.slug })),
-  );
+  return getChapters().map((c) => ({ chapter: c.slug }));
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ chapter: string; section: string }>;
+  params: Promise<{ chapter: string }>;
 }): Promise<Metadata> {
-  const { chapter, section } = await params;
-  const ch = getChapters().find((c) => c.slug === chapter);
-  const sec = ch?.sections.find((s) => s.slug === section);
-  if (!ch || !sec) return {};
+  const { chapter } = await params;
+  const found = getChapters().find((c) => c.slug === chapter);
+  if (!found) return {};
   return {
-    title: `${sec.title} — ${ch.title} | Vayu Docs | NAVRobotec`,
-    description: `${sec.title}, part of ${ch.title} — technical documentation for the Vayu flight control stack.`,
+    title: `${found.title} | Vayu Technical Report | NAVRobotec`,
+    description: `${found.title} — technical documentation for the Vayu flight control stack.`,
   };
 }
 
-export default async function SectionPage({
+export default async function ChapterPage({
   params,
 }: {
-  params: Promise<{ chapter: string; section: string }>;
+  params: Promise<{ chapter: string }>;
 }) {
-  const { chapter, section } = await params;
+  const { chapter } = await params;
   const chapters = getChapters();
   const current = chapters.find((c) => c.slug === chapter);
-  const sec = current?.sections.find((s) => s.slug === section);
-  if (!current || !sec) notFound();
+  if (!current) notFound();
 
-  const html = readDocFile(sec.file);
+  const intro = readDocFile(current.intro);
 
   const pages = getFlatPages();
   const idx = pages.findIndex(
-    (p) => p.href === `/docs/${current.slug}/${sec.slug}`,
+    (p) => p.href === `/docs/report/${current.slug}`,
   );
   const prev = idx > 0 ? pages[idx - 1] : undefined;
   const next = idx >= 0 ? pages[idx + 1] : undefined;
@@ -49,21 +45,39 @@ export default async function SectionPage({
   return (
     <article className={styles.article}>
       <header className={styles.header}>
-        <Link href={`/docs/${current.slug}`} className={styles.label}>
-          ← {current.title}
+        <Link href="/docs/report" className={styles.label}>
+          ← Technical Report
         </Link>
-        <h1 className={styles.title}>{sec.title}</h1>
+        <h1 className={styles.title}>{current.title}</h1>
       </header>
 
-      {html ? (
+      {intro ? (
         <div
           className={styles.prose}
-          dangerouslySetInnerHTML={{ __html: html }}
+          dangerouslySetInnerHTML={{ __html: intro }}
         />
-      ) : (
+      ) : current.sections.length === 0 ? (
         <p className={styles.pending}>
-          This section is being written. Please check back soon.
+          This chapter is being written. Please check back soon.
         </p>
+      ) : null}
+
+      {current.sections.length > 0 && (
+        <nav className={styles.chapterList}>
+          {current.sections.map((s, i) => (
+            <Link
+              key={s.slug}
+              href={`/docs/report/${current.slug}/${s.slug}`}
+              className={styles.chapterItem}
+            >
+              <span className={styles.chapterNo}>
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <span className={styles.chapterName}>{s.title}</span>
+              <ArrowRight size={16} />
+            </Link>
+          ))}
+        </nav>
       )}
 
       <footer className={styles.footer}>
