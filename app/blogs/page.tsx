@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import Link from 'next/link';
+import Image from 'next/image';
 import styles from './page.module.css';
 import sharedStyles from '../shared.module.css';
 import { Calendar, ArrowRight } from 'lucide-react';
@@ -57,9 +58,11 @@ export default async function BlogsPage() {
                             <Link key={post.slug} href={`/blogs/${post.slug}`} className={styles.blogCard}>
                                 {post.frontmatter.coverImage && (
                                     <div className={styles.blogCardImageWrapper}>
-                                        <img 
-                                            src={post.frontmatter.coverImage} 
-                                            alt={post.frontmatter.title} 
+                                        <Image
+                                            src={post.frontmatter.coverImage}
+                                            alt={post.frontmatter.title}
+                                            fill
+                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
                                             className={styles.blogCardImage}
                                         />
                                         <div className={styles.blogCardOverlay} />

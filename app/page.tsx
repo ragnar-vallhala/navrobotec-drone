@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Cpu, Layers, Navigation, Rocket, Zap } from 'lucide-react';
 import styles from './page.module.css';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -96,7 +97,7 @@ export default function Home() {
                 We are not building another autopilot. We are building the foundation — a sovereign, silicon-native intelligence that belongs entirely to its operator. No black boxes. No foreign dependencies. Just pure, auditable control.
               </blockquote>
               <div className={styles.founderAttrib}>
-                <img src="/images/nipun.jpeg" alt="Nipun Singh" className={styles.founderAvatar} />
+                <Image src="/images/nipun.jpeg" alt="Nipun Singh" width={72} height={72} className={styles.founderAvatar} />
                 <span className={styles.founderName}>Nipun Singh</span>
                 <span className={styles.founderTitle}>Founder &amp; Director, NAVRobotec</span>
               </div>
@@ -108,10 +109,10 @@ export default function Home() {
               <div className={styles.carouselTrack}>
                 {[1, 2].map((group) => (
                   <div key={group} className={styles.carouselGroup}>
-                    <img src="/logos/dpiit.png" alt="DPIIT" className={styles.institutionLogo} />
-                    <img src="/logos/i3c.png" alt="I3C" className={styles.institutionLogo} />
-                    <img src="/logos/msme.png" alt="MSME" className={styles.institutionLogo} />
-                    <img src="/logos/startup_up.png" alt="Startup UP" className={`${styles.institutionLogo} ${styles.startupUpLogo}`} />
+                    <Image src="/logos/dpiit.png" alt="DPIIT" width={1969} height={655} style={{ width: 'auto' }} className={styles.institutionLogo} />
+                    <Image src="/logos/i3c.png" alt="I3C" width={512} height={512} style={{ width: 'auto' }} className={styles.institutionLogo} />
+                    <Image src="/logos/msme.png" alt="MSME" width={367} height={137} style={{ width: 'auto' }} className={styles.institutionLogo} />
+                    <Image src="/logos/startup_up.png" alt="Startup UP" width={200} height={200} style={{ width: 'auto' }} className={`${styles.institutionLogo} ${styles.startupUpLogo}`} />
                   </div>
                 ))}
               </div>
@@ -136,7 +137,14 @@ export default function Home() {
                   {...fadeInUp}
                   transition={{ delay: i * 0.1, duration: 0.8 }}
                 >
-                  <div className={styles.visionCardImage} style={{ backgroundImage: `url(${card.image})` }} />
+                  <Image
+                    src={card.image}
+                    alt={card.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    className={styles.visionCardImage}
+                    style={{ objectFit: 'cover' }}
+                  />
                   <div className={styles.visionCardOverlay}>
                     <h3>{card.title}</h3>
                     <p>{card.desc}</p>

@@ -3,6 +3,7 @@ import path from 'path';
 import matter from 'gray-matter';
 import { marked } from 'marked';
 import Link from 'next/link';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, Clock, Calendar, User } from 'lucide-react';
 import styles from './blog.module.css';
@@ -62,11 +63,16 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
                 </header>
 
                 {data.coverImage && (
-                    <img 
-                        src={data.coverImage} 
-                        alt={data.title} 
-                        className={styles.featuredImage} 
-                    />
+                    <div className={styles.featuredImage}>
+                        <Image
+                            src={data.coverImage}
+                            alt={data.title}
+                            fill
+                            preload
+                            sizes="(max-width: 1024px) 100vw, 1024px"
+                            style={{ objectFit: 'cover', objectPosition: 'center top' }}
+                        />
+                    </div>
                 )}
                 
                 <div 

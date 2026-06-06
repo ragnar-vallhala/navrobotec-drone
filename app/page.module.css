@@ -19,7 +19,7 @@
 
 /* HERO SECTION */
 .hero {
-  min-height: 80vh; /* Shorter hero to let content flow into white section */
+  min-height: 100vh; /* Full-screen hero; -80px margin cancels the content-wrapper's top padding */
   margin-top: -80px;
   padding-top: 80px;
   justify-content: center;
@@ -321,8 +321,8 @@
 .visionCardImage {
   position: absolute;
   inset: 0;
-  background-size: cover;
-  background-position: center;
+  object-fit: cover;
+  object-position: center;
   transition: transform 0.8s ease;
 }
 
