@@ -2,12 +2,19 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import { marked } from 'marked';
+import markedKatex from 'marked-katex-extension';
+import 'katex/dist/katex.min.css';
 import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, Clock, Calendar, User } from 'lucide-react';
 import styles from './blog.module.css';
 import sharedStyles from '../../shared.module.css';
+
+// Render LaTeX written as $inline$ / $$block$$ in any post via KaTeX (SSR to
+// HTML + the imported stylesheet — no client JS needed). Applied once; posts
+// without math are unaffected.
+marked.use(markedKatex({ throwOnError: false }));
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
