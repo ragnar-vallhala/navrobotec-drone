@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import styles from '../shared.module.css';
 
 const fadeInUp = {
@@ -22,7 +23,7 @@ export default function Team() {
                 <div className={styles.grid}>
                     <motion.div className={styles.card} {...fadeInUp}>
                         <div className={styles.cardHeader}>
-                            <img src="/images/nipun.jpeg" alt="Nipun Singh" className={styles.avatar} />
+                            <Image src="/images/nipun.jpeg" alt="Nipun Singh" width={90} height={90} className={styles.avatar} />
                             <div className={styles.memberInfo}>
                                 <h3>Nipun Singh</h3>
                                 <strong>Founder & Director</strong>
@@ -35,7 +36,7 @@ export default function Team() {
 
                     <motion.div className={styles.card} {...fadeInUp} transition={{ delay: 0.2 }}>
                         <div className={styles.cardHeader}>
-                            <img src="/images/Ashutosh.jpeg" alt="Ashutosh Vishwakarma" className={styles.avatar} />
+                            <Image src="/images/Ashutosh.jpeg" alt="Ashutosh Vishwakarma" width={90} height={90} className={styles.avatar} />
                             <div className={styles.memberInfo}>
                                 <h3>Ashutosh Vishwakarma</h3>
                                 <strong>Founder & Core Hardware</strong>
@@ -48,7 +49,7 @@ export default function Team() {
 
                     <motion.div className={styles.card} {...fadeInUp} transition={{ delay: 0.4 }}>
                         <div className={styles.cardHeader}>
-                            <img src="/images/vibhu.png" alt="Vibhu Gupta" className={styles.avatar} />
+                            <Image src="/images/vibhu.png" alt="Vibhu Gupta" width={90} height={90} className={styles.avatar} />
                             <div className={styles.memberInfo}>
                                 <h3>Vibhu Gupta</h3>
                                 <strong>Founder & Director</strong>
