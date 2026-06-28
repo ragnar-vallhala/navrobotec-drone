@@ -16,7 +16,10 @@ import { getImageMeta } from '../../../lib/imageMeta';
 // Render LaTeX written as $inline$ / $$block$$ in any post via KaTeX (SSR to
 // HTML + the imported stylesheet — no client JS needed). Applied once; posts
 // without math are unaffected.
-marked.use(markedKatex({ throwOnError: false }));
+// nonStandard: render inline $…$ even when flush against punctuation like
+// "($I_{xy}=-\int xy$)" — the default requires whitespace boundaries and would
+// leave those as literal text. Safe here: posts only use $ for (balanced) math.
+marked.use(markedKatex({ throwOnError: false, nonStandard: true }));
 
 // ```mermaid fences become <pre class="mermaid"> for the client-side Mermaid
 // component to render; every other fenced block falls through to the default
