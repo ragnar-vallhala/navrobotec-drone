@@ -171,29 +171,41 @@
 }
 
 /* Inline + block code */
+/* Code uses a real monospace face. The site-wide --font-mono is Poppins (a
+   sans-serif used for labels), so code must not inherit it — point at the
+   JetBrains Mono variable with a system monospace fallback. */
 .markdownContent code {
-  font-family: var(--font-mono);
-  font-size: 0.9em;
+  font-family: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.88em;
   background: var(--bg-secondary);
   padding: 0.15em 0.4em;
   border-radius: 6px;
   color: var(--color-accent);
+  /* Show code literally — no `->`→`→` or `!=` ligatures. */
+  font-variant-ligatures: none;
+  font-feature-settings: "liga" 0, "calt" 0;
 }
 
 .markdownContent pre {
+  font-family: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   background: var(--bg-secondary);
-  padding: 1.75rem;
+  padding: 1.5rem 1.75rem;
   border-radius: 16px;
   overflow-x: auto;
   margin: 3rem 0;
   border: 1px solid rgba(0, 0, 0, 0.05);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  tab-size: 4;
 }
 
 .markdownContent pre code {
+  font-family: inherit;
+  font-size: inherit;
   background: none;
   padding: 0;
   color: var(--text-primary);
-  font-size: 0.95rem;
+  white-space: pre;
 }
 
 /* Mermaid diagrams: not a code block — let the rendered SVG breathe. Centered,
