@@ -1,6 +1,5 @@
 import fs from 'fs';
 import path from 'path';
-import sharp from 'sharp';
 import matter from 'gray-matter';
 import { marked } from 'marked';
 import markedKatex from 'marked-katex-extension';
@@ -12,6 +11,7 @@ import { ArrowLeft, Clock, Calendar, User } from 'lucide-react';
 import styles from './blog.module.css';
 import sharedStyles from '../../shared.module.css';
 import Mermaid from '../../../components/Mermaid';
+import { getImageMeta } from '../../../lib/imageMeta';
 
 // Render LaTeX written as $inline$ / $$block$$ in any post via KaTeX (SSR to
 // HTML + the imported stylesheet — no client JS needed). Applied once; posts
@@ -80,20 +80,9 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
     // Convert Markdown to HTML
     const htmlContent = await marked(content);
 
-    // Read the cover's real dimensions so the hero renders at its natural
-    // aspect ratio (no crop). Falls back to no fixed size if it can't be read.
-    let coverDims: { width: number; height: number } | null = null;
-    if (data.coverImage) {
-        try {
-            const coverPath = path.join(process.cwd(), 'public', data.coverImage);
-            const meta = await sharp(coverPath).metadata();
-            if (meta.width && meta.height) {
-                coverDims = { width: meta.width, height: meta.height };
-            }
-        } catch (e) {
-            coverDims = null;
-        }
-    }
+    // Read the cover's real dimensions (so the hero renders at its natural
+    // aspect ratio, no crop) plus a tiny blur placeholder for progressive load.
+    const coverMeta = data.coverImage ? await getImageMeta(data.coverImage) : null;
 
     return (
         <article className={styles.articleWrapper}>
@@ -116,14 +105,16 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
                     </div>
                 </header>
 
-                {data.coverImage && coverDims && (
+                {data.coverImage && coverMeta && (
                     <div className={styles.featuredImage}>
                         <Image
                             src={data.coverImage}
                             alt={data.title}
-                            width={coverDims.width}
-                            height={coverDims.height}
+                            width={coverMeta.width}
+                            height={coverMeta.height}
                             priority
+                            placeholder="blur"
+                            blurDataURL={coverMeta.blurDataURL}
                             sizes="(max-width: 1024px) 100vw, 1024px"
                             style={{ width: '100%', height: 'auto', display: 'block' }}
                         />

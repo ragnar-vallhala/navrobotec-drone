@@ -6,6 +6,7 @@ import Image from 'next/image';
 import styles from './page.module.css';
 import sharedStyles from '../shared.module.css';
 import { Calendar, ArrowRight } from 'lucide-react';
+import { getImageMeta } from '../../lib/imageMeta';
 
 export const metadata = {
     title: 'VAYU Blogs | NAVRobotec',
@@ -34,6 +35,14 @@ export default async function BlogsPage() {
             .filter(post => post.frontmatter.title);
             
         posts.sort((a, b) => (new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime()));
+
+        // Attach a blur placeholder for each cover so cards fade in from a
+        // low-res preview instead of popping in once the full image downloads.
+        await Promise.all(posts.map(async (post) => {
+            if (post.frontmatter.coverImage) {
+                post.cover = await getImageMeta(post.frontmatter.coverImage);
+            }
+        }));
     } catch (e) {
         posts = [];
     }
@@ -64,6 +73,7 @@ export default async function BlogsPage() {
                                             fill
                                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
                                             className={styles.blogCardImage}
+                                            {...(post.cover ? { placeholder: 'blur' as const, blurDataURL: post.cover.blurDataURL } : {})}
                                         />
                                         <div className={styles.blogCardOverlay} />
                                     </div>
