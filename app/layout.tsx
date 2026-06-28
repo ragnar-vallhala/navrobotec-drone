@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Poppins, Outfit, Caveat } from "next/font/google";
+import { Inter, Poppins, Outfit, Caveat, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -23,6 +23,11 @@ const caveat = Caveat({
   subsets: ["latin"],
   variable: "--font-caveat"
 });
+// Real monospace for code (the site's --font-mono is Poppins, used for labels).
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains-mono"
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -36,7 +41,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${poppins.variable} ${outfit.variable} ${caveat.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${inter.variable} ${poppins.variable} ${outfit.variable} ${caveat.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
       <body>
         <Navbar />
         <main className="content-wrapper">{children}</main>
