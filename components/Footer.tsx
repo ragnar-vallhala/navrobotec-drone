@@ -87,13 +87,14 @@ export default function Footer() {
                         BOTEC
                     </Link>
                     <p className={styles.description}>
-                        Indigenous autonomous systems and defense stack.
+                        Sovereign software for autonomous flight — built from the silicon up.
                     </p>
                 </div>
                 <div className={styles.links}>
                     <FooterHeading>QUICK LINKS</FooterHeading>
-                    <FooterLink href="/blogs">Blogs</FooterLink>
+                    <FooterLink href="/technology">Technology</FooterLink>
                     <FooterLink href="/vision">Vision</FooterLink>
+                    <FooterLink href="/blogs">Blogs</FooterLink>
                     <FooterLink href="/team">Team</FooterLink>
                 </div>
                 <div className={styles.contact}>

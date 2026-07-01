@@ -43,7 +43,7 @@ export default function Team() {
                             </div>
                         </div>
                         <p>
-                            Embedded systems developer and controls theory specialist. Responsible for VAIOS architecture, NavHAL implementation, and core flight stabilization logic.
+                            Embedded systems developer and controls theory specialist. Responsible for VaiOS architecture, NavHAL implementation, and core flight stabilization logic.
                         </p>
                     </motion.div>
 

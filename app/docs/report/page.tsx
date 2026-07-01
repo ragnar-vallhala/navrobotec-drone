@@ -7,7 +7,7 @@ import styles from "../DocsPage.module.css";
 export const metadata: Metadata = {
   title: "Technical Report | NAVRobotec",
   description:
-    "Technical report for the Vayu flight control stack — system architecture, hardware, and the NavHAL and VAIOS platform.",
+    "Technical report for the Vayu flight control stack — system architecture, hardware, and the NavHAL and VaiOS platform.",
 };
 
 export default function ReportIndex() {
@@ -24,7 +24,7 @@ export default function ReportIndex() {
 
       <p className={styles.lead}>
         An end-to-end, hardware-agnostic flight control stack built on the
-        NavHAL and VAIOS infrastructure. The chapters below are generated from
+        NavHAL and VaiOS infrastructure. The chapters below are generated from
         the project&apos;s technical report.
       </p>
 

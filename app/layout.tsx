@@ -31,8 +31,9 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "NAVROBOTEC",
-  description: "Man Meets Machine",
+  title: "NAVROBOTEC | Sovereign Software for Autonomous Flight",
+  description:
+    "NAVRobotec builds VaiOS, a sovereign robotics runtime for autonomous flight — engineered from the silicon up. VAYU is our first aircraft.",
 };
 
 export default function RootLayout({

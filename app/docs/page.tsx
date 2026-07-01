@@ -8,7 +8,7 @@ import styles from "./DocsPage.module.css";
 export const metadata: Metadata = {
   title: "Documentation | NAVRobotec",
   description:
-    "Documentation for the Vayu flight control stack — the technical report plus per-layer tutorial guides for NavHAL, VAIOS, and Vayu.",
+    "Documentation for the VaiOS stack — the technical report plus per-layer guides for NavHAL, VaiOS, and Vayu.",
 };
 
 export default function DocsHub() {
@@ -24,9 +24,10 @@ export default function DocsHub() {
           </header>
 
           <p className={styles.lead}>
-            The full technical report sits alongside per-layer tutorial guides
-            for the three platforms in the stack — NavHAL, VAIOS, and Vayu.
-            Pick a book to get started.
+            VaiOS is our sovereign robotics runtime, built from the silicon up.
+            The full technical report sits alongside per-layer guides for its
+            three layers — NavHAL at the hardware, the VaiOS core, and Vayu in
+            the air. Pick a book to get started.
           </p>
 
           <nav className={styles.bookGrid}>

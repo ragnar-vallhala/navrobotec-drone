@@ -3,7 +3,7 @@
  *
  * The /docs section is organised as a hub of "books". The technical report
  * (chapters 01-09, generated from LaTeX by scripts/convert-docs.mjs) is one
- * book; per-layer tutorial books for NavHAL, VAIOS, and Vayu sit alongside it
+ * book; per-layer tutorial books for NavHAL, VaiOS, and Vayu sit alongside it
  * and are currently scaffolded as placeholders.
  *
  * These helpers run server-side only (they read the filesystem).
@@ -55,7 +55,7 @@ export const BOOKS: DocBook[] = [
     slug: "report",
     title: "Technical Report",
     description:
-      "End-to-end technical report covering system architecture, hardware, NavHAL, VAIOS, and Vayu — generated from the project's LaTeX source.",
+      "End-to-end technical report covering system architecture, hardware, NavHAL, VaiOS, and Vayu — generated from the project's LaTeX source.",
     kicker: "Reference",
     href: "/docs/report",
     comingSoon: false,
@@ -64,16 +64,16 @@ export const BOOKS: DocBook[] = [
     slug: "navhal",
     title: "NavHAL Guide",
     description:
-      "Tutorial-style walkthrough of the NavHAL hardware abstraction layer — peripheral abstractions, porting, and integration with VAIOS.",
+      "Tutorial-style walkthrough of the NavHAL hardware abstraction layer — peripheral abstractions, porting, and integration with VaiOS.",
     kicker: "Tutorial",
     href: "/docs/navhal",
     comingSoon: false,
   },
   {
     slug: "vaios",
-    title: "VAIOS Guide",
+    title: "VaiOS Guide",
     description:
-      "Tutorial-style walkthrough of the VAIOS real-time kernel — task model, scheduler, IPC, and timing.",
+      "Tutorial-style walkthrough of the VaiOS real-time kernel — task model, scheduler, IPC, and timing.",
     kicker: "Tutorial",
     href: "/docs/vaios",
     comingSoon: true,

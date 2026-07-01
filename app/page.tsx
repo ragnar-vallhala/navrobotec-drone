@@ -33,12 +33,12 @@ const itemVariant = {
 };
 
 export default function Home() {
-  const phrases = ["Unwavering Reliability", "Unmatched Control", "Unrestricted Innovation"];
+  const phrases = ["Unwavering Reliability", "Absolute Control", "Sovereign by Design"];
   const [phraseIndex, setPhraseIndex] = useState(0);
   const visionCards = [
-    { image: '/images/autonomous.jpg', title: 'True Autonomy', desc: 'Human-centric intelligence that eliminates the need for manual piloting. Interact via audio-visual cues and assign complex tasks that drones execute independently.' },
-    { image: '/images/swarm.webp', title: 'Dynamic Swarms', desc: 'Unified multi-agent coordination where drones communicate, self-localize, and collaboratively plan to execute mission objectives as a single, cohesive entity.' },
-    { image: '/images/in-house.jpg', title: 'Sovereign Software', desc: 'Zero-dependency architecture built from the ground up. By eliminating third-party weak links and implementing high-grade testing, we ensure mission-critical reliability.' },
+    { image: '/images/in-house.jpg', title: 'Sovereign Foundation', desc: 'We own every layer — NavHAL at the hardware, VaiOS as the operating system, VAYU in the air. No black boxes, no foreign dependencies: a stack you can audit from the first register.' },
+    { image: '/images/autonomous.jpg', title: 'Real-Time Reliability', desc: 'A flight core that never misses its deadline. VaiOS holds the control loop to a fixed schedule every cycle — benchmarked head-to-head against FreeRTOS and Zephyr on the same hardware.' },
+    { image: '/images/swarm.webp', title: 'Built to Grow', desc: 'Autonomy and swarms are not bolted on — they are how VaiOS is designed to scale, from one aircraft to many. UAVs come first because that is where we prove it.' },
   ];
   useEffect(() => {
     const interval = setInterval(() => {
@@ -80,6 +80,12 @@ export default function Home() {
                 </motion.p>
               </AnimatePresence>
             </motion.div>
+            <motion.p
+              className={styles.heroTagline}
+              variants={itemVariant}
+            >
+              An autonomous flight stack powered by <strong>VaiOS</strong> — our sovereign robotics runtime.
+            </motion.p>
             <motion.div className={styles.ctaGroup} variants={itemVariant}>
               <Link href="/docs" className={styles.primaryBtn}>What We Do</Link>
               <Link href="/contact" className={styles.secondaryBtn}>Join the Mission</Link>
@@ -94,7 +100,7 @@ export default function Home() {
             <motion.div className={styles.founderQuote} {...fadeInUp}>
               <span className={styles.quoteAccent}>&ldquo;</span>
               <blockquote className={styles.quoteText}>
-                We are not building another autopilot. We are building the foundation — a sovereign, silicon-native intelligence that belongs entirely to its operator. No black boxes. No foreign dependencies. Just pure, auditable control.
+                We are not building another autopilot. We are building the foundation — VaiOS, a sovereign, silicon-native runtime that belongs entirely to its operator. No black boxes. No foreign dependencies. Just pure, auditable control.
               </blockquote>
               <div className={styles.founderAttrib}>
                 <Image src="/images/nipun.jpeg" alt="Nipun Singh" width={72} height={72} className={styles.founderAvatar} />
@@ -109,10 +115,10 @@ export default function Home() {
               <div className={styles.carouselTrack}>
                 {[1, 2].map((group) => (
                   <div key={group} className={styles.carouselGroup}>
-                    <Image src="/logos/dpiit.png" alt="DPIIT" width={1969} height={655} style={{ width: 'auto' }} className={styles.institutionLogo} />
-                    <Image src="/logos/i3c.png" alt="I3C" width={512} height={512} style={{ width: 'auto' }} className={styles.institutionLogo} />
-                    <Image src="/logos/msme.png" alt="MSME" width={367} height={137} style={{ width: 'auto' }} className={styles.institutionLogo} />
-                    <Image src="/logos/startup_up.png" alt="Startup UP" width={200} height={200} style={{ width: 'auto' }} className={`${styles.institutionLogo} ${styles.startupUpLogo}`} />
+                    <Image src="/logos/dpiit.png" alt="DPIIT" width={1969} height={655} className={styles.institutionLogo} />
+                    <Image src="/logos/i3c.png" alt="I3C" width={512} height={512} className={styles.institutionLogo} />
+                    <Image src="/logos/msme.png" alt="MSME" width={367} height={137} className={styles.institutionLogo} />
+                    <Image src="/logos/startup_up.png" alt="Startup UP" width={200} height={200} className={`${styles.institutionLogo} ${styles.startupUpLogo}`} />
                   </div>
                 ))}
               </div>
@@ -126,7 +132,7 @@ export default function Home() {
             <div className={styles.visionHeader}>
               <motion.h2 className={styles.visionTitle} {...fadeInUp}>Our Focus.</motion.h2>
               <motion.p className={styles.visionDescription} {...fadeInUp} transition={{ delay: 0.2, duration: 0.8 }}>
-                We are redefining the boundaries of flight through three core pillars: human-centric autonomy, collaborative swarm intelligence, and a totally sovereign software stack. Our mission is to eliminate black boxes and foreign dependencies, ensuring total control for every mission.
+                Everything we fly runs on VaiOS — a sovereign robotics runtime we build from the silicon up. Our focus is the foundation: own every layer, hold it to hard real time, and prove it on UAVs before it grows further.
               </motion.p>
             </div>
             <div className={styles.visionGrid}>
@@ -171,7 +177,7 @@ export default function Home() {
                   </div>
                   <div className={styles.cardContent}>
                     <h4>Developers</h4>
-                    <p>Contribute to and improve core modules like NavHAL and VAIOS. Leverage our sovereign stack to build your own high-performance projects.</p>
+                    <p>Contribute to the core layers of VaiOS — from NavHAL up. Build on a sovereign stack you can read, audit, and extend down to the register.</p>
                   </div>
                 </motion.div>
                 <motion.div className={styles.joinCard} {...fadeInUp} transition={{ delay: 0.1, duration: 0.8 }}>
@@ -206,7 +212,7 @@ export default function Home() {
               <h2>The Future of Autonomy is <span className={`${styles.textAccent}`}>Here.</span></h2>
               <div className={styles.ctaGroupLarge}>
                 <Link href="/contact" className={styles.primaryBtnLarge}>Start Your Mission</Link>
-                <Link href="/blogs" className={styles.secondaryTextBtn}>Explore our Stack &rarr;</Link>
+                <Link href="/technology" className={styles.secondaryTextBtn}>Explore our Stack &rarr;</Link>
               </div>
             </motion.div>
           </div>

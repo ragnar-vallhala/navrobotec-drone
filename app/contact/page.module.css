@@ -20,10 +20,10 @@
 }
 
 .infoCard {
-  background: var(--color-white);
+  background: var(--surface);
   padding: 2rem;
   border-radius: 16px;
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   box-shadow: var(--shadow-card);
   transition: all 0.3s ease;
 }
@@ -44,17 +44,17 @@
 
 .infoCard p {
   font-size: 1.2rem;
-  color: var(--color-dark);
+  color: var(--color-bone);
   font-weight: 700;
   margin: 0;
   overflow-wrap: break-word; /* break long tokens like the email address */
 }
 
 .formColumn {
-  background: var(--color-white);
+  background: var(--surface);
   padding: 3rem;
   border-radius: 24px;
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   box-shadow: var(--shadow-card);
   min-width: 0; /* allow grid item to shrink below content width */
 }
@@ -96,11 +96,18 @@
   min-width: 0;
   padding: 1rem 1.25rem;
   border-radius: 12px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  background: var(--color-off-white);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--color-bone);
   font-family: inherit;
   font-size: 1rem;
   transition: all 0.2s ease;
+}
+
+.formGroup input::placeholder,
+.formGroup textarea::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.7;
 }
 
 .formGroup textarea {
@@ -111,13 +118,13 @@
 .formGroup textarea:focus {
   outline: none;
   border-color: var(--color-accent);
-  background: var(--color-white);
-  box-shadow: 0 0 0 4px rgba(233, 69, 96, 0.1);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 0 0 4px rgba(255, 176, 0, 0.12);
 }
 
 .submitButton {
-  background: var(--color-dark);
-  color: var(--color-white);
+  background: var(--color-accent);
+  color: var(--color-dark);
   padding: 1.25rem;
   border-radius: 12px;
   border: none;
@@ -129,9 +136,9 @@
 }
 
 .submitButton:hover {
-  background: var(--color-accent);
+  filter: brightness(1.08);
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(233, 69, 96, 0.2);
+  box-shadow: 0 10px 24px rgba(255, 176, 0, 0.25);
 }
 
 .submitButton:disabled {
@@ -168,8 +175,8 @@
 
 .secondaryButton {
   background: transparent;
-  border: 2px solid var(--color-dark);
-  color: var(--color-dark);
+  border: 2px solid var(--color-bone);
+  color: var(--color-bone);
   padding: 1rem 2rem;
   border-radius: 12px;
   font-weight: 700;
@@ -178,8 +185,8 @@
 }
 
 .secondaryButton:hover {
-  background: var(--color-dark);
-  color: var(--color-white);
+  background: var(--color-bone);
+  color: var(--color-dark);
 }
 
 .highlightLink {
@@ -230,6 +237,6 @@
   border-radius: 24px;
   overflow: hidden;
   box-shadow: var(--shadow-card);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  background-color: var(--color-white);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background-color: var(--surface);
 }

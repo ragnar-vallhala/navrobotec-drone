@@ -15,20 +15,20 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
 }) => (
   <div style={{
     fontFamily: 'sans-serif',
-    color: '#1a1a2e',
+    color: '#0B0E14',
     lineHeight: '1.6',
     maxWidth: '600px',
     margin: '0 auto',
     padding: '20px',
-    border: '1px solid #e94560',
+    border: '1px solid #D97706',
     borderRadius: '12px'
   }}>
-    <h2 style={{ color: '#e94560', borderBottom: '2px solid #e94560', paddingBottom: '10px' }}>New Mission Inquiry</h2>
+    <h2 style={{ color: '#D97706', borderBottom: '2px solid #D97706', paddingBottom: '10px' }}>New Mission Inquiry</h2>
     <p>You have received a new message from the Navrobotec contact form.</p>
     
     <div style={{ background: '#f9f9f9', padding: '15px', borderRadius: '8px', margin: '20px 0' }}>
       <p style={{ margin: '5px 0' }}><strong>Name:</strong> {firstName} {lastName}</p>
-      <p style={{ margin: '5px 0' }}><strong>Email:</strong> <a href={`mailto:${email}`} style={{ color: '#e94560' }}>{email}</a></p>
+      <p style={{ margin: '5px 0' }}><strong>Email:</strong> <a href={`mailto:${email}`} style={{ color: '#D97706' }}>{email}</a></p>
     </div>
 
     <div style={{ background: '#fff', border: '1px solid #ddd', padding: '15px', borderRadius: '8px' }}>

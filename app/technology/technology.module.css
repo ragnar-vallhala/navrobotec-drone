@@ -1,0 +1,170 @@
+/* ---- Instrument readout band (headline numbers as one strip, not boxes) ---- */
+.readout {
+  display: flex;
+  background: var(--surface);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-top: 3rem;
+}
+
+.readoutItem {
+  flex: 1;
+  padding: 1.85rem 1rem;
+  text-align: center;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.readoutItem:last-child {
+  border-right: none;
+}
+
+.readoutNum {
+  font-family: var(--font-data);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  letter-spacing: -0.5px;
+  margin-bottom: 0.5rem;
+  line-height: 1.1;
+}
+
+.readoutLabel {
+  font-family: var(--font-data);
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.3px;
+  line-height: 1.5;
+}
+
+/* ---- The layered stack (the page's spine) ---- */
+.stack {
+  display: flex;
+  flex-direction: column;
+  margin-top: 3rem;
+}
+
+.layer {
+  position: relative;
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 2.5rem;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-left: 3px solid var(--color-accent);
+  border-radius: 14px;
+  padding: 2rem 2.25rem;
+  transition: transform 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+}
+
+.layer:hover {
+  transform: translateX(6px);
+  border-color: rgba(255, 176, 0, 0.45);
+  background: var(--surface-elevated);
+}
+
+.layerTop {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.layerIcon {
+  width: 46px;
+  height: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: rgba(255, 176, 0, 0.08);
+  border: 1px solid rgba(255, 176, 0, 0.22);
+  color: var(--color-accent);
+  flex-shrink: 0;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.layer:hover .layerIcon {
+  background: rgba(255, 176, 0, 0.16);
+  border-color: rgba(255, 176, 0, 0.4);
+}
+
+.layerIndex {
+  font-family: var(--font-data);
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  opacity: 0.6;
+}
+
+.layerName {
+  font-family: var(--font-sans);
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--color-bone);
+  letter-spacing: -0.5px;
+  line-height: 1;
+}
+
+.layerRole {
+  font-family: var(--font-data);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--color-accent);
+  margin-top: 0.6rem;
+}
+
+.layerBlurb {
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.1rem;
+}
+
+.chip {
+  font-family: var(--font-data);
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  padding: 0.32rem 0.8rem;
+  white-space: nowrap;
+}
+
+/* Vertical connector between layers — reads the four bands as one stack */
+.connector {
+  width: 2px;
+  height: 1.5rem;
+  margin: 0 0 0 1.1rem;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 176, 0, 0.5),
+    rgba(255, 176, 0, 0.06)
+  );
+}
+
+@media (max-width: 768px) {
+  .readout {
+    flex-wrap: wrap;
+  }
+  .readoutItem {
+    flex: 1 1 50%;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .layer {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    padding: 1.6rem 1.5rem;
+  }
+  .connector {
+    margin-left: 1rem;
+  }
+}

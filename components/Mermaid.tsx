@@ -48,11 +48,11 @@ export default function Mermaid({ container }: { container: string }) {
                     secondaryColor: '#f9f9f9',
                     tertiaryColor: '#f9f9f9',
                     primaryBorderColor: 'rgba(0,0,0,0.15)',
-                    lineColor: '#e94560',
-                    primaryTextColor: '#1a1a2e',
-                    secondaryTextColor: '#1a1a2e',
-                    textColor: '#1a1a2e',
-                    titleColor: '#1a1a2e',
+                    lineColor: '#D97706',
+                    primaryTextColor: '#0B0E14',
+                    secondaryTextColor: '#0B0E14',
+                    textColor: '#0B0E14',
+                    titleColor: '#0B0E14',
                 },
             });
 
