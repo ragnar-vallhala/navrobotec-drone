@@ -3,6 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { Shield, Activity, Rocket } from 'lucide-react';
 import styles from '../shared.module.css';
 
 const fadeInUp = {
@@ -14,22 +15,25 @@ const fadeInUp = {
 
 const visionNarrative = [
   {
-    kicker: "Pillar One: True Autonomy",
-    headline: "Eliminating the Pilot.",
-    description: "We are moving past the era of remote piloting. True autonomy means a drone can exist in a human environment, interpret audio-visual cues, and execute complex assignments independently.",
-    why: "Human intervention is the primary point of failure and the greatest bottleneck in scaling aerial operations. We need machines that can think and act, not just follow commands."
+    kicker: "Pillar One: Sovereign Foundation",
+    icon: Shield,
+    headline: "Built From the Silicon Up.",
+    description: "Most flight software is stacked on borrowed frameworks nobody fully controls. We took the opposite path and built our own: NavHAL speaking directly to the hardware, VaiOS as the operating system above it, and VAYU flying on top. Every layer is ours.",
+    why: "If you don't own the foundation, you don't own the mission. Owning every layer means there are no black boxes and no foreign dependencies — a stack you can read, audit, and trust down to the last register."
   },
   {
-    kicker: "Pillar Two: Swarm Coordination",
-    headline: "Unified Intelligence.",
-    description: "Our vision is a sky where drones aren't just flying together, but thinking together. Through peer-to-peer communication and collaborative localization, swarms can solve problems that a single agent never could.",
-    why: "The challenges of the future—from rapid search and rescue to complex industrial inspection—demand the redundancy and efficiency of a distributed machine mind."
+    kicker: "Pillar Two: Real-Time Reliability",
+    icon: Activity,
+    headline: "A Core That Never Misses.",
+    description: "A flight controller is judged in microseconds. VaiOS runs the control loop on a fixed schedule, every cycle, without exception — and we have benchmarked it head-to-head against FreeRTOS and Zephyr on the same hardware to prove it. VAYU is that reliability in the air.",
+    why: "An aircraft does not get a second chance. A system that is usually fast but occasionally stalls will still drop a drone, so we engineer for the worst case, not the average."
   },
   {
-    kicker: "Pillar Three: Sovereign Software",
-    headline: "Zero-Dependency Reliability.",
-    description: "In mission-critical environments, a single third-party weak link is an unacceptable risk. We reject 'black box' frameworks in favor of a totally sovereign, high-grade tested software stack.",
-    why: "True security isn't just about code; it's about owning the foundation. If you don't own every line of code, you don't own the mission."
+    kicker: "Pillar Three: Built to Grow",
+    icon: Rocket,
+    headline: "From One Drone to Many.",
+    description: "Autonomy and swarms aren't features bolted on at the end — they're how VaiOS is designed to scale. The same runtime that flies one aircraft is built to coordinate many, and to reach beyond drones as it matures. UAVs come first because that is where we are proving it.",
+    why: "We are building a foundation, not a single product. Getting the hard real-time core right on a drone is what earns the right to carry it further."
   }
 ];
 
@@ -43,15 +47,34 @@ export default function Vision() {
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8rem', marginTop: '4rem', paddingBottom: '8rem' }}>
-                    {visionNarrative.map((item, index) => (
+                    {visionNarrative.map((item, index) => {
+                        const Icon = item.icon;
+                        return (
                         <section key={index} style={{ maxWidth: '850px' }}>
-                            <motion.span 
+                            <motion.div
                                 {...fadeInUp}
-                                style={{ 
-                                    color: 'var(--color-accent)', 
-                                    fontFamily: 'var(--font-mono)', 
-                                    fontSize: '0.9rem', 
-                                    letterSpacing: '0.2em', 
+                                style={{
+                                    width: 46,
+                                    height: 46,
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    borderRadius: 12,
+                                    background: 'rgba(255, 176, 0, 0.08)',
+                                    border: '1px solid rgba(255, 176, 0, 0.22)',
+                                    color: 'var(--color-accent)',
+                                    marginBottom: '1.5rem'
+                                }}
+                            >
+                                <Icon size={22} strokeWidth={1.75} />
+                            </motion.div>
+                            <motion.span
+                                {...fadeInUp}
+                                style={{
+                                    color: 'var(--color-accent)',
+                                    fontFamily: 'var(--font-data)',
+                                    fontSize: '0.82rem',
+                                    letterSpacing: '0.2em',
                                     textTransform: 'uppercase',
                                     display: 'block',
                                     marginBottom: '1rem'
@@ -77,17 +100,17 @@ export default function Vision() {
                                 {...fadeInUp} 
                                 transition={{ delay: 0.3 }}
                                 style={{ 
-                                    background: 'rgba(233, 69, 96, 0.05)', 
+                                    background: 'rgba(217, 119, 6, 0.05)', 
                                     padding: '2rem', 
                                     borderRadius: '16px', 
                                     borderLeft: '4px solid var(--color-accent)' 
                                 }}
                             >
-                                <p style={{ 
-                                    fontFamily: 'var(--font-mono)', 
-                                    fontSize: '0.85rem', 
-                                    color: 'var(--color-accent)', 
-                                    textTransform: 'uppercase', 
+                                <p style={{
+                                    fontFamily: 'var(--font-data)',
+                                    fontSize: '0.78rem',
+                                    color: 'var(--color-accent)',
+                                    textTransform: 'uppercase',
                                     letterSpacing: '0.1em',
                                     marginBottom: '0.5rem'
                                 }}>
@@ -98,7 +121,8 @@ export default function Vision() {
                                 </p>
                             </motion.div>
                         </section>
-                    ))}
+                        );
+                    })}
                 </div>
 
                 <motion.div 
@@ -116,10 +140,10 @@ export default function Vision() {
                 >
                     <h3 style={{ fontSize: '2.5rem', marginBottom: '1.5rem', fontWeight: 800 }}>Deep Dive into Our Technology.</h3>
                     <p style={{ color: 'var(--text-secondary)', marginBottom: '3rem', fontSize: '1.2rem', maxWidth: '700px', margin: '0 auto 3rem' }}>
-                        Want to learn more about the engineering and philosophy behind Vayu? 
-                        Explore our technical deep dives and project updates on our blog.
+                        Want to see how the stack fits together — NavHAL, VaiOS, and VAYU?
+                        Walk through the architecture, or read the engineering journal on our blog.
                     </p>
-                    <Link href="/blogs" className={styles.ctaBtn}>Read Our Blogs</Link>
+                    <Link href="/technology" className={styles.ctaBtn}>Explore the Stack</Link>
                 </motion.div>
             </div>
         </div>

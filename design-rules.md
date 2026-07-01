@@ -2,17 +2,23 @@
 
 ## Color Palette
 
-| Token              | Hex       | Usage                                               |
-| ------------------ | --------- | --------------------------------------------------- |
-| Primary Background | `#ffffff` | Page body, section backgrounds                      |
-| Dark Primary       | `#1a1a2e` | Navbar, footer, darkest UI surfaces                 |
-| Dark Secondary     | `#16213e` | Sub-surfaces, secondary dark panels                 |
-| Dark Elevated      | `#0f3460` | Cards, elevated elements on dark bg                 |
-| Body Text          | `#1a1a2e` | All body text on light backgrounds                  |
-| Accent Pink        | `#e94560` | Hover states, highlights, CTAs, decorative emphasis |
-| Accent Blue        | `#16213e` | Secondary accents, link underlines                  |
+The site is **dark throughout** — an avionics / instrument aesthetic: near-black
+charcoal surfaces, bone text, a single signal-amber accent.
 
-> White body text (`#ffffff`) and peach (`#f8cba6`) secondary text are reserved **exclusively** for elements with a dark background (navbar, footer).
+| Token             | Hex       | Usage                                                    |
+| ----------------- | --------- | -------------------------------------------------------- |
+| Base / Page BG    | `#0B0E14` | All pages — charcoal near-black                          |
+| Surface           | `#12171F` | Cards, panels (`--surface`)                              |
+| Surface Elevated  | `#1C2533` | Hover / raised surfaces (`--surface-elevated`)           |
+| Primary Text Bone | `#ECE7DE` | Body + headings on dark (`--text-primary`)               |
+| Secondary Text    | `#9E988C` | Muted body, captions (`--text-secondary`)                |
+| Warm Grey         | `#B9B2A6` | Tertiary text, hero secondary (`--color-peach`)          |
+| Signal Amber      | `#FFB000` | Accent: CTAs, highlights, data, labels (`--color-accent`)|
+| Deep Amber        | `#D97706` | Amber on light diagram panels (`--color-accent-deep`)    |
+
+> **Bone panels (`#ECE7DE`)** are reserved for figure/diagram backgrounds so black
+> line-art stays legible on the dark page. **Dark text (`#0B0E14`)** is used only on
+> amber or bone fills (buttons, chips).
 
 ---
 
@@ -27,6 +33,7 @@ a family name.
 | `--font-sans`  | Inter (`--font-inter`)     | All `h1`–`h6` headings, hero titles, primary UI text   |
 | `--font-mono`  | Poppins (`--font-poppins`) | All body copy — `body`, `p`, `span`, subtext, captions |
 | `--font-serif` | Georgia (system serif)     | Editorial section/blog titles for contrast             |
+| `--font-data`  | JetBrains Mono (`--font-jetbrains-mono`) | Technical labels, stat numbers, nav links, kickers — the "instrument" voice |
 
 ### Headings — Inter
 
@@ -50,11 +57,16 @@ a family name.
 
 All hero text uses `var(--font-sans)` (Inter).
 
-| Class                             | Size     | Weight | Letter-spacing |
-| --------------------------------- | -------- | ------ | -------------- |
-| `.titleAccent` (VAYU / SKIES)     | `7rem`   | `800`  | `0.5em`        |
-| `.titleSecondary` (MASTERING THE) | `3rem`   | `300`  | `0.3em`        |
-| `.subtext` (cycling tagline)      | `1.5rem` | `600`  | `2px`          |
+| Class                             | Size      | Weight | Letter-spacing |
+| --------------------------------- | --------- | ------ | -------------- |
+| `.titleAccent` (VAYU / SKIES)     | `7rem`    | `800`  | `0.5em`        |
+| `.titleSecondary` (MASTERING THE) | `3rem`    | `300`  | `0.3em`        |
+| `.subtext` (cycling tagline)      | `1.5rem`  | `600`  | `2px`          |
+| `.heroTagline` (VaiOS sub-line)   | `0.95rem` | `400`  | `0.5px`        |
+
+- `.heroTagline` uses `var(--font-mono)` in peach (`#f8cba6`) with the product
+  name (`VaiOS`) emphasized in white; it sits between the cycling subtext and the
+  hero CTA group.
 
 - All hero text is **centered** over the video background
 - `.titleAccent` has `text-shadow: 0 4px 20px rgba(0,0,0,0.4)` for legibility over video

@@ -6,7 +6,7 @@ import styles from "./DocsPage.module.css";
 
 /**
  * Generic placeholder for a tutorial book whose content hasn't been written
- * yet. Used by the per-layer book index pages (NavHAL, VAIOS, Vayu).
+ * yet. Used by the per-layer book index pages (NavHAL, VaiOS, Vayu).
  */
 export default function BookPlaceholder({ slug }: { slug: string }) {
   const book = getBook(slug);

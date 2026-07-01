@@ -18,11 +18,35 @@ export default function InvestorOnboarding() {
                 <div className={styles.headerArea}>
                     <motion.h1 {...fadeInUp}>Partnership <span className={styles.gradientText}>Inquiry.</span></motion.h1>
                     <motion.p {...fadeInUp} transition={{ delay: 0.2 }}>
-                        Please complete the official onboarding form below.
+                        Backing a sovereign foundation for autonomous flight.
                     </motion.p>
                 </div>
 
-                <motion.div 
+                <motion.div
+                    {...fadeInUp}
+                    transition={{ delay: 0.3 }}
+                    style={{ maxWidth: '850px', margin: '0 auto 4rem', display: 'flex', flexDirection: 'column', gap: '2rem' }}
+                >
+                    <p style={{ fontSize: '1.35rem', lineHeight: 1.6, color: 'var(--text-primary)' }}>
+                        Most drone companies build on borrowed software. We build the foundation itself —
+                        <strong> VaiOS</strong>, a sovereign robotics runtime engineered from the silicon up.
+                    </p>
+                    <p style={{ fontSize: '1.15rem', lineHeight: 1.7, color: 'var(--text-secondary)' }}>
+                        Our differentiation is depth. We own every layer of the flight stack — NavHAL at the
+                        hardware, VaiOS as the operating system, and VAYU in the air — with no foreign
+                        dependencies in the flight path. UAVs are our beachhead: the place we prove the
+                        real-time core before the same runtime reaches further into robotics. The work is
+                        already recognized by DPIIT, MSME, and the Startup UP initiative.
+                    </p>
+                    <p style={{
+                        fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--color-accent)',
+                        textTransform: 'uppercase', letterSpacing: '0.1em'
+                    }}>
+                        Tell us where you fit — complete the onboarding form below.
+                    </p>
+                </motion.div>
+
+                <motion.div
                     className={contactStyles.iframeContainer}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}

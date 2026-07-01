@@ -101,6 +101,22 @@
   text-transform: uppercase;
 }
 
+.heroTagline {
+  font-family: var(--font-data);
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--color-peach);
+  letter-spacing: 0.5px;
+  line-height: 1.6;
+  max-width: 560px;
+  margin: 0 auto 2.5rem auto;
+}
+
+.heroTagline strong {
+  color: var(--color-white);
+  font-weight: 700;
+}
+
 /* =========================================
    MISSION SECTION
    ========================================= */
@@ -115,10 +131,10 @@
   max-width: 900px;
   margin: 0 auto 10rem auto;
   text-align: center;
-  background: var(--color-white);
+  background: var(--surface);
   padding: 5rem 4rem;
   border-radius: 24px;
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
 }
 
@@ -131,8 +147,8 @@
 }
 
 .recognizedBy {
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
+  font-family: var(--font-data);
+  font-size: 0.8rem;
   text-transform: uppercase;
   color: var(--text-secondary);
   letter-spacing: 2px;
@@ -157,18 +173,25 @@
 }
 
 .institutionLogo {
-  height: 60px;
-  width: auto;
-  filter: grayscale(1) opacity(0.6);
+  /* Uniform chip: fixed box, logo letterboxed inside via object-fit */
+  width: 160px;
+  height: 72px;
+  /* Real logos on a light chip so colored/photographic marks stay legible on dark */
+  background: #ffffff;
+  padding: 0.7rem 1.1rem;
+  border-radius: 10px;
+  object-fit: contain;
+  opacity: 0.9;
   transition: all 0.4s ease;
 }
 
 .startupUpLogo {
-  height: 85px; /* Scaled up to match visual weight */
+  /* Square mark — a touch more vertical room inside the same-size chip */
+  padding: 0.45rem 1.1rem;
 }
 
 .institutionLogo:hover {
-  filter: grayscale(0) opacity(1);
+  opacity: 1;
   transform: scale(1.05);
 }
 
@@ -239,7 +262,7 @@
   object-position: top;
   border: 2px solid var(--color-accent);
   margin-bottom: 0.8rem;
-  box-shadow: 0 4px 16px rgba(233, 69, 96, 0.25);
+  box-shadow: 0 4px 16px rgba(217, 119, 6, 0.25);
 }
 
 .founderName {
@@ -335,8 +358,8 @@
   inset: 0;
   background: linear-gradient(
     to top,
-    rgba(26, 26, 46, 0.95) 0%,
-    rgba(26, 26, 46, 0.2) 60%,
+    rgba(11, 14, 20, 0.95) 0%,
+    rgba(11, 14, 20, 0.2) 60%,
     transparent 100%
   );
   display: flex;
@@ -351,8 +374,8 @@
   padding: 3rem;
   background: linear-gradient(
     to top,
-    rgba(26, 26, 46, 0.98) 0%,
-    rgba(26, 26, 46, 0.1) 80%,
+    rgba(11, 14, 20, 0.98) 0%,
+    rgba(11, 14, 20, 0.1) 80%,
     transparent 100%
   );
 }
@@ -530,8 +553,8 @@
 }
 
 .stackLayer {
-  background: var(--color-white);
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  background: var(--surface);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   padding: 0.75rem 2.5rem;
   border-radius: 12px;
   display: flex;
@@ -556,7 +579,7 @@
 
 .stackIcon {
   color: var(--color-accent);
-  background: rgba(233, 69, 96, 0.05);
+  background: rgba(217, 119, 6, 0.05);
   padding: 0.75rem;
   border-radius: 10px;
   display: flex;
@@ -572,7 +595,7 @@
 .stackInfo h3 {
   font-size: 1.35rem;
   margin-bottom: 0.15rem;
-  color: var(--color-dark);
+  color: var(--color-bone);
 }
 
 .stackInfo p {
@@ -587,7 +610,7 @@
   background: linear-gradient(
     to bottom,
     var(--color-accent) 0%,
-    rgba(233, 69, 96, 0.1) 100%
+    rgba(217, 119, 6, 0.1) 100%
   );
   margin: -2px 0;
   z-index: 1;
@@ -622,9 +645,9 @@
 
 .mutedTextAccent {
   color: var(--color-accent);
-  font-family: var(--font-sans);
-  font-weight: 700;
-  font-size: 0.9rem;
+  font-family: var(--font-data);
+  font-weight: 600;
+  font-size: 0.82rem;
   text-transform: uppercase;
   letter-spacing: 3px;
 }
@@ -642,10 +665,10 @@
 }
 
 .joinCard {
-  background: var(--color-white);
+  background: var(--surface);
   padding: 3.5rem 2.5rem;
   border-radius: 24px;
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   text-align: left;
   transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
@@ -668,7 +691,7 @@
 
 .joinCard:hover {
   transform: translateY(-12px) scale(1.02);
-  border-color: rgba(233, 69, 96, 0.2);
+  border-color: rgba(217, 119, 6, 0.2);
   box-shadow: 0 30px 60px rgba(0, 0, 0, 0.1);
 }
 
@@ -682,7 +705,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(233, 69, 96, 0.05);
+  background: rgba(217, 119, 6, 0.05);
   border-radius: 16px;
   position: relative;
   z-index: 1;
@@ -745,8 +768,8 @@
 
 .primaryBtnLarge:hover {
   background: var(--color-accent);
-  color: var(--color-white);
-  box-shadow: 0 10px 30px rgba(233, 69, 96, 0.3);
+  color: var(--color-dark);
+  box-shadow: 0 10px 30px rgba(255, 176, 0, 0.35);
 }
 
 @media (max-width: 900px) {
@@ -779,12 +802,12 @@
 
 .primaryBtn::before {
   content: "[ ";
-  color: var(--color-dark); /* Changed to black */
+  color: var(--color-peach); /* light brackets on dark hero */
   opacity: 0.5;
 }
 .primaryBtn::after {
   content: " ]";
-  color: var(--color-dark); /* Changed to black */
+  color: var(--color-peach); /* light brackets on dark hero */
   opacity: 0.5;
 }
 .primaryBtn:hover::before,
@@ -1060,10 +1083,11 @@
   }
 
   .institutionLogo {
-    height: 40px;
+    width: 128px;
+    height: 60px;
   }
 
   .startupUpLogo {
-    height: 60px;
+    padding: 0.4rem 0.9rem;
   }
 }
