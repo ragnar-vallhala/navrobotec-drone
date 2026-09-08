@@ -113,14 +113,29 @@ export default function Home() {
             lazy-loads it and the page opens on an empty box, which is the
             fault the old video hero had. */}
         <div className={styles.stage} aria-hidden>
-          <Image
-            src="/images/vayu-hero.jpg"
-            alt=""
-            fill
-            priority
-            sizes="100vw"
-            className={styles.heroImage}
-          />
+          {/* Art direction, not a resize: the landscape and portrait renders
+              are different compositions, not two sizes of one. A phone gets
+              the frame that was shot for a phone rather than a crop of the
+              wide one, which is what the aircraft's own reflection needs.
+
+              A plain <picture> rather than next/image: `media` on <source> is
+              how a browser picks one file and downloads only that. next/image
+              serves widths of a single source, which is the other problem.
+              Both files are already sized and re-encoded by hand, so its
+              optimiser has nothing left to do here. */}
+          <picture>
+            <source
+              media="(orientation: portrait) and (max-width: 60rem)"
+              srcSet="/images/vayu-hero-portrait.jpg"
+            />
+            <img
+              src="/images/vayu-hero.jpg"
+              alt=""
+              fetchPriority="high"
+              decoding="async"
+              className={styles.heroImage}
+            />
+          </picture>
           {/* Only at the foot, so the frame dissolves into the band instead of
               ending on a hard edge. */}
           <div className={styles.fade} />
@@ -139,6 +154,11 @@ export default function Home() {
           <Link href="/contact" className="btn btn-ghost">
             Join the mission
           </Link>
+        </div>
+
+        <div className={`shell ${styles.scrollCue}`} aria-hidden>
+          <span className="label">Scroll</span>
+          <span className={styles.cueLine} />
         </div>
 
         {/* The page still needs one, and the frame carries no text. Announced
