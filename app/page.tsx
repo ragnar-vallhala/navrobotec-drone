@@ -242,8 +242,14 @@ export default function Home() {
         </ScrollSteps>
       </section>
 
-      {/* ---------------- the claim ---------------- */}
-      <section className={`section tinted ${styles.quoteSection}`}>
+      {/* ---------------- the claim ----------------
+          Where the page comes up out of the descent, so it is the brightest
+          ground on the page rather than the palest — it was tinted, arriving
+          from near-black as a wash, and the recognition strip below it was
+          near enough the same value that the two read as one grey slab. The
+          tint has moved down to that strip, which is the one meant to
+          recede. */}
+      <section className="section">
         <div className="shell">
           <blockquote className={styles.quote}>
             <p className={styles.quoteText}>
@@ -252,27 +258,36 @@ export default function Home() {
               belongs entirely to its operator. No black boxes. No foreign
               dependencies. Just pure, auditable control.&rdquo;
             </p>
+            {/* The rule runs the whole measure and the attribution sits
+                under it: it gives the block a bottom edge, and it gives the
+                right half of the frame something to hold. */}
             <footer className={styles.attrib}>
-              <Image
-                src="/images/nipun.jpeg"
-                alt=""
-                width={56}
-                height={56}
-                className={styles.avatar}
-              />
-              <span>
-                <span className={styles.attribName}>Nipun Singh</span>
-                <span className={`label ${styles.attribRole}`}>
-                  Founder &amp; Director
+              <span className={styles.attribWho}>
+                <Image
+                  src="/images/nipun.jpeg"
+                  alt=""
+                  width={56}
+                  height={56}
+                  className={styles.avatar}
+                />
+                <span>
+                  <span className={styles.attribName}>Nipun Singh</span>
+                  <span className={`label ${styles.attribRole}`}>
+                    Founder &amp; Director
+                  </span>
                 </span>
               </span>
+              <Link href="/team" className={styles.attribLink}>
+                Meet the team
+                <span aria-hidden>→</span>
+              </Link>
             </footer>
           </blockquote>
         </div>
       </section>
 
       {/* ---------------- recognition ---------------- */}
-      <section className="section-tight rule">
+      <section className="section-tight tinted rule">
         <div className="shell">
           <p className={`label ${styles.recognitionLabel}`}>
             Recognised by
