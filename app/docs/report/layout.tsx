@@ -11,9 +11,9 @@ export default function ReportLayout({
   return (
     <>
       <DocsNav chapters={chapters} />
-      <main className={styles.docsContent}>
+      <div className={styles.docsContent}>
         <div className={styles.innerContent}>{children}</div>
-      </main>
+      </div>
     </>
   );
 }

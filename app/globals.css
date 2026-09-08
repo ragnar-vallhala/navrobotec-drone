@@ -287,6 +287,12 @@ a { color: inherit; text-decoration: none; }
 .btn-ghost { border-color: var(--line-strong); color: var(--ink); }
 .btn-ghost:hover { border-color: var(--signal); color: var(--signal); }
 
+/* In dark mode --signal becomes the bright mint, and white on mint is close to
+   unreadable. The label takes the dark ground instead — the same swap the
+   always-dark bands below already make. */
+:root[data-theme="dark"] .btn-primary { color: var(--band); }
+:root[data-theme="dark"] .btn-primary:hover { background: #5ceab5; }
+
 /* On a dark band the same two buttons need the other green and the other
    ground; without this the ghost button is invisible and the primary one is
    too dark to read. */

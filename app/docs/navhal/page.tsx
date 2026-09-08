@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { ArrowRight, Clock } from "lucide-react";
+import { ArrowLeft, ArrowRight, Clock } from "lucide-react";
 import { getBook, getTutorials } from "@/lib/docs";
 import styles from "../DocsPage.module.css";
 
@@ -9,7 +9,7 @@ const BOOK_SLUG = "navhal";
 export function generateMetadata(): Metadata {
   const book = getBook(BOOK_SLUG);
   return {
-    title: `${book?.title ?? "NavHAL Guide"} | NAVRobotec`,
+    title: `${book?.title ?? "NavHAL Guide"}`,
     description:
       book?.description ??
       "Tutorial-style walkthrough of the NavHAL hardware abstraction layer.",
@@ -24,7 +24,7 @@ export default function NavhalIndex() {
     <article className={styles.article}>
       <header className={styles.header}>
         <Link href="/docs" className={styles.label}>
-          ← Documentation
+          <ArrowLeft size={12} /> Documentation
         </Link>
         <h1 className={styles.title}>{book?.title ?? "NavHAL Guide"}</h1>
       </header>

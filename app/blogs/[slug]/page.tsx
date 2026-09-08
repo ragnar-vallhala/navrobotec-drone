@@ -1,15 +1,13 @@
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
-import { marked } from 'marked';
+import { marked, type Tokens } from 'marked';
 import markedKatex from 'marked-katex-extension';
 import 'katex/dist/katex.min.css';
 import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, Clock, Calendar, User } from 'lucide-react';
 import styles from './blog.module.css';
-import sharedStyles from '../../shared.module.css';
 import Mermaid from '../../../components/Mermaid';
 import { getImageMeta } from '../../../lib/imageMeta';
 
@@ -26,7 +24,7 @@ marked.use(markedKatex({ throwOnError: false, nonStandard: true }));
 // renderer. Escape the source so it survives as text until mermaid reads it.
 marked.use({
     renderer: {
-        code(token: any) {
+        code(token: Tokens.Code) {
             const lang = (token.lang || '').trim().split(/\s+/)[0];
             if (lang === 'mermaid') {
                 const escaped = String(token.text)
@@ -35,11 +33,11 @@ marked.use({
                     .replace(/>/g, '&gt;');
                 return `<pre class="mermaid">${escaped}</pre>\n`;
             }
-            return false as any; // defer to marked's built-in code renderer
+            return false; // defer to marked's built-in code renderer
         },
         // Surface the image title as a visible <figcaption> — the data-heavy
         // posts lean on captions to explain each plot.
-        image(token: any) {
+        image(token: Tokens.Image) {
             const src = token.href || '';
             const alt = (token.text || '').replace(/"/g, '&quot;');
             const img = `<img src="${src}" alt="${alt}" loading="lazy" />`;
@@ -51,6 +49,14 @@ marked.use({
     },
 });
 
+/* The frontmatter carries "June 24, 2026" — fine to print, useless to a
+   machine. This gives <time> something a parser can read, and returns
+   undefined rather than a wrong date if it cannot. */
+function isoDate(value: string): string | undefined {
+    const d = new Date(value);
+    return Number.isNaN(d.getTime()) ? undefined : d.toISOString().slice(0, 10);
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
     try {
@@ -60,11 +66,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         const { data } = matter(fileContents);
 
         return {
-            title: `${data.title} | VAYU Blogs`,
+            title: `${data.title}`,
             description: data.excerpt || 'Engineering Journal from NAVRobotec',
         };
-    } catch (e) {
-        return { title: 'Blog Post' };
+    } catch {
+        return { title: 'Blog post' };
     }
 }
 
@@ -91,21 +97,16 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
         <article className={styles.articleWrapper}>
             <div className={styles.bodyContainer}>
                 <Link href="/blogs" className={styles.backLink}>
-                    <ArrowLeft size={14} /> Back to Journal
+                    <span aria-hidden>←</span> Engineering journal
                 </Link>
-                
-                <header style={{ marginBottom: '4rem' }}>
-                    <span className={styles.kicker}>
-                        Engineering Journal
-                    </span>
+
+                <header className={styles.header}>
                     <h1 className={styles.title}>{data.title}</h1>
-                    <div className={styles.meta}>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                            By {data.author || 'VAYU Team'}
-                        </span>
-                        <span>•</span>
-                        <span>{data.date}</span>
-                    </div>
+                    <p className={styles.meta}>
+                        <span>{data.author || 'VAYU Team'}</span>
+                        <span aria-hidden className={styles.dot}>·</span>
+                        <time dateTime={isoDate(String(data.date ?? ''))}>{data.date}</time>
+                    </p>
                 </header>
 
                 {data.coverImage && coverMeta && (
@@ -126,29 +127,30 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
                 
                 <div
                     id="blog-markdown"
-                    className={styles.markdownContent}
+                    className={styles.prose}
                     dangerouslySetInnerHTML={{ __html: htmlContent }}
-                    style={{ marginBottom: '6rem' }}
                 />
                 <Mermaid container="#blog-markdown" />
 
-                <div 
-                    style={{ 
-                        marginTop: '6rem', 
-                        padding: '5rem 2rem', 
-                        background: 'var(--bg-secondary)', 
-                        borderRadius: '24px', 
-                        textAlign: 'center',
-                        border: '1px solid rgba(0, 0, 0, 0.05)',
-                        marginBottom: '4rem'
-                    }}
-                >
-                    <h3 style={{ fontSize: '2.2rem', marginBottom: '1.5rem', fontWeight: 800, fontFamily: 'var(--font-serif)' }}>Build the Sovereign Future.</h3>
-                    <p style={{ color: 'var(--text-secondary)', marginBottom: '2.5rem', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto 2.5rem', lineHeight: 1.6, fontFamily: 'var(--font-sans)' }}>
-                        We are actively partnering with developers, researchers, and institutions to build out this intelligence layer. Ready to collaborate?
+                {/* The end of a post is a place to offer the next thing, not
+                    to shout. */}
+                <aside className={styles.after}>
+                    <p className="label label-signal">Next</p>
+                    <h2 className="h3">Build on it.</h2>
+                    <p className="body small">
+                        We are partnering with developers, researchers and
+                        institutions to build out this layer. The stack is open
+                        to read first.
                     </p>
-                    <Link href="/contact" className={sharedStyles.ctaBtn}>Join the Mission</Link>
-                </div>
+                    <div className={styles.afterActions}>
+                        <Link href="/docs" className="btn btn-primary">
+                            Read the docs
+                        </Link>
+                        <Link href="/blogs" className="btn btn-ghost">
+                            More from the journal
+                        </Link>
+                    </div>
+                </aside>
             </div>
         </article>
     );

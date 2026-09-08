@@ -22,7 +22,7 @@ export async function generateMetadata({
   const book = getBook(BOOK_SLUG);
   if (!tutorial) return {};
   return {
-    title: `${tutorial.title} — ${book?.title ?? "NavHAL Guide"} | NAVRobotec`,
+    title: `${tutorial.title} · ${book?.title ?? "NavHAL Guide"}`,
     description:
       tutorial.summary ??
       `${tutorial.title}, a NavHAL tutorial from NAVRobotec.`,

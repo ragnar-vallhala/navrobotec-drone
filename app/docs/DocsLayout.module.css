@@ -1,23 +1,44 @@
+/* The /docs shell.
+ *
+ * Two arrangements share this file:
+ *   • the hub, which is a full-width page with no sidebar, and
+ *   • a book, where a sticky contents rail sits beside the reading column.
+ *
+ * `--doc-top` is the one measurement everything vertical hangs off: the fixed
+ * header plus the reading bar under it. The sidebar sticks to it, headings
+ * scroll-margin to it, and the mobile drawer opens below it. It used to be
+ * three separate hard-coded 80px, which is not even the header's height.
+ */
+
 .docsContainer {
+  --reading-bar: 53px;
+  --doc-top: calc(var(--bar) + var(--reading-bar));
+  --doc-measure: 52rem;
+
   display: flex;
   align-items: flex-start;
-  min-height: calc(100vh - 80px);
-  background: var(--bg-primary);
+  min-height: calc(100vh - var(--doc-top));
+  padding-top: var(--bar);
+  background: var(--paper);
 }
 
 .docsContent {
   flex: 1;
+  /* Without this a wide code block or table inside the reading column makes
+     the flex item refuse to shrink, and the whole page scrolls sideways. */
   min-width: 0;
-  padding: 3rem 4rem 5rem;
+  padding: clamp(2.5rem, 5vw, 3.5rem) var(--gutter) clamp(5rem, 9vw, 7rem);
 }
 
 .innerContent {
-  max-width: 820px;
-  margin: 0 auto;
+  max-width: var(--doc-measure);
+  margin-inline: auto;
 }
 
-@media (max-width: 1024px) {
-  .docsContent {
-    padding: 2rem 1.5rem 5rem;
-  }
+/* The hub has no rail to sit beside, so it takes the site measure instead of
+   the reading one and aligns with every other page. */
+.hubContent {
+  flex: 1;
+  min-width: 0;
+  padding-block: clamp(2.5rem, 5vw, 3.5rem) clamp(5rem, 9vw, 7rem);
 }

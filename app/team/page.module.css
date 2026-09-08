@@ -46,7 +46,10 @@
 }
 
 .closing { padding-block: clamp(4.5rem, 10vw, 7rem); }
-.closingInner { position: relative; max-width: 42rem; }
+/* margin-inline: 0 because this sits on the .shell element, which centres
+   what it is given — without it a narrower measure here centres the block
+   rather than aligning it with every other heading on the page. */
+.closingInner { position: relative; max-width: 42rem; margin-inline: 0; }
 .closingInner .label { display: block; margin-bottom: 1.25rem; }
 .actions { display: flex; flex-wrap: wrap; gap: 0.875rem; margin-top: 2.5rem; }
 

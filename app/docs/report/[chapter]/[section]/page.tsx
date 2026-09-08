@@ -21,7 +21,7 @@ export async function generateMetadata({
   const sec = ch?.sections.find((s) => s.slug === section);
   if (!ch || !sec) return {};
   return {
-    title: `${sec.title} — ${ch.title} | Vayu Technical Report | NAVRobotec`,
+    title: `${sec.title} · ${ch.title}`,
     description: `${sec.title}, part of ${ch.title} — technical documentation for the Vayu flight control stack.`,
   };
 }
@@ -53,7 +53,7 @@ export default async function SectionPage({
           href={`/docs/report/${current.slug}`}
           className={styles.label}
         >
-          ← {current.title}
+          <ArrowLeft size={12} /> {current.title}
         </Link>
         <h1 className={styles.title}>{sec.title}</h1>
       </header>

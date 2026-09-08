@@ -1,11 +1,11 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { FileText, Download, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Download, FileText } from "lucide-react";
 import { getChapters, readDocFile } from "@/lib/docs";
 import styles from "../DocsPage.module.css";
 
 export const metadata: Metadata = {
-  title: "Technical Report | NAVRobotec",
+  title: "Vayu Technical Report",
   description:
     "Technical report for the Vayu flight control stack — system architecture, hardware, and the NavHAL and VaiOS platform.",
 };
@@ -17,7 +17,7 @@ export default function ReportIndex() {
     <article className={styles.article}>
       <header className={styles.header}>
         <Link href="/docs" className={styles.label}>
-          ← Documentation
+          <ArrowLeft size={12} /> Documentation
         </Link>
         <h1 className={styles.title}>Vayu Technical Report</h1>
       </header>
@@ -25,11 +25,12 @@ export default function ReportIndex() {
       <p className={styles.lead}>
         An end-to-end, hardware-agnostic flight control stack built on the
         NavHAL and VaiOS infrastructure. The chapters below are generated from
-        the project&apos;s technical report.
+        the project&apos;s LaTeX source, so they track the report itself rather
+        than a hand-copied version of it.
       </p>
 
       {chapters.length > 0 ? (
-        <nav className={styles.chapterList}>
+        <nav className={styles.chapterList} aria-label="Chapters">
           {chapters.map((c) => {
             const empty =
               c.sections.length === 0 && readDocFile(c.intro).length === 0;
@@ -46,7 +47,7 @@ export default function ReportIndex() {
                 >
                   <span className={styles.chapterNo}>{num}</span>
                   <span className={styles.chapterName}>{c.title}</span>
-                  <span className={styles.soon}>Coming soon</span>
+                  <span className={styles.soon}>In progress</span>
                 </div>
               );
             }
@@ -66,36 +67,43 @@ export default function ReportIndex() {
         </nav>
       ) : (
         <p className={styles.pending}>
-          Documentation is being prepared. Please check back soon.
+          The report is being prepared. Please check back soon.
         </p>
       )}
 
-      <div className={styles.grid2}>
-        <a
-          href="/report_v0.1.1.pdf"
-          target="_blank"
-          rel="noopener noreferrer"
-          className={`${styles.pagLink} ${styles.prev}`}
-        >
-          <span className={styles.pagLabel}>
-            <FileText size={16} />
-            <span>Full Report</span>
-          </span>
-          <span className={styles.pagTitle}>Vayu Technical Report v0.1.1</span>
-        </a>
-        <a
-          href="/summary_report_v0.1.1.pdf"
-          target="_blank"
-          rel="noopener noreferrer"
-          className={`${styles.pagLink} ${styles.next}`}
-        >
-          <span className={styles.pagLabel}>
-            <Download size={16} />
-            <span>Executive Summary</span>
-          </span>
-          <span className={styles.pagTitle}>Vayu Summary Report v0.1.1</span>
-        </a>
-      </div>
+      <section className={styles.downloads}>
+        <span className={`label ${styles.downloadsLabel}`}>
+          Or take it with you
+        </span>
+        <div className={styles.downloadGrid}>
+          <a
+            href="/report_v0.1.1.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.download}
+          >
+            <FileText size={20} className={styles.downloadIcon} />
+            <span className={styles.downloadText}>
+              <span className={styles.downloadTitle}>
+                Vayu Technical Report
+              </span>
+              <span className={styles.downloadMeta}>PDF · v0.1.1 · 5.8 MB</span>
+            </span>
+          </a>
+          <a
+            href="/summary_report_v0.1.1.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.download}
+          >
+            <Download size={20} className={styles.downloadIcon} />
+            <span className={styles.downloadText}>
+              <span className={styles.downloadTitle}>Executive Summary</span>
+              <span className={styles.downloadMeta}>PDF · v0.1.1 · 236 KB</span>
+            </span>
+          </a>
+        </div>
+      </section>
     </article>
   );
 }
