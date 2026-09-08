@@ -159,66 +159,84 @@ export default function Home() {
       </section>
 
       {/* ---------------- the stack ----------------
-          The track is taller than the screen; the stage inside it pins, and
-          each layer opens in turn as the reader descends — the lede enacted
-          rather than described. A layer that is waiting keeps its tier, name
-          and role and loses only its detail, so the four-layer shape is on
-          screen the whole way down and no step is ever a blank row.
+          A descent, not a list. The section is a dark band that runs on from
+          the hero — the same shot continuing — and it holds for four screens
+          while the reader falls through the stack: VAYU at the top, silicon at
+          the bottom, one layer to a screen. The index in the margin shows the
+          whole depth the whole time, so the reader always knows where in the
+          four they are and how much is left.
 
-          On a narrow screen none of this applies and the list is simply open;
-          see ScrollSteps for the same fallback without JavaScript. */}
-      <section className="section rule">
+          Off the pinned path — no JavaScript, reduced motion, or a screen too
+          narrow to hold it — the same four layers are simply listed down the
+          band. See ScrollSteps. */}
+      <section className={styles.stackSection}>
         <ScrollSteps className={styles.track}>
           <div className={styles.stackStage}>
-            <div className={`shell ${styles.stackGrid}`}>
-              <header className={styles.head}>
+            <div aria-hidden className="reticle" />
+
+            <div className={`shell ${styles.stageInner}`}>
+              <header className={styles.stackHead}>
                 <p className="label">Four layers, all ours</p>
-                <h2 className="h2">
+                <h2 className={styles.stackTitle}>
                   The aircraft rests on an operating system, which rests on the
                   silicon.
                 </h2>
-                <p className="lede">
+                <p className={styles.stackLede}>
                   Read it top to bottom. Each layer is ours, so each one can be
                   opened, measured and replaced without asking anybody.
                 </p>
               </header>
 
-              <div className={styles.stackWrap}>
-                <div className={styles.stackRail} aria-hidden>
-                  <span className={styles.stackRailFill} />
-                </div>
-                <ol className={styles.stack}>
-                  {STACK.map((layer) => (
-                    <li key={layer.tier} className={styles.layer} data-step-item>
-                      <span className={`data ${styles.tier}`}>{layer.tier}</span>
-                      <div className={styles.layerBody}>
-                        <h3 className={`h3 ${styles.layerTitle}`}>
-                          {layer.name}
-                          <span className={styles.layerRole}>{layer.role}</span>
-                        </h3>
-                        <div className={styles.reveal}>
-                          <p className="body small">{layer.body}</p>
-                        </div>
-                      </div>
-                      <div className={`${styles.reveal} ${styles.factsWrap}`}>
-                        <ul className={styles.facts}>
-                          {layer.facts.map((fact) => (
-                            <li key={fact} className={`data ${styles.fact}`}>
-                              {fact}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </li>
-                  ))}
-                </ol>
+              {/* The depth gauge. It repeats the tiers rather than owning
+                  them, so it is hidden from the reading order — the slides
+                  below carry the real content. */}
+              <ol className={styles.depth} aria-hidden>
+                {STACK.map((layer) => (
+                  <li key={layer.tier} className={styles.depthItem} data-step-mirror>
+                    <span className={styles.depthNode} />
+                    <span className={`data ${styles.depthTier}`}>{layer.tier}</span>
+                  </li>
+                ))}
+              </ol>
+
+              <div className={styles.slides}>
+                {STACK.map((layer) => (
+                  <article
+                    key={layer.tier}
+                    className={styles.slide}
+                    data-step-item
+                  >
+                    <span aria-hidden className={styles.ghost}>
+                      {layer.tier}
+                    </span>
+                    <p className={`data ${styles.slideRole}`}>
+                      <span className={styles.slideTier}>{layer.tier}</span>
+                      {layer.role}
+                    </p>
+                    <h3 className={styles.slideName}>{layer.name}</h3>
+                    <p className={styles.slideBody}>{layer.body}</p>
+                    <ul className={styles.slideFacts}>
+                      {layer.facts.map((fact) => (
+                        <li key={fact} className={`data ${styles.fact}`}>
+                          {fact}
+                        </li>
+                      ))}
+                    </ul>
+                  </article>
+                ))}
               </div>
 
-              <p className={styles.after}>
+              <p className={styles.stackAfter}>
                 <Link href="/technology" className="btn btn-ghost">
                   Read the stack in full
                 </Link>
               </p>
+            </div>
+
+            {/* How far through the descent. A hairline, at the foot of the
+                frame, moving continuously rather than in four jumps. */}
+            <div aria-hidden className={styles.scrub}>
+              <span className={styles.scrubFill} />
             </div>
           </div>
         </ScrollSteps>
