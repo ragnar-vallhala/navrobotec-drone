@@ -1,0 +1,56 @@
+.people {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1px;
+  background: var(--line);
+  border-block: 1px solid var(--line);
+}
+.person {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.25rem 1.5rem;
+  align-items: start;
+  padding: 2rem 0;
+  background: var(--paper);
+}
+.photo {
+  /* Forced square in CSS, not just in the width/height props: the three
+     sources are 1:1.01, 1:1.17 and 1:1.11, and next/image preserves the
+     intrinsic ratio — so a 50% radius on them drew three ovals of three
+     different shapes. */
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  /* Enough to settle three differently-lit portraits into one row, and not so
+     much that the one shot against a pale background disappears into the
+     page — which full greyscale did. */
+  filter: grayscale(0.65) contrast(1.02);
+  background: var(--paper-2);
+}
+.who { min-width: 0; }
+.role { display: block; margin: 0.5rem 0 0.875rem; color: var(--signal); }
+/* Which layer this person answers for — the thing a visitor is actually
+   trying to work out from a team page. */
+.owns {
+  grid-column: 2;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  /* Two even lines rather than a long one and an orphan, which is what
+     "VaiOS · NavHAL · control" did against a right edge. */
+  text-wrap: balance;
+}
+
+.closing { padding-block: clamp(4.5rem, 10vw, 7rem); }
+.closingInner { position: relative; max-width: 42rem; }
+.closingInner .label { display: block; margin-bottom: 1.25rem; }
+.actions { display: flex; flex-wrap: wrap; gap: 0.875rem; margin-top: 2.5rem; }
+
+@media (min-width: 56rem) {
+  .person { grid-template-columns: auto 1fr 14rem; align-items: center; padding: 2.25rem 0; }
+  .owns { grid-column: 3; text-align: right; }
+}
