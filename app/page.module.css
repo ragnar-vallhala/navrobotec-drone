@@ -115,15 +115,15 @@
   background: var(--card);
   transition: background-color 0.3s var(--ease);
 }
-.layer:hover { background: var(--paper-2); }
 .tier {
   font-size: 0.875rem;
   font-weight: 700;
   color: var(--signal);
   letter-spacing: 0.08em;
   padding-top: 0.2rem;
+  transition: color 0.4s var(--ease);
 }
-.layerBody h3 { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 0.625rem; }
+.layerTitle { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 0.625rem; }
 .layerRole {
   font-family: var(--font-data);
   font-size: 0.75rem;
@@ -132,7 +132,7 @@
   text-transform: uppercase;
   color: var(--faint);
 }
-.facts { grid-column: 2; list-style: none; margin: 1rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.facts { list-style: none; margin: 1rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .fact {
   padding: 0.3125rem 0.625rem;
   border: 1px solid var(--line);
@@ -140,6 +140,130 @@
   font-size: 0.75rem;
   color: var(--ink-2);
 }
+.factsWrap { grid-column: 2; }
+
+/* The collapsible half of a layer. 0fr -> 1fr is the one way to animate to a
+   content-sized height without measuring it in JavaScript; the child carries
+   the overflow, and `min-height: 0` is what lets a grid item shrink below it.
+   Open is the default, so this reads as an ordinary list until something
+   turns the sequence on. */
+.reveal { display: grid; grid-template-rows: 1fr; }
+.reveal > * { min-height: 0; overflow: hidden; }
+
+/* --- the pinned sequence -----------------------------------------------------
+   Gated three ways, and each gate is a real one:
+
+     • [data-enhanced] — ScrollSteps sets it on mount and removes it for a
+       reader who has asked for reduced motion. No JavaScript, no sequence.
+     • min-width: 62rem — a pinned two-column stage needs the width to hold a
+       heading beside the stack, and the height to hold both. A phone gets the
+       plain open list, which is the better page there anyway.
+     • the reduced-motion query at the end of this file, as a backstop.
+
+   In every one of those cases the fallback is the same thing: the list, open,
+   in normal flow. Nothing here is the only route to the content.
+*/
+.stackGrid { display: block; }
+
+/* The rail needs a positioned box the height of the stack, not of the shell. */
+.stackWrap { position: relative; }
+.stackRail { display: none; }
+
+@media (min-width: 62rem) {
+  .track[data-enhanced] {
+    /* One viewport to pin in, plus a step's worth of travel per layer. The
+       travel is what ScrollSteps divides into steps, so this and the number of
+       layers are the only two things that set the pace. */
+    --step: 46vh;
+    height: calc(100vh + 4 * var(--step));
+    height: calc(100svh + 4 * var(--step));
+  }
+  .track[data-enhanced] .stackStage {
+    position: sticky;
+    top: var(--bar);
+    min-height: calc(100vh - var(--bar));
+    min-height: calc(100svh - var(--bar));
+    display: grid;
+    align-content: center;
+  }
+  /* Two columns, two rows: the heading and the link stack up on the left, the
+     layers span both rows on the right. The link is last in the source so the
+     unenhanced page still reads heading, stack, link — the grid only moves it,
+     it does not reorder the document. */
+  .track[data-enhanced] .stackGrid {
+    display: grid;
+    grid-template-columns: minmax(0, 21rem) minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    align-content: center;
+    gap: clamp(2rem, 4vw, 3rem);
+  }
+  .track[data-enhanced] .head { grid-area: 1 / 1; margin-bottom: 0; align-self: end; }
+  .track[data-enhanced] .stackWrap { grid-area: 1 / 2 / span 2; align-self: center; }
+  .track[data-enhanced] .after { grid-area: 2 / 1; margin-top: 0; align-self: start; }
+  /* The heading is in a column now, not across the page. At the full-width
+     size it broke to three words a line. */
+  .track[data-enhanced] .head h2 {
+    font-size: clamp(1.5rem, 2.4vw, 2rem);
+    text-wrap: balance;
+  }
+
+  /* A waiting layer is a single line: tier, name, role. It gives back the
+     width and the height the full-bleed version could afford, so the sentence
+     that does the work is not set three words to a line. */
+  .track[data-enhanced] .layer {
+    grid-template-columns: 3rem minmax(0, 1fr) minmax(0, 13rem);
+    padding-block: 0.9375rem;
+    padding-inline: 1.75rem;
+    background: var(--paper-2);
+    transition: background-color 0.45s var(--ease), padding 0.45s var(--ease),
+                box-shadow 0.45s var(--ease);
+  }
+  .track[data-enhanced] .layer .reveal {
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition: grid-template-rows 0.5s var(--ease), opacity 0.3s var(--ease);
+  }
+  .track[data-enhanced] .layer .tier { color: var(--muted); }
+  .track[data-enhanced] .layer .layerTitle { margin-bottom: 0; color: var(--ink-2); }
+
+  .track[data-enhanced] .layer[data-step-state="active"] {
+    padding-block: 1.75rem;
+    background: var(--card);
+    box-shadow: inset 3px 0 0 var(--signal);
+  }
+  .track[data-enhanced] .layer[data-step-state="active"] .reveal {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    transition-delay: 0.05s;
+  }
+  .track[data-enhanced] .layer[data-step-state="active"] .tier { color: var(--signal); }
+  .track[data-enhanced] .layer[data-step-state="active"] .layerTitle {
+    margin-bottom: 0.625rem;
+    color: var(--ink);
+  }
+
+  /* How far down the stack the reader is. A sequence whose length you cannot
+     see just feels like the page has stopped scrolling. It sits outside the
+     stack's own box so the stack stays aligned with every other section. */
+  .track[data-enhanced] .stackRail {
+    display: block;
+    position: absolute;
+    left: -1.25rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    border-radius: 2px;
+    background: var(--line);
+  }
+  .stackRailFill {
+    display: block;
+    width: 100%;
+    height: calc(var(--progress, 0) * 100%);
+    background: var(--signal);
+    border-radius: 2px;
+  }
+}
+
 .after { margin-top: 2.5rem; }
 
 /* --- the claim --------------------------------------------------------------- */
@@ -245,7 +369,27 @@
 
 @media (min-width: 62rem) {
   .layer { grid-template-columns: 4rem 1fr 18rem; align-items: start; }
-  .facts { grid-column: 3; margin-top: 0; flex-direction: column; align-items: flex-start; }
+  .factsWrap { grid-column: 3; }
+  .facts { margin-top: 0; flex-direction: column; align-items: flex-start; }
   .focus { grid-template-columns: repeat(3, 1fr); }
   .join { grid-template-columns: repeat(3, 1fr); }
+}
+
+
+/* The sequence is an enhancement; the transitions that carry it are not worth
+   anything to a reader who has turned motion off, and ScrollSteps has already
+   dropped [data-enhanced] for them. This is the belt to that braces. */
+@media (prefers-reduced-motion: reduce) {
+  .track { height: auto; }
+  .track .stackStage { position: static; min-height: 0; }
+  .track .stackGrid { display: block; }
+  .track .head { margin-bottom: clamp(2.5rem, 5vw, 3.5rem); }
+  .track .stackRail { display: none; }
+  .track .layer,
+  .track .reveal,
+  .track .tier { transition: none; }
+  .track .layer { padding-block: 1.75rem; background: var(--card); box-shadow: none; }
+  .track .layer .reveal { grid-template-rows: 1fr; opacity: 1; }
+  .track .layer .layerTitle { margin-bottom: 0.625rem; color: var(--ink); }
+  .track .layer .tier { color: var(--signal); }
 }
