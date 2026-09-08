@@ -53,21 +53,38 @@ const STACK = [
   },
 ];
 
+/* The heading says "and prove it", so each of these carries the thing that
+   proves it and a way to go and check: the measurement in the instrument
+   voice, and the page it is substantiated on. The numbers are the ones the
+   stack section already states — this is the same claim, sourced.
+
+   `proof` is optional on purpose. Scale to swarms is a direction rather than
+   a measurement, and inventing a figure to make the third row match the first
+   two is exactly what this section is meant not to do. */
 const FOCUS = [
   {
     image: "/images/in-house.jpg",
     title: "Sovereign foundation",
     body: "We own every layer — NavHAL at the hardware, VaiOS as the operating system, VAYU in the air. No black boxes, no foreign dependencies: a stack you can audit from the first register.",
+    proof: "~5-cycle GPIO · register-level · STM32F4 · H7 · AVR",
+    href: "/technology" as const,
+    cta: "How the layers fit",
   },
   {
     image: "/images/autonomous.jpg",
     title: "Real-time reliability",
     body: "A flight core that never misses its deadline. VaiOS holds the control loop to a fixed schedule every cycle — benchmarked head to head against FreeRTOS and Zephyr on the same hardware.",
+    proof: "~5.9 µs task-wake · 1 kHz / 250 Hz loops",
+    href: "/docs/report/vaios/vaios-performance" as const,
+    cta: "Read the benchmark",
   },
   {
     image: "/images/swarm.webp",
     title: "Built to grow",
     body: "Autonomy and swarms are not bolted on — they are how VaiOS is designed to scale, from one aircraft to many. UAVs come first because that is where we prove it.",
+    proof: null,
+    href: "/vision" as const,
+    cta: "Where this goes",
   },
 ];
 
@@ -324,27 +341,52 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ---------------- focus ---------------- */}
+      {/* ---------------- focus ----------------
+          Rows, alternating, rather than a row of three cards. "Three ways in"
+          below is a row of three cards, and the two ran together as the same
+          component twice — the reader met the same shape and read it as the
+          same kind of thing. Rows also give each claim room for the figure
+          that backs it and the page it is backed on, which is what the
+          heading is promising. */}
       <section className="section rule">
         <div className="shell">
           <header className={styles.head}>
             <p className="label">Our focus</p>
             <h2 className="h1">Own every layer, and prove it.</h2>
           </header>
+
           <div className={styles.focus}>
-            {FOCUS.map((card) => (
-              <article key={card.title} className={styles.card}>
-                <div className={styles.cardImage}>
+            {FOCUS.map((card, i) => (
+              <article key={card.title} className={styles.focusRow}>
+                <div className={styles.focusImage}>
                   <Image
                     src={card.image}
                     alt=""
                     fill
-                    sizes="(max-width: 62rem) 100vw, 33vw"
-                    className={styles.cardImg}
+                    sizes="(max-width: 62rem) 100vw, 46vw"
+                    className={styles.focusImg}
                   />
                 </div>
-                <h3 className="h3">{card.title}</h3>
-                <p className="body small">{card.body}</p>
+
+                <div className={styles.focusBody}>
+                  <p className={`data ${styles.focusIndex}`}>
+                    {String(i + 1).padStart(2, "0")}
+                  </p>
+                  <h3 className="h2">{card.title}</h3>
+                  <p className="body">{card.body}</p>
+                  {/* The rule belongs to the block, not to the figure: the
+                      third row has no figure to show, and hanging the rule
+                      off `proof` left that row without a bottom edge. */}
+                  <div className={styles.focusMeta}>
+                    {card.proof && (
+                      <p className={`data ${styles.focusProof}`}>{card.proof}</p>
+                    )}
+                    <Link href={card.href} className={styles.focusLink}>
+                      {card.cta}
+                      <span aria-hidden>→</span>
+                    </Link>
+                  </div>
+                </div>
               </article>
             ))}
           </div>
