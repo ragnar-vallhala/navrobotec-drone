@@ -1,0 +1,22 @@
+.bar {
+  position: sticky;
+  /* Under the fixed header, not over it. */
+  top: var(--bar);
+  z-index: 500;
+  background: color-mix(in srgb, var(--paper) 92%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 52px;
+  padding-block: 0.5rem;
+}
+.hint { display: none; }
+
+@media (min-width: 40rem) {
+  .hint { display: block; }
+}

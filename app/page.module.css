@@ -1,1093 +1,200 @@
-.main {
-  background-color: var(--bg-primary);
-  min-height: 100vh;
-}
-
-.container {
-  display: flex;
-  flex-direction: column;
-}
-
-.section {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  padding: 0 8rem;
-  position: relative;
-  z-index: 1;
-}
-
-/* HERO SECTION */
+/* --- hero -------------------------------------------------------------------
+   Text and numbers, no video. Sized by its content plus the bar rather than
+   forced to 100vh: a hero that is exactly the viewport tall pushes everything
+   below it out of sight on a laptop, which is what made the old homepage feel
+   like it began with nothing. */
 .hero {
-  min-height: 100vh; /* Full-screen hero; -80px margin cancels the content-wrapper's top padding */
-  margin-top: -80px;
-  padding-top: 80px;
-  justify-content: center;
-  padding-bottom: 0;
-}
-
-.heroContent {
-  max-width: 800px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
   position: relative;
-  z-index: 2; /* Ensure content is above video */
-  margin-top: 8rem;
+  overflow: hidden;
+  padding-top: calc(var(--bar) + clamp(3.5rem, 9vw, 7rem));
+  padding-bottom: clamp(3rem, 7vw, 5.5rem);
+  /* The emerald bloom is the VAYU render's own light, standing in for it
+     until the render is in the repo. */
+  background:
+    radial-gradient(110% 90% at 72% -10%, rgba(53, 224, 161, 0.16), transparent 62%),
+    var(--band);
+}
+.heroInner { position: relative; }
+
+.kicker { display: block; margin-bottom: 1.5rem; }
+.title { max-width: 16ch; }
+.lede { margin-top: 1.75rem; }
+.lede strong { color: var(--bone); font-weight: 600; }
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.875rem;
+  margin-top: 2.5rem;
 }
 
-.title {
-  font-size: 6rem;
-  line-height: 1.1;
-  margin-bottom: 2rem;
-  letter-spacing: -2px;
-  color: var(--color-white);
-  font-weight: 800;
-}
+/* Staggered by hand rather than by a library: four `animation-delay` values
+   is the whole requirement, and it keeps the page a server component. */
+.kicker  { animation-delay: 0.05s; }
+.title   { animation-delay: 0.12s; }
+.lede    { animation-delay: 0.2s; }
+.actions { animation-delay: 0.28s; }
+.readout { animation-delay: 0.36s; }
 
-.title span {
+/* The readout: four figures on a rule, the way an instrument reports. */
+.readout {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  margin: clamp(3rem, 7vw, 5rem) 0 0;
+  background: rgba(230, 239, 234, 0.14);
+  border: 1px solid rgba(230, 239, 234, 0.14);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.reading {
+  padding: 1.25rem 1.375rem;
+  background: rgba(255, 255, 255, 0.03);
+}
+.readingValue {
   display: block;
-}
-
-.titleAccent {
-  font-family: var(--font-sans);
-  font-size: 7rem;
-  color: var(--color-white);
-  font-weight: 800;
-  line-height: 1.6;
-  letter-spacing: 0.5em;
-  text-shadow: var(--shadow-text);
-}
-
-.titleSecondary {
-  font-family: var(--font-sans);
-  font-size: 3rem;
-  color: var(--color-peach);
-  font-weight: 300;
-  line-height: 1.6;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-}
-
-.greyText {
-  color: var(--color-peach);
-}
-
-.subtextWrapper {
-  height: 2.5rem;
-  width: 100%;
-  margin-top: 2rem; /* More space above the changing words */
-  margin-bottom: 2rem;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.subtext {
-  font-size: 1.5rem;
-  font-family: var(--font-sans);
-  color: var(--color-white); /* Changed to black */
-  font-weight: 600;
-  line-height: 1.6;
-  max-width: 100%;
-  white-space: nowrap;
-  position: absolute;
-  left: 0;
-  width: 100%;
-  text-align: center;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-}
-
-.heroTagline {
-  font-family: var(--font-data);
-  font-size: 0.9rem;
-  font-weight: 400;
-  color: var(--color-peach);
-  letter-spacing: 0.5px;
-  line-height: 1.6;
-  max-width: 560px;
-  margin: 0 auto 2.5rem auto;
-}
-
-.heroTagline strong {
-  color: var(--color-white);
+  font-size: clamp(1.5rem, 3vw, 2rem);
   font-weight: 700;
-}
-
-/* =========================================
-   MISSION SECTION
-   ========================================= */
-.missionSection {
-  padding: 8rem 0;
-  background: var(--bg-primary);
-}
-
-/* Founder Quote */
-.founderQuote {
-  position: relative;
-  max-width: 900px;
-  margin: 0 auto 10rem auto;
-  text-align: center;
-  background: var(--surface);
-  padding: 5rem 4rem;
-  border-radius: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
-}
-
-/* Institutional Recognition Carousel */
-.logoCarousel {
-  margin-top: 6rem;
-  width: 100%;
-  overflow: hidden;
-  position: relative;
-}
-
-.recognizedBy {
-  font-family: var(--font-data);
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  color: var(--text-secondary);
-  letter-spacing: 2px;
-  text-align: center;
-  margin-bottom: 3rem;
-  opacity: 0.7;
-}
-
-.carouselTrack {
-  display: flex;
-  width: max-content;
-  animation: scroll 30s linear infinite;
-  align-items: center;
-  gap: 4rem;
-}
-
-.carouselGroup {
-  display: flex;
-  align-items: center;
-  gap: 8rem;
-  padding-right: 8rem;
-}
-
-.institutionLogo {
-  /* Uniform chip: fixed box, logo letterboxed inside via object-fit */
-  width: 160px;
-  height: 72px;
-  /* Real logos on a light chip so colored/photographic marks stay legible on dark */
-  background: #ffffff;
-  padding: 0.7rem 1.1rem;
-  border-radius: 10px;
-  object-fit: contain;
-  opacity: 0.9;
-  transition: all 0.4s ease;
-}
-
-.startupUpLogo {
-  /* Square mark — a touch more vertical room inside the same-size chip */
-  padding: 0.45rem 1.1rem;
-}
-
-.institutionLogo:hover {
-  opacity: 1;
-  transform: scale(1.05);
-}
-
-.logoCarousel::before,
-.logoCarousel::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  width: 15rem;
-  height: 100%;
-  z-index: 2;
-}
-
-.logoCarousel::before {
-  left: 0;
-  background: linear-gradient(to right, var(--bg-primary) 0%, transparent 100%);
-}
-
-.logoCarousel::after {
-  right: 0;
-  background: linear-gradient(to left, var(--bg-primary) 0%, transparent 100%);
-}
-
-@keyframes scroll {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-.quoteAccent {
-  font-family: var(--font-sans);
-  font-size: 8rem;
-  color: var(--color-accent);
-  line-height: 0;
-  position: relative;
-  top: 2rem;
-  left: -1.5rem;
-  opacity: 0.5;
-}
-
-.quoteText {
-  font-family: var(--font-sans);
-  font-size: 1.65rem;
-  font-weight: 400;
-  font-style: italic;
-  line-height: 1.7;
-  color: var(--text-primary);
-  margin: 0 0 2.5rem 0;
-  padding: 0;
-  border: none;
-}
-
-.founderAttrib {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  align-items: center;
-}
-
-.founderAvatar {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  object-fit: cover;
-  object-position: top;
-  border: 2px solid var(--color-accent);
-  margin-bottom: 0.8rem;
-  box-shadow: 0 4px 16px rgba(217, 119, 6, 0.25);
-}
-
-.founderName {
-  font-family: var(--font-sans);
-  font-weight: 700;
-  font-size: 1.1rem;
-  letter-spacing: 0.05em;
-  color: var(--text-primary);
-}
-
-.founderTitle {
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-  letter-spacing: 0.05em;
-}
-
-/* Vision Section */
-.visionSectionOuter {
-  padding: 8rem 0;
-  background: var(--bg-dark);
-}
-
-.visionHeader {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1.5rem;
-  margin-bottom: 5rem;
-  max-width: 800px;
-}
-
-.visionTitle {
-  font-family: var(--font-sans);
-  font-size: 4rem;
-  font-weight: 700;
-  color: var(--text-on-dark);
-  letter-spacing: -1.5px;
-  line-height: 1;
-}
-
-.visionDescription {
-  font-size: 1.25rem;
-  color: var(--text-on-dark);
-  opacity: 0.7;
-  line-height: 1.75;
-  font-weight: 400;
-}
-
-.vision.ctaGroup {
-  display: flex;
-  gap: 2rem;
-  margin-top: 2rem;
-  z-index: 10;
-}
-
-.visionGrid {
-  display: flex;
-  gap: 1.5rem;
-  width: 100%;
-  height: 50vh;
-}
-
-.visionCard {
-  position: relative;
-  flex: 1;
-  height: 100%;
-  border-radius: 12px;
-  overflow: hidden;
-  cursor: pointer;
-  box-shadow: var(--shadow-card);
-  transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-}
-
-.visionCard:hover {
-  flex: 2.5;
-}
-
-.visionCardImage {
-  position: absolute;
-  inset: 0;
-  object-fit: cover;
-  object-position: center;
-  transition: transform 0.8s ease;
-}
-
-.visionCard:hover .visionCardImage {
-  transform: scale(1.05);
-}
-
-.visionCardOverlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to top,
-    rgba(11, 14, 20, 0.95) 0%,
-    rgba(11, 14, 20, 0.2) 60%,
-    transparent 100%
-  );
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 2rem;
-  z-index: 2;
-  transition: padding 0.6s ease;
-}
-
-.visionCard:hover .visionCardOverlay {
-  padding: 3rem;
-  background: linear-gradient(
-    to top,
-    rgba(11, 14, 20, 0.98) 0%,
-    rgba(11, 14, 20, 0.1) 80%,
-    transparent 100%
-  );
-}
-
-.visionCardOverlay h3 {
-  font-family: var(--font-sans);
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: var(--color-white);
-  margin-bottom: 0.75rem;
-  transition: font-size 0.6s ease;
-}
-
-.visionCard:hover h3 {
-  font-size: 2.2rem;
-}
-
-.visionCardOverlay p {
-  font-family: var(--font-mono);
-  font-size: 0.9rem;
-  color: var(--color-white);
-  line-height: 1.6;
-  opacity: 0;
-  max-width: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-}
-
-.visionCard:hover p {
-  opacity: 1;
-  max-width: 800px;
-  white-space: normal;
-}
-
-@media (max-width: 1024px) {
-  .visionGrid {
-    flex-direction: column;
-    height: auto;
-  }
-  .visionCard {
-    height: 35vh;
-    flex: none !important;
-  }
-  .visionCardOverlay p {
-    opacity: 0.85;
-    max-width: 100%;
-    white-space: normal;
-    overflow: visible;
-  }
-}
-
-@media (max-width: 768px) {
-  .visionCard {
-    height: 40vh;
-  }
-}
-
-/* Common Section styles */
-.highlights {
-  justify-content: flex-start;
-  text-align: left;
-}
-
-/* Right aligned sections for storytelling variety */
-.problem {
-  justify-content: space-between;
-  text-align: right;
-  gap: 4rem;
-}
-
-/* Layout Containers */
-.standardContainer,
-.wideContainer {
-  margin: 0 auto;
-  padding: 0 4rem;
-  width: 100%;
-}
-
-.standardContainer {
-  max-width: 1200px;
-}
-
-.wideContainer {
-  max-width: 1440px;
-}
-
-.sectionHeader h2 {
-  font-size: 3.5rem;
-  margin-bottom: 2rem;
-  letter-spacing: -1px;
-}
-
-.mutedText {
-  color: var(--text-secondary);
-  font-size: 1.2rem;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-}
-
-/* Problem/Mission Cards */
-.grid2 {
-  display: flex;
-  flex-direction: column;
-  gap: 4rem;
-}
-
-.card {
-  padding: 3rem 0;
-  border-top: var(--border-light);
-}
-
-.card h3 {
-  font-size: 2rem;
-  margin-bottom: 1.5rem;
-  color: var(--text-primary);
-}
-
-.card p {
-  color: var(--text-secondary);
-  font-size: 1.1rem;
-  line-height: 1.7;
-}
-
-/* Technology Grid */
-.grid3 {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 3rem;
-}
-
-.highlightCard {
-  padding: 3rem;
-  background: var(--bg-secondary);
-  border-radius: 16px;
-  border: var(--border-light);
-  transition: all 0.4s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.highlightCard:hover {
-  transform: translateY(-8px);
-  border-color: var(--color-accent);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
-}
-
-.highlightIcon {
-  font-size: 2.5rem;
-  margin-bottom: 2rem;
-  color: var(--color-accent);
-}
-
-.highlightCard h3 {
-  font-size: 1.8rem;
-  margin-bottom: 1.25rem;
-  color: var(--text-primary);
-  letter-spacing: -0.5px;
-}
-
-.highlightCard p {
-  color: var(--text-secondary);
-  font-size: 1rem;
-  line-height: 1.7;
-}
-
-/* Technology Stack Diagram */
-.stackDiagram {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0;
-  margin: 2rem auto 0 auto;
-  max-width: 900px;
-}
-
-.stackLayer {
-  background: var(--surface);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  padding: 0.75rem 2.5rem;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  width: 100%;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.02);
-  position: relative;
-  z-index: 2;
-}
-
-.stackLayer:hover {
-  transform: translateY(-2px) scale(1.01);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
-  border-color: var(--color-accent);
-}
-
-.stackLayer {
-  width: 100%;
-}
-
-.stackIcon {
-  color: var(--color-accent);
-  background: rgba(217, 119, 6, 0.05);
-  padding: 0.75rem;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.stackIcon svg {
-  width: 24px;
-  height: 24px;
-}
-
-.stackInfo h3 {
-  font-size: 1.35rem;
-  margin-bottom: 0.15rem;
-  color: var(--color-bone);
-}
-
-.stackInfo p {
-  font-size: 0.95rem;
-  color: var(--text-secondary);
-  line-height: 1.3;
-}
-
-.stackConnector {
-  width: 2px;
-  height: 1.25rem;
-  background: linear-gradient(
-    to bottom,
-    var(--color-accent) 0%,
-    rgba(217, 119, 6, 0.1) 100%
-  );
-  margin: -2px 0;
-  z-index: 1;
-}
-
-/* Join the Mission Section */
-.joinSection {
-  padding: 10rem 0;
-  background: var(--bg-secondary);
-  position: relative;
-  overflow: hidden;
-}
-
-.joinInner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.sectionHeaderCenter {
-  margin-bottom: 5rem;
-}
-
-.sectionHeaderCenter h2 {
-  font-size: 3.5rem;
-  color: var(--text-primary);
-  max-width: 800px;
-  margin-top: 1rem;
-  margin-bottom: 2rem;
-}
-
-.mutedTextAccent {
-  color: var(--color-accent);
-  font-family: var(--font-data);
-  font-weight: 600;
-  font-size: 0.82rem;
-  text-transform: uppercase;
-  letter-spacing: 3px;
-}
-
-.textAccent {
-  color: var(--color-accent);
-}
-
-.joinGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 3rem;
-  width: 100%;
-  margin-bottom: 5rem;
-}
-
-.joinCard {
-  background: var(--surface);
-  padding: 3.5rem 2.5rem;
-  border-radius: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  text-align: left;
-  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-.joinCard::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, var(--color-accent) 0%, transparent 40%);
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  z-index: 0;
-}
-
-.joinCard:hover {
-  transform: translateY(-12px) scale(1.02);
-  border-color: rgba(217, 119, 6, 0.2);
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.1);
-}
-
-.joinCard:hover::before {
-  opacity: 0.05;
-}
-
-.joinCardIcon {
-  width: 60px;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(217, 119, 6, 0.05);
-  border-radius: 16px;
-  position: relative;
-  z-index: 1;
-  transition: all 0.5s ease;
-}
-
-.cardIcon {
-  width: 28px;
-  height: 28px;
-  color: var(--color-accent);
-  transition: all 0.5s ease;
-}
-
-.joinCard:hover .joinCardIcon {
-  background: var(--color-accent);
-}
-
-.joinCard:hover .cardIcon {
-  color: var(--color-white);
-  transform: scale(1.1);
-}
-
-.cardContent {
-  position: relative;
-  z-index: 1;
-}
-
-.joinCard h4 {
-  font-family: var(--font-sans);
-  font-size: 2.2rem;
-  font-weight: 800;
-  margin-bottom: 1.25rem;
-  color: var(--text-primary);
-  letter-spacing: -1px;
-  text-transform: none;
-}
-
-.joinCard p {
-  color: var(--text-secondary);
-  font-size: 1.15rem;
-  line-height: 1.8;
-  opacity: 0.85;
-}
-
-.joinCTA {
-  margin-top: 2rem;
-}
-
-.primaryBtnLarge {
-  font-family: var(--font-mono);
-  font-weight: 700;
-  font-size: 1.25rem;
-  text-decoration: none;
-  color: var(--color-accent);
-  padding: 1.2rem 3rem;
-  border: 2px solid var(--color-accent);
-  border-radius: 50px;
-  transition: all 0.3s ease;
-}
-
-.primaryBtnLarge:hover {
-  background: var(--color-accent);
-  color: var(--color-dark);
-  box-shadow: 0 10px 30px rgba(255, 176, 0, 0.35);
-}
-
-@media (max-width: 900px) {
-  .joinGrid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.ctaGroup {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 2.5rem;
-}
-
-.primaryBtn,
-.secondaryBtn {
-  font-family: var(--font-mono);
-  font-weight: 700;
-  font-size: 1.1rem;
-  text-decoration: none;
-}
-
-.primaryBtn {
-  color: var(--color-white); /* Changed to black */
-  letter-spacing: 1px;
-  position: relative;
-  font-weight: 700;
-}
-
-.primaryBtn::before {
-  content: "[ ";
-  color: var(--color-peach); /* light brackets on dark hero */
-  opacity: 0.5;
-}
-.primaryBtn::after {
-  content: " ]";
-  color: var(--color-peach); /* light brackets on dark hero */
-  opacity: 0.5;
-}
-.primaryBtn:hover::before,
-.primaryBtn:hover::after {
-  color: var(--color-accent);
-  opacity: 1;
-}
-
-.primaryBtn:hover {
-  color: var(--color-accent);
-}
-
-.secondaryBtn {
-  color: var(--color-white); /* Changed to black */
-  letter-spacing: 1px;
-  font-weight: 700;
-  opacity: 0.8;
-  transition: all 0.3s ease;
-}
-
-.secondaryBtn:hover {
-  color: var(--color-accent);
-  opacity: 1;
-}
-
-/* Hero Video */
-.heroVideoContainer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0; /* Changed from -1 to avoid being hidden by content-wrapper */
-  overflow: hidden;
-  background-color: var(--color-dark);
-}
-
-.heroVideo {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0.8;
-}
-
-.heroVideoOverlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0.8) 0%,
-    rgba(0, 0, 0, 0.3) 100%
-  );
-  z-index: 1;
-}
-
-/* Final CTA Section */
-.finalCTA {
-  position: relative;
-  min-height: 80vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-image: url("/images/far_away.jpg");
-  background-size: cover;
-  background-position: 65% 25%;
-  /* background-attachment: fixed; */
-  overflow: hidden;
-  border-top-left-radius: 40px;
-  border-top-right-radius: 40px;
-  padding: 10rem 0;
-}
-
-.finalCTAOverlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    to bottom,
-    rgba(10, 10, 10, 0.4) 0%,
-    rgba(10, 10, 10, 0.7) 100%
-  );
-  z-index: 1;
-}
-
-.finalCTAContent {
-  position: relative;
-  z-index: 2;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
-}
-
-.finalCTAContent h2 {
-  font-family: var(--font-sans); /* Industrial Sans-Serif font */
-  font-size: 4.5rem;
-  font-weight: 800;
-  color: var(--text-on-dark);
-  max-width: 900px;
+  color: var(--signal-lit);
   line-height: 1.1;
-  letter-spacing: -2px;
 }
+.readingLabel { display: block; margin: 0.5rem 0 0; }
 
-.ctaGroupLarge {
+/* --- section heads ---------------------------------------------------------- */
+.head { max-width: 52rem; margin-bottom: clamp(2.5rem, 5vw, 3.5rem); }
+.head .label { display: block; margin-bottom: 1.125rem; }
+.head h2 + .lede { margin-top: 1.25rem; }
+
+/* --- the layer stack --------------------------------------------------------
+   Read top to bottom, L3 down to L0, so the list is the diagram. Each row is
+   its own panel with the tier in the margin: the numbering carries the
+   structure, so no connecting lines are needed to explain it. */
+.stack { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; }
+.layer {
+  display: grid;
+  grid-template-columns: 3.5rem 1fr;
+  gap: 0 1.5rem;
+  padding: 1.75rem var(--gutter);
+  background: var(--card);
+  transition: background-color 0.3s var(--ease);
+}
+.layer:hover { background: var(--paper-2); }
+.tier {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--signal);
+  letter-spacing: 0.08em;
+  padding-top: 0.2rem;
+}
+.layerBody h3 { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 0.625rem; }
+.layerRole {
+  font-family: var(--font-data);
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.facts { grid-column: 2; list-style: none; margin: 1rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.fact {
+  padding: 0.3125rem 0.625rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  font-size: 0.75rem;
+  color: var(--ink-2);
+}
+.after { margin-top: 2.5rem; }
+
+/* --- the claim --------------------------------------------------------------- */
+.quoteSection { border-top: 1px solid var(--line); }
+.quote { margin: 0; max-width: 46rem; }
+.quoteText {
+  font-size: clamp(1.375rem, 2.8vw, 2rem);
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  /* Hanging punctuation: the opening quote sits in the margin so the first
+     line of text starts on the same vertical as every line under it. A real
+     character, not a giant decorative glyph floating behind the text — which
+     is what the old one did, and which read as an accident at small widths. */
+  text-indent: -0.42em;
+}
+.attrib { display: flex; align-items: center; gap: 1rem; margin-top: 2rem; }
+.avatar { border-radius: 50%; object-fit: cover; }
+.attribName { display: block; color: var(--ink); font-weight: 600; }
+.attribRole { display: block; margin-top: 0.25rem; }
+
+/* --- recognition -------------------------------------------------------------- */
+.recognitionLabel { display: block; margin-bottom: 1.75rem; }
+.logos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 3rem;
-  margin-top: 3rem;
+  gap: clamp(2rem, 6vw, 4rem);
 }
-
-.secondaryTextBtn {
-  color: var(--color-white);
-  text-decoration: none;
-  font-family: var(--font-sans);
-  font-weight: 600;
-  font-size: 1.1rem;
-  transition: all 0.3s ease;
-  opacity: 0.8;
+.logo {
+  width: auto;
+  height: clamp(28px, 4vw, 40px);
+  /* Four logos in four palettes is a mess on any ground; one tone each, lifted
+     on hover, reads as a set. */
+  filter: grayscale(1);
+  opacity: 0.55;
+  transition: opacity 0.3s var(--ease);
 }
+:global([data-theme="dark"]) .logo { filter: grayscale(1) brightness(2.4); }
+.logo:hover { opacity: 1; }
 
-.secondaryTextBtn:hover {
-  opacity: 1;
-  transform: translateX(10px);
+/* --- focus --------------------------------------------------------------------- */
+.focus { display: grid; gap: 1.5rem; }
+.card { display: flex; flex-direction: column; }
+.cardImage {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--paper-2);
 }
+.cardImg { object-fit: cover; }
+.card h3 { margin-bottom: 0.75rem; }
 
-@media (max-width: 1024px) {
-  .section {
-    padding: 0 4rem;
-  }
-
-  .titleAccent {
-    font-size: 5rem;
-    letter-spacing: 0.3em;
-  }
-
-  .titleSecondary {
-    font-size: 2.5rem;
-  }
-
-  .visionGrid {
-    flex-direction: column;
-    height: auto;
-  }
-  .visionCard {
-    height: 35vh;
-    flex: none !important;
-  }
+/* --- join ------------------------------------------------------------------------ */
+.join { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; }
+.route { display: flex; flex-direction: column; gap: 0.875rem; padding: 2rem var(--gutter); background: var(--card); }
+.route p { flex: 1; }
+.routeLink {
+  align-self: flex-start;
+  font-family: var(--font-data);
+  font-size: 0.8125rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--signal);
 }
+.routeLink:hover { color: var(--ink); }
 
-@media (max-width: 768px) {
-  .section {
-    padding: 0 var(--section-padding-x);
-  }
+/* --- closing ---------------------------------------------------------------------- */
+.closing {
+  position: relative;
+  overflow: hidden;
+  padding-block: clamp(5rem, 12vw, 9rem);
+  background:
+    radial-gradient(100% 100% at 50% 120%, rgba(53, 224, 161, 0.18), transparent 65%),
+    var(--band);
+}
+.closingInner { position: relative; text-align: center; }
+.closingInner .label { display: block; margin-bottom: 1.25rem; }
+.closingInner .actions { justify-content: center; }
 
-  .titleAccent {
-    font-size: 3.5rem;
-    letter-spacing: 0.2em;
-    line-height: 1.2;
-  }
-
-  .titleSecondary {
-    font-size: 1.8rem;
-    letter-spacing: 0.15em;
-  }
-
-  .subtext {
-    font-size: 1rem;
-    white-space: normal;
-  }
-
-  .ctaGroup {
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  /* Mission Section Mobile */
-  .missionSection {
-    padding: var(--section-padding-y) 0;
-  }
-
-  .quoteAccent {
-    font-size: 5rem;
-    top: 1rem;
-    left: 0;
-  }
-
-  .quoteText {
-    font-size: 1.25rem;
-    line-height: 1.6;
-  }
-
-  .standardContainer {
-    padding: 0 var(--section-padding-x);
-  }
-
-  .visionHeader {
-    margin-bottom: 3rem;
-  }
-
-  .visionTitle {
-    font-size: 2.8rem;
-  }
-
-  .visionDescription {
-    font-size: 1.1rem;
-  }
-
-  .visionCardOverlay {
-    padding: 1.5rem;
-  }
-
-  .visionCardOverlay h3 {
-    font-size: 1.5rem;
-  }
-
-  /* Join Section Mobile */
-  .joinSection {
-    padding: var(--section-padding-y) 0;
-  }
-
-  .sectionHeaderCenter h2 {
-    font-size: 2.5rem;
-  }
-
-  .joinCard {
-    padding: 2.5rem 1.5rem;
-  }
-
-  .joinCard h4 {
-    font-size: 1.8rem;
-  }
-
-  /* Final CTA Mobile */
-  .finalCTA {
-    min-height: 60vh;
-  }
-
-  .finalCTAContent h2 {
-    font-size: 2.5rem;
-  }
-
-  .ctaGroupLarge {
-    flex-direction: column;
-    gap: 2rem;
-  }
-
-  .stackLayer {
-    padding: 0.75rem 1.25rem;
-    gap: 1.25rem;
-  }
-
-  .stackIcon {
-    padding: 0.5rem;
-  }
-
-  .stackInfo h3 {
-    font-size: 1.1rem;
-  }
-
-  .stackInfo p {
-    font-size: 0.85rem;
-  }
-
-  .carouselGroup {
-    gap: 4rem;
-    padding-right: 4rem;
-  }
-
-  .institutionLogo {
-    width: 128px;
-    height: 60px;
-  }
-
-  .startupUpLogo {
-    padding: 0.4rem 0.9rem;
-  }
+@media (min-width: 40rem) {
+  .readout { grid-template-columns: repeat(4, 1fr); }
+}
+@media (min-width: 62rem) {
+  .layer { grid-template-columns: 4rem 1fr 18rem; align-items: start; }
+  .facts { grid-column: 3; margin-top: 0; flex-direction: column; align-items: flex-start; }
+  .focus { grid-template-columns: repeat(3, 1fr); }
+  .join { grid-template-columns: repeat(3, 1fr); }
 }

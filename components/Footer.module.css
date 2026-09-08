@@ -1,278 +1,52 @@
 .footer {
-  background-color: var(--color-dark);
-  border-top: var(--border-dark);
-  padding: 8rem 0 0;
-  color: var(--text-on-dark);
-  font-family: var(--font-mono);
-  margin-top: 4rem; /* Space to see the curve */
-  border-top-left-radius: 120px;
-  border-top-right-radius: 120px;
-  overflow: hidden;
+  background: var(--void);
+  border-top: 1px solid var(--line);
+  padding-top: clamp(3.5rem, 8vw, 5.5rem);
 }
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
+.inner {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  gap: 3rem;
-  margin-bottom: 3rem;
+  gap: clamp(2.5rem, 5vw, 3.5rem);
+  padding-bottom: clamp(3rem, 6vw, 4.5rem);
 }
 
-.logo {
-  font-size: 1.5rem;
+.brandCol { max-width: 22rem; }
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+  color: var(--bone);
   font-weight: 700;
-  color: var(--color-white);
-  margin-bottom: 1rem;
+  font-size: 1rem;
+  letter-spacing: 0.14em;
 }
+.mark { width: 20px; height: 20px; margin-inline: 1px; filter: invert(1); }
+.blurb { margin-top: 1.25rem; color: var(--warm); }
+.legal { display: block; margin-top: 1.5rem; line-height: 1.9; }
 
-.logo span {
-  color: var(--color-accent);
+.colTitle { display: block; margin-bottom: 1.25rem; color: var(--bone); }
+.list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.75rem; }
+.link {
+  color: var(--warm);
+  font-size: 0.9375rem;
+  transition: color 0.2s var(--ease);
 }
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.logoIcon {
-  animation: spin 8s linear infinite;
-}
-
-.description {
-  line-height: 1.6;
-  font-size: 0.95rem;
-}
-
-.footerHeading {
-  color: var(--color-white);
-  font-family: var(--font-sans);
-  font-size: 0.9rem;
-  font-weight: 800;
-  letter-spacing: 2px;
-  margin-bottom: 0; /* Remove margin, use parent gap */
-  text-transform: uppercase;
-  display: inline-block;
-}
-
-.links,
-.contact {
-  display: flex;
-  flex-direction: column;
-  gap: 1.8rem; /* Unified gap for the entire column content */
-}
-
-.footerLinkWrapper {
-  margin: 0;
-  line-height: 1.2;
-}
-
-.footerLinkWrapper a {
-  color: var(--text-on-dark);
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.footerLinkWrapper a:hover {
-  color: var(--color-accent);
-}
-
-.contact {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem; /* Standardized gap to match .links ul */
-}
-
-.contact p {
-  margin: 0;
-}
-
-.socials {
-  display: flex;
-  gap: 1.2rem;
-  margin: 0;
-  height: 40px; /* Match height of other rows for alignment */
-  align-items: center;
-}
-
-.socialIcon {
-  width: 40px;
-  height: 40px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 12px; /* Fully square rounded from all sides */
-  color: var(--text-on-dark);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.socialIcon:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: var(--color-accent);
-  color: var(--color-accent); /* Icon turns accent color instead of background */
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-}
-
-.email {
-  margin: 0;
-  display: flex;
-  align-items: center;
-  line-height: 1.2;
-}
-
-.phone {
-  margin: 0;
-  color: var(--color-white);
-  font-size: 1.1rem;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  line-height: 1.2;
-}
-
-.phone a {
-  color: inherit;
-  text-decoration: none;
-}
-
-.email a {
-  color: var(--color-white) !important;
-  text-decoration: none;
-}
+.link:hover { color: var(--amber); }
+.muted { color: var(--faint); font-size: 0.9375rem; }
+.social { margin-top: 1.75rem; flex-direction: row; flex-wrap: wrap; gap: 1.25rem; }
 
 .bottom {
-  text-align: center;
-  padding: 2rem 0;
-  border-top: var(--border-dark);
-  font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.4);
-}
-
-.bigNavContainer {
-  width: 100%;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: -2rem;
-  padding-bottom: 2rem;
-  min-height: 250px;
-  position: relative;
-  cursor: pointer;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-block: 1.5rem;
+  border-top: 1px solid var(--line);
 }
 
-.bigNav {
-  display: flex;
-  align-items: baseline;
-  justify-content: center;
-  font-family: var(--font-outfit);
-  font-weight: 900;
-  color: rgba(255, 255, 255, 0.03);
-  text-transform: uppercase;
-  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-  letter-spacing: 0.05em;
-  user-select: none;
-  pointer-events: none;
-  position: relative;
+@media (min-width: 48rem) {
+  .inner { grid-template-columns: 1.4fr 1fr 1fr; }
 }
-
-.navPart {
-  font-size: clamp(6rem, 25vw, 16rem);
-  line-height: 1;
-  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-  display: inline-block;
-}
-
-.robotecPart {
-  font-size: 0;
-  opacity: 0;
-  max-width: 0;
-  overflow: hidden;
-  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-  color: rgba(255, 255, 255, 0.03);
-  white-space: nowrap;
-  display: inline-block;
-  vertical-align: baseline;
-}
-
-/* Hover state triggered by the stable container */
-.bigNavContainer:hover .bigNav {
-  color: rgba(255, 255, 255, 0.1);
-  letter-spacing: 0.1em;
-}
-
-.bigNavContainer:hover .navPart {
-  font-size: clamp(2rem, 10vw, 6rem);
-}
-
-.bigNavContainer:hover .robotecPart {
-  font-size: clamp(2rem, 10vw, 6rem);
-  opacity: 1;
-  max-width: 1000px; /* Large enough value to allow expansion */
-  margin-left: 0.1em;
-}
-
-.accentLetter {
-  color: var(--color-accent);
-  opacity: 0.45; /* Much more vibrant pink as requested */
-}
-
-@media (max-width: 768px) {
-  .footer {
-    padding: 3rem 0 2rem;
-  }
-  
-  .container {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 3rem 2rem;
-  }
-
-  .brand {
-    grid-column: span 2;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .links, .contact {
-    text-align: left;
-  }
-
-  .socials {
-    justify-content: flex-start;
-  }
-}
-
-@media (max-width: 480px) {
-  .container {
-    grid-template-columns: 1fr;
-    text-align: center;
-  }
-
-  .brand, .links, .contact {
-    grid-column: span 1;
-    text-align: center;
-  }
-
-  .links ul {
-    align-items: center;
-  }
-
-  /* .email/.phone are flex rows — text-align doesn't reach them */
-  .email,
-  .phone {
-    justify-content: center;
-  }
-
-  .socials {
-    justify-content: center;
-  }
+@media (min-width: 62rem) {
+  .inner { grid-template-columns: 1.6fr 1fr 1fr 1.2fr; }
 }

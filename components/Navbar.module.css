@@ -1,247 +1,131 @@
-.navbar {
+.bar {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 80px;
-  background: rgba(11, 14, 20, 0.5);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-bottom: var(--border-dark);
-  display: flex;
-  align-items: center;
+  inset: 0 0 auto 0;
   z-index: 1000;
-  transition: background 0.3s ease;
-  font-family: var(--font-mono);
+  height: var(--bar);
+  /* Transparent over the hero band, but never bare: a scrim keeps the links
+     legible over whatever the band turns out to hold. */
+  background: linear-gradient(to bottom, rgba(7, 19, 16, 0.7), rgba(7, 19, 16, 0));
+  border-bottom: 1px solid transparent;
+  transition: background-color 0.35s var(--ease), border-color 0.35s var(--ease);
+  color: var(--band-text);
 }
-
-.navbarScrolled {
-  background: var(--color-dark);
+.solid {
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter: blur(12px);
+  border-bottom-color: var(--line);
+  color: var(--ink);
 }
+.bar[data-open] { height: auto; background: var(--paper); color: var(--ink); }
 
-.container {
-  max-width: 1400px;
-  margin: 0 auto;
-  width: 100%;
-  padding: 0 4rem;
+.inner {
+  height: var(--bar);
+  max-width: var(--measure);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 1.5rem;
 }
 
-.logo {
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: var(--color-white);
-  text-decoration: none;
-  letter-spacing: 2px;
-  transition:
-    color 0.3s ease,
-    transform 0.3s ease;
+.brand {
   display: inline-flex;
   align-items: center;
+  gap: 1px;
+  margin-right: auto;
+  color: inherit;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.0625rem;
+  letter-spacing: 0.1em;
 }
-
-.logo:hover {
-  transform: scale(1.08);
+.word { display: inline-block; }
+.mark {
+  width: 22px;
+  height: 22px;
+  margin-inline: 2px;
+  transition: transform 0.6s var(--ease);
 }
+/* The file is black line-art: it needs inverting on the dark band and not on
+   the light page. Driven by the bar's own state rather than the theme, because
+   what is behind it is the bar's business. */
+.bar:not(.solid) .mark { filter: invert(1); }
+:global([data-theme="dark"]) .solid .mark { filter: invert(1); }
+.brand:hover .mark { transform: rotate(120deg); }
 
-.logo:hover .logoIcon {
-  filter: invert(24%) sepia(93%) saturate(1253%) hue-rotate(327deg)
-    brightness(97%) contrast(89%);
-}
-
-.navLinks {
-  display: flex;
-  list-style: none;
-  gap: 2.5rem;
-  margin: 0;
-  padding: 0;
-}
-
-.navLinks a,
-.navLinkWrapper {
-  color: var(--text-on-dark);
-  text-decoration: none;
+.links { display: none; align-items: center; gap: 0.25rem; }
+.link {
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius);
   font-family: var(--font-data);
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   font-weight: 500;
-  letter-spacing: 1.5px;
-  transition: color 0.3s ease;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  padding: 0.5rem 0;
-}
-
-.navLinkWrapper:hover {
-  color: var(--color-accent);
-}
-
-.underline {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: var(--color-accent);
-  transform-origin: left;
-}
-
-.cta {
-  display: flex;
-  align-items: center;
-}
-
-.contactBtn {
-  color: var(--color-white);
-  font-family: var(--font-data);
-  font-size: 0.78rem;
-  font-weight: 500;
-  letter-spacing: 1px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  transition: all 0.3s ease;
+  color: inherit;
+  opacity: 0.75;
+  transition: opacity 0.2s var(--ease), color 0.2s var(--ease);
 }
+.link:hover { opacity: 1; }
+/* aria-current rather than a class: the page you are on is announced as well
+   as marked. */
+.link[aria-current="page"] { opacity: 1; color: var(--signal-lit); }
+.solid .link[aria-current="page"] { color: var(--signal); }
 
-.contactBtn::before {
-  content: "[ ";
-  color: var(--color-peach);
-  transition: color 0.3s ease;
+.contact {
+  margin-left: 0.75rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid currentColor;
+  border-radius: var(--radius);
+  font-family: var(--font-data);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: inherit;
+  opacity: 0.85;
+  transition: opacity 0.2s var(--ease), color 0.2s var(--ease);
 }
+.contact:hover { opacity: 1; color: var(--signal-lit); }
+.solid .contact:hover { color: var(--signal); }
 
-.contactBtn::after {
-  content: " ]";
-  color: var(--color-peach);
-  transition: color 0.3s ease;
-}
-
-.contactBtn:hover::before,
-.contactBtn:hover::after {
-  color: var(--color-accent);
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.logoIcon {
-  animation: spin 8s linear infinite;
-  filter: invert(1);
-  transition: filter 0.3s ease;
-}
-
-/* Mobile Toggle Styles */
-.menuToggle {
-  display: none;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 10px;
-  z-index: 1001;
-}
-
-.hamburger {
-  width: 24px;
-  height: 2px;
-  background-color: var(--color-bone);
-  position: relative;
-  transition: all 0.3s ease;
-}
-
-.hamburger::before,
-.hamburger::after {
-  content: "";
-  position: absolute;
-  width: 24px;
-  height: 2px;
-  background-color: var(--color-bone);
-  left: 0;
-  transition: all 0.3s ease;
-}
-
-.hamburger::before {
-  top: -8px;
-}
-.hamburger::after {
-  top: 8px;
-}
-
-.hamburgerActive {
-  background-color: transparent;
-}
-
-.hamburgerActive::before {
-  top: 0;
-  transform: rotate(45deg);
-}
-
-.hamburgerActive::after {
-  top: 0;
-  transform: rotate(-45deg);
-}
-
-@media (max-width: 1024px) {
-  .container {
-    padding: 0 2rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .menuToggle {
-    display: block;
-  }
-
-  .navContent {
-    position: fixed;
-    top: 0;
-    right: -100%;
-    width: 80%;
-    height: 100vh;
-    background: var(--color-dark);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 4rem;
-    transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-  }
-
-  .navContentOpen {
-    right: 0;
-  }
-
-  .navLinks {
-    flex-direction: column;
-    align-items: center;
-    gap: 2.5rem;
-  }
-
-  .navLinks a {
-    font-size: 1.2rem;
-  }
-
-  .contactBtn {
-    font-size: 1.2rem;
-  }
-
-  .container {
-    padding: 0 1.5rem;
-  }
-
-  .navbar {
-    height: 70px;
-  }
-}
-
-.navContent {
-  display: flex;
+.toggle {
+  display: inline-flex;
   align-items: center;
-  gap: 2.5rem;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: none;
+  border: 1px solid currentColor;
+  border-radius: var(--radius);
+  color: inherit;
+  font-family: var(--font-data);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.bars {
+  display: block;
+  width: 14px;
+  height: 9px;
+  border-top: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+}
+
+.drawer { border-top: 1px solid var(--line); padding: 0.5rem var(--gutter) 1.5rem; }
+.drawer nav { display: flex; flex-direction: column; }
+.drawerLink {
+  padding: 0.9375rem 0;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--font-data);
+  font-size: 0.9375rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+.drawerLink[aria-current="page"] { color: var(--signal); }
+
+@media (min-width: 62rem) {
+  .links { display: flex; }
+  .toggle, .drawer { display: none; }
 }

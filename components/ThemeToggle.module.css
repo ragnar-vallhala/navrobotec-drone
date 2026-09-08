@@ -1,0 +1,27 @@
+.group {
+  display: inline-flex;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--card);
+  overflow: hidden;
+}
+.option {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4375rem;
+  padding: 0.4375rem 0.75rem;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font-family: var(--font-data);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.2s var(--ease), color 0.2s var(--ease);
+}
+.option + .option { border-left: 1px solid var(--line); }
+.option:hover { color: var(--ink); }
+/* aria-pressed rather than a class: the state is announced as well as shown. */
+.option[aria-pressed="true"] { background: var(--signal-wash); color: var(--signal); }
+.icon { font-size: 0.875rem; line-height: 1; }

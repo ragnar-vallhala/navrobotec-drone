@@ -1,162 +1,354 @@
 @import "tailwindcss";
 
-/* Global Styles - NAVRobotec Design System */
+/* ---------------------------------------------------------------------------
+   NAVRobotec — the design system.
+   ---------------------------------------------------------------------------
+
+   Light by default, with dark bands where the page wants weight — the hero,
+   the closing call. Long-form reading (blogs, docs) carries a theme toggle,
+   because that is where a reader actually has a preference and where they sit
+   for more than a minute. The choice is remembered and applies site-wide: a
+   setting that silently stops working when you navigate is worse than none.
+
+   Emerald is the signal, taken from the VAYU render. Two of them, because one
+   green cannot serve both grounds: `--signal` is dark enough to read on paper,
+   `--signal-lit` is bright enough to read on near-black. Using the wrong one
+   is the single easiest mistake to make here.
+
+   Three rules the old site broke, kept here so they are hard to break again:
+
+   1. Nothing that matters is invisible. No scroll-linked opacity, no reveal
+      that can leave text at 20% if a frame never arrives. Motion is for
+      arrival, never for legibility.
+   2. The first screen works with no video, no WebGL and no JavaScript.
+   3. Three typefaces, each with a job: Space Grotesk for display, Geist for
+      anything read at length, Geist Mono for the instrument voice. The site
+      had five, and set body copy in a geometric display face.
+--------------------------------------------------------------------------- */
+
 :root {
-  /* ---- Colors ---- */
-  --color-dark: #0B0E14; /* Darkest: navbar, footer, hero overlay */
-  --color-dark-mid: #12171F; /* Mid-dark: secondary surfaces */
-  --color-dark-elevated: #1C2533; /* Elevated dark: cards, accents on dark */
-  --color-white: #ffffff;
-  --color-bone: #ECE7DE; /* Primary text on dark */
-  --color-off-white: #f4f1ea; /* legacy alias (rarely used now) */
-  --color-peach: #B9B2A6; /* Warm grey: secondary text on dark backgrounds */
-  --color-accent: #FFB000; /* Bright signal amber (primary, on dark) */
-  --color-accent-deep: #D97706; /* Deeper amber: fills sitting under light text */
-  --color-accent-bright: #FFB000;
+  color-scheme: light;
 
-  /* ---- Surfaces (dark theme) ---- */
-  --surface: var(--color-dark-mid); /* Cards */
-  --surface-elevated: var(--color-dark-elevated); /* Hover / raised */
+  /* --- ground ------------------------------------------------------------ */
+  --paper: #f7f9f8;      /* the page */
+  --paper-2: #edf2ef;    /* tinted band, table stripes */
+  --card: #ffffff;       /* panels that sit above the page */
 
-  /* ---- Semantic aliases (maps to above) ---- */
-  --bg-primary: var(--color-dark);
-  --bg-secondary: #0E131B;
-  --bg-dark: var(--color-dark);
-  --text-primary: var(--color-bone);
-  --text-secondary: #9E988C;
-  --text-on-dark: var(--color-bone);
-  --text-muted-dark: var(--color-peach);
-  --accent-cyan: var(--color-accent);
-  --accent-blue: var(--color-dark-mid);
+  /* --- ink --------------------------------------------------------------- */
+  --ink: #0b1512;        /* headings */
+  --ink-2: #35443e;      /* body */
+  --muted: #6b7a73;      /* captions, labels */
 
-  /* ---- Fonts ---- */
-  --font-serif: "Georgia", serif;
-  --font-mono: var(--font-poppins), sans-serif; /* body copy (Poppins) */
-  --font-sans: var(--font-inter), system-ui, sans-serif; /* headings + UI */
-  --font-data: var(--font-jetbrains-mono), ui-monospace, "SFMono-Regular", monospace; /* technical labels, stats, nav */
+  /* --- structure --------------------------------------------------------- */
+  --line: #dde5e0;
+  --line-strong: #c4d0ca;
 
-  /* ---- Borders ---- */
-  --border-light: 1px solid rgba(255, 255, 255, 0.08);
-  --border-dark: 1px solid rgba(255, 255, 255, 0.05);
+  /* --- signal -------------------------------------------------------------
+     One accent, for one thing: the live value. Anything emerald on this site
+     should be a number, a state, or the thing you are meant to click. */
+  --signal: #05966a;         /* on paper */
+  --signal-deep: #04724f;
+  --signal-lit: #35e0a1;     /* on near-black — the VAYU glow */
+  --signal-wash: #e2f4ec;
+  --signal-line: rgba(5, 150, 106, 0.3);
 
-  /* ---- Shadows ---- */
-  --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.35);
-  --shadow-text: 0 4px 20px rgba(0, 0, 0, 0.4);
+  /* --- always-dark bands ---------------------------------------------------
+     The hero and the closing call are dark in both themes; these do not swap.
+     In dark mode the band lifts slightly instead, so it still reads as a band
+     rather than dissolving into the page. */
+  --band: #071310;
+  --band-2: #0d1f1a;
+  --band-text: #e6efea;
+  --band-muted: #8fa39a;
 
-  /* ---- Layout ---- */
-  --section-padding-x: 8rem;
-  --section-padding-y: 8rem;
-  --container-max-width: 1200px;
+  /* --- type ---------------------------------------------------------------
+     `--font-data` is the instrument voice: tabular figures, so a column of
+     numbers lines up and a changing value does not shuffle its neighbours. */
+  --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-data: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* --- rhythm -------------------------------------------------------------
+     One measure and one gutter for the whole site. Pages that set their own
+     are half of every alignment problem. */
+  --measure: 76rem;
+  --measure-prose: 44rem;
+  --gutter: clamp(1.25rem, 4vw, 3rem);
+  --bar: 68px;
+
+  --radius: 6px;
+  --radius-lg: 12px;
+
+  --shadow: 0 1px 2px rgba(11, 21, 18, 0.04), 0 12px 32px -20px rgba(11, 21, 18, 0.25);
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@theme {
-  --color-accent: var(--color-accent);
-  --color-dark: var(--color-dark);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-mono);
+/* Dark, chosen by the reader. Only the semantic tokens move; every rule in the
+   site is written against these names, so nothing else has to know. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --paper: #08120f;
+  --paper-2: #0d1a16;
+  --card: #101f1a;
+
+  --ink: #e9f1ec;
+  --ink-2: #b3c3bb;
+  --muted: #7f918a;
+
+  --line: rgba(233, 241, 236, 0.12);
+  --line-strong: rgba(233, 241, 236, 0.22);
+
+  --signal: var(--signal-lit);
+  --signal-deep: #1fc98c;
+  --signal-wash: rgba(53, 224, 161, 0.12);
+  --signal-line: rgba(53, 224, 161, 0.32);
+
+  /* Lifted, not sunk: on a dark page a darker band disappears. */
+  --band: #0d1f1a;
+  --band-2: #142b24;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 32px -20px rgba(0, 0, 0, 0.7);
 }
 
-@media (max-width: 1200px) {
-  :root {
-    --section-padding-x: 4rem;
+/* --- migration shim ---------------------------------------------------------
+   The page-level CSS modules were written against the old dark-only token
+   names. These map them onto the system above, so every page picks up the new
+   palette at once rather than rendering against tokens that no longer resolve
+   while the pages are converted one at a time. They follow the theme, so a
+   page still on the old names goes light and dark with everything else.
+
+   A bridge, not an API. As each page's CSS is rewritten against the real
+   tokens, its entries here fall out of use; delete the block when
+   `grep -rn "var(--text-primary" app components` comes back empty. */
+:root {
+  --color-dark: var(--ink);
+  --color-dark-mid: var(--paper-2);
+  --color-dark-elevated: var(--card);
+  --color-bone: var(--ink);
+  --color-peach: var(--ink-2);
+  --color-accent: var(--signal);
+  --color-accent-deep: var(--signal-deep);
+  --color-accent-bright: var(--signal);
+  --color-white: var(--card);
+  --surface: var(--card);
+  --surface-elevated: var(--paper-2);
+  --bg-primary: var(--paper);
+  --bg-secondary: var(--paper-2);
+  --bg-dark: var(--band);
+  --text-primary: var(--ink);
+  --text-secondary: var(--ink-2);
+  --text-muted: var(--muted);
+  --text-on-dark: var(--band-text);
+  --text-muted-dark: var(--band-muted);
+  --accent-cyan: var(--signal);
+  --accent-blue: var(--paper-2);
+  /* Body copy used to be Poppins through --font-mono, which is most of why it
+     read badly at paragraph sizes. Both aliases now point at the real faces. */
+  --font-mono: var(--font-sans);
+  --font-serif: var(--font-display);
+  --border-light: 1px solid var(--line);
+  --border-dark: 1px solid var(--line);
+  --shadow-card: var(--shadow);
+  --shadow-text: none;
+  --section-padding-x: var(--gutter);
+  --section-padding-y: clamp(4.5rem, 10vw, 8rem);
+  --container-max-width: var(--measure);
+}
+
+* { box-sizing: border-box; }
+
+html {
+  /* On <html> only: on <body> it becomes the scroll container and silently
+     breaks position: sticky. */
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  /* The fixed header would otherwise cover whatever an in-page link lands on. */
+  scroll-padding-top: calc(var(--bar) + 1.5rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
-@media (max-width: 768px) {
-  :root {
-    --section-padding-x: 1.5rem;
-    --section-padding-y: 5rem;
-  }
-
-  html {
-    font-size: 14px; /* Base scaling for mobile */
-  }
-}
-
-html,
 body {
   margin: 0;
-  padding: 0;
-}
-
-/* Clip stray horizontal overflow on <html> only. Setting overflow-x on <body>
-   makes it the scroll container and silently breaks `position: sticky`. */
-html {
-  overflow-x: hidden;
-}
-
-body {
-  background-color: var(--color-dark);
-  color: var(--text-primary);
-  font-family: var(--font-mono);
+  background: var(--paper);
+  color: var(--ink-2);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-* {
-  box-sizing: border-box;
-}
+/* --- type scale -----------------------------------------------------------
+   Display in Space Grotesk, which has character at size; everything read at
+   length in Geist, which gets out of the way. */
 
-.content-wrapper {
-  min-height: calc(100vh - 80px);
-  padding-top: 80px;
-  background-color: var(--bg-primary);
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+h1, h2, h3, h4, h5, h6 {
   margin: 0;
-  font-weight: 700;
-  font-family: var(--font-sans);
-  letter-spacing: -0.02em;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.06;
+  text-wrap: balance;
 }
 
-a {
-  text-decoration: none;
+.display { font-size: clamp(2.75rem, 7vw, 5.25rem); font-weight: 700; letter-spacing: -0.045em; }
+.h1      { font-size: clamp(2.25rem, 5vw, 3.5rem); }
+.h2      { font-size: clamp(1.75rem, 3.4vw, 2.5rem); }
+.h3      { font-size: clamp(1.1875rem, 2vw, 1.4375rem); letter-spacing: -0.02em; }
+
+p { margin: 0; }
+.lede { font-size: clamp(1.0625rem, 1.5vw, 1.25rem); line-height: 1.6; max-width: 60ch; }
+.body { max-width: 68ch; }
+.small { font-size: 0.9375rem; }
+.muted { color: var(--muted); }
+
+/* The instrument voice. */
+.label {
+  font-family: var(--font-data);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.label-signal { color: var(--signal); }
+
+/* Any number a reader might compare with another number. */
+.data {
+  font-family: var(--font-data);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
 }
 
-/* Animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+a { color: inherit; text-decoration: none; }
+
+/* --- layout --------------------------------------------------------------- */
+
+.shell {
+  width: 100%;
+  max-width: var(--measure);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
 }
 
-.animateFadeIn {
-  animation: fadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+.section { padding-block: clamp(4.5rem, 10vw, 8rem); }
+.section-tight { padding-block: clamp(3rem, 6vw, 5rem); }
+.rule { border-top: 1px solid var(--line); }
+.tinted { background: var(--paper-2); }
+
+/* A dark band on a light page — the hero, the closing call. Dark in both
+   themes, so it always reads as a deliberate change of ground. */
+.band {
+  position: relative;
+  overflow: hidden;
+  background: var(--band);
+  color: var(--band-muted);
+}
+.band :where(h1, h2, h3, h4, h5, h6) { color: var(--band-text); }
+.band :where(.label) { color: var(--band-muted); }
+.band :where(.label-signal) { color: var(--signal-lit); }
+.band :where(.lede, .body) { color: var(--band-muted); }
+.band strong { color: var(--band-text); }
+
+.page { padding-top: var(--bar); min-height: calc(100vh - var(--bar)); }
+.page-flush { padding-top: 0; }
+.prose-measure { max-width: var(--measure-prose); }
+
+/* --- controls -------------------------------------------------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.8125rem 1.5rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  font-family: var(--font-data);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.25s var(--ease), border-color 0.25s var(--ease),
+              color 0.25s var(--ease);
+}
+.btn-primary { background: var(--signal); color: #fff; }
+.btn-primary:hover { background: var(--signal-deep); }
+.btn-ghost { border-color: var(--line-strong); color: var(--ink); }
+.btn-ghost:hover { border-color: var(--signal); color: var(--signal); }
+
+/* On a dark band the same two buttons need the other green and the other
+   ground; without this the ghost button is invisible and the primary one is
+   too dark to read. */
+.band .btn-primary { background: var(--signal-lit); color: var(--band); }
+.band .btn-primary:hover { background: #5ceab5; }
+.band .btn-ghost { border-color: rgba(230, 239, 234, 0.28); color: var(--band-text); }
+.band .btn-ghost:hover { border-color: var(--signal-lit); color: var(--signal-lit); }
+
+:where(a, button, input, textarea, select, [tabindex]):focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+.band :where(a, button):focus-visible { outline-color: var(--signal-lit); }
+
+.skip {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 2000;
+  padding: 0.875rem 1.25rem;
+  background: var(--signal);
+  color: #fff;
+  font-family: var(--font-data);
+  font-size: 0.8125rem;
+}
+.skip:focus { left: 1rem; top: 1rem; }
+
+/* --- panels ---------------------------------------------------------------- */
+
+.panel {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
 }
 
-/* Custom Scrollbar - Ultra Thin Minimalist */
-::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+/* The faint reticle behind dark bands — an instrument grid, pure CSS, so it
+   costs nothing and cannot fail to load. */
+.reticle {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(230, 239, 234, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(230, 239, 234, 0.07) 1px, transparent 1px);
+  background-size: 96px 96px;
+  mask-image: radial-gradient(120% 100% at 50% 0%, #000 20%, transparent 78%);
 }
 
-::-webkit-scrollbar-track {
-  background: var(--color-dark);
+/* --- motion ----------------------------------------------------------------
+   One entrance, and it ends visible. The old site animated opacity from 0 on
+   scroll with `once: false`, so a section taller than the viewport never
+   reached the trigger and stayed invisible for good. */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
 }
+.rise { animation: rise 0.7s var(--ease) both; }
 
-::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  transition: background 0.3s ease;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-accent);
-}
-
-/* Firefox Support */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.1) var(--color-dark);
-}
+/* --- scrollbar -------------------------------------------------------------- */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--paper-2); }
+::-webkit-scrollbar-thumb { background: var(--line-strong); border: 2px solid var(--paper-2); border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: var(--signal); }
+* { scrollbar-width: thin; scrollbar-color: var(--line-strong) var(--paper-2); }
