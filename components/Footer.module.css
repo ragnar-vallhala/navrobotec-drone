@@ -20,7 +20,7 @@
   font-size: 1rem;
   letter-spacing: 0.14em;
 }
-.mark { width: 20px; height: 20px; margin-inline: 1px; filter: invert(1); }
+.mark { width: 1.15em; height: 1.15em; margin-inline: 0.09em; flex: none; }
 .blurb { margin-top: 1.25rem; color: var(--warm); }
 .legal { display: block; margin-top: 1.5rem; line-height: 1.9; }
 
