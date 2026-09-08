@@ -27,9 +27,19 @@
 .stage {
   position: absolute;
   inset: 0;
+  /* Plain url() first, for anything that does not know image-set. */
   background-image: url("/images/vayu-hero.webp");
+  /* Then by pixel density: a laptop at 2x is showing roughly 3000 physical
+     pixels across, so it gets the native 1808px file — which is encoded at
+     q=92 and never resampled, because the fog and the grain in the wordmark
+     are exactly what a cheap WebP smears. A 1x display gets half the file and
+     cannot tell. */
+  background-image: image-set(
+    url("/images/vayu-hero-1x.webp") 1x,
+    url("/images/vayu-hero.webp") 2x
+  );
   background-size: cover;
-  background-position: center 45%;
+  background-position: center 48%;
   background-repeat: no-repeat;
 }
 

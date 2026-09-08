@@ -77,10 +77,13 @@ export default function RootLayout({
             discover until it has parsed the stylesheet. These tell it now,
             with the same conditions the stylesheet uses, so exactly one of
             them is fetched and the first paint is not waiting on CSS. */}
+        {/* imageSrcSet, not href: the stylesheet picks by density, and the
+            preload has to make the same choice or the browser fetches one
+            file early and a different one when the CSS lands. */}
         <link
           rel="preload"
           as="image"
-          href="/images/vayu-hero.webp"
+          imageSrcSet="/images/vayu-hero-1x.webp 1x, /images/vayu-hero.webp 2x"
           media="(orientation: landscape), (min-width: 60rem)"
         />
         <link
