@@ -27,12 +27,20 @@
 .stage {
   position: absolute;
   inset: 0;
-  /* One file, no density split. This render is 1448px wide, which a laptop
-     already stretches past at 1x on a full-bleed hero — so a smaller "1x"
-     variant would be softer for no saving worth having. It is encoded native
-     and unresampled at q=92: the fog and the grain inside the wordmark are
-     exactly what a cheap WebP smears. */
+  /* One file, native, unresampled, q=96 — the point at which the encoder
+     stops being a visible contributor. q=100 costs another 85K for a
+     difference nobody can see, and lossless is 1.2MB.
+     
+     The remaining softness is not the encoder: this render is 1448px wide and
+     a full-bleed hero needs the viewport's device width, so it upscales about
+     1.3x on a 1080p window and 2.1x on a retina laptop. No encoder setting
+     fixes that — only a larger render does. Around 3000px wide would satisfy
+     every screen the site is likely to meet. */
   background-image: url("/images/vayu-hero.webp");
+  /* Tell the browser to interpolate smoothly rather than sharpen an image it
+     is already stretching, which is what makes an upscale look like JPEG
+     artefacts rather than softness. */
+  image-rendering: auto;
   background-size: cover;
   background-position: center 45%;
   background-repeat: no-repeat;
