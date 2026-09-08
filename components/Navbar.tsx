@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Mark from "./Mark";
 import styles from "./Navbar.module.css";
 
 /* The bar.
@@ -92,15 +92,7 @@ export default function Navbar() {
           {/* The mark stands in for the O. Hidden from assistive technology:
               the label above already says the name, and an <img alt="O"> makes
               a screen reader spell the word out. */}
-          <Image
-            src="/logo.svg"
-            alt=""
-            aria-hidden
-            width={22}
-            height={22}
-            className={styles.mark}
-            priority
-          />
+          <Mark className={styles.mark} />
           <span className={styles.word}>BOTEC</span>
         </Link>
 

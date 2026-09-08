@@ -41,16 +41,15 @@
 }
 .word { display: inline-block; }
 .mark {
-  width: 22px;
-  height: 22px;
-  margin-inline: 2px;
+  /* In em, so it tracks the wordmark instead of being a pixel value that only
+     looks right at one font size. 1.15em puts the rotor a little above the
+     cap height, which is where it has to sit to read as the O it replaces. */
+  width: 1.15em;
+  height: 1.15em;
+  margin-inline: 0.09em;
+  flex: none;
   transition: transform 0.6s var(--ease);
 }
-/* The file is black line-art: it needs inverting on the dark band and not on
-   the light page. Driven by the bar's own state rather than the theme, because
-   what is behind it is the bar's business. */
-.bar:not(.solid) .mark { filter: invert(1); }
-:global([data-theme="dark"]) .solid .mark { filter: invert(1); }
 .brand:hover .mark { transform: rotate(120deg); }
 
 .links { display: none; align-items: center; gap: 0.25rem; }

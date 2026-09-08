@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import Mark from "./Mark";
 import styles from "./Footer.module.css";
 
 /* The footer.
@@ -43,14 +43,7 @@ export default function Footer() {
         <div className={styles.brandCol}>
           <Link href="/" className={styles.brand} aria-label="NAVRobotec, home">
             <span>NAVR</span>
-            <Image
-              src="/logo.svg"
-              alt=""
-              aria-hidden
-              width={20}
-              height={20}
-              className={styles.mark}
-            />
+            <Mark className={styles.mark} />
             <span>BOTEC</span>
           </Link>
           <p className={`small ${styles.blurb}`}>
