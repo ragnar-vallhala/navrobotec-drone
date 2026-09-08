@@ -3,6 +3,6 @@
 // a new URL. Next serves optimised images `immutable`.
 export const FOCUS_IMAGES = {
   "focus-layout": "/images/focus-layout.b79ecd21.webp",
-  "focus-board": "/images/focus-board.a56ffb71.webp",
-  "focus-vayu": "/images/focus-vayu.e0b00b50.webp",
+  "focus-timing": "/images/focus-timing.eae0188f.webp",
+  "focus-scale": "/images/focus-scale.46fccd54.webp",
 } as const;

@@ -60,11 +60,9 @@ const STACK = [
    stack section already states — this is the same claim, sourced.
 
    Images are built by scripts/make-focus-images.py; sources and licences are
-   in assets/focus-source/CREDITS.md. Copper, then the company's own board
-   powered up, then the aircraft — silicon, hardware, flight, which is the
-   order the three claims are already in. What was here was a hand holding
-   somebody's flight controller, a quadcopter against blank sky, and a rack of
-   other people's airframes.
+   in assets/focus-source/CREDITS.md. Copper, a settling response, two
+   aircraft — the layer, the loop, the fleet, which is the order the three
+   claims are already in.
 
    `proof` is optional on purpose. Scale to swarms is a direction rather than
    a measurement, and inventing a figure to make the third row match the first
@@ -80,8 +78,8 @@ const FOCUS = [
     cta: "How the layers fit",
   },
   {
-    image: FOCUS_IMAGES["focus-board"],
-    alt: "The VAYU flight controller board, powered up, with the NAVROBOTEC silkscreen and its STM32 at the centre.",
+    image: FOCUS_IMAGES["focus-timing"],
+    alt: "A control-theory diagram: an oscillation settling towards its set point over time.",
     title: "Real-time reliability",
     body: "A flight core that never misses its deadline. VaiOS holds the control loop to a fixed schedule every cycle — benchmarked head to head against FreeRTOS and Zephyr on the same hardware.",
     proof: "~5.9 µs task-wake · 1 kHz / 250 Hz loops",
@@ -89,8 +87,8 @@ const FOCUS = [
     cta: "Read the benchmark",
   },
   {
-    image: FOCUS_IMAGES["focus-vayu"],
-    alt: "The VAYU aircraft.",
+    image: FOCUS_IMAGES["focus-scale"],
+    alt: "Two aircraft airborne in the same frame, one near and one far.",
     title: "Built to grow",
     body: "Autonomy and swarms are not bolted on — they are how VaiOS is designed to scale, from one aircraft to many. UAVs come first because that is where we prove it.",
     proof: null,

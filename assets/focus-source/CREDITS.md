@@ -1,33 +1,44 @@
 # Focus section imagery
 
 Sources for the images `scripts/make-focus-images.py` builds into
-`public/images/focus-*.webp`.
+`public/images/focus-*.webp`. All three are from Unsplash under the
+[Unsplash License](https://unsplash.com/license): free for commercial use,
+no permission or attribution required. The credits are recorded anyway,
+because knowing where an asset came from is worth more than the licence asks.
 
-| Output | Source | Licence |
-|---|---|---|
-| `focus-layout.webp` | `assets/focus-source/pcb-macro.jpg` — Vishnu Mohanan, [unsplash.com/photos/pfR18JNEMv8](https://unsplash.com/photos/pfR18JNEMv8) | [Unsplash License](https://unsplash.com/license) — free for commercial use, no attribution required |
-| `focus-board.webp` | `public/data/report/img/real_pcb.jpeg` — NAVROBOTEC's own board, from the technical report | Own work |
-| `focus-vayu.webp` | `public/images/vayu-hero.webp` — the VAYU render | Own work |
+| Row | Output | Source | Photographer |
+|---|---|---|---|
+| 01 Sovereign foundation | `focus-layout` | [unsplash.com/photos/pfR18JNEMv8](https://unsplash.com/photos/pfR18JNEMv8) → `pcb-macro.jpg` | Vishnu Mohanan |
+| 02 Real-time reliability | `focus-timing` | [unsplash.com/photos/Os_ISjoU4Lg](https://unsplash.com/photos/Os_ISjoU4Lg) → `damped-oscillation.jpg` | Bozhin Karaivanov |
+| 03 Built to grow | `focus-scale` | [unsplash.com/photos/FQa5xUZlAUo](https://unsplash.com/photos/FQa5xUZlAUo) → `two-aircraft.jpg` | Valentin Zickner |
 
-The Unsplash License permits commercial use without permission or
-attribution; the credits are recorded here because knowing where an asset came
-from is worth more than the licence requires.
+Copper, a settling response, two aircraft — the layer, the loop, the fleet.
 
-`assets/focus-source/two-aircraft.jpg` — Valentin Zickner,
-[unsplash.com/photos/FQa5xUZlAUo](https://unsplash.com/photos/FQa5xUZlAUo),
-same licence. Held here as the alternative for the third row.
+## Rejected, and why
 
-## What was replaced, and why
+Worth recording so nobody spends the search again.
 
-The section previously used `in-house.jpg`, `autonomous.jpg` and `swarm.webp`
-— stock photographs of other people's hardware, under a heading that reads
-"Own every layer, and prove it."
+* **An Arduino Uno** was the best-lit development board in the results. It is
+  the exact thing this company positions against; putting it under
+  "Real-time reliability" would argue the opposite case.
+* **`public/images/drone_cta.png`**, already in the repo, is AI-generated.
+  The airframe carries another company's name and the lettering on it is
+  garbled. Do not use it anywhere.
+* **`public/images/far_away.jpg`**, also in the repo, is a photograph of
+  somebody's FPV racing build.
+* **A vintage analogue oscilloscope** with a blank screen: reads as old lab
+  equipment, not as a hard real-time flight stack.
 
-Two other candidates already in the repo are worse and should not be used:
+## The strongest image is not in here
 
-* `images/drone_cta.png` is AI-generated. The airframe carries another
-  company's name and the lettering on it is garbled.
-* `images/far_away.jpg` is a photograph of somebody's FPV racing build.
+`public/data/report/img/real_pcb.jpeg` is NAVROBOTEC's own flight controller,
+powered, LEDs lit, the company's name silkscreened across it — and it is the
+hardware the benchmark that row 02 links to was run on. Under a heading that
+reads "Own every layer, and prove it", a photograph of the actual board beats
+any stock photograph of anything. It was in row 02 and was swapped out for
+the Unsplash image on request. To put it back, one line in
+`scripts/make-focus-images.py`:
 
-An Arduino Uno came up while searching for the middle row. It is the exact
-thing this company positions against; the row keeps NAVROBOTEC's own board.
+    ("public/data/report/img/real_pcb.jpeg", "focus-timing", "cover:0.52", None),
+
+then re-run the script.

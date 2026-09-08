@@ -82,14 +82,11 @@ def pad(im: Image.Image, margin: float = 0.06) -> Image.Image:
 JOBS = [
     # (source, output, how, pre-crop as fractions of the source or None)
     ("assets/focus-source/pcb-macro.jpg", "focus-layout", "cover:0.5", None),
-    # The middle row keeps NAVROBOTEC's own board: it is the hardware the
-    # benchmark in that row's link was run on, and nothing stock beats a
-    # photograph of the thing itself with the company's name on it. The board
-    # sits low in the frame — the photo has a lot of desk above it.
-    ("public/data/report/img/real_pcb.jpeg", "focus-board", "cover:0.52", None),
-    # In on the aircraft, below the wordmark. Taken whole this is the hero
-    # again, letters and all, a screen and a half further down the same page.
-    ("public/images/vayu-hero.webp", "focus-vayu", "cover:0.5", (0.16, 0.34, 0.84, 1.0)),
+    ("assets/focus-source/damped-oscillation.jpg", "focus-timing", "cover:0.5", None),
+    # In tight on both aircraft. Taken whole this is mostly empty sky, which
+    # is the fault the photograph it replaced had.
+    ("assets/focus-source/two-aircraft.jpg", "focus-scale", "cover:0.5",
+     (0.24, 0.22, 0.93, 0.95)),
 ]
 
 
