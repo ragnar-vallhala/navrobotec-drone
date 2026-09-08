@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import ScrollSteps from "@/components/ScrollSteps";
-import { FOCUS_IMAGES } from "@/lib/focus-images";
+import { PAGE_IMAGES } from "@/lib/page-images";
 import styles from "./page.module.css";
 
 /* The homepage.
@@ -59,7 +59,7 @@ const STACK = [
    voice, and the page it is substantiated on. The numbers are the ones the
    stack section already states — this is the same claim, sourced.
 
-   Images are built by scripts/make-focus-images.py; sources and licences are
+   Images are built by scripts/make-page-images.py; sources and licences are
    in assets/focus-source/CREDITS.md. Copper, a settling response, two
    aircraft — the layer, the loop, the fleet, which is the order the three
    claims are already in.
@@ -69,7 +69,7 @@ const STACK = [
    two is exactly what this section is meant not to do. */
 const FOCUS = [
   {
-    image: FOCUS_IMAGES["focus-layout"],
+    image: PAGE_IMAGES["focus-layout"],
     alt: "A bare circuit board in macro — copper traces, gold pads and a debug header.",
     title: "Sovereign foundation",
     body: "We own every layer — NavHAL at the hardware, VaiOS as the operating system, VAYU in the air. No black boxes, no foreign dependencies: a stack you can audit from the first register.",
@@ -78,7 +78,7 @@ const FOCUS = [
     cta: "How the layers fit",
   },
   {
-    image: FOCUS_IMAGES["focus-timing"],
+    image: PAGE_IMAGES["focus-timing"],
     alt: "A control-theory diagram: an oscillation settling towards its set point over time.",
     title: "Real-time reliability",
     body: "A flight core that never misses its deadline. VaiOS holds the control loop to a fixed schedule every cycle — benchmarked head to head against FreeRTOS and Zephyr on the same hardware.",
@@ -87,7 +87,7 @@ const FOCUS = [
     cta: "Read the benchmark",
   },
   {
-    image: FOCUS_IMAGES["focus-scale"],
+    image: PAGE_IMAGES["focus-scale"],
     alt: "Two aircraft airborne in the same frame, one near and one far.",
     title: "Built to grow",
     body: "Autonomy and swarms are not bolted on — they are how VaiOS is designed to scale, from one aircraft to many. UAVs come first because that is where we prove it.",

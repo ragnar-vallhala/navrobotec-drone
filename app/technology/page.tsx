@@ -2,9 +2,10 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import tech from "./technology.module.css";
 import Cinematic from "@/components/Cinematic";
+import { PAGE_IMAGES } from "@/lib/page-images";
 
 export const metadata: Metadata = {
-  title: "Technology | NAVRobotec",
+  title: "Technology",
   description:
     "The VaiOS stack, explained. NavHAL speaks to the silicon, VaiOS runs the real-time core, and VAYU flies on top — a sovereign flight stack built from the register up.",
 };
@@ -50,9 +51,14 @@ const layers = [
 export default function Technology() {
   return (
     <div className="page-flush">
+      {/* Silicon, because the lede says "built from the silicon up". What was
+          here was a 894x670 stock photograph of a hand holding somebody
+          else's flight controller — the same picture the homepage had already
+          dropped for proving nothing — stretched to twice its width across a
+          21:9 band. */}
       <Cinematic
-        src="/images/frame-technology.jpg"
-        focus="center 62%"
+        src={PAGE_IMAGES["hero-technology"]}
+        focus="center"
         kicker="The stack"
         title={<>Four layers, all ours.</>}
         lede="One sovereign runtime, built from the silicon up — from the register NavHAL writes to, up to the aircraft VAYU flies."
