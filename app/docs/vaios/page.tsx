@@ -5,7 +5,7 @@ import { getBook } from "@/lib/docs";
 export function generateMetadata(): Metadata {
   const book = getBook("vaios");
   return {
-    title: `${book?.title ?? "VaiOS Guide"} | NAVRobotec`,
+    title: `${book?.title ?? "VaiOS Guide"}`,
     description:
       book?.description ??
       "Tutorial-style walkthrough of the VaiOS real-time kernel.",

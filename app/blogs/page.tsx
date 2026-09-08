@@ -1,107 +1,173 @@
-import fs from 'fs';
-import path from 'path';
-import matter from 'gray-matter';
-import Link from 'next/link';
-import Image from 'next/image';
-import styles from './page.module.css';
-import sharedStyles from '../shared.module.css';
-import { Calendar, ArrowRight } from 'lucide-react';
-import { getImageMeta } from '../../lib/imageMeta';
+import fs from "fs";
+import path from "path";
+import matter from "gray-matter";
+import Link from "next/link";
+import Image from "next/image";
+import type { Metadata } from "next";
+import { getImageMeta } from "../../lib/imageMeta";
+import styles from "./page.module.css";
 
-export const metadata = {
-    title: 'VAYU Blogs | NAVRobotec',
-    description: 'Insights into sovereign autonomous flight, embedded real-time software, and the future of Indian robotics.',
+export const metadata: Metadata = {
+  title: "Engineering journal",
+  description:
+    "Field reports from building a sovereign flight stack: real-time scheduling, control loops, transport bugs, and the benchmarks behind them.",
 };
 
-export default async function BlogsPage() {
-    const blogsDirectory = path.join(process.cwd(), 'public/blogs');
-    let posts: any[] = [];
-    
-    try {
-        const files = fs.readdirSync(blogsDirectory);
-        posts = files
-            .filter(filename => filename.endsWith('.md'))
-            .map(filename => {
-                const slug = filename.replace('.md', '');
-                const filePath = path.join(blogsDirectory, filename);
-                const fileContents = fs.readFileSync(filePath, 'utf8');
-                const { data } = matter(fileContents);
+/* A typed shape instead of `any[]`. The frontmatter is ours, written by us,
+   in files in this repo — there is no reason for the compiler not to know it. */
+type Post = {
+  slug: string;
+  title: string;
+  date: string;
+  excerpt: string;
+  coverImage?: string;
+  blurDataURL?: string;
+};
 
-                return {
-                    slug,
-                    frontmatter: data,
-                };
-            })
-            .filter(post => post.frontmatter.title);
-            
-        posts.sort((a, b) => (new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime()));
+async function getPosts(): Promise<Post[]> {
+  const dir = path.join(process.cwd(), "public/blogs");
+  let files: string[];
+  try {
+    files = fs.readdirSync(dir).filter((f) => f.endsWith(".md"));
+  } catch {
+    /* No posts directory is a legitimate state — an empty journal, not a
+       broken page. */
+    return [];
+  }
 
-        // Attach a blur placeholder for each cover so cards fade in from a
-        // low-res preview instead of popping in once the full image downloads.
-        await Promise.all(posts.map(async (post) => {
-            if (post.frontmatter.coverImage) {
-                post.cover = await getImageMeta(post.frontmatter.coverImage);
-            }
-        }));
-    } catch (e) {
-        posts = [];
-    }
+  const posts = files.map((filename) => {
+    const { data } = matter(fs.readFileSync(path.join(dir, filename), "utf8"));
+    return {
+      slug: filename.replace(/\.md$/, ""),
+      title: String(data.title ?? ""),
+      date: String(data.date ?? ""),
+      excerpt: String(data.excerpt ?? ""),
+      coverImage: data.coverImage ? String(data.coverImage) : undefined,
+    } satisfies Post;
+  });
 
-    return (
-        <div className={sharedStyles.container} style={{ minHeight: '100vh' }}>
-            <div className={sharedStyles.standardContainer}>
-                <div className={sharedStyles.headerArea}>
-                    <h1>Engineering <span className={sharedStyles.gradientText}>Journal.</span></h1>
-                    <p>
-                        Documenting our architecture, research, and milestones in building autonomous, sovereign intelligence.
-                    </p>
-                </div>
+  const withCovers = await Promise.all(
+    posts
+      .filter((p) => p.title)
+      .map(async (p) => {
+        if (!p.coverImage) return p;
+        const meta = await getImageMeta(p.coverImage);
+        return { ...p, blurDataURL: meta?.blurDataURL };
+      }),
+  );
 
-                {posts.length === 0 ? (
-                    <div style={{ padding: '4rem 0', opacity: 0.5 }}>
-                        <p>Initializing intelligence protocols. No logs available yet.</p>
-                    </div>
-                ) : (
-                    <div className={styles.blogGrid}>
-                        {posts.map((post) => (
-                            <Link key={post.slug} href={`/blogs/${post.slug}`} className={styles.blogCard}>
-                                {post.frontmatter.coverImage && (
-                                    <div className={styles.blogCardImageWrapper}>
-                                        <Image
-                                            src={post.frontmatter.coverImage}
-                                            alt={post.frontmatter.title}
-                                            fill
-                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
-                                            className={styles.blogCardImage}
-                                            {...(post.cover ? { placeholder: 'blur' as const, blurDataURL: post.cover.blurDataURL } : {})}
-                                        />
-                                        <div className={styles.blogCardOverlay} />
-                                    </div>
-                                )}
-                                
-                                <div className={styles.blogCardContent}>
-                                    <div className={styles.blogCardMeta}>
-                                        <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                                            <Calendar size={14} />
-                                            {post.frontmatter.date}
-                                        </span>
-                                    </div>
+  return withCovers.sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+  );
+}
 
-                                    <h3 className={styles.blogCardTitle}>{post.frontmatter.title}</h3>
-                                    
-                                    <p className={styles.blogCardExcerpt}>
-                                        {post.frontmatter.excerpt}
-                                    </p>
+/* Written as a date, read as a date: the frontmatter carries "June 24, 2026",
+   which is fine to print but useless to a machine. */
+function when(value: string) {
+  const d = new Date(value);
+  return Number.isNaN(d.getTime())
+    ? { text: value, iso: undefined }
+    : {
+        text: d.toLocaleDateString("en-GB", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        }),
+        iso: d.toISOString().slice(0, 10),
+      };
+}
 
-                                    <div className={styles.blogCardCTA}>
-                                        Read Article <ArrowRight size={16} />
-                                    </div>
-                                </div>
-                            </Link>
-                        ))}
-                    </div>
-                )}
-            </div>
+export default async function Blogs() {
+  const posts = await getPosts();
+  const [lead, ...rest] = posts;
+
+  return (
+    <div className="page">
+      {/* The measure goes on an inner element, never on .shell itself: .shell
+          centres what it is given, so a narrower max-width on the same node
+          centres the heading instead of aligning it with the page. */}
+      <header className="shell">
+        <div className={styles.head}>
+          <p className="label">Engineering journal</p>
+          <h1 className="h1">
+            What we found, and what it cost to find it.
+          </h1>
+          <p className="lede">
+            Field reports from building the stack: scheduling, control loops,
+            transport bugs, and the measurements behind the claims.
+          </p>
         </div>
-    );
+      </header>
+
+      {posts.length === 0 ? (
+        <div className="shell">
+          <p className={styles.empty}>Nothing published yet.</p>
+        </div>
+      ) : (
+        <div className="shell">
+          {/* The newest post gets the width. A journal where every entry is
+              the same size says nothing about which one to read. */}
+          <Link href={`/blogs/${lead.slug}`} className={styles.lead}>
+            {lead.coverImage ? (
+              <div className={styles.leadImage}>
+                <Image
+                  src={lead.coverImage}
+                  alt=""
+                  fill
+                  priority
+                  sizes="(max-width: 62rem) 100vw, 62rem"
+                  className={styles.cover}
+                  {...(lead.blurDataURL
+                    ? { placeholder: "blur" as const, blurDataURL: lead.blurDataURL }
+                    : {})}
+                />
+              </div>
+            ) : null}
+            <div className={styles.leadBody}>
+              <time className="label" dateTime={when(lead.date).iso}>
+                {when(lead.date).text}
+              </time>
+              <h2 className="h2">{lead.title}</h2>
+              <p className="body">{lead.excerpt}</p>
+              <span className={styles.more}>
+                Read it<span aria-hidden> →</span>
+              </span>
+            </div>
+          </Link>
+
+          {rest.length > 0 ? (
+            <ol className={styles.list}>
+              {rest.map((post) => (
+                <li key={post.slug}>
+                  <Link href={`/blogs/${post.slug}`} className={styles.entry}>
+                    <time className={`label ${styles.entryDate}`} dateTime={when(post.date).iso}>
+                      {when(post.date).text}
+                    </time>
+                    <div className={styles.entryBody}>
+                      <h2 className="h3">{post.title}</h2>
+                      <p className="body small">{post.excerpt}</p>
+                    </div>
+                    {post.coverImage ? (
+                      <div className={styles.entryThumb}>
+                        <Image
+                          src={post.coverImage}
+                          alt=""
+                          fill
+                          sizes="12rem"
+                          className={styles.cover}
+                          {...(post.blurDataURL
+                            ? { placeholder: "blur" as const, blurDataURL: post.blurDataURL }
+                            : {})}
+                        />
+                      </div>
+                    ) : null}
+                  </Link>
+                </li>
+              ))}
+            </ol>
+          ) : null}
+        </div>
+      )}
+    </div>
+  );
 }

@@ -5,7 +5,7 @@ import { getBook } from "@/lib/docs";
 export function generateMetadata(): Metadata {
   const book = getBook("vayu");
   return {
-    title: `${book?.title ?? "Vayu Guide"} | NAVRobotec`,
+    title: `${book?.title ?? "Vayu Guide"}`,
     description:
       book?.description ??
       "Tutorial-style walkthrough of the Vayu flight control stack.",

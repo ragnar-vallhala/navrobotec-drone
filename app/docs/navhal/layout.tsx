@@ -16,9 +16,9 @@ export default function NavhalLayout({
         bookTitle={book?.title ?? "NavHAL Guide"}
         tutorials={tutorials}
       />
-      <main className={styles.docsContent}>
+      <div className={styles.docsContent}>
         <div className={styles.innerContent}>{children}</div>
-      </main>
+      </div>
     </>
   );
 }

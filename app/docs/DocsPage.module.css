@@ -1,553 +1,497 @@
-.article {
-  animation: fadeIn 0.8s ease-out;
-  padding: 2rem 0;
-}
+/* Every page under /docs — the hub, a book index, a chapter, a section, a
+ * tutorial — is one of two shapes: a list of things to read, or a thing being
+ * read. This file holds both.
+ *
+ * The reading half is deliberately the same typography as a blog post. A
+ * reader who has just come from /blogs should not have to re-learn what a
+ * heading looks like; the difference between a post and a chapter is what is
+ * around the text, not the text.
+ */
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+.article { padding-block: 0 1rem; }
+
+/* --- page head ------------------------------------------------------------ */
 
 .header {
-  margin-bottom: 4rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  padding-bottom: 2rem;
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+  padding-bottom: 1.75rem;
+  border-bottom: 1px solid var(--line);
 }
 
+/* Doubles as the "up one level" link on every inner page — the same word that
+   names where you are is the word that takes you back to it. */
 .label {
-  display: block;
-  font-size: 0.85rem;
-  color: var(--color-accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-data);
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  margin-bottom: 1rem;
-  font-weight: 700;
-  font-family: var(--font-mono);
+  color: var(--muted);
+  transition: color 0.2s var(--ease);
 }
+a.label:hover { color: var(--signal); }
 
 .title {
-  font-size: 3rem;
-  color: var(--text-primary);
-  letter-spacing: -1.5px;
-  font-family: var(--font-serif);
-}
-
-.content {
-  color: var(--text-secondary);
-  line-height: 1.8;
-  font-size: 1.1rem;
+  margin-top: 1.25rem;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4.2vw, 3rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--ink);
+  text-wrap: balance;
 }
 
 .lead {
-  font-size: 1.35rem;
-  color: var(--text-primary);
-  margin-bottom: 2.5rem;
-  line-height: 1.5;
-  font-weight: 500;
-}
-
-.section {
-  margin-bottom: 4rem;
-}
-
-.section h2 {
-  color: var(--text-primary);
-  font-size: 1.8rem;
-  margin-bottom: 1.5rem;
-  font-family: var(--font-serif);
-}
-
-.infoBox {
-  background: rgba(217, 119, 6, 0.03);
-  border-left: 4px solid var(--color-accent);
-  padding: 2rem;
-  margin: 3rem 0;
-  color: var(--text-primary);
-  font-style: italic;
-  border-radius: 4px 12px 12px 4px;
-  font-size: 1.05rem;
-}
-
-.list {
-  padding-left: 1.5rem;
-}
-
-.list li {
-  margin-bottom: 1rem;
-}
-
-.list strong {
-  color: var(--text-primary);
-}
-
-.grid2 {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
-  margin: 3rem 0;
-}
-
-.miniCard {
-  background: var(--surface);
-  padding: 1.75rem;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.02);
-}
-
-.miniCard h3 {
-  color: var(--color-accent);
-  font-size: 1.1rem;
-  margin-bottom: 0.75rem;
-  font-family: var(--font-mono);
-}
-
-.miniCard p {
-  font-size: 0.95rem;
-  color: var(--text-secondary);
-  line-height: 1.5;
-}
-
-.tikz-svg {
-  display: block;
-  margin: 3rem auto;
-  max-width: 100%;
-  height: auto;
-  /* Light panel so black line-art diagrams stay legible on the dark page */
-  background: var(--color-bone);
-  padding: 3rem;
-  border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  transition: transform 0.3s ease;
-}
-
-.tikz-svg:hover {
-  transform: scale(1.01);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-}
-
-.footer {
-  margin-top: 8rem;
-  padding-top: 4rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.pagination {
-  display: flex;
-  justify-content: space-between;
-  gap: 2rem;
-}
-
-.pagLink {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  padding: 1.5rem 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  background: var(--surface);
-}
-
-.pagLink.prev {
-  align-items: flex-start;
-  text-align: left;
-}
-
-.pagLink.next {
-  align-items: flex-end;
-  text-align: right;
-}
-
-.pagLink:hover {
-  border-color: var(--color-accent);
-  transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-}
-
-.pagLabel {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: var(--text-muted);
-  margin-bottom: 0.5rem;
-  font-weight: 700;
-  font-family: var(--font-mono);
-}
-
-.pagLink:hover .pagLabel {
-  color: var(--color-accent);
-}
-
-.pagTitle {
-  font-size: 1.25rem;
-  color: var(--text-primary);
-  font-weight: 700;
-  font-family: var(--font-serif);
-}
-
-@media (max-width: 768px) {
-  .pagination {
-    flex-direction: column;
-  }
-}
-
-/* ---- Chapter index list ---- */
-.chapterList {
-  display: flex;
-  flex-direction: column;
-  margin: 1rem 0 3rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.chapterItem {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  padding: 1.4rem 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  text-decoration: none;
-  color: var(--text-primary);
-  transition: all 0.25s ease;
-}
-
-.chapterItem:hover {
-  background: rgba(217, 119, 6, 0.04);
-  padding-left: 1.5rem;
-}
-
-.chapterNo {
-  font-family: var(--font-mono);
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: var(--color-accent);
-}
-
-.chapterName {
-  flex: 1;
-  font-family: var(--font-serif);
-  font-size: 1.25rem;
-  font-weight: 700;
-}
-
-.chapterItem svg {
-  color: var(--color-accent);
-}
-
-.chapterDisabled {
-  cursor: default;
-  opacity: 0.5;
-}
-
-.chapterDisabled:hover {
-  background: none;
-  padding-left: 1rem;
-}
-
-.soon {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: var(--text-secondary);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  padding: 0.25rem 0.6rem;
-  border-radius: 999px;
-}
-
-.chapterMeta {
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  color: var(--text-secondary);
+  font-size: clamp(1.0625rem, 1.4vw, 1.1875rem);
+  line-height: 1.65;
+  color: var(--ink-2);
+  max-width: 46rem;
+  margin-bottom: clamp(2.5rem, 5vw, 3.5rem);
 }
 
 .pending {
-  color: var(--text-secondary);
-  font-style: italic;
-  padding: 3rem 0;
+  padding: 1.5rem 0;
+  color: var(--muted);
+  font-size: 0.9375rem;
 }
 
-/* ---- Tutorial header meta ---- */
 .tutorialMeta {
   display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: var(--text-secondary);
-}
-
-.tutorialMetaItem {
-  display: inline-flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 0.35rem;
+  gap: 1rem;
+  margin-top: 1.25rem;
+  font-family: var(--font-data);
+  font-size: 0.8125rem;
+  color: var(--muted);
 }
+.tutorialMetaItem { display: inline-flex; align-items: center; gap: 0.375rem; }
 
-/* ---- Book hub grid (docs landing) ---- */
+/* --- the books on the hub ---------------------------------------------------
+   The report is the one finished book, so it gets the whole width and the
+   tutorials sit under it as rows. A grid of four equal cards would tell a
+   visitor that three unwritten guides matter as much as the one document
+   that is actually there. */
+
+.bookLead {
+  display: grid;
+  gap: 1.5rem;
+  align-items: end;
+  padding: clamp(1.75rem, 3.5vw, 2.5rem);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--card);
+  box-shadow: var(--shadow);
+  transition: border-color 0.25s var(--ease), transform 0.25s var(--ease);
+}
+.bookLead:hover { border-color: var(--signal-line); transform: translateY(-2px); }
+.bookLead:hover .bookTitle { color: var(--signal); }
+.bookLeadBody { max-width: 40rem; }
+
 .bookGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
-  margin: 1rem 0 4rem;
+  gap: 1px;
+  background: var(--line);
+  border-block: 1px solid var(--line);
+  margin-top: clamp(2.5rem, 5vw, 3.5rem);
 }
 
 .bookCard {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-  padding: 2rem 1.75rem;
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: var(--surface);
-  text-decoration: none;
-  color: var(--text-primary);
-  transition: transform 0.25s ease, border-color 0.25s ease,
-    box-shadow 0.25s ease;
+  display: grid;
+  gap: 0.5rem;
+  padding: 1.75rem 0;
+  background: var(--paper);
+  transition: background-color 0.25s var(--ease);
 }
+.bookCard:hover { background: var(--paper-2); }
+.bookCard:hover .bookTitle { color: var(--signal); }
 
-.bookCard:hover {
-  border-color: var(--color-accent);
-  transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
-}
-
-.bookCardSoon {
-  opacity: 0.75;
-}
-
-.bookCardSoon:hover {
-  border-color: rgba(0, 0, 0, 0.15);
-  transform: none;
-  box-shadow: none;
-}
+/* A guide that has not been written yet still gets a row — a reader should be
+   able to see what is coming — but it does not pretend to be a link. */
+.bookCardSoon { cursor: default; }
+.bookCardSoon:hover { background: var(--paper); }
+.bookCardSoon:hover .bookTitle { color: var(--ink); }
+.bookCardSoon .bookTitle,
+.bookCardSoon .bookDesc { opacity: 0.6; }
 
 .bookKicker {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  font-weight: 700;
+  font-family: var(--font-data);
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  color: var(--color-accent);
+  color: var(--muted);
 }
 
 .bookTitle {
-  font-family: var(--font-serif);
-  font-size: 1.55rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2.2vw, 1.625rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
   line-height: 1.2;
-  margin: 0;
-  color: var(--text-primary);
+  color: var(--ink);
+  transition: color 0.25s var(--ease);
 }
 
 .bookDesc {
-  color: var(--text-secondary);
-  font-size: 0.98rem;
-  line-height: 1.55;
-  margin: 0;
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  max-width: 52ch;
 }
 
-.bookFooter {
-  display: flex;
-  align-items: center;
-  margin-top: 0.5rem;
-}
+.bookFooter { display: flex; align-items: center; }
 
 .bookCta {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  font-family: var(--font-mono);
-  font-size: 0.82rem;
-  font-weight: 700;
+  gap: 0.5rem;
+  font-family: var(--font-data);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  color: var(--color-accent);
+  color: var(--signal);
 }
 
-/* ---- Rendered chapter HTML (pandoc output) ---- */
+.soon {
+  font-family: var(--font-data);
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  padding: 0.2rem 0.625rem;
+}
+
+@media (min-width: 48rem) {
+  .bookLead { grid-template-columns: 1fr auto; }
+  .bookCard {
+    grid-template-columns: 8rem 1fr auto;
+    align-items: baseline;
+    row-gap: 0.5rem;
+    column-gap: 2rem;
+    padding-inline: 0 0.5rem;
+  }
+  .bookCard .bookDesc { grid-column: 2; }
+  .bookCard .bookTitle { grid-column: 2; grid-row: 1; }
+  .bookCard .bookKicker { grid-row: 1; }
+  .bookCard .bookFooter { grid-column: 3; grid-row: 1; }
+}
+
+/* --- a list of chapters, sections or tutorials ------------------------------ */
+
+.chapterList {
+  display: grid;
+  gap: 1px;
+  background: var(--line);
+  border-block: 1px solid var(--line);
+  /* Adjacent-sibling margins collapse, so this does not stack on top of the
+     lede's bottom margin on the pages where the list follows one directly —
+     it only opens the gap where the list follows a chapter's prose. */
+  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+  margin-bottom: clamp(3rem, 6vw, 4rem);
+}
+
+.listHead {
+  display: block;
+  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+  margin-bottom: 1.25rem;
+}
+.listHead + .chapterList { margin-top: 0; }
+
+.chapterItem {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr auto auto;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 1.125rem 0.5rem 1.125rem 0;
+  background: var(--paper);
+  color: var(--ink);
+  transition: background-color 0.2s var(--ease), padding-left 0.2s var(--ease);
+}
+.chapterItem:hover { background: var(--paper-2); padding-left: 0.5rem; }
+.chapterItem:hover .chapterName { color: var(--signal); }
+.chapterItem svg { color: var(--muted); align-self: center; }
+.chapterItem:hover svg { color: var(--signal); }
+
+.chapterDisabled { color: var(--muted); cursor: default; }
+.chapterDisabled:hover { background: var(--paper); padding-left: 0; }
+.chapterDisabled .chapterName { color: var(--muted); }
+
+.chapterNo {
+  font-family: var(--font-data);
+  font-size: 0.8125rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.chapterName {
+  font-size: 1.0625rem;
+  line-height: 1.4;
+  transition: color 0.2s var(--ease);
+}
+
+.chapterMeta {
+  font-family: var(--font-data);
+  font-size: 0.75rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* --- the two PDFs ------------------------------------------------------------
+   These used to be styled as previous/next pagination, which told a reader
+   the executive summary came after the hub in reading order. They are
+   downloads; they look like downloads. */
+
+.downloads {
+  margin-top: clamp(3rem, 6vw, 4.5rem);
+  padding-top: 2rem;
+  border-top: 1px solid var(--line);
+}
+.downloadsLabel { display: block; margin-bottom: 1.25rem; }
+.downloadGrid { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; }
+
+.download {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 1.375rem;
+  background: var(--card);
+  transition: background-color 0.2s var(--ease);
+}
+.download:hover { background: var(--paper-2); }
+.download:hover .downloadTitle { color: var(--signal); }
+.downloadIcon { flex-shrink: 0; color: var(--signal); }
+.downloadText { min-width: 0; }
+.downloadTitle {
+  display: block;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--ink);
+  transition: color 0.2s var(--ease);
+}
+.downloadMeta {
+  display: block;
+  margin-top: 0.25rem;
+  font-family: var(--font-data);
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+@media (min-width: 44rem) {
+  .downloadGrid { grid-template-columns: 1fr 1fr; }
+}
+
+/* --- previous / next --------------------------------------------------------- */
+
+.footer {
+  margin-top: clamp(3.5rem, 7vw, 5rem);
+  padding-top: 2rem;
+  border-top: 1px solid var(--line);
+}
+
+.pagination,
+.grid2 {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 40rem) {
+  .pagination,
+  .grid2 { grid-template-columns: 1fr 1fr; }
+}
+
+.pagLink {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.125rem 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--card);
+  transition: border-color 0.2s var(--ease), background-color 0.2s var(--ease);
+}
+.pagLink:hover { border-color: var(--signal-line); background: var(--paper-2); }
+.pagLink:hover .pagTitle { color: var(--signal); }
+
+.pagLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-data);
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.pagTitle {
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  color: var(--ink);
+  transition: color 0.2s var(--ease);
+}
+/* "Next" points right, so it is set right — the direction of the link and the
+   direction of the text agree. */
+.pagLink.next { align-items: flex-end; text-align: right; }
+
+/* --- the prose ---------------------------------------------------------------
+   Scoped to generated markup: the report is converted from LaTeX and the
+   tutorials from markdown, so nothing below can rely on a class name being
+   present. Everything is selected by element.
+*/
+
 .prose {
-  color: var(--text-secondary);
-  line-height: 1.85;
-  font-size: 1.08rem;
-  overflow-wrap: break-word;
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: var(--ink-2);
 }
+.prose > * + * { margin-top: 1.5em; }
 
-.prose h2 {
-  font-family: var(--font-serif);
-  color: var(--text-primary);
-  font-size: 1.9rem;
-  margin: 3.5rem 0 1.25rem;
+.prose :where(h1, h2, h3, h4, h5, h6) {
+  color: var(--ink);
+  font-family: var(--font-display);
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  margin-top: 2.5em;
+  margin-bottom: 0.75em;
+  /* A deep link to a heading must clear the header and the reading bar, or it
+     lands with the heading underneath them. */
+  scroll-margin-top: calc(var(--doc-top) + 1.5rem);
 }
-
-.prose h3 {
-  font-family: var(--font-sans);
-  color: var(--text-primary);
-  font-size: 1.3rem;
-  margin: 2.5rem 0 1rem;
-}
-
-.prose p {
-  margin: 0 0 1.5rem;
-}
-
-.prose ul,
-.prose ol {
-  margin: 0 0 1.5rem;
-  padding-left: 1.5rem;
-}
-
-.prose li {
-  margin-bottom: 0.6rem;
-}
-
-.prose strong {
-  color: var(--text-primary);
-}
+.prose h1 { font-size: 1.875rem; }
+.prose h2 { font-size: 1.5rem; }
+.prose h3 { font-size: 1.1875rem; }
+.prose :where(h4, h5, h6) { font-size: 1.0625rem; }
 
 .prose a {
-  color: var(--color-accent);
+  color: var(--signal);
   text-decoration: underline;
-  text-underline-offset: 3px;
+  text-underline-offset: 0.15em;
+  text-decoration-thickness: 1px;
+}
+.prose a:hover { text-decoration-thickness: 2px; }
+
+.prose strong { color: var(--ink); font-weight: 600; }
+.prose em { font-style: italic; }
+
+.prose :where(ul, ol) { padding-left: 1.5rem; }
+.prose :where(ul, ol) > li + li { margin-top: 0.5em; }
+.prose li::marker { color: var(--muted); }
+/* A nested list is part of its parent item, not a new block. */
+.prose li > :where(ul, ol) { margin-top: 0.5em; }
+
+.prose blockquote {
+  margin-inline: 0;
+  padding: 0.25rem 0 0.25rem 1.5rem;
+  border-left: 2px solid var(--signal);
+  color: var(--ink);
 }
 
-.prose figure {
-  margin: 3rem 0;
-  text-align: center;
+.prose :not(pre) > code {
+  font-family: var(--font-data);
+  font-size: 0.875em;
+  padding: 0.15em 0.35em;
+  border-radius: 4px;
+  background: var(--paper-2);
+  color: var(--ink);
 }
 
-.prose img {
+.prose pre {
+  padding: 1.25rem 1.375rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--paper-2);
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+.prose pre code { font-family: var(--font-data); background: none; padding: 0; }
+
+/* Pandoc's syntax highlighting, in the site's palette rather than its own. */
+.prose :global(.sourceCode) :where(.kw, .cf) { color: var(--signal-deep); font-weight: 600; }
+.prose :global(.sourceCode) :where(.dt, .bu) { color: var(--ink); }
+.prose :global(.sourceCode) :where(.co, .pp, .im) { color: var(--muted); font-style: italic; }
+.prose :global(.sourceCode) :where(.dv, .fl, .st, .ch) { color: var(--signal); }
+
+/* --- figures -----------------------------------------------------------------
+   The TikZ diagrams are dvisvgm output: black strokes on a transparent
+   canvas. Dropped straight onto a dark page they are invisible. Every figure
+   image therefore carries its own light ground in both themes, which is also
+   how they were drawn to be read. */
+
+.prose :where(img) {
   display: block;
   max-width: 100%;
   height: auto;
-  margin: 1.5rem auto;
+  margin-inline: auto;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1rem;
 }
 
-.prose figure img {
-  background: var(--color-bone);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-  padding: 1.5rem;
-}
-
+.prose figure { margin-inline: 0; text-align: center; }
 .prose figcaption {
-  margin-top: 1rem;
-  font-size: 0.95rem;
-  color: var(--text-secondary);
-  font-style: italic;
+  margin-top: 0.875rem;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--muted);
 }
 
-/* display:block + max-content lets a wide table scroll horizontally instead
-   of overflowing the page (the same approach GitHub uses for markdown). */
+/* --- tables --------------------------------------------------------------------
+   Pandoc emits striped rows via .odd/.even. The stripe is what makes a wide
+   comparison table readable across a row, so it is kept — in tokens. */
+
 .prose table {
-  display: block;
-  width: max-content;
-  max-width: 100%;
-  overflow-x: auto;
+  width: 100%;
   border-collapse: collapse;
-  margin: 2rem 0;
-  font-size: 0.95rem;
-}
-
-.prose th,
-.prose td {
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 0.6rem 0.9rem;
-  text-align: left;
-}
-
-.prose th {
-  background: var(--bg-secondary);
-}
-
-.prose math[display="block"] {
+  font-size: 0.9375rem;
   display: block;
   overflow-x: auto;
-  margin: 1.5rem 0;
 }
-
-/* ---- Code ---- */
-.prose pre,
-.prose code {
-  font-family: ui-monospace, "SF Mono", "Cascadia Code", "Fira Code",
-    Consolas, "Liberation Mono", Menlo, monospace;
+.prose :where(th, td) {
+  padding: 0.625rem 0.875rem;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
 }
-
-/* Inline code — subtle accent-tinted pill. */
-.prose code {
-  background: rgba(217, 119, 6, 0.08);
-  color: var(--text-primary);
-  padding: 0.15em 0.4em;
-  border-radius: 5px;
-  font-size: 0.88em;
+.prose th {
+  font-family: var(--font-data);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
 }
+.prose :global(tr.even) { background: var(--paper-2); }
+.prose caption { caption-side: bottom; padding-top: 0.75rem; font-size: 0.875rem; color: var(--muted); }
 
-/* Block code — dark panel so it stands clearly apart from prose. */
-.prose pre {
-  background: #06090f;
-  color: #e4e4ef;
-  padding: 1.5rem;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+.prose hr { border: 0; border-top: 1px solid var(--line); margin-block: 3em; }
+
+/* MathML renders in the browser's own colour; these keep it with the text,
+   and let a long display equation scroll rather than widen the column. */
+.prose math { color: var(--ink); }
+.prose :where(math[display="block"]) {
+  display: block;
   overflow-x: auto;
-  margin: 0 0 1.75rem;
-  font-size: 0.9rem;
-  line-height: 1.6;
+  overflow-y: hidden;
+  padding-block: 0.5rem;
 }
+.prose :global(.katex) { color: var(--ink); }
+.prose :global(.katex-display) { overflow-x: auto; overflow-y: hidden; padding-block: 0.5rem; }
 
-.prose pre code {
-  background: none;
-  color: inherit;
-  padding: 0;
-  font-size: inherit;
-}
+/* A heading Pandoc marked unnumbered still gets the same treatment; the class
+   only means the numbering was suppressed upstream. */
+.prose :global(.center) { text-align: center; }
 
-.prose pre a {
-  color: inherit;
-  text-decoration: none;
-}
-
-/* pandoc / skylighting syntax tokens, tuned for the dark panel. */
-.prose pre .kw {
-  color: #ff7b9c;
-}
-.prose pre .cf {
-  color: #ff7b9c;
-}
-.prose pre .dt {
-  color: #8bd5ca;
-}
-.prose pre .pp,
-.prose pre .ot {
-  color: #c3a6ff;
-}
-.prose pre .co {
-  color: #828bb8;
-  font-style: italic;
-}
-.prose pre .st,
-.prose pre .ch,
-.prose pre .sc {
-  color: #a6e3a1;
-}
-.prose pre .dv,
-.prose pre .bn,
-.prose pre .fl {
-  color: #f9c784;
-}
-.prose pre .op {
-  color: #cbd5e1;
-}
-.prose pre .fu {
-  color: #89b4fa;
+@media (prefers-reduced-motion: reduce) {
+  .bookLead,
+  .chapterItem,
+  .pagLink,
+  .download { transition: none; }
+  .bookLead:hover { transform: none; }
+  .chapterItem:hover { padding-left: 0; }
 }

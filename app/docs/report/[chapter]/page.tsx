@@ -18,7 +18,7 @@ export async function generateMetadata({
   const found = getChapters().find((c) => c.slug === chapter);
   if (!found) return {};
   return {
-    title: `${found.title} | Vayu Technical Report | NAVRobotec`,
+    title: `${found.title} · Vayu Technical Report`,
     description: `${found.title} — technical documentation for the Vayu flight control stack.`,
   };
 }
@@ -46,7 +46,7 @@ export default async function ChapterPage({
     <article className={styles.article}>
       <header className={styles.header}>
         <Link href="/docs/report" className={styles.label}>
-          ← Technical Report
+          <ArrowLeft size={12} /> Technical Report
         </Link>
         <h1 className={styles.title}>{current.title}</h1>
       </header>
@@ -63,21 +63,26 @@ export default async function ChapterPage({
       ) : null}
 
       {current.sections.length > 0 && (
-        <nav className={styles.chapterList}>
-          {current.sections.map((s, i) => (
-            <Link
-              key={s.slug}
-              href={`/docs/report/${current.slug}/${s.slug}`}
-              className={styles.chapterItem}
-            >
-              <span className={styles.chapterNo}>
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <span className={styles.chapterName}>{s.title}</span>
-              <ArrowRight size={16} />
-            </Link>
-          ))}
-        </nav>
+        <>
+          <span className={`label ${styles.listHead}`}>
+            Sections in this chapter
+          </span>
+          <nav className={styles.chapterList} aria-label="Sections">
+            {current.sections.map((s, i) => (
+              <Link
+                key={s.slug}
+                href={`/docs/report/${current.slug}/${s.slug}`}
+                className={styles.chapterItem}
+              >
+                <span className={styles.chapterNo}>
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span className={styles.chapterName}>{s.title}</span>
+                <ArrowRight size={16} />
+              </Link>
+            ))}
+          </nav>
+        </>
       )}
 
       <footer className={styles.footer}>
