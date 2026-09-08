@@ -1,81 +1,92 @@
-'use client';
-
-import { motion } from 'framer-motion';
-import styles from '../shared.module.css';
-import contactStyles from '../contact/page.module.css';
+import Link from "next/link";
 import Cinematic from "@/components/Cinematic";
+import styles from "./page.module.css";
 
-const fadeInUp = {
-    initial: { opacity: 0, y: 30 },
-    whileInView: { opacity: 1, y: 0 },
-    viewport: { once: true },
-    transition: { duration: 0.8 }
+/* Was a client component whose only JavaScript faded a paragraph and an
+   iframe in. Both are now just in the page. */
+
+export const metadata = {
+  title: "Investors",
+  description:
+    "NAVRobotec builds VaiOS, a sovereign robotics runtime engineered from the silicon up. Recognised by DPIIT, MSME and Startup UP.",
 };
 
-export default function InvestorOnboarding() {
-    return (
-        <>
-        <Cinematic
-          kicker="Investors"
-          title={<>Backing a foundation, not a product.</>}
-          lede="A sovereign, auditable runtime for autonomous flight — proved on UAVs first, because that is where hard real time is hardest to fake."
-        />
-        <div className={styles.container}>
-            <div className={styles.standardContainer}>
+const FORM =
+  "https://docs.google.com/forms/d/e/1FAIpQLScSWAK8vBPcc8MIGL5Dj-n7z1xvVcFEy1YCE5jtWs7MDC8Hkg/viewform?embedded=true";
 
-                <motion.div
-                    {...fadeInUp}
-                    transition={{ delay: 0.3 }}
-                    style={{ maxWidth: '850px', margin: '0 auto 4rem', display: 'flex', flexDirection: 'column', gap: '2rem' }}
-                >
-                    <p style={{ fontSize: '1.35rem', lineHeight: 1.6, color: 'var(--text-primary)' }}>
-                        Most drone companies build on borrowed software. We build the foundation itself —
-                        <strong> VaiOS</strong>, a sovereign robotics runtime engineered from the silicon up.
-                    </p>
-                    <p style={{ fontSize: '1.15rem', lineHeight: 1.7, color: 'var(--text-secondary)' }}>
-                        Our differentiation is depth. We own every layer of the flight stack — NavHAL at the
-                        hardware, VaiOS as the operating system, and VAYU in the air — with no foreign
-                        dependencies in the flight path. UAVs are our beachhead: the place we prove the
-                        real-time core before the same runtime reaches further into robotics. The work is
-                        already recognized by DPIIT, MSME, and the Startup UP initiative.
-                    </p>
-                    <p style={{
-                        fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--color-accent)',
-                        textTransform: 'uppercase', letterSpacing: '0.1em'
-                    }}>
-                        Tell us where you fit — complete the onboarding form below.
-                    </p>
-                </motion.div>
+const POINTS = [
+  {
+    k: "The difference",
+    v: "Depth, not features. Every layer of the flight stack is ours — NavHAL at the hardware, VaiOS as the operating system, VAYU in the air — with no foreign dependencies in the flight path.",
+  },
+  {
+    k: "The beachhead",
+    v: "UAVs, because hard real time is hardest to fake there. The same runtime is designed to reach further into robotics once the core is proved in the air.",
+  },
+  {
+    k: "Recognition",
+    v: "DPIIT, MSME and the Startup UP initiative.",
+  },
+];
 
-                <motion.div
-                    className={contactStyles.iframeContainer}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.4, duration: 1 }}
-                    style={{ 
-                        width: '100%', 
-                        marginTop: '3rem', 
-                        borderRadius: '24px', 
-                        overflow: 'hidden',
-                        boxShadow: 'var(--shadow-card)',
-                        border: '1px solid rgba(0,0,0,0.05)',
-                        backgroundColor: '#fff'
-                    }}
-                >
-                    <iframe 
-                        src="https://docs.google.com/forms/d/e/1FAIpQLScSWAK8vBPcc8MIGL5Dj-n7z1xvVcFEy1YCE5jtWs7MDC8Hkg/viewform?embedded=true" 
-                        width="100%" 
-                        height="800" 
-                        frameBorder="0" 
-                        marginHeight={0} 
-                        marginWidth={0}
-                        style={{ display: 'block' }}
-                    >
-                        Loading…
-                    </iframe>
-                </motion.div>
-            </div>
+export default function Investors() {
+  return (
+    <div className="page-flush">
+      <Cinematic
+        kicker="Investors"
+        title={<>Backing a foundation, not a product.</>}
+        lede="Most drone companies build on borrowed software. We build the foundation itself — VaiOS, a sovereign robotics runtime engineered from the silicon up."
+      />
+
+      <section className="section">
+        <div className="shell">
+          <dl className={styles.points}>
+            {POINTS.map((point) => (
+              <div key={point.k} className={styles.point}>
+                <dt className="label">{point.k}</dt>
+                <dd className={`body ${styles.pointBody}`}>{point.v}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
-    </>
-    );
+      </section>
+
+      <section className="section rule tinted">
+        <div className="shell">
+          <header className={styles.head}>
+            <p className="label">Onboarding</p>
+            <h2 className="h1">Tell us where you fit.</h2>
+            <p className="lede">
+              A few questions, so the first conversation starts somewhere
+              useful.
+            </p>
+          </header>
+
+          {/* A third-party form in a frame. Given a title, because a frame
+              without one is announced as "frame" and nothing else, and a
+              height that is generous rather than clipped — a scrollbar inside
+              a scrollbar is how an embedded form gets abandoned. */}
+          <div className={styles.frame}>
+            <iframe
+              src={FORM}
+              title="Investor onboarding form"
+              className={styles.iframe}
+              loading="lazy"
+            >
+              Loading…
+            </iframe>
+          </div>
+
+          <p className="note small muted">
+            The form is hosted by Google. If it does not load —
+            an extension or a network policy will do that —{" "}
+            <Link href="/contact" className={styles.link}>
+              write to us directly
+            </Link>{" "}
+            instead.
+          </p>
+        </div>
+      </section>
+    </div>
+  );
 }
