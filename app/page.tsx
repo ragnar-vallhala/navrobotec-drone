@@ -112,32 +112,21 @@ export default function Home() {
             `priority` because this is the first screen — without it Next
             lazy-loads it and the page opens on an empty box, which is the
             fault the old video hero had. */}
-        <div className={styles.stage} aria-hidden>
-          {/* Art direction, not a resize: the landscape and portrait renders
-              are different compositions, not two sizes of one. A phone gets
-              the frame that was shot for a phone rather than a crop of the
-              wide one, which is what the aircraft's own reflection needs.
+        {/* Painted by CSS, not carried by an <img>.
+        
+            The point of the change is honest about its limits: it removes
+            "Save image as" from the context menu, and that is all it removes.
+            The file is still one line down in the Network tab, and a
+            screenshot needs no tools at all. Anything a browser renders, the
+            visitor already has. What this does buy is that the frame stops
+            being an object on the page and becomes the surface — which is
+            also why the art direction moves to a media query, where it
+            belongs for a purely decorative image.
 
-              A plain <picture> rather than next/image: `media` on <source> is
-              how a browser picks one file and downloads only that. next/image
-              serves widths of a single source, which is the other problem.
-              Both files are already sized and re-encoded by hand, so its
-              optimiser has nothing left to do here. */}
-          <picture>
-            <source
-              media="(orientation: portrait) and (max-width: 60rem)"
-              srcSet="/images/vayu-hero-portrait.jpg"
-            />
-            <img
-              src="/images/vayu-hero.jpg"
-              alt=""
-              fetchPriority="high"
-              decoding="async"
-              className={styles.heroImage}
-            />
-          </picture>
-          {/* Only at the foot, so the frame dissolves into the band instead of
-              ending on a hard edge. */}
+            Preloaded, with the same media conditions, so making it a
+            background does not cost the first paint: without this the browser
+            does not know about the file until it has parsed the stylesheet. */}
+        <div className={styles.stage} aria-hidden>
           <div className={styles.fade} />
         </div>
 

@@ -73,6 +73,22 @@ export default function RootLayout({
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+        {/* The homepage frame is a CSS background, which the browser cannot
+            discover until it has parsed the stylesheet. These tell it now,
+            with the same conditions the stylesheet uses, so exactly one of
+            them is fetched and the first paint is not waiting on CSS. */}
+        <link
+          rel="preload"
+          as="image"
+          href="/images/vayu-hero.webp"
+          media="(orientation: landscape), (min-width: 60rem)"
+        />
+        <link
+          rel="preload"
+          as="image"
+          href="/images/vayu-hero-portrait.webp"
+          media="(orientation: portrait) and (max-width: 60rem)"
+        />
       </head>
       <body>
         {/* First in the tab order: past the nav, into the page. */}
