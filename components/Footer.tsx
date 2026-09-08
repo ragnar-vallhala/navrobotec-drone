@@ -15,6 +15,7 @@ const SECTIONS = [
     title: "The stack",
     links: [
       { href: "/technology", label: "Technology" },
+      { href: "/wishlist", label: "Wishlist" },
       { href: "/vision", label: "Vision" },
       { href: "/docs", label: "Documentation" },
       { href: "/blogs", label: "Engineering journal" },
