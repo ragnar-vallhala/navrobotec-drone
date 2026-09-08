@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import ScrollSteps from "@/components/ScrollSteps";
 import styles from "./page.module.css";
 
 /* The homepage.
@@ -157,49 +158,70 @@ export default function Home() {
         </h1>
       </section>
 
-      {/* ---------------- the stack ---------------- */}
-      <section className="section rule">
-        <div className="shell">
-          <header className={styles.head}>
-            <p className="label">Four layers, all ours</p>
-            <h2 className="h1">
-              The aircraft rests on an operating system, which rests on the
-              silicon.
-            </h2>
-            <p className="lede">
-              Read it top to bottom. Each layer is ours, so each one can be
-              opened, measured and replaced without asking anybody.
-            </p>
-          </header>
+      {/* ---------------- the stack ----------------
+          The track is taller than the screen; the stage inside it pins, and
+          each layer opens in turn as the reader descends — the lede enacted
+          rather than described. A layer that is waiting keeps its tier, name
+          and role and loses only its detail, so the four-layer shape is on
+          screen the whole way down and no step is ever a blank row.
 
-          <ol className={styles.stack}>
-            {STACK.map((layer) => (
-              <li key={layer.tier} className={styles.layer}>
-                <span className={`data ${styles.tier}`}>{layer.tier}</span>
-                <div className={styles.layerBody}>
-                  <h3 className="h3">
-                    {layer.name}
-                    <span className={styles.layerRole}>{layer.role}</span>
-                  </h3>
-                  <p className="body small">{layer.body}</p>
+          On a narrow screen none of this applies and the list is simply open;
+          see ScrollSteps for the same fallback without JavaScript. */}
+      <section className="section rule">
+        <ScrollSteps className={styles.track}>
+          <div className={styles.stackStage}>
+            <div className={`shell ${styles.stackGrid}`}>
+              <header className={styles.head}>
+                <p className="label">Four layers, all ours</p>
+                <h2 className="h2">
+                  The aircraft rests on an operating system, which rests on the
+                  silicon.
+                </h2>
+                <p className="lede">
+                  Read it top to bottom. Each layer is ours, so each one can be
+                  opened, measured and replaced without asking anybody.
+                </p>
+              </header>
+
+              <div className={styles.stackWrap}>
+                <div className={styles.stackRail} aria-hidden>
+                  <span className={styles.stackRailFill} />
                 </div>
-                <ul className={styles.facts}>
-                  {layer.facts.map((fact) => (
-                    <li key={fact} className={`data ${styles.fact}`}>
-                      {fact}
+                <ol className={styles.stack}>
+                  {STACK.map((layer) => (
+                    <li key={layer.tier} className={styles.layer} data-step-item>
+                      <span className={`data ${styles.tier}`}>{layer.tier}</span>
+                      <div className={styles.layerBody}>
+                        <h3 className={`h3 ${styles.layerTitle}`}>
+                          {layer.name}
+                          <span className={styles.layerRole}>{layer.role}</span>
+                        </h3>
+                        <div className={styles.reveal}>
+                          <p className="body small">{layer.body}</p>
+                        </div>
+                      </div>
+                      <div className={`${styles.reveal} ${styles.factsWrap}`}>
+                        <ul className={styles.facts}>
+                          {layer.facts.map((fact) => (
+                            <li key={fact} className={`data ${styles.fact}`}>
+                              {fact}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     </li>
                   ))}
-                </ul>
-              </li>
-            ))}
-          </ol>
+                </ol>
+              </div>
 
-          <p className={styles.after}>
-            <Link href="/technology" className="btn btn-ghost">
-              Read the stack in full
-            </Link>
-          </p>
-        </div>
+              <p className={styles.after}>
+                <Link href="/technology" className="btn btn-ghost">
+                  Read the stack in full
+                </Link>
+              </p>
+            </div>
+          </div>
+        </ScrollSteps>
       </section>
 
       {/* ---------------- the claim ---------------- */}
