@@ -13,16 +13,7 @@
 .head .label { display: block; margin-bottom: 1.125rem; }
 .head h2 + .lede { margin-top: 1.25rem; }
 
-.frame {
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  background: var(--card);
-  box-shadow: var(--shadow);
-}
-.iframe { display: block; width: 100%; height: 78rem; border: 0; }
-.link { color: var(--signal); text-decoration: underline; text-underline-offset: 2px; }
-.note { margin-top: 1.25rem; }
+.formCol { max-width: 44rem; }
 
 @media (min-width: 56rem) {
   .point { grid-template-columns: 12rem 1fr; gap: 2.5rem; align-items: baseline; }
