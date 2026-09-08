@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import ScrollSteps from "@/components/ScrollSteps";
+import { FOCUS_IMAGES } from "@/lib/focus-images";
 import styles from "./page.module.css";
 
 /* The homepage.
@@ -58,12 +59,20 @@ const STACK = [
    voice, and the page it is substantiated on. The numbers are the ones the
    stack section already states — this is the same claim, sourced.
 
+   Images are built by scripts/make-focus-images.py; sources and licences are
+   in assets/focus-source/CREDITS.md. Copper, then the company's own board
+   powered up, then the aircraft — silicon, hardware, flight, which is the
+   order the three claims are already in. What was here was a hand holding
+   somebody's flight controller, a quadcopter against blank sky, and a rack of
+   other people's airframes.
+
    `proof` is optional on purpose. Scale to swarms is a direction rather than
    a measurement, and inventing a figure to make the third row match the first
    two is exactly what this section is meant not to do. */
 const FOCUS = [
   {
-    image: "/images/in-house.jpg",
+    image: FOCUS_IMAGES["focus-layout"],
+    alt: "A bare circuit board in macro — copper traces, gold pads and a debug header.",
     title: "Sovereign foundation",
     body: "We own every layer — NavHAL at the hardware, VaiOS as the operating system, VAYU in the air. No black boxes, no foreign dependencies: a stack you can audit from the first register.",
     proof: "~5-cycle GPIO · register-level · STM32F4 · H7 · AVR",
@@ -71,7 +80,8 @@ const FOCUS = [
     cta: "How the layers fit",
   },
   {
-    image: "/images/autonomous.jpg",
+    image: FOCUS_IMAGES["focus-board"],
+    alt: "The VAYU flight controller board, powered up, with the NAVROBOTEC silkscreen and its STM32 at the centre.",
     title: "Real-time reliability",
     body: "A flight core that never misses its deadline. VaiOS holds the control loop to a fixed schedule every cycle — benchmarked head to head against FreeRTOS and Zephyr on the same hardware.",
     proof: "~5.9 µs task-wake · 1 kHz / 250 Hz loops",
@@ -79,7 +89,8 @@ const FOCUS = [
     cta: "Read the benchmark",
   },
   {
-    image: "/images/swarm.webp",
+    image: FOCUS_IMAGES["focus-vayu"],
+    alt: "The VAYU aircraft.",
     title: "Built to grow",
     body: "Autonomy and swarms are not bolted on — they are how VaiOS is designed to scale, from one aircraft to many. UAVs come first because that is where we prove it.",
     proof: null,
@@ -361,7 +372,7 @@ export default function Home() {
                 <div className={styles.focusImage}>
                   <Image
                     src={card.image}
-                    alt=""
+                    alt={card.alt}
                     fill
                     sizes="(max-width: 62rem) 100vw, 46vw"
                     className={styles.focusImg}
