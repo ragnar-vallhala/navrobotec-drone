@@ -1,0 +1,50 @@
+.opening {
+  position: relative;
+  overflow: hidden;
+  padding-bottom: clamp(3.5rem, 8vw, 6rem);
+}
+
+.stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 21 / 9;
+  max-height: 74vh;
+  overflow: hidden;
+}
+.short { aspect-ratio: 21 / 7; max-height: 52vh; }
+.image { object-fit: cover; }
+
+.fade {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 46%;
+  background: linear-gradient(to bottom, transparent, var(--band) 92%);
+}
+
+/* Pulled up into the fade, so the words begin inside the frame's shadow
+   rather than in a gap under it. */
+.card { position: relative; margin-top: clamp(-3.5rem, -5vw, -2rem); }
+
+/* No photograph: the band opens on itself, with room above the words where
+   the frame would have been. */
+.plain {
+  padding-top: calc(var(--bar) + clamp(5rem, 12vw, 9rem));
+  padding-bottom: clamp(4.5rem, 10vw, 7rem);
+  background:
+    radial-gradient(90% 70% at 70% 0%, rgba(53, 224, 161, 0.1), transparent 62%),
+    var(--band);
+}
+.plain .card { margin-top: 0; }
+.kicker { display: block; margin-bottom: 1.5rem; }
+.title { max-width: 18ch; }
+.lede { margin-top: 1.75rem; }
+.lede strong { color: var(--band-text); }
+
+.kicker { animation: rise 0.7s var(--ease) both 0.05s; }
+.title  { animation: rise 0.7s var(--ease) both 0.12s; }
+.lede   { animation: rise 0.7s var(--ease) both 0.2s; }
+
+@media (max-width: 48rem) {
+  .stage { aspect-ratio: 4 / 3; max-height: 58vh; }
+  .short { aspect-ratio: 3 / 2; max-height: 44vh; }
+}

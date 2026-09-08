@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import styles from '../shared.module.css';
 import contactStyles from './page.module.css';
+import Cinematic from "@/components/Cinematic";
 
 const fadeInUp = {
     initial: { opacity: 0, y: 30 },
@@ -45,14 +46,14 @@ export default function Contact() {
     };
 
     return (
+        <>
+        <Cinematic
+          kicker="Contact"
+          title={<>Tell us what you want it to fly.</>}
+          lede="Collaborations, developer integrations, pilot programmes, or a question about the stack — all reach the same inbox, and an engineer answers."
+        />
         <div className={styles.container}>
             <div className={styles.standardContainer}>
-                <div className={styles.headerArea}>
-                    <motion.h1 {...fadeInUp}>Get in <span className={styles.gradientText}>Touch.</span></motion.h1>
-                    <motion.p {...fadeInUp} transition={{ delay: 0.2 }}>
-                        We are open to collaborations, developer integrations, and general inquiries.
-                    </motion.p>
-                </div>
 
                 <div className={contactStyles.contactWrapper}>
                     <motion.div 
@@ -161,5 +162,6 @@ export default function Contact() {
                 </div>
             </div>
         </div>
+    </>
     );
 }

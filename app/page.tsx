@@ -139,16 +139,20 @@ export default function Home() {
           <p className={`label label-signal rise ${styles.kicker}`}>
             VaiOS · sovereign robotics runtime
           </p>
+          {/* Their own claim, not a slogan. "Mastering the skies" could sit
+              on any drone company's homepage; owning every layer down to the
+              register is a thing almost nobody else can say. */}
           <h1 className={`display rise ${styles.title}`}>
-            Mastering
+            Built from the
             <br />
-            the skies.
+            silicon up.
           </h1>
           <p className={`lede rise ${styles.lede}`}>
-            An autonomous flight stack built from the silicon up — a hardware
-            layer that speaks to the register, a hard real-time core above it,
-            and <strong>VAYU</strong> in the air. Nothing in the flight path we
-            cannot read, test and trust.
+            Most flight software is stacked on borrowed frameworks nobody fully
+            controls. Ours is not: <strong>NavHAL</strong> speaks to the
+            register, <strong>VaiOS</strong> holds the control loop to a fixed
+            schedule, and <strong>VAYU</strong> flies on top. Nothing in the
+            flight path we cannot read, test and trust.
           </p>
           <div className={`rise ${styles.actions}`}>
             <Link href="/technology" className="btn btn-primary">
@@ -182,9 +186,8 @@ export default function Home() {
               silicon.
             </h2>
             <p className="lede">
-              Most flight software is stacked on borrowed frameworks nobody
-              fully controls. Read it top to bottom — VAYU in the air, down to
-              the register.
+              Read it top to bottom. Each layer is ours, so each one can be
+              opened, measured and replaced without asking anybody.
             </p>
           </header>
 
@@ -324,14 +327,21 @@ export default function Home() {
       <section className={`band ${styles.closing}`}>
         <div className="reticle" aria-hidden />
         <div className={`shell ${styles.closingInner}`}>
-          <p className="label label-signal">Ready to lead?</p>
-          <h2 className="display">The future of autonomy is here.</h2>
+          {/* "The future of autonomy is here" says nothing and asks for
+              nothing. This says what you can actually do next. */}
+          <p className="label label-signal">Next</p>
+          <h2 className="display">Read it before you trust it.</h2>
+          <p className={`lede ${styles.closingLede}`}>
+            The technical report, the per-layer guides, and the benchmarks
+            against FreeRTOS and Zephyr are all public. Start there — or write
+            to us about putting the runtime in your fleet.
+          </p>
           <div className={styles.actions}>
-            <Link href="/contact" className="btn btn-primary">
-              Start your mission
+            <Link href="/docs" className="btn btn-primary">
+              Read the docs
             </Link>
-            <Link href="/technology" className="btn btn-ghost">
-              Explore the stack
+            <Link href="/contact" className="btn btn-ghost">
+              Talk to us
             </Link>
           </div>
         </div>

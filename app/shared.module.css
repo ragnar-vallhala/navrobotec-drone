@@ -1,11 +1,16 @@
+/* No top padding: every page now opens on a cinematic band that runs to the
+   top of the window and under the header. The 8rem here was clearing a bar
+   that the band is meant to sit beneath, and it showed as a strip of page
+   above the frame. */
 .container {
-  padding: 8rem 0;
+  padding: 0 0 8rem;
   max-width: 100%;
   margin: 0;
   background: var(--bg-primary);
 }
 
 .standardContainer {
+  padding-top: clamp(3rem, 6vw, 4.5rem);
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 2rem;
