@@ -1,0 +1,89 @@
+.form { display: grid; gap: clamp(1.75rem, 3vw, 2.25rem); }
+
+.row { display: grid; gap: 1.25rem; }
+.field { display: grid; gap: 0.5rem; }
+.optional { color: var(--muted); text-transform: none; letter-spacing: 0; }
+
+.input {
+  width: 100%;
+  padding: 0.8125rem 1rem;
+  font: inherit;
+  color: var(--ink);
+  background: var(--card);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+.input::placeholder { color: var(--muted); }
+.input:focus-visible {
+  outline: none;
+  border-color: var(--signal);
+  box-shadow: 0 0 0 3px var(--signal-wash);
+}
+.input[aria-invalid="true"] { border-color: #c0392b; }
+:global([data-theme="dark"]) .input[aria-invalid="true"] { border-color: #ff8a7a; }
+
+.textarea { resize: vertical; min-height: 9rem; line-height: 1.6; }
+
+.fieldError { font-size: 0.8125rem; color: #c0392b; }
+:global([data-theme="dark"]) .fieldError { color: #ff8a7a; }
+
+.alert {
+  padding: 0.875rem 1rem;
+  border: 1px solid var(--line-strong);
+  border-left: 3px solid #c0392b;
+  border-radius: var(--radius);
+  background: var(--card);
+  font-size: 0.9375rem;
+  color: var(--ink);
+}
+:global([data-theme="dark"]) .alert { border-left-color: #ff8a7a; }
+
+/* --- chips ---------------------------------------------------------------
+   Buttons with aria-pressed rather than checkboxes: the visual is a toggle,
+   and a checkbox styled out of existence stops announcing itself as one. */
+.set { border: 0; padding: 0; margin: 0; display: grid; gap: 0.875rem; }
+.set legend { padding: 0; }
+.chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.chip {
+  padding: 0.5rem 0.875rem;
+  font: inherit;
+  font-size: 0.875rem;
+  color: var(--ink-2);
+  background: var(--card);
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color 0.2s var(--ease), background-color 0.2s var(--ease),
+              color 0.2s var(--ease);
+}
+.chip:hover { border-color: var(--signal); color: var(--ink); }
+.chipOn {
+  border-color: var(--signal);
+  background: var(--signal-wash);
+  color: var(--signal);
+}
+
+.honeypot {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; }
+.actions button[disabled] { opacity: 0.6; cursor: progress; }
+.aside { margin: 0; }
+.link { color: var(--signal); text-decoration: underline; text-underline-offset: 2px; }
+
+/* --- after ---------------------------------------------------------------- */
+.done { display: grid; gap: 1rem; max-width: 34rem; }
+.done .label { display: block; }
+.reference { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.08em; }
+
+@media (min-width: 44rem) {
+  .row { grid-template-columns: 1fr 1fr; gap: 1.25rem 1.5rem; }
+  .wide { grid-column: 1 / -1; }
+}
