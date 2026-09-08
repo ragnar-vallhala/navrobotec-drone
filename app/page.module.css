@@ -31,53 +31,22 @@
   background: linear-gradient(to bottom, transparent, var(--band) 92%);
 }
 
-.heroInner { position: relative; margin-top: clamp(-3rem, -4vw, -1.5rem); }
-
-
-
-.kicker { display: block; margin-bottom: 1.5rem; }
-.title { max-width: 16ch; }
-.lede { margin-top: 1.75rem; }
-.lede strong { color: var(--bone); font-weight: 600; }
-
-.actions {
+/* Pulled up into the fade, so the buttons sit inside the frame rather than in
+   a gap beneath it — the shot ends on the two things you can do next. */
+.heroActions {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   gap: 0.875rem;
-  margin-top: 2.5rem;
+  margin-top: clamp(-5rem, -7vw, -3rem);
+  animation: rise 0.7s var(--ease) both 0.25s;
 }
 
-/* Staggered by hand rather than by a library: four `animation-delay` values
-   is the whole requirement, and it keeps the page a server component. */
-.kicker  { animation-delay: 0.05s; }
-.title   { animation-delay: 0.12s; }
-.lede    { animation-delay: 0.2s; }
-.actions { animation-delay: 0.28s; }
-.readout { animation-delay: 0.36s; }
 
-/* The readout: four figures on a rule, the way an instrument reports. */
-.readout {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1px;
-  margin: clamp(3rem, 7vw, 5rem) 0 0;
-  background: rgba(230, 239, 234, 0.14);
-  border: 1px solid rgba(230, 239, 234, 0.14);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-}
-.reading {
-  padding: 1.25rem 1.375rem;
-  background: rgba(255, 255, 255, 0.03);
-}
-.readingValue {
-  display: block;
-  font-size: clamp(1.5rem, 3vw, 2rem);
-  font-weight: 700;
-  color: var(--signal-lit);
-  line-height: 1.1;
-}
-.readingLabel { display: block; margin: 0.5rem 0 0; }
+
+
+
+
 
 /* --- section heads ---------------------------------------------------------- */
 .head { max-width: 52rem; margin-bottom: clamp(2.5rem, 5vw, 3.5rem); }
@@ -207,7 +176,13 @@
 .closingInner { position: relative; text-align: center; }
 .closingInner .label { display: block; margin-bottom: 1.25rem; }
 .closingLede { margin: 1.5rem auto 0; }
-.closingInner .actions { justify-content: center; }
+.closingActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.875rem;
+  margin-top: 2.5rem;
+}
 
 @media (max-width: 48rem) {
   /* The narrow crop is centred on the airframe: at this width the wide one is
@@ -216,9 +191,6 @@
   .stage { aspect-ratio: 4 / 3; max-height: 62vh; }
 }
 
-@media (min-width: 40rem) {
-  .readout { grid-template-columns: repeat(4, 1fr); }
-}
 @media (min-width: 62rem) {
   .layer { grid-template-columns: 4rem 1fr 18rem; align-items: start; }
   .facts { grid-column: 3; margin-top: 0; flex-direction: column; align-items: flex-start; }
