@@ -21,15 +21,16 @@
   background: var(--band);
 }
 
-.stage { position: absolute; inset: 0; }
-/* <picture> is inline by default, so it needs to be told to fill the stage as
-   well as the <img> inside it. */
-.stage picture { display: block; width: 100%; height: 100%; }
-.heroImage {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 45%;
+/* The frame is the surface, not an element on it. The landscape and portrait
+   renders are different compositions rather than two sizes of one, so the
+   swap is a media query on the ground itself. */
+.stage {
+  position: absolute;
+  inset: 0;
+  background-image: url("/images/vayu-hero.webp");
+  background-size: cover;
+  background-position: center 45%;
+  background-repeat: no-repeat;
 }
 
 /* Deeper now that it has a whole screen to work with: the foot of the frame
@@ -219,11 +220,14 @@
   margin-top: 2.5rem;
 }
 
-@media (max-width: 48rem) {
-  /* The portrait render is composed with the aircraft low and the wordmark
-     above it, so it wants to sit a little higher in the frame than the
-     landscape one. */
-  .heroImage { object-position: center 40%; }
+/* The portrait render: aircraft low, wordmark stacked above it. Matched on
+   orientation rather than width alone, because a phone held sideways is a
+   landscape screen and should get the landscape frame. */
+@media (orientation: portrait) and (max-width: 60rem) {
+  .stage {
+    background-image: url("/images/vayu-hero-portrait.webp");
+    background-position: center 40%;
+  }
 }
 
 @media (min-width: 62rem) {
