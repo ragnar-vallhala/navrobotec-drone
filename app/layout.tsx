@@ -57,7 +57,23 @@ export const metadata: Metadata = {
  * which is worse than not offering the choice. Deliberately not reading
  * prefers-color-scheme: this is a light site with dark bands by design, and
  * dark is something the reader asks for rather than something inferred. */
-const THEME_SCRIPT = `try{var t=localStorage.getItem("navrobotec.theme");if(t==="dark"||t==="light"){document.documentElement.dataset.theme=t}}catch(e){}`;
+/* Applies the reader's stored theme before first paint, and only on the
+   pages that offer the choice.
+ *
+ * The path test is the whole point. Blogs and docs are the only pages with a
+ * toggle, and the only ones designed to work either way; everything else is a
+ * light page with dark bands placed in it, and forcing those dark inverts a
+ * composition rather than re-theming it. Reading the preference on every route
+ * turned one click on a blog post into a dark homepage that nothing on screen
+ * explained or offered to undo.
+ *
+ * ThemeToggle keeps this in step during client-side navigation — see the
+ * cleanup in its effect. This script exists for the first paint of a hard
+ * load, which that effect is too late for. */
+const READING = ["/blogs", "/docs"];
+const THEME_SCRIPT = `try{var p=location.pathname;if(${JSON.stringify(
+  READING,
+)}.some(function(r){return p===r||p.indexOf(r+"/")===0})){var t=localStorage.getItem("navrobotec.theme");if(t==="dark"||t==="light"){document.documentElement.dataset.theme=t}}}catch(e){}`;
 
 export default function RootLayout({
   children,

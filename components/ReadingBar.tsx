@@ -9,8 +9,10 @@ import styles from "./ReadingBar.module.css";
  * offer it on a landing page nobody reads for five minutes, and take space
  * from the navigation on every one of them.
  *
- * The choice still applies site-wide once made — a setting that quietly stops
- * working when you navigate is worse than not offering one.
+ * The choice is remembered, but it applies here rather than site-wide: the
+ * rest of the site is a light page with dark bands composed into it, and
+ * turning that dark inverts the composition instead of re-theming it. See
+ * ThemeToggle, whose own mount and unmount are what scope it.
  */
 export default function ReadingBar() {
   return (

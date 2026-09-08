@@ -6,13 +6,17 @@ import styles from "./ThemeToggle.module.css";
 /* Light or dark, for the pages people read.
  *
  * Offered on blogs and docs because that is where a reader sits for more than
- * a minute and actually has a preference. The choice is stored and applies to
- * the whole site: a setting that silently stops working when you navigate is
- * worse than not offering one.
+ * a minute and actually has a preference, and because those are the only
+ * pages built to work either way. The rest of the site is a light page with
+ * dark bands composed into it; turning that dark inverts the composition
+ * rather than re-theming it.
  *
- * The value is applied before first paint by the inline script in the layout —
- * this component only reflects and changes it. Reading localStorage here
- * instead would flash the wrong theme on every load.
+ * So the choice is remembered but scoped. This component is rendered only
+ * inside the reading layouts, which makes its own lifetime the right signal:
+ * it applies the stored theme when it mounts and puts the page back to light
+ * when it unmounts, so leaving for the homepage takes the dark with it and
+ * coming back brings it again. The inline script in the layout does the same
+ * for the first paint of a hard load, which this effect is too late for.
  */
 
 type Theme = "light" | "dark";
@@ -24,9 +28,26 @@ export default function ThemeToggle() {
   const [theme, setTheme] = useState<Theme | null>(null);
 
   useEffect(() => {
+    const root = document.documentElement;
+    let stored: Theme | null = null;
+    try {
+      const value = localStorage.getItem("navrobotec.theme");
+      if (value === "dark" || value === "light") stored = value;
+    } catch {
+      /* Private mode, or storage disabled. Light, and no memory of it. */
+    }
+
     const current =
-      (document.documentElement.dataset.theme as Theme | undefined) ?? "light";
+      stored ?? ((root.dataset.theme as Theme | undefined) ?? "light");
+    root.dataset.theme = current;
     setTheme(current);
+
+    /* Leaving the reading pages. React runs this and the next layout's
+       effects in one commit, so moving between /blogs and /docs does not
+       flash light in between. */
+    return () => {
+      root.dataset.theme = "light";
+    };
   }, []);
 
   const set = (next: Theme) => {
