@@ -1,7 +1,7 @@
-# Focus section imagery
+# Page imagery
 
-Sources for the images `scripts/make-focus-images.py` builds into
-`public/images/focus-*.webp`. All three are from Unsplash under the
+Sources for the images `scripts/make-page-images.py` builds into
+`public/images/`. All are from Unsplash under the
 [Unsplash License](https://unsplash.com/license): free for commercial use,
 no permission or attribution required. The credits are recorded anyway,
 because knowing where an asset came from is worth more than the licence asks.
@@ -11,6 +11,7 @@ because knowing where an asset came from is worth more than the licence asks.
 | 01 Sovereign foundation | `focus-layout` | [unsplash.com/photos/pfR18JNEMv8](https://unsplash.com/photos/pfR18JNEMv8) → `pcb-macro.jpg` | Vishnu Mohanan |
 | 02 Real-time reliability | `focus-timing` | [unsplash.com/photos/Os_ISjoU4Lg](https://unsplash.com/photos/Os_ISjoU4Lg) → `damped-oscillation.jpg` | Bozhin Karaivanov |
 | 03 Built to grow | `focus-scale` | [unsplash.com/photos/FQa5xUZlAUo](https://unsplash.com/photos/FQa5xUZlAUo) → `two-aircraft.jpg` | Valentin Zickner |
+| /technology hero | `hero-technology` | [unsplash.com/photos/qOx9KsvpqcM](https://unsplash.com/photos/qOx9KsvpqcM) → `silicon-wafer.jpg` | Laura Ockel |
 
 Copper, a settling response, two aircraft — the layer, the loop, the fleet.
 
@@ -28,6 +29,10 @@ Worth recording so nobody spends the search again.
   somebody's FPV racing build.
 * **A vintage analogue oscilloscope** with a blank screen: reads as old lab
   equipment, not as a hard real-time flight stack.
+* **`public/images/frame-technology.jpg`** was the /technology hero: the same
+  stock hand-holding-a-flight-controller shot the homepage had already
+  dropped, and 894x670 for a 21:9 band that asks for 3200. Still referenced
+  by nothing; safe to delete.
 
 ## The strongest image is not in here
 

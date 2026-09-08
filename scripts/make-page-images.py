@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the three /images/focus-*.webp used by the focus section.
+"""Build the page imagery: the focus rows, and the /technology hero.
 
 The section's heading is "Own every layer, and prove it", and it was
 illustrated with three photographs that proved nothing: a stock hand holding
@@ -18,7 +18,7 @@ and are not — drone_cta.png is AI-generated and carries another company's name
 on the airframe, and far_away.jpg is somebody's FPV racing build.
 
 Filenames carry a hash of their own bytes, and the script writes the paths
-into lib/focus-images.ts for the page to import. That is not tidiness: Next
+into lib/page-images.ts for the pages to import. That is not tidiness: Next
 serves optimised images `immutable`, so re-generating different artwork under
 a name that has already been fetched leaves the old picture on screen — which
 happened three times while this section was being built, twice convincingly
@@ -39,30 +39,30 @@ try:
 except ImportError:
     sys.exit("needs Pillow: pip install pillow")
 
-OUT_W, OUT_H = 1600, 1200          # 4:3, the frame the section draws
-ASPECT = OUT_W / OUT_H
 
 
-def cover(im: Image.Image, focus_y: float = 0.5) -> Image.Image:
+def cover(im: Image.Image, size: tuple[int, int], focus_y: float = 0.5) -> Image.Image:
     """Crop to the output aspect, keeping the widest possible frame.
 
     `focus_y` is where the subject sits vertically, 0-1, so a tall photo is
     cropped around its subject rather than around its middle.
     """
+    out_w, out_h = size
+    aspect = out_w / out_h
     w, h = im.size
-    if w / h > ASPECT:                      # too wide: trim the sides
-        new_w = round(h * ASPECT)
+    if w / h > aspect:                      # too wide: trim the sides
+        new_w = round(h * aspect)
         x = (w - new_w) // 2
         im = im.crop((x, 0, x + new_w, h))
     else:                                   # too tall: trim top and bottom
-        new_h = round(w / ASPECT)
+        new_h = round(w / aspect)
         y = round((h - new_h) * focus_y)
         y = max(0, min(y, h - new_h))
         im = im.crop((0, y, w, y + new_h))
-    return im.resize((OUT_W, OUT_H), Image.LANCZOS)
+    return im.resize(size, Image.LANCZOS)
 
 
-def pad(im: Image.Image, margin: float = 0.06) -> Image.Image:
+def pad(im: Image.Image, size: tuple[int, int], margin: float = 0.06) -> Image.Image:
     """Fit the whole image into the frame on its own background colour.
 
     For the layout figure: it is a screenshot with labels running to every
@@ -71,28 +71,37 @@ def pad(im: Image.Image, margin: float = 0.06) -> Image.Image:
     """
     im = im.convert("RGB")
     bg = im.getpixel((0, 0))
-    canvas = Image.new("RGB", (OUT_W, OUT_H), bg)
-    inner_w, inner_h = round(OUT_W * (1 - 2 * margin)), round(OUT_H * (1 - 2 * margin))
+    out_w, out_h = size
+    canvas = Image.new("RGB", size, bg)
+    inner = (round(out_w * (1 - 2 * margin)), round(out_h * (1 - 2 * margin)))
     fitted = im.copy()
-    fitted.thumbnail((inner_w, inner_h), Image.LANCZOS)
-    canvas.paste(fitted, ((OUT_W - fitted.width) // 2, (OUT_H - fitted.height) // 2))
+    fitted.thumbnail(inner, Image.LANCZOS)
+    canvas.paste(fitted, ((out_w - fitted.width) // 2, (out_h - fitted.height) // 2))
     return canvas
 
 
+FOCUS = (1600, 1200)     # 4:3, the frame the focus rows draw
+HERO = (3200, 1371)      # 21:9 at 100vw, so it is not upscaled on a wide screen
+
 JOBS = [
-    # (source, output, how, pre-crop as fractions of the source or None)
-    ("assets/focus-source/pcb-macro.jpg", "focus-layout", "cover:0.5", None),
-    ("assets/focus-source/damped-oscillation.jpg", "focus-timing", "cover:0.5", None),
+    # (source, output, size, how, pre-crop as fractions of the source or None)
+    ("assets/focus-source/pcb-macro.jpg", "focus-layout", FOCUS, "cover:0.5", None),
+    ("assets/focus-source/damped-oscillation.jpg", "focus-timing", FOCUS, "cover:0.5", None),
     # In tight on both aircraft. Taken whole this is mostly empty sky, which
     # is the fault the photograph it replaced had.
-    ("assets/focus-source/two-aircraft.jpg", "focus-scale", "cover:0.5",
+    ("assets/focus-source/two-aircraft.jpg", "focus-scale", FOCUS, "cover:0.5",
      (0.24, 0.22, 0.93, 0.95)),
+    # /technology opens on "built from the silicon up", so it opens on silicon.
+    # What was there was a 894x670 stock photograph of a hand holding somebody
+    # else's flight controller, stretched across a 21:9 band — a 2x upscale of
+    # the same picture the homepage had already dropped for proving nothing.
+    ("assets/focus-source/silicon-wafer.jpg", "hero-technology", HERO, "cover:0.5", None),
 ]
 
 
 def main() -> int:
     written: dict[str, str] = {}
-    for src, name, how, box in JOBS:
+    for src, name, size, how, box in JOBS:
         if not os.path.exists(src):
             sys.exit(f"missing source: {src}")
         im = Image.open(src)
@@ -101,9 +110,9 @@ def main() -> int:
             l, t, r, b = box
             im = im.crop((round(l * w), round(t * h), round(r * w), round(b * h)))
         if how.startswith("cover"):
-            out = cover(im.convert("RGB"), float(how.split(":")[1]))
+            out = cover(im.convert("RGB"), size, float(how.split(":")[1]))
         else:
-            out = pad(im)
+            out = pad(im, size)
         tmp = os.path.join("public/images", f".{name}.tmp.webp")
         out.save(tmp, "WEBP", quality=88, method=6)
         digest = hashlib.sha1(open(tmp, "rb").read()).hexdigest()[:8]
@@ -113,17 +122,17 @@ def main() -> int:
         print(f"{src:42} -> {path}  {im.size[0]}x{im.size[1]} -> "
               f"{out.size[0]}x{out.size[1]}  {os.path.getsize(path) // 1024}KB")
 
-    for stale in glob.glob("public/images/focus-*.webp"):
+    for stale in glob.glob("public/images/focus-*.webp") + glob.glob("public/images/hero-*.webp"):
         if "/" + os.path.relpath(stale, "public") not in written.values():
             os.remove(stale)
             print(f"removed stale {stale}")
 
-    module = pathlib.Path("lib/focus-images.ts")
+    module = pathlib.Path("lib/page-images.ts")
     module.write_text(
-        "// Generated by scripts/make-focus-images.py — do not edit.\n"
+        "// Generated by scripts/make-page-images.py — do not edit.\n"
         "// The hash is the file's own content, so new artwork always lands on\n"
         "// a new URL. Next serves optimised images `immutable`.\n"
-        "export const FOCUS_IMAGES = {\n"
+        "export const PAGE_IMAGES = {\n"
         + "".join(f'  "{k}": "{v}",\n' for k, v in written.items())
         + "} as const;\n"
     )
