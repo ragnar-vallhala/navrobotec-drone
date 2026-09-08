@@ -5,10 +5,13 @@ import { useEffect, useRef } from "react";
 /* A section that advances through its own children as you scroll past it.
  *
  * It publishes two things and decides nothing about how they look:
- *   • `data-step` and `--progress` on itself — which step, and how far through
- *     the whole track the reader is;
+ *   • `data-step` on itself, plus `--progress` (through the whole track) and
+ *     `--step-progress` (through the current step alone — the one that can
+ *     drive a continuous move rather than a state change);
  *   • `data-step-state` of "past" | "active" | "next" on every descendant
- *     marked `data-step-item`.
+ *     marked `data-step-item`, and on every `data-step-mirror` — a second
+ *     marker for elements that follow the steps without being one, like an
+ *     index in the margin.
  *
  * No React state, so a scroll never re-renders anything: the handler writes
  * two attributes and a custom property, and nothing else.
@@ -37,21 +40,26 @@ export default function ScrollSteps({
       el.querySelectorAll<HTMLElement>("[data-step-item]"),
     );
     if (items.length === 0) return;
+    const mirrors = Array.from(
+      el.querySelectorAll<HTMLElement>("[data-step-mirror]"),
+    );
 
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let listening = false;
     let lastStep = -1;
 
-    const paint = (index: number, progress: number) => {
+    const state = (i: number, index: number) =>
+      i === index ? "active" : i < index ? "past" : "next";
+
+    const paint = (index: number, progress: number, within: number) => {
       if (index !== lastStep) {
         lastStep = index;
         el.dataset.step = String(index);
-        items.forEach((item, i) => {
-          item.dataset.stepState =
-            i === index ? "active" : i < index ? "past" : "next";
-        });
+        items.forEach((item, i) => (item.dataset.stepState = state(i, index)));
+        mirrors.forEach((m, i) => (m.dataset.stepState = state(i, index)));
       }
       el.style.setProperty("--progress", progress.toFixed(4));
+      el.style.setProperty("--step-progress", within.toFixed(4));
     };
 
     /* Handled on the scroll event itself rather than coalesced into
@@ -68,11 +76,13 @@ export default function ScrollSteps({
       // the plain list.
       const travel = rect.height - window.innerHeight;
       if (travel <= 0) {
-        paint(0, 0);
+        paint(0, 0, 0);
         return;
       }
       const progress = Math.min(Math.max(-rect.top / travel, 0), 1);
-      paint(Math.min(items.length - 1, Math.floor(progress * items.length)), progress);
+      const raw = progress * items.length;
+      const index = Math.min(items.length - 1, Math.floor(raw));
+      paint(index, progress, Math.min(raw - index, 1));
     };
 
     const listen = (on: boolean) => {
@@ -93,7 +103,9 @@ export default function ScrollSteps({
         delete el.dataset.enhanced;
         delete el.dataset.step;
         el.style.removeProperty("--progress");
+        el.style.removeProperty("--step-progress");
         items.forEach((item) => delete item.dataset.stepState);
+        mirrors.forEach((m) => delete m.dataset.stepState);
         lastStep = -1;
         return;
       }
