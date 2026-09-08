@@ -454,16 +454,23 @@
   align-items: center;
   gap: clamp(2rem, 6vw, 4rem);
 }
+/* The marks arrive already monochrome on transparent — see
+   scripts/make-mono-logos.py. They used to be four brand palettes on baked-in
+   white plates, tone-corrected with `grayscale()` and `brightness()`, which
+   could not work: on paper the plates hid inside the ground and the filter
+   washed the ink to nothing, and in dark mode the plates showed up as grey
+   rectangles with the ink still dark inside them. A filter cannot remove a
+   background; only the alpha channel can, so that is where it is fixed.
+
+   Ink is black, so dark mode is one inversion rather than a guessed
+   brightness multiplier. */
 .logo {
   width: auto;
-  height: clamp(28px, 4vw, 40px);
-  /* Four logos in four palettes is a mess on any ground; one tone each, lifted
-     on hover, reads as a set. */
-  filter: grayscale(1);
-  opacity: 0.55;
+  height: calc(clamp(26px, 3.4vw, 34px) * var(--scale, 1));
+  opacity: 0.6;
   transition: opacity 0.3s var(--ease);
 }
-:global([data-theme="dark"]) .logo { filter: grayscale(1) brightness(2.4); }
+:global([data-theme="dark"]) .logo { filter: invert(1); opacity: 0.72; }
 .logo:hover { opacity: 1; }
 
 /* --- focus --------------------------------------------------------------------- */

@@ -92,11 +92,20 @@ const JOIN = [
   },
 ];
 
+/* The marks are baked monochrome-on-transparent by
+   scripts/make-mono-logos.py; the sources are in assets/logos-source. See that
+   script for why — in short, every one of these shipped with its white plate
+   baked in, so no CSS filter could make the strip work on both grounds.
+
+   `scale` sizes each one by eye rather than by height. A square mark and a
+   3:1 wordmark set to the same height do not look the same size, because what
+   the eye compares is roughly area; these sit about half way between equal
+   height and equal area, which is where a mixed row of logos settles. */
 const RECOGNITION = [
-  { src: "/logos/dpiit.png", alt: "DPIIT", width: 1969, height: 655 },
-  { src: "/logos/i3c.png", alt: "I3C", width: 512, height: 512 },
-  { src: "/logos/msme.png", alt: "MSME", width: 367, height: 137 },
-  { src: "/logos/startup_up.png", alt: "Startup UP", width: 512, height: 512 },
+  { src: "/logos/dpiit-mark.png", alt: "DPIIT, Startup India", width: 800, height: 296, scale: 1 },
+  { src: "/logos/i3c-mark.png", alt: "Institute Incubation & Innovation Council", width: 488, height: 473, scale: 1.28 },
+  { src: "/logos/msme-mark.png", alt: "Ministry of Micro, Small & Medium Enterprises", width: 282, height: 136, scale: 1.08 },
+  { src: "/logos/startup_up-mark.png", alt: "Start in UP", width: 200, height: 75, scale: 1 },
 ];
 
 export default function Home() {
@@ -303,6 +312,7 @@ export default function Home() {
                   width={logo.width}
                   height={logo.height}
                   className={styles.logo}
+                  style={{ "--scale": logo.scale } as React.CSSProperties}
                 />
               </li>
             ))}
