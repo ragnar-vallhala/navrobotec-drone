@@ -92,20 +92,24 @@ const JOIN = [
   },
 ];
 
-/* The marks are baked monochrome-on-transparent by
-   scripts/make-mono-logos.py; the sources are in assets/logos-source. See that
-   script for why — in short, every one of these shipped with its white plate
-   baked in, so no CSS filter could make the strip work on both grounds.
+/* Brand colour, with the baked-in white plate taken off — see
+   scripts/make-logo-marks.py; sources in assets/logos-source. Every one of
+   these shipped as its mark printed on an opaque white rectangle, which is
+   why the strip could not be made to work on both grounds with CSS alone.
+
+   They sit on a white chip in both themes, because that is the ground they
+   are drawn for: on near-black the navy in the i3c mark and the black in
+   DPIIT simply disappear.
 
    `scale` sizes each one by eye rather than by height. A square mark and a
-   3:1 wordmark set to the same height do not look the same size, because what
-   the eye compares is roughly area; these sit about half way between equal
-   height and equal area, which is where a mixed row of logos settles. */
+   3:1 wordmark set to the same height do not look the same size, because
+   what the eye compares is closer to area; these sit about half way between
+   equal height and equal area, which is where a mixed row settles. */
 const RECOGNITION = [
-  { src: "/logos/dpiit-mark.png", alt: "DPIIT, Startup India", width: 800, height: 296, scale: 1 },
-  { src: "/logos/i3c-mark.png", alt: "Institute Incubation & Innovation Council", width: 488, height: 473, scale: 1.28 },
-  { src: "/logos/msme-mark.png", alt: "Ministry of Micro, Small & Medium Enterprises", width: 282, height: 136, scale: 1.08 },
-  { src: "/logos/startup_up-mark.png", alt: "Start in UP", width: 200, height: 75, scale: 1 },
+  { src: "/logos/dpiit-colour.png", alt: "DPIIT, Startup India", width: 900, height: 336, scale: 1 },
+  { src: "/logos/i3c-colour.png", alt: "Institute Incubation & Innovation Council", width: 492, height: 477, scale: 1.3 },
+  { src: "/logos/msme-colour.png", alt: "Ministry of Micro, Small & Medium Enterprises", width: 284, height: 137, scale: 1.08 },
+  { src: "/logos/startup_up-colour.png", alt: "Start in UP", width: 196, height: 77, scale: 1 },
 ];
 
 export default function Home() {
@@ -305,7 +309,7 @@ export default function Home() {
               a fixed list look like a longer one. */}
           <ul className={styles.logos}>
             {RECOGNITION.map((logo) => (
-              <li key={logo.alt}>
+              <li key={logo.alt} className={styles.logoChip}>
                 <Image
                   src={logo.src}
                   alt={logo.alt}
