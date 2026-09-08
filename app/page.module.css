@@ -3,43 +3,78 @@
    forced to 100vh: a hero that is exactly the viewport tall pushes everything
    below it out of sight on a laptop, which is what made the old homepage feel
    like it began with nothing. */
-/* The image runs to the top of the window and under the bar — the frame is
-   the first thing, and the header floats on it the way a title bar does. */
+/* The frame takes the window. Nothing else is on this screen, so it can.
+   
+   svh, not vh: on a phone `100vh` is the height with the browser chrome
+   hidden, so a full-screen hero sized in vh is taller than the screen until
+   you scroll, and the buttons pinned to its bottom start off-screen. `svh` is
+   the height you actually have. The vh line above it is the fallback for
+   anything that does not know svh yet. */
 .hero {
   position: relative;
   overflow: hidden;
-  padding-bottom: clamp(3.5rem, 8vw, 6rem);
+  height: 100vh;
+  height: 100svh;
+  /* A landscape phone is about 380px tall; below this the frame stops being a
+     frame and the buttons crowd the header. */
+  min-height: 32rem;
   background: var(--band);
 }
 
-.stage {
-  position: relative;
+.stage { position: absolute; inset: 0; }
+/* <picture> is inline by default, so it needs to be told to fill the stage as
+   well as the <img> inside it. */
+.stage picture { display: block; width: 100%; height: 100%; }
+.heroImage {
   width: 100%;
-  /* The render's own shape, so nothing is cropped away on a wide screen, but
-     capped so it cannot take the whole window and leave the words below the
-     fold on a laptop. */
-  aspect-ratio: 1810 / 869;
-  max-height: 82vh;
-  overflow: hidden;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 45%;
 }
-.heroImage { object-fit: cover; object-position: center 42%; }
 
+/* Deeper now that it has a whole screen to work with: the foot of the frame
+   has to resolve into the page rather than stop. */
 .fade {
   position: absolute;
   inset: auto 0 0 0;
-  height: 42%;
-  background: linear-gradient(to bottom, transparent, var(--band) 92%);
+  height: 38%;
+  background: linear-gradient(to bottom, transparent, var(--band) 96%);
 }
 
-/* Pulled up into the fade, so the buttons sit inside the frame rather than in
-   a gap beneath it — the shot ends on the two things you can do next. */
+/* Low in the frame, on the shell's own left edge so they line up with every
+   heading further down the page. */
 .heroActions {
-  position: relative;
+  position: absolute;
+  inset: auto 0 clamp(5.5rem, 12vh, 9rem) 0;
   display: flex;
   flex-wrap: wrap;
   gap: 0.875rem;
-  margin-top: clamp(-5rem, -7vw, -3rem);
   animation: rise 0.7s var(--ease) both 0.25s;
+}
+
+/* A full-screen frame hides the fact that there is a page under it. This is
+   the only thing on the screen that says keep going. */
+.scrollCue {
+  position: absolute;
+  inset: auto 0 clamp(1.75rem, 4vh, 2.75rem) 0;
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  color: var(--band-muted);
+  animation: rise 0.7s var(--ease) both 0.45s;
+}
+.scrollCue span { font-size: 0.6875rem; }
+.cueLine {
+  display: block;
+  width: 2.25rem;
+  height: 1px;
+  background: currentColor;
+  transform-origin: left;
+  animation: cue 2.4s var(--ease) infinite;
+}
+@keyframes cue {
+  0%, 100% { transform: scaleX(0.35); opacity: 0.5; }
+  50%      { transform: scaleX(1); opacity: 1; }
 }
 
 
@@ -185,10 +220,10 @@
 }
 
 @media (max-width: 48rem) {
-  /* The narrow crop is centred on the airframe: at this width the wide one is
-     a letterbox strip of fog. */
-  .heroImage { content: url("/images/vayu-hero-narrow.jpg"); object-position: center 38%; }
-  .stage { aspect-ratio: 4 / 3; max-height: 62vh; }
+  /* The portrait render is composed with the aircraft low and the wordmark
+     above it, so it wants to sit a little higher in the frame than the
+     landscape one. */
+  .heroImage { object-position: center 40%; }
 }
 
 @media (min-width: 62rem) {
