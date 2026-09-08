@@ -112,6 +112,21 @@ export default function Home() {
     <div className="page-flush">
       {/* ---------------- hero ---------------- */}
       <section className={`band ${styles.hero}`}>
+        {/* The render, and the scrim that makes text possible over it.
+            `priority` because this is the largest thing on the first screen —
+            without it Next lazy-loads it and the hero paints empty, which is
+            the fault the old video hero had. */}
+        <div className={styles.heroMedia} aria-hidden>
+          <Image
+            src="/images/vayu-hero.jpg"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className={styles.heroImage}
+          />
+          <div className={styles.heroScrim} />
+        </div>
         <div className="reticle" aria-hidden />
         <div className={`shell ${styles.heroInner}`}>
           <p className={`label label-signal rise ${styles.kicker}`}>
