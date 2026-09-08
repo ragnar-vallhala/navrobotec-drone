@@ -7,8 +7,9 @@
    Light by default, with dark bands where the page wants weight — the hero,
    the closing call. Long-form reading (blogs, docs) carries a theme toggle,
    because that is where a reader actually has a preference and where they sit
-   for more than a minute. The choice is remembered and applies site-wide: a
-   setting that silently stops working when you navigate is worse than none.
+   for more than a minute. It is remembered, and it applies to those pages
+   only: everything else is a light page with dark bands placed in it, and
+   forcing that dark inverts a composition rather than re-theming it.
 
    Emerald is the signal, taken from the VAYU render. Two of them, because one
    green cannot serve both grounds: `--signal` is dark enough to read on paper,
