@@ -1,156 +1,118 @@
-# NAVRobotec Brand Design Rules
+# NAVRobotec — design rules
 
-## Color Palette
+The site sells a flight control stack: hard real time, microsecond deadlines,
+every layer auditable. It should read like an instrument — precise, dense with
+real numbers, quiet everywhere it is not saying something.
 
-The site is **dark throughout** — an avionics / instrument aesthetic: near-black
-charcoal surfaces, bone text, a single signal-amber accent.
-
-| Token             | Hex       | Usage                                                    |
-| ----------------- | --------- | -------------------------------------------------------- |
-| Base / Page BG    | `#0B0E14` | All pages — charcoal near-black                          |
-| Surface           | `#12171F` | Cards, panels (`--surface`)                              |
-| Surface Elevated  | `#1C2533` | Hover / raised surfaces (`--surface-elevated`)           |
-| Primary Text Bone | `#ECE7DE` | Body + headings on dark (`--text-primary`)               |
-| Secondary Text    | `#9E988C` | Muted body, captions (`--text-secondary`)                |
-| Warm Grey         | `#B9B2A6` | Tertiary text, hero secondary (`--color-peach`)          |
-| Signal Amber      | `#FFB000` | Accent: CTAs, highlights, data, labels (`--color-accent`)|
-| Deep Amber        | `#D97706` | Amber on light diagram panels (`--color-accent-deep`)    |
-
-> **Bone panels (`#ECE7DE`)** are reserved for figure/diagram backgrounds so black
-> line-art stays legible on the dark page. **Dark text (`#0B0E14`)** is used only on
-> amber or bone fills (buttons, chips).
+Everything below is defined once in `app/globals.css`. Reference the tokens;
+never hardcode a hex or a family name.
 
 ---
 
-## Typography
+## Ground
 
-All fonts are loaded via `next/font/google` in `app/layout.tsx` and exposed as
-CSS variables. Reference them through the semantic tokens below — never hardcode
-a family name.
+**Light by default, with dark bands.** The page is paper; the hero and the
+closing call are near-black. Long-form pages (`/blogs`, `/docs`) carry a theme
+toggle, because that is where a reader sits for more than a minute and actually
+has a preference. The choice is stored and applies site-wide — a setting that
+silently stops working when you navigate is worse than not offering one.
 
-| Token          | Font (variable)            | Usage                                                  |
-| -------------- | -------------------------- | ------------------------------------------------------ |
-| `--font-sans`  | Inter (`--font-inter`)     | All `h1`–`h6` headings, hero titles, primary UI text   |
-| `--font-mono`  | Poppins (`--font-poppins`) | All body copy — `body`, `p`, `span`, subtext, captions |
-| `--font-serif` | Georgia (system serif)     | Editorial section/blog titles for contrast             |
-| `--font-data`  | JetBrains Mono (`--font-jetbrains-mono`) | Technical labels, stat numbers, nav links, kickers — the "instrument" voice |
+| Token | Light | Role |
+|---|---|---|
+| `--paper` | `#f7f9f8` | the page |
+| `--paper-2` | `#edf2ef` | tinted band, stripes |
+| `--card` | `#ffffff` | panels above the page |
+| `--ink` | `#0b1512` | headings |
+| `--ink-2` | `#35443e` | body |
+| `--muted` | `#6b7a73` | captions, labels |
+| `--line` / `--line-strong` | `#dde5e0` / `#c4d0ca` | structure |
 
-### Headings — Inter
+`:root[data-theme="dark"]` swaps those same names. Every rule in the site is
+written against them, so nothing else has to know which theme is on.
 
-- Token: `var(--font-sans)`
-- Weight: `700` (Bold)
-- Letter-spacing: `-0.02em` globally; individual overrides apply in hero
-- Usage: All `h1`–`h6` elements
+**Always-dark bands** do not swap: `--band`, `--band-2`, `--band-text`,
+`--band-muted`. Apply with the `.band` class, which also re-tones headings,
+labels and buttons for the dark ground. In dark mode the band lifts instead of
+sinking, so it still reads as a band rather than dissolving into the page.
 
-### Body — Poppins
+## Signal
 
-- Token: `var(--font-mono)`
-- Weight: `400` (Regular); loaded weights `300`–`700`
-- Usage: All `body`, `p`, `span`, subtext, captions
+Emerald, from the VAYU render. **Two of them, because one green cannot serve
+both grounds:**
 
-### Accent Fonts
+- `--signal` `#05966a` — on paper. Dark enough to read.
+- `--signal-lit` `#35e0a1` — on near-black. Bright enough to read.
 
-- **Outfit** (`--font-outfit`, weight `900`) — display wordmark in the footer logo lockup
-- **Caveat** (`--font-caveat`) — handwritten-style accent text (e.g. contact page)
+Using the wrong one is the easiest mistake to make here. Inside `.band`, use
+`--signal-lit`; the `.label-signal` and `.btn-*` classes already switch.
 
-### Hero Typography
+One accent, for one thing: the live value. Anything emerald should be a number,
+a state, or the thing you are meant to click.
 
-All hero text uses `var(--font-sans)` (Inter).
+## Type
 
-| Class                             | Size      | Weight | Letter-spacing |
-| --------------------------------- | --------- | ------ | -------------- |
-| `.titleAccent` (VAYU / SKIES)     | `7rem`    | `800`  | `0.5em`        |
-| `.titleSecondary` (MASTERING THE) | `3rem`    | `300`  | `0.3em`        |
-| `.subtext` (cycling tagline)      | `1.5rem`  | `600`  | `2px`          |
-| `.heroTagline` (VaiOS sub-line)   | `0.95rem` | `400`  | `0.5px`        |
+Three faces, each with a job. The site previously loaded five and set body copy
+in a geometric display face, which is most of why it read badly at paragraph
+sizes.
 
-- `.heroTagline` uses `var(--font-mono)` in peach (`#f8cba6`) with the product
-  name (`VaiOS`) emphasized in white; it sits between the cycling subtext and the
-  hero CTA group.
+| Token | Face | Used for |
+|---|---|---|
+| `--font-display` | Space Grotesk | `h1`–`h6`, the `.display` class |
+| `--font-sans` | Geist | body, UI — anything read at length |
+| `--font-data` | Geist Mono | labels, nav, and every number |
 
-- All hero text is **centered** over the video background
-- `.titleAccent` has `text-shadow: 0 4px 20px rgba(0,0,0,0.4)` for legibility over video
-- `.titleSecondary` uses `text-transform: uppercase`
+Scale classes: `.display`, `.h1`, `.h2`, `.h3`, `.lede`, `.body`, `.small`,
+`.label`, `.data`. All fluid via `clamp`, so no media query per level.
 
----
+`.data` carries `font-variant-numeric: tabular-nums` — a column of numbers
+lines up, and a changing value does not shuffle the ones beside it.
 
-## Logo Lockup
+## Layout
 
+One measure and one gutter for the whole site: `--measure` (76rem),
+`--measure-prose` (44rem), `--gutter`. Use `.shell` for the column and
+`.section` / `.section-tight` for vertical rhythm. Pages that invent their own
+are half of every alignment problem.
+
+`--bar` (68px) is the fixed header. `.page` clears it; `.page-flush` opts out
+for a page opening on a band.
+
+## Motion
+
+One entrance — `.rise` — and it ends visible. Stagger with
+`animation-delay` in the page's own module.
+
+**Never animate opacity from 0 on scroll.** The old homepage used
+`viewport: { once: false, amount: 0.3 }`; a section taller than the viewport
+can never be 30% visible, so it never animated in and sat at `opacity: 0`
+permanently. Half the page was invisible. Motion is for arrival, never for
+legibility.
+
+`prefers-reduced-motion` is honoured globally.
+
+## Rules that are not negotiable
+
+1. **Nothing that matters is invisible.** No scroll-linked opacity, no reveal
+   that can leave text unreadable if a frame never arrives.
+2. **The first screen works with no video, no WebGL and no JavaScript.** Those
+   are decoration on a page that already says what this is.
+3. **Real text in real elements.** No per-letter span splitting for hover
+   effects: it made the nav read "H O M E H O M E" to a screen reader and to
+   every crawler.
+4. **`aria-current`, not a class,** for the page you are on — announced as well
+   as shaded.
+5. **Focus is always visible,** in the signal colour, on every interactive
+   element.
+
+## Migration shim
+
+`app/globals.css` ends with a block mapping the old dark-only token names
+(`--text-primary`, `--color-accent`, `--bg-primary`, …) onto the system above,
+so pages whose CSS has not been rewritten still pick up the palette and follow
+the theme.
+
+It is a bridge, not an API. Delete it when this comes back empty:
+
+```bash
+grep -rn "var(--text-primary" app components
 ```
-NAVR [spinning SVG icon] BOTEC
-```
-
-- The SVG replaces the letter **"O"** visually
-- Icon spins continuously at `8s linear infinite`
-- The icon uses `filter: invert(1)` on dark backgrounds
-- On hover, the icon transitions to `#e94560` via CSS filter (`0.3s ease`)
-- The text **NAVR** and **BOTEC** do **not** change color on hover
-- The whole logo scales up `1.08x` on hover with a `0.3s ease` transition
-
----
-
-## Navbar
-
-- Fixed, full-width, `height: 80px`, `z-index: 1000`
-- **Over hero:** `background: rgba(26, 26, 46, 0.5)` with `backdrop-filter: blur(10px)`
-- **After scroll:** Solid `#1a1a2e` (no transparency)
-- Nav links: color `#f8cba6`, hover → `#e94560`
-- Contact button: `[ Contact ]` bracket notation, brackets use `#f8cba6`, hover → `#e94560`
-- Font: `0.8rem`, `font-weight: 600`, `letter-spacing: 1.5px`, uppercase
-
----
-
-## Footer
-
-- Background: `#1a1a2e`
-- Text: `#f8cba6`
-- Logo lockup identical to navbar, with spin animation
-- Link hover: `#e94560`
-- 3-column grid: Brand description | Quick Links | Connect
-
----
-
-## Sections & Layout
-
-- Page padding: `0 8rem` horizontal
-- Section min-height: `100vh`
-- Content max-width: `600px` (for readability in text-heavy sections)
-- **Card borders:** `1px solid rgba(0,0,0,0.1)` on white backgrounds
-- **Highlight card borders:** `1px solid rgba(0,0,0,0.1)` bottom border
-
-### Layout Variants
-
-| Class         | Alignment                                 |
-| ------------- | ----------------------------------------- |
-| `.highlights` | Left-aligned (default)                    |
-| `.problem`    | Image left + content right, space-between |
-| `.traction`   | Right-aligned                             |
-
----
-
-## Animations
-
-- Hero text: staggered `framer-motion` fade-up on scroll (`once: true`)
-- Subtext cycling: `AnimatePresence` + `setInterval(2000ms)`, slide + fade
-- Scroll-triggered sections: `fadeInUp` — `opacity 0→1`, `y 20→0`, `duration: 0.8s`
-- Logo spin: `8s linear infinite`
-- Logo hover scale: `transform: scale(1.08)`, `transition: 0.3s ease`
-- Icon hover color: `transition: filter 0.3s ease`
-
----
-
-## Buttons
-
-```css
-.primaryBtn   — Dark fill, white text, [ bracket ] notation
-.secondaryBtn — Transparent, uppercase, spaced letters
-```
-
-- CTA hover: color shifts to `#e94560`
-
----
-
-## Images
-
-- Section images use `border-radius: 12px` and `box-shadow: 0 10px 30px rgba(0,0,0,0.1)`
-- Mission section image: `max-width: 55%`, left column

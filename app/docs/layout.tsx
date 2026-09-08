@@ -1,3 +1,4 @@
+import ReadingBar from "@/components/ReadingBar";
 import styles from "./DocsLayout.module.css";
 
 /**
@@ -10,5 +11,10 @@ export default function DocsLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <div className={styles.docsContainer}>{children}</div>;
+  return (
+    <>
+      <ReadingBar />
+      <div className={styles.docsContainer}>{children}</div>
+    </>
+  );
 }
