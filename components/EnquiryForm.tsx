@@ -39,7 +39,7 @@ export type EnquiryField = {
 
 export type EnquiryFormProps = {
   /** Which entry point this is. Must be one of the API's kSources. */
-  source: "contact" | "investor";
+  source: "contact" | "investor" | "wishlist";
   fields: EnquiryField[];
   /** Multi-select chips, stored as `interests`. */
   interests?: { legend: string; options: string[] };
