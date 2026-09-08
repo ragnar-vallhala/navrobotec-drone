@@ -488,20 +488,75 @@
   object-fit: contain;
 }
 
-/* --- focus --------------------------------------------------------------------- */
-.focus { display: grid; gap: 1.5rem; }
-.card { display: flex; flex-direction: column; }
-.cardImage {
+/* --- focus ---------------------------------------------------------------------
+   Alternating rows. The section below is a row of three cards; when this one
+   was too, a reader met the same shape twice running and read the two as the
+   same kind of thing.
+*/
+.focus { display: grid; gap: clamp(3rem, 7vw, 5rem); }
+
+.focusRow { display: grid; gap: clamp(1.5rem, 3vw, 2.5rem); align-items: center; }
+
+.focusImage {
   position: relative;
-  aspect-ratio: 16 / 10;
-  margin-bottom: 1.5rem;
+  aspect-ratio: 3 / 2;
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   overflow: hidden;
   background: var(--paper-2);
 }
-.cardImg { object-fit: cover; }
-.card h3 { margin-bottom: 0.75rem; }
+.focusImg { object-fit: cover; }
+
+.focusBody { max-width: 34rem; }
+.focusIndex {
+  display: block;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  color: var(--signal);
+  margin-bottom: 1rem;
+}
+.focusBody h3 { margin-bottom: 1rem; }
+
+/* Evidence and destination, under a rule: what backs the claim and where to
+   go and check it, set apart from the prose rather than continuing it. */
+.focusMeta {
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+}
+.focusProof {
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.focusLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.125rem;
+  font-family: var(--font-data);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--signal);
+  transition: gap 0.25s var(--ease);
+}
+.focusLink:hover { gap: 0.75rem; text-decoration: underline; text-underline-offset: 0.25em; }
+/* Nothing above it in the block when a row carries no figure. */
+.focusProof + .focusLink { margin-top: 1.125rem; }
+.focusMeta > .focusLink:only-child { margin-top: 0; }
+
+@media (min-width: 62rem) {
+  .focusRow {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(2.5rem, 5vw, 4.5rem);
+  }
+  /* Every other row turns over, so the eye is handed back and forth down the
+     section instead of running straight down one column. */
+  .focusRow:nth-child(even) .focusImage { order: 2; }
+  .focusRow:nth-child(even) .focusBody { justify-self: end; }
+}
 
 /* --- join ------------------------------------------------------------------------ */
 .join { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; }
@@ -548,7 +603,6 @@
 }
 
 @media (min-width: 62rem) {
-  .focus { grid-template-columns: repeat(3, 1fr); }
   .join { grid-template-columns: repeat(3, 1fr); }
 }
 
