@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import styles from '../shared.module.css';
 import contactStyles from '../contact/page.module.css';
+import Cinematic from "@/components/Cinematic";
 
 const fadeInUp = {
     initial: { opacity: 0, y: 30 },
@@ -13,14 +14,14 @@ const fadeInUp = {
 
 export default function InvestorOnboarding() {
     return (
+        <>
+        <Cinematic
+          kicker="Investors"
+          title={<>Backing a foundation, not a product.</>}
+          lede="A sovereign, auditable runtime for autonomous flight — proved on UAVs first, because that is where hard real time is hardest to fake."
+        />
         <div className={styles.container}>
             <div className={styles.standardContainer}>
-                <div className={styles.headerArea}>
-                    <motion.h1 {...fadeInUp}>Partnership <span className={styles.gradientText}>Inquiry.</span></motion.h1>
-                    <motion.p {...fadeInUp} transition={{ delay: 0.2 }}>
-                        Backing a sovereign foundation for autonomous flight.
-                    </motion.p>
-                </div>
 
                 <motion.div
                     {...fadeInUp}
@@ -75,5 +76,6 @@ export default function InvestorOnboarding() {
                 </motion.div>
             </div>
         </div>
+    </>
     );
 }

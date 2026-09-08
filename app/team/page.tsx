@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import styles from '../shared.module.css';
+import Cinematic from "@/components/Cinematic";
 
 const fadeInUp = {
     initial: { opacity: 0, y: 30 },
@@ -13,12 +14,14 @@ const fadeInUp = {
 
 export default function Team() {
     return (
+        <>
+        <Cinematic
+          kicker="The team"
+          title={<>Three founders, one stack.</>}
+          lede="Built by engineers who care about control loops and deadlines — and who answer for every layer between the register and the air."
+        />
         <div className={styles.container}>
             <div className={styles.standardContainer}>
-                <div className={styles.headerArea}>
-                    <motion.h1 {...fadeInUp}>The <span className={styles.gradientText}>Team.</span></motion.h1>
-                    <motion.p {...fadeInUp} transition={{ delay: 0.2 }}>Built by engineers obsessed with control and autonomy.</motion.p>
-                </div>
 
                 <div className={styles.grid}>
                     <motion.div className={styles.card} {...fadeInUp}>
@@ -64,5 +67,6 @@ export default function Team() {
 
             </div>
         </div>
+    </>
     );
 }

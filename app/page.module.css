@@ -206,6 +206,7 @@
 }
 .closingInner { position: relative; text-align: center; }
 .closingInner .label { display: block; margin-bottom: 1.25rem; }
+.closingLede { margin: 1.5rem auto 0; }
 .closingInner .actions { justify-content: center; }
 
 @media (max-width: 48rem) {

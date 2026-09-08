@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Navigation, Activity, Microchip, Cpu } from "lucide-react";
 import styles from "../shared.module.css";
 import tech from "./technology.module.css";
+import Cinematic from "@/components/Cinematic";
 
 export const metadata: Metadata = {
   title: "Technology | NAVRobotec",
@@ -55,14 +56,16 @@ const layers = [
 
 export default function Technology() {
   return (
-    <div className={styles.container}>
+    <div className={`page-flush ${styles.container}`}>
+      <Cinematic
+        src="/images/frame-technology.jpg"
+        focus="center 62%"
+        kicker="The stack"
+        title={<>Four layers, all ours.</>}
+        lede="One sovereign runtime, built from the silicon up — from the register NavHAL writes to, up to the aircraft VAYU flies."
+      />
+
       <div className={styles.standardContainer}>
-        <div className={styles.headerArea}>
-          <h1>
-            The <span className={styles.gradientText}>Stack.</span>
-          </h1>
-          <p>One sovereign runtime, built from the silicon up.</p>
-        </div>
 
         {/* Instrument readout */}
         <div className={tech.readout}>
