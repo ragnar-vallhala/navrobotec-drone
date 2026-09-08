@@ -499,7 +499,9 @@
 
 .focusImage {
   position: relative;
-  aspect-ratio: 3 / 2;
+  /* 4:3 — the frame the images in scripts/make-focus-images.py are built to,
+     and the shape a squarish board sits in without being cropped to a strip. */
+  aspect-ratio: 4 / 3;
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   overflow: hidden;
