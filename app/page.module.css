@@ -443,8 +443,18 @@
 }
 .attribLink:hover { color: var(--signal); gap: 0.75rem; }
 
-/* --- recognition -------------------------------------------------------------- */
-.recognitionLabel { display: block; margin-bottom: 1.75rem; }
+/* --- recognition --------------------------------------------------------------
+   Centred, because there is nothing else in the band to align to — the label
+   and the row are the whole section, and left-aligning four short marks under
+   a two-word label left most of the strip empty.
+
+   Each mark sits on a white chip. The marks themselves are brand colour with
+   the plate they shipped with taken off (scripts/make-logo-marks.py), and
+   white is the ground they are drawn for: on the near-black page the navy in
+   the i3c mark and the black in DPIIT would vanish. The chip is the same in
+   both themes, so the strip does not change shape when the reader does.
+*/
+.recognitionLabel { display: block; margin-bottom: 1.75rem; text-align: center; }
 .logos {
   list-style: none;
   margin: 0;
@@ -452,26 +462,31 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: clamp(2rem, 6vw, 4rem);
+  justify-content: center;
+  gap: clamp(0.75rem, 2vw, 1.25rem);
 }
-/* The marks arrive already monochrome on transparent — see
-   scripts/make-mono-logos.py. They used to be four brand palettes on baked-in
-   white plates, tone-corrected with `grayscale()` and `brightness()`, which
-   could not work: on paper the plates hid inside the ground and the filter
-   washed the ink to nothing, and in dark mode the plates showed up as grey
-   rectangles with the ink still dark inside them. A filter cannot remove a
-   background; only the alpha channel can, so that is where it is fixed.
+.logoChip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: clamp(8rem, 14vw, 11rem);
+  height: clamp(4.5rem, 7vw, 5.5rem);
+  padding-inline: clamp(1rem, 2vw, 1.5rem);
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  transition: border-color 0.3s var(--ease), box-shadow 0.3s var(--ease);
+}
+.logoChip:hover { border-color: var(--line-strong); box-shadow: var(--shadow); }
+:global([data-theme="dark"]) .logoChip { border-color: rgba(233, 241, 236, 0.14); }
 
-   Ink is black, so dark mode is one inversion rather than a guessed
-   brightness multiplier. */
 .logo {
   width: auto;
-  height: calc(clamp(26px, 3.4vw, 34px) * var(--scale, 1));
-  opacity: 0.6;
-  transition: opacity 0.3s var(--ease);
+  max-width: 100%;
+  /* Sized by eye rather than by height — see RECOGNITION in page.tsx. */
+  height: calc(clamp(28px, 3.6vw, 36px) * var(--scale, 1));
+  object-fit: contain;
 }
-:global([data-theme="dark"]) .logo { filter: invert(1); opacity: 0.72; }
-.logo:hover { opacity: 1; }
 
 /* --- focus --------------------------------------------------------------------- */
 .focus { display: grid; gap: 1.5rem; }
