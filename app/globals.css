@@ -302,6 +302,20 @@ a { color: inherit; text-decoration: none; }
 }
 .band :where(a, button):focus-visible { outline-color: var(--signal-lit); }
 
+/* Announced, never drawn. For the heading a page needs when its opening is a
+   photograph with nothing written on it. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
 .skip {
   position: absolute;
   left: -9999px;

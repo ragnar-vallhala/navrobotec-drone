@@ -21,15 +21,6 @@ export const metadata = {
   title: "Sovereign software for autonomous flight",
 };
 
-/* Figures from the technology page — kept in step with it by hand. If they
-   change there, they change here. */
-const READOUT = [
-  { value: "1 kHz", label: "Control loop" },
-  { value: "~5.9 µs", label: "Task-wake latency" },
-  { value: "0", label: "Foreign flight-critical deps" },
-  { value: "4", label: "Layers, silicon to sky" },
-];
-
 const STACK = [
   {
     tier: "L3",
@@ -135,45 +126,26 @@ export default function Home() {
           <div className={styles.fade} />
         </div>
 
-        <div className={`shell ${styles.heroInner}`}>
-          <p className={`label label-signal rise ${styles.kicker}`}>
-            VaiOS · sovereign robotics runtime
-          </p>
-          {/* Their own claim, not a slogan. "Mastering the skies" could sit
-              on any drone company's homepage; owning every layer down to the
-              register is a thing almost nobody else can say. */}
-          <h1 className={`display rise ${styles.title}`}>
-            Built from the
-            <br />
-            silicon up.
-          </h1>
-          <p className={`lede rise ${styles.lede}`}>
-            Most flight software is stacked on borrowed frameworks nobody fully
-            controls. Ours is not: <strong>NavHAL</strong> speaks to the
-            register, <strong>VaiOS</strong> holds the control loop to a fixed
-            schedule, and <strong>VAYU</strong> flies on top. Nothing in the
-            flight path we cannot read, test and trust.
-          </p>
-          <div className={`rise ${styles.actions}`}>
-            <Link href="/technology" className="btn btn-primary">
-              The stack
-            </Link>
-            <Link href="/contact" className="btn btn-ghost">
-              Join the mission
-            </Link>
-          </div>
+        {/* Only the two ways in. The frame says what this is; a headline,
+            a paragraph and four figures underneath it were the page
+            explaining a picture that did not need explaining.
 
-          {/* The instrument readout. Four figures, tabular, that say what kind
-              of company this is faster than a paragraph would. */}
-          <dl className={`rise ${styles.readout}`}>
-            {READOUT.map((item) => (
-              <div key={item.label} className={styles.reading}>
-                <dt className={`data ${styles.readingValue}`}>{item.value}</dt>
-                <dd className={`label ${styles.readingLabel}`}>{item.label}</dd>
-              </div>
-            ))}
-          </dl>
+            The numbers are not lost — the same four open /technology, where
+            they are the subject rather than a caption. */}
+        <div className={`shell ${styles.heroActions}`}>
+          <Link href="/technology" className="btn btn-primary">
+            The stack
+          </Link>
+          <Link href="/contact" className="btn btn-ghost">
+            Join the mission
+          </Link>
         </div>
+
+        {/* The page still needs one, and the frame carries no text. Announced
+            to a screen reader and to a crawler; drawn for nobody. */}
+        <h1 className="sr-only">
+          NAVRobotec — sovereign software for autonomous flight
+        </h1>
       </section>
 
       {/* ---------------- the stack ---------------- */}
@@ -336,7 +308,7 @@ export default function Home() {
             against FreeRTOS and Zephyr are all public. Start there — or write
             to us about putting the runtime in your fleet.
           </p>
-          <div className={styles.actions}>
+          <div className={styles.closingActions}>
             <Link href="/docs" className="btn btn-primary">
               Read the docs
             </Link>
