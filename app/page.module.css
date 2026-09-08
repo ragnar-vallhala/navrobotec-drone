@@ -8,13 +8,33 @@
   overflow: hidden;
   padding-top: calc(var(--bar) + clamp(3.5rem, 9vw, 7rem));
   padding-bottom: clamp(3rem, 7vw, 5.5rem);
-  /* The emerald bloom is the VAYU render's own light, standing in for it
-     until the render is in the repo. */
-  background:
-    radial-gradient(110% 90% at 72% -10%, rgba(53, 224, 161, 0.16), transparent 62%),
-    var(--band);
+  background: var(--band);
 }
 .heroInner { position: relative; }
+
+/* --- the render -------------------------------------------------------------
+   Positioned at 64%, so the aircraft sits right of the text rather than under
+   it: the image is 2.08:1 and centring it would put the airframe directly
+   behind the headline. */
+.heroMedia { position: absolute; inset: 0; }
+.heroImage { object-fit: cover; object-position: 64% center; }
+
+/* Dark on the left, clear on the right — the words get a ground to sit on and
+   the aircraft keeps its own light. A flat overlay across the whole image
+   would make the text legible by making the render dull, which is the usual
+   way a hero image ends up not worth having. */
+.heroScrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(100deg,
+      var(--band) 0%,
+      rgba(7, 19, 16, 0.92) 26%,
+      rgba(7, 19, 16, 0.55) 52%,
+      rgba(7, 19, 16, 0.18) 74%,
+      rgba(7, 19, 16, 0.35) 100%),
+    linear-gradient(to top, var(--band) 2%, transparent 30%);
+}
 
 .kicker { display: block; margin-bottom: 1.5rem; }
 .title { max-width: 16ch; }
@@ -49,7 +69,10 @@
 }
 .reading {
   padding: 1.25rem 1.375rem;
-  background: rgba(255, 255, 255, 0.03);
+  /* Its own ground, because behind this is a photograph: a translucent panel
+     lets the fog through and the numbers stop being readable. */
+  background: rgba(7, 19, 16, 0.72);
+  backdrop-filter: blur(6px);
 }
 .readingValue {
   display: block;
@@ -188,6 +211,20 @@
 .closingInner { position: relative; text-align: center; }
 .closingInner .label { display: block; margin-bottom: 1.25rem; }
 .closingInner .actions { justify-content: center; }
+
+@media (max-width: 48rem) {
+  /* The narrow crop is centred on the airframe: at this width the wide one
+     shows fog and half a letter. The scrim turns vertical, because there is no
+     horizontal room to fade across. */
+  .heroImage { content: url("/images/vayu-hero-narrow.jpg"); object-position: center 30%; }
+  .heroScrim {
+    background: linear-gradient(to bottom,
+      rgba(7, 19, 16, 0.55) 0%,
+      rgba(7, 19, 16, 0.82) 42%,
+      var(--band) 78%);
+  }
+  .hero { padding-top: calc(var(--bar) + 12rem); }
+}
 
 @media (min-width: 40rem) {
   .readout { grid-template-columns: repeat(4, 1fr); }
