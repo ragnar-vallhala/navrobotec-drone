@@ -43,6 +43,10 @@ export type EnquiryFormProps = {
   fields: EnquiryField[];
   /** Multi-select chips, stored as `interests`. */
   interests?: { legend: string; options: string[] };
+  /** Chips to start with, for a link that arrives already saying what it is
+      about. Anything not in `interests.options` is dropped: the value comes
+      off a URL, and anyone can type one into it. */
+  defaultInterests?: string[];
   /** Single-select, stored as `budget`. */
   budget?: { legend: string; options: string[] };
   message: { label: string; placeholder: string; rows?: number };
@@ -55,12 +59,17 @@ export default function EnquiryForm({
   source,
   fields,
   interests,
+  defaultInterests,
   budget,
   message,
   submit,
   done,
 }: EnquiryFormProps) {
-  const [chosen, setChosen] = useState<string[]>([]);
+  const [chosen, setChosen] = useState<string[]>(() =>
+    (defaultInterests ?? []).filter((label) =>
+      (interests?.options ?? []).includes(label),
+    ),
+  );
   const [band, setBand] = useState("");
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);

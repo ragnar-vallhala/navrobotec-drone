@@ -30,9 +30,30 @@ export const metadata = {
    build time. */
 export const dynamic = "force-dynamic";
 
-export default async function Products() {
-  const products = await getProducts();
+/* The chips the API validates against, keyed by slug.
+ *
+ * Fixed labels rather than the product names from the database: the API
+ * checks them against kInterests and drops what it does not know, so renaming
+ * a product must not silently stop recording who asked for it. Keyed by slug
+ * so a card can link to the form already saying which one it is about. */
+const INTEREST_BY_SLUG: Record<string, string> = {
+  "fc-f446": "Flight controller (F446)",
+  "fc-h747": "Flight controller (H7)",
+  "airframe-sub250": "Sub-250 g airframe",
+};
+const INTEREST_OPTIONS = Object.values(INTEREST_BY_SLUG);
+
+export default async function Products({
+  searchParams,
+}: {
+  searchParams: Promise<{ want?: string }>;
+}) {
+  const [products, params] = await Promise.all([
+    getProducts(),
+    searchParams,
+  ]);
   const anyPlaceholder = products.some((product) => product.placeholder);
+  const wanted = params.want ? [params.want] : [];
 
   return (
     <div className="page-flush">
@@ -65,26 +86,16 @@ export default async function Products() {
             </p>
           ) : (
             <ol className={styles.items}>
-              {products.map((product, i) => (
-                <li key={product.id} className={styles.item}>
-                  <p className={`data ${styles.index}`}>
-                    {String(i + 1).padStart(2, "0")}
-                  </p>
-
-                  <div className={styles.body}>
-                    <h2 className={`h2 ${styles.name}`}>
-                      {product.name}
-                      {product.part ? (
-                        <span className={`data ${styles.part}`}>
-                          {product.part}
-                        </span>
-                      ) : null}
-                    </h2>
-
-                    <p className={styles.meta}>
-                      {product.kicker ? (
-                        <span className="label">{product.kicker}</span>
-                      ) : null}
+              {products.map((product) => {
+                const interest = INTEREST_BY_SLUG[product.slug];
+                return (
+                  <li key={product.id} className={styles.item}>
+                    {/* The identity block. Both flight controllers are called
+                        "Flight controller"; what tells them apart is the part,
+                        so the part is what the card leads with rather than a
+                        grey subtitle a reader has to compare. */}
+                    <div className={styles.badge}>
+                      <span className={styles.designator}>{product.part}</span>
                       {product.status ? (
                         <span className={`data ${styles.status}`}>
                           {product.status}
@@ -95,29 +106,48 @@ export default async function Products() {
                           Placeholder
                         </span>
                       ) : null}
-                    </p>
+                    </div>
 
-                    {product.summary ? (
-                      <p className="body">{product.summary}</p>
-                    ) : null}
+                    <div className={styles.body}>
+                      <p className={`label ${styles.role}`}>
+                        {product.name}
+                        {product.kicker ? ` — ${product.kicker}` : ""}
+                      </p>
 
-                    {product.specs.length > 0 ? (
-                      <dl className={styles.specs}>
-                        {product.specs.map((spec) => (
-                          <div key={spec.label} className={styles.spec}>
-                            <dt className={`label ${styles.specLabel}`}>
-                              {spec.label}
-                            </dt>
-                            <dd className={`data ${styles.specValue}`}>
-                              {spec.value}
-                            </dd>
-                          </div>
-                        ))}
-                      </dl>
-                    ) : null}
-                  </div>
-                </li>
-              ))}
+                      {product.summary ? (
+                        <p className={`lede ${styles.summary}`}>
+                          {product.summary}
+                        </p>
+                      ) : null}
+
+                      {product.specs.length > 0 ? (
+                        <dl className={styles.specs}>
+                          {product.specs.map((spec) => (
+                            <div key={spec.label} className={styles.spec}>
+                              <dt className={`label ${styles.specLabel}`}>
+                                {spec.label}
+                              </dt>
+                              <dd className={`data ${styles.specValue}`}>
+                                {spec.value}
+                              </dd>
+                            </div>
+                          ))}
+                        </dl>
+                      ) : null}
+
+                      {interest ? (
+                        <Link
+                          href={`/products?want=${encodeURIComponent(interest)}#interest`}
+                          className={styles.want}
+                        >
+                          Register interest in this
+                          <span aria-hidden>&rarr;</span>
+                        </Link>
+                      ) : null}
+                    </div>
+                  </li>
+                );
+              })}
             </ol>
           )}
 
@@ -136,7 +166,7 @@ export default async function Products() {
         </div>
       </section>
 
-      <section className="section rule tinted">
+      <section id="interest" className="section rule tinted">
         <div className="shell">
           <header className={styles.head}>
             <p className="label">Register interest</p>
@@ -156,18 +186,8 @@ export default async function Products() {
                 { name: "email", label: "Email", type: "email", autoComplete: "email", required: true },
                 { name: "company", label: "Company or team", type: "text", autoComplete: "organization", wide: true },
               ]}
-              /* Fixed labels rather than the product names, because the API
-                 validates them against kInterests and drops anything it does
-                 not know — renaming a product in the database must not
-                 silently stop recording who asked for it. */
-              interests={{
-                legend: "Which of these",
-                options: [
-                  "Flight controller (F446)",
-                  "Flight controller (H7)",
-                  "Sub-250 g airframe",
-                ],
-              }}
+              interests={{ legend: "Which of these", options: INTEREST_OPTIONS }}
+              defaultInterests={wanted}
               message={{
                 label: "What would you use it for?",
                 placeholder:
