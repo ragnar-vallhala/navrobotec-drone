@@ -19,40 +19,65 @@
 
 .empty { color: var(--muted); padding: 3rem 0; max-width: 40rem; }
 
-/* --- the list ---------------------------------------------------------------
-   Rows down the page. Three items is too few for a grid to read as anything
-   but three cards, and each has a paragraph a card would crop. */
+/* --- the products -----------------------------------------------------------
+   Cards, not rows in a table. The first version rendered the schema — a
+   label/value list per item, two of them headed "Flight controller" — and
+   read like the admin view of the products table, which is what it was.
+
+   What separates these two products is the part, so the part is the card's
+   subject: set large on a dark tile, which is also the only strong contrast
+   on an otherwise light page and the thing that gives the list a rhythm to
+   scroll through.
+*/
 .items {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 1px;
-  background: var(--line);
-  border-block: 1px solid var(--line);
+  gap: clamp(1.25rem, 2.5vw, 2rem);
 }
+
 .item {
   display: grid;
-  gap: 1rem;
-  padding: clamp(2rem, 4vw, 2.75rem) 0;
-  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--card);
+  box-shadow: var(--shadow);
 }
-.index { font-size: 0.75rem; letter-spacing: 0.14em; color: var(--signal); }
 
-.body { max-width: 48rem; }
-.name { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.875rem; }
-/* The part, beside the name and in the instrument voice: a fact about the
-   silicon, not part of a product name that does not exist yet. */
-.part { font-size: 0.8125rem; font-weight: 400; letter-spacing: 0.08em; color: var(--muted); }
+/* --- the identity tile ---------------------------------------------------- */
+.badge {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.625rem;
+  padding: clamp(1.5rem, 3vw, 2rem);
+  background: var(--band);
+  color: var(--band-muted);
+}
 
-.meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin-top: 0.75rem; }
+.designator {
+  flex: 1 1 100%;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 2.6vw, 2.125rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  color: var(--band-text);
+  /* Wraps rather than overflows: a part number longer than the tile is a
+     content change away, and the first version of this spilled STM32F446
+     straight out onto the card beside it. */
+  overflow-wrap: anywhere;
+}
+
 .status {
   padding: 0.25rem 0.625rem;
-  border: 1px solid var(--line-strong);
+  border: 1px solid rgba(230, 239, 234, 0.28);
   border-radius: 999px;
   font-size: 0.6875rem;
   letter-spacing: 0.08em;
-  color: var(--ink-2);
+  color: var(--band-text);
 }
 .flag {
   padding: 0.25rem 0.625rem;
@@ -62,26 +87,57 @@
   background: #c0392b;
   color: #fff;
 }
-.meta + p { margin-top: 1rem; }
 
-/* --- specifications ----------------------------------------------------------
-   A definition list, because that is what it is: the label is the term and
-   the figure is the definition. */
-.specs { margin: 1.5rem 0 0; display: grid; gap: 1px; background: var(--line); border-top: 1px solid var(--line); }
-.spec { display: grid; gap: 0.25rem; padding: 0.875rem 0; background: var(--paper); }
-.specLabel { display: block; }
-.specValue { margin: 0; font-size: 0.9375rem; color: var(--ink); }
+/* --- the content ---------------------------------------------------------- */
+.body { padding: clamp(1.5rem, 3vw, 2.25rem); min-width: 0; }
+.role { display: block; color: var(--muted); }
+.summary { margin-top: 0.875rem; max-width: 42rem; color: var(--ink-2); }
 
-.caveat { margin-top: clamp(2rem, 4vw, 3rem); max-width: 46rem; }
+/* Specifications as an instrument readout: the value leads and the label sits
+   under it small, because the figure is what a reader is scanning for. A
+   twelve-rem grey label column in front of every one of them was the shape of
+   the database, not of the question being asked. */
+.specs {
+  margin: clamp(1.5rem, 3vw, 2rem) 0 0;
+  display: grid;
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.spec { padding: 0.875rem 1rem; background: var(--paper); display: grid; gap: 0.3125rem; }
+.specValue { margin: 0; font-size: 0.9375rem; color: var(--ink); line-height: 1.4; }
+.specLabel { display: block; color: var(--muted); }
+
+.want {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: clamp(1.5rem, 3vw, 2rem);
+  font-family: var(--font-data);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--signal);
+  transition: gap 0.25s var(--ease);
+}
+.want:hover { gap: 0.75rem; text-decoration: underline; text-underline-offset: 0.25em; }
+
+.caveat { margin-top: clamp(2.5rem, 5vw, 3.5rem); max-width: 46rem; }
 .link { color: var(--signal); text-decoration: underline; text-underline-offset: 2px; }
+
+@media (min-width: 48rem) {
+  /* The tile becomes a column and the specs go three across; below this the
+     card stacks, because a 2.5rem part number and a spec table do not both
+     fit beside each other on a phone. */
+  .item { grid-template-columns: minmax(12rem, 17rem) minmax(0, 1fr); }
+  .badge { align-content: flex-start; }
+  .specs { grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); }
+}
 
 /* --- the form ------------------------------------------------------------- */
 .head { max-width: 46rem; margin-bottom: clamp(2.5rem, 5vw, 3.5rem); }
 .head .label { display: block; margin-bottom: 1.125rem; }
 .head h2 + .lede { margin-top: 1.25rem; }
 .formCol { max-width: 44rem; }
-
-@media (min-width: 56rem) {
-  .item { grid-template-columns: 4rem 1fr; gap: 0 2.5rem; align-items: start; }
-  .spec { grid-template-columns: 12rem 1fr; gap: 0 2rem; align-items: baseline; }
-}
