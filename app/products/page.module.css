@@ -60,7 +60,7 @@
 .designator {
   flex: 1 1 100%;
   font-family: var(--font-display);
-  font-size: clamp(1.5rem, 2.6vw, 2.125rem);
+  font-size: clamp(1.375rem, 2.3vw, 1.875rem);
   font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 1.05;
@@ -69,6 +69,16 @@
      content change away, and the first version of this spilled STM32F446
      straight out onto the card beside it. */
   overflow-wrap: anywhere;
+}
+
+/* The MCU, under the name. Full width so it sits on its own line rather than
+   competing with the status pill beside it. */
+.part {
+  flex: 1 1 100%;
+  margin-top: -0.25rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: var(--band-muted);
 }
 
 .status {
@@ -131,7 +141,7 @@
   /* The tile becomes a column and the specs go three across; below this the
      card stacks, because a 2.5rem part number and a spec table do not both
      fit beside each other on a phone. */
-  .item { grid-template-columns: minmax(12rem, 17rem) minmax(0, 1fr); }
+  .item { grid-template-columns: minmax(13rem, 18rem) minmax(0, 1fr); }
   .badge { align-content: flex-start; }
   .specs { grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); }
 }

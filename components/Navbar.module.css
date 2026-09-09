@@ -124,7 +124,11 @@
 }
 .drawerLink[aria-current="page"] { color: var(--signal); }
 
-@media (min-width: 62rem) {
+/* 64rem, not 62. Seven links plus the wordmark and the Contact button need
+   about 1001px with the gutters, and the desktop nav used to switch on at
+   992 — so adding Products opened a nine-pixel band, roughly 992 to 1001,
+   where the bar overflowed its own container. The drawer covers it instead. */
+@media (min-width: 64rem) {
   .links { display: flex; }
   .toggle, .drawer { display: none; }
 }
