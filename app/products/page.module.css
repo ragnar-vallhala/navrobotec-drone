@@ -46,49 +46,46 @@
   box-shadow: var(--shadow);
 }
 
-/* --- the identity tile ---------------------------------------------------- */
-.badge {
+/* --- the render ------------------------------------------------------------
+   The dark panel is still what gives the list its rhythm, but it holds the
+   product now rather than its name. The renders are transparent PNGs keyed
+   out of their backgrounds, so they sit on the band directly — no plate, no
+   drop shadow, nothing that would read as a photograph of a boxed product. */
+.frame {
+  position: relative;
+  /* Stacked, the panel sets its own height from its width. Beside the copy it
+     must not: with `align-items: stretch` on the card, an aspect-ratio makes
+     the panel take its *width* from the stretched height, and it overflowed
+     its own grid track and sat on top of the text. The two-column rule below
+     turns it off. */
+  aspect-ratio: 4 / 3;
+  background: var(--band);
+  overflow: hidden;
+}
+.render { object-fit: contain; padding: 6%; }
+
+.meta {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.625rem;
-  padding: clamp(1.5rem, 3vw, 2rem);
-  background: var(--band);
-  color: var(--band-muted);
+  gap: 0.5rem;
+  margin-top: 0.875rem;
 }
-
-.designator {
-  flex: 1 1 100%;
-  font-family: var(--font-display);
-  font-size: clamp(1.375rem, 2.3vw, 1.875rem);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 1.05;
-  color: var(--band-text);
-  /* Wraps rather than overflows: a part number longer than the tile is a
-     content change away, and the first version of this spilled STM32F446
-     straight out onto the card beside it. */
-  overflow-wrap: anywhere;
-}
-
-/* The detail under the name — the MCU for a board, the weight for an
-   aircraft. Full width so it sits on its own line rather than competing with
-   the status pill beside it. */
 .part {
-  flex: 1 1 100%;
-  margin-top: -0.25rem;
-  font-size: 0.75rem;
-  letter-spacing: 0.1em;
-  color: var(--band-muted);
-}
-
-.status {
   padding: 0.25rem 0.625rem;
-  border: 1px solid rgba(230, 239, 234, 0.28);
+  border: 1px solid var(--line-strong);
   border-radius: 999px;
   font-size: 0.6875rem;
   letter-spacing: 0.08em;
-  color: var(--band-text);
+  color: var(--ink-2);
+}
+.status {
+  padding: 0.25rem 0.625rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  color: var(--ink-2);
 }
 .flag {
   padding: 0.25rem 0.625rem;
@@ -101,8 +98,9 @@
 
 /* --- the content ---------------------------------------------------------- */
 .body { padding: clamp(1.5rem, 3vw, 2.25rem); min-width: 0; }
-.role { display: block; color: var(--muted); }
-.summary { margin-top: 0.875rem; max-width: 42rem; color: var(--ink-2); }
+.name { letter-spacing: -0.02em; }
+.role { display: block; margin-top: 0.625rem; color: var(--muted); }
+.summary { margin-top: 1.125rem; max-width: 42rem; color: var(--ink-2); }
 
 /* Specifications as an instrument readout: the value leads and the label sits
    under it small, because the figure is what a reader is scanning for. A
@@ -142,7 +140,8 @@
   /* The tile becomes a column and the specs go three across; below this the
      card stacks, because a 2.5rem part number and a spec table do not both
      fit beside each other on a phone. */
-  .item { grid-template-columns: minmax(13rem, 18rem) minmax(0, 1fr); }
+  .item { grid-template-columns: minmax(15rem, 22rem) minmax(0, 1fr); align-items: stretch; }
+  .frame { aspect-ratio: auto; min-height: 15rem; }
   .badge { align-content: flex-start; }
   .specs { grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); }
 }

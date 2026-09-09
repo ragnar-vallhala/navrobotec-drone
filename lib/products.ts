@@ -25,6 +25,9 @@ export type Product = {
   kicker: string;
   summary: string;
   status: string;
+  /* Path to the render, hashed by scripts/make-product-images.py. */
+  image: string;
+  imageIsRender: boolean;
   specs: Spec[];
   published: boolean;
   /* True while the row still holds the seeded stand-in copy. The page says so

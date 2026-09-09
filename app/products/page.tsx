@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import Cinematic from "@/components/Cinematic";
 import EnquiryForm from "@/components/EnquiryForm";
@@ -90,32 +91,43 @@ export default async function Products({
                 const interest = INTEREST_BY_SLUG[product.slug];
                 return (
                   <li key={product.id} className={styles.item}>
-                    {/* The identity block: the product name, then the one
-                        detail a reader checks once they have it — the MCU for
-                        a board, the all-up weight for an aircraft. */}
-                    <div className={styles.badge}>
-                      <span className={styles.designator}>{product.name}</span>
-                      {product.part ? (
-                        <span className={`data ${styles.part}`}>
-                          {product.part}
-                        </span>
-                      ) : null}
-                      {product.status ? (
-                        <span className={`data ${styles.status}`}>
-                          {product.status}
-                        </span>
-                      ) : null}
-                      {product.placeholder ? (
-                        <span className={`data ${styles.flag}`}>
-                          Placeholder
-                        </span>
+                    {/* The render carries the identity now, so the name goes
+                        back into the content where a heading belongs. */}
+                    <div className={styles.frame}>
+                      {product.image ? (
+                        <Image
+                          src={product.image}
+                          alt={`${product.name}, a render`}
+                          fill
+                          sizes="(max-width: 48rem) 100vw, 30vw"
+                          className={styles.render}
+                        />
                       ) : null}
                     </div>
 
                     <div className={styles.body}>
+                      <h2 className={`h2 ${styles.name}`}>{product.name}</h2>
                       {product.kicker ? (
                         <p className={`label ${styles.role}`}>{product.kicker}</p>
                       ) : null}
+
+                      <p className={styles.meta}>
+                        {product.part ? (
+                          <span className={`data ${styles.part}`}>
+                            {product.part}
+                          </span>
+                        ) : null}
+                        {product.status ? (
+                          <span className={`data ${styles.status}`}>
+                            {product.status}
+                          </span>
+                        ) : null}
+                        {product.placeholder ? (
+                          <span className={`data ${styles.flag}`}>
+                            Placeholder
+                          </span>
+                        ) : null}
+                      </p>
 
                       {product.summary ? (
                         <p className={`lede ${styles.summary}`}>
@@ -155,9 +167,10 @@ export default async function Products({
           )}
 
           <p className={`small muted ${styles.caveat}`}>
-            Nothing here is shipping, and none of it has a date. The figures
-            describe the parts these are built around; anything measured on our
-            own hardware is in{" "}
+            The images are renders, not photographs — none of this has been
+            manufactured yet. Nothing here is shipping and none of it has a
+            date; the figures describe the parts these are built around, and
+            anything measured on our own hardware is in{" "}
             <Link
               href="/docs/report/vaios/vaios-performance"
               className={styles.link}
