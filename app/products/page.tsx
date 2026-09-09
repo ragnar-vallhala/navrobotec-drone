@@ -23,7 +23,7 @@ import styles from "./page.module.css";
 export const metadata = {
   title: "Products",
   description:
-    "The hardware NAVRobotec is building around VaiOS: flight controllers on STM32F446 and STM32H747, and a sub-250 g airframe.",
+    "The hardware NAVRobotec is building around VaiOS: the NAVIX-SMF446 and NAVIX-SMH747 flight controllers, and Vidyut, a sub-250 g airframe.",
 };
 
 /* The catalogue changes without a deploy, so the page must not be baked at
@@ -39,7 +39,7 @@ export const dynamic = "force-dynamic";
 const INTEREST_BY_SLUG: Record<string, string> = {
   "fc-f446": "NAVIX-SMF446",
   "fc-h747": "NAVIX-SMH747",
-  "airframe-sub250": "Sub-250 g airframe",
+  "airframe-sub250": "Vidyut",
 };
 const INTEREST_OPTIONS = Object.values(INTEREST_BY_SLUG);
 
@@ -90,10 +90,9 @@ export default async function Products({
                 const interest = INTEREST_BY_SLUG[product.slug];
                 return (
                   <li key={product.id} className={styles.item}>
-                    {/* The identity block: the board name, then the part it
-                        is built around. The name leads because that is what
-                        someone asks for by; the part is under it because for
-                        a flight controller it is the first thing they check. */}
+                    {/* The identity block: the product name, then the one
+                        detail a reader checks once they have it — the MCU for
+                        a board, the all-up weight for an aircraft. */}
                     <div className={styles.badge}>
                       <span className={styles.designator}>{product.name}</span>
                       {product.part ? (
