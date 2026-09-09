@@ -71,8 +71,9 @@
   overflow-wrap: anywhere;
 }
 
-/* The MCU, under the name. Full width so it sits on its own line rather than
-   competing with the status pill beside it. */
+/* The detail under the name — the MCU for a board, the weight for an
+   aircraft. Full width so it sits on its own line rather than competing with
+   the status pill beside it. */
 .part {
   flex: 1 1 100%;
   margin-top: -0.25rem;
