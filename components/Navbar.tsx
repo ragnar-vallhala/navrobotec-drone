@@ -23,6 +23,7 @@ const LINKS = [
   { href: "/", label: "Home" },
   { href: "/vision", label: "Vision" },
   { href: "/technology", label: "Technology" },
+  { href: "/products", label: "Products" },
   { href: "/blogs", label: "Blogs" },
   { href: "/docs", label: "Docs" },
   { href: "/team", label: "Team" },

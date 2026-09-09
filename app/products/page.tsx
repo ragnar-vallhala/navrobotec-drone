@@ -37,8 +37,8 @@ export const dynamic = "force-dynamic";
  * a product must not silently stop recording who asked for it. Keyed by slug
  * so a card can link to the form already saying which one it is about. */
 const INTEREST_BY_SLUG: Record<string, string> = {
-  "fc-f446": "Flight controller (F446)",
-  "fc-h747": "Flight controller (H7)",
+  "fc-f446": "NAVIX-SMF446",
+  "fc-h747": "NAVIX-SMH747",
   "airframe-sub250": "Sub-250 g airframe",
 };
 const INTEREST_OPTIONS = Object.values(INTEREST_BY_SLUG);
@@ -90,12 +90,17 @@ export default async function Products({
                 const interest = INTEREST_BY_SLUG[product.slug];
                 return (
                   <li key={product.id} className={styles.item}>
-                    {/* The identity block. Both flight controllers are called
-                        "Flight controller"; what tells them apart is the part,
-                        so the part is what the card leads with rather than a
-                        grey subtitle a reader has to compare. */}
+                    {/* The identity block: the board name, then the part it
+                        is built around. The name leads because that is what
+                        someone asks for by; the part is under it because for
+                        a flight controller it is the first thing they check. */}
                     <div className={styles.badge}>
-                      <span className={styles.designator}>{product.part}</span>
+                      <span className={styles.designator}>{product.name}</span>
+                      {product.part ? (
+                        <span className={`data ${styles.part}`}>
+                          {product.part}
+                        </span>
+                      ) : null}
                       {product.status ? (
                         <span className={`data ${styles.status}`}>
                           {product.status}
@@ -109,10 +114,9 @@ export default async function Products({
                     </div>
 
                     <div className={styles.body}>
-                      <p className={`label ${styles.role}`}>
-                        {product.name}
-                        {product.kicker ? ` — ${product.kicker}` : ""}
-                      </p>
+                      {product.kicker ? (
+                        <p className={`label ${styles.role}`}>{product.kicker}</p>
+                      ) : null}
 
                       {product.summary ? (
                         <p className={`lede ${styles.summary}`}>
