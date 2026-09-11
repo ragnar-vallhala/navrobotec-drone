@@ -1,0 +1,257 @@
+name: image
+
+# Build the image for both architectures, then record it as the thing that
+# should be running.
+#
+# The second half is what makes this a deployment rather than a publish. Argo
+# reconciles the cluster against git, so an image pushed under a tag git already
+# names changes nothing: the manifests are identical, there is no diff, and no
+# rollout happens. So every build produces an immutable tag and the workflow
+# commits that tag into the overlay for its environment.
+#
+# Two architectures because the cluster is mixed: one amd64 server carrying the
+# mail path, four arm64 Pis with the room. An amd64-only image can only be
+# scheduled on the busy node.
+#
+# The NEXT_PUBLIC_* values are build arguments and not environment variables
+# because `next build` inlines them into the client bundle. They are baked into
+# the image, so changing one means rebuilding — setting it on the Deployment
+# would do nothing at all, silently.
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+    paths: ['Dockerfile', '.dockerignore', '.github/workflows/image.yml']
+  workflow_dispatch:
+
+concurrency:
+  # Not cancel-in-progress: a cancelled run can have pushed an image and not
+  # recorded it, leaving a tag in the registry nothing references.
+  group: image-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  prepare:
+    name: work out where this goes
+    runs-on: ubuntu-latest
+    outputs:
+      environment: ${{ steps.target.outputs.environment }}
+      overlay: ${{ steps.target.outputs.overlay }}
+      tag: ${{ steps.target.outputs.tag }}
+    steps:
+      - id: target
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            ENVIRONMENT=pr
+          else
+            ENVIRONMENT=prod
+          fi
+          echo "environment=$ENVIRONMENT" >> "$GITHUB_OUTPUT"
+          echo "overlay=k8s/overlays/$ENVIRONMENT/kustomization.yaml" >> "$GITHUB_OUTPUT"
+          echo "tag=${ENVIRONMENT}-$(date -u +%Y%m%d-%H%M)-${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+
+  build:
+    name: build ${{ matrix.arch }}
+    needs: [prepare]
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: amd64
+            platform: linux/amd64
+            label: X64
+          - arch: arm64
+            platform: linux/arm64
+            label: ARM64
+    # Native builders, one per architecture. `next build` under QEMU is slow
+    # enough to be worth avoiding, and these machines keep their layer cache
+    # between runs where a GitHub-hosted runner throws it away.
+    #
+    # The docs are not regenerated here. `prebuild` runs
+    # scripts/convert-docs.mjs, which wants pandoc, LaTeX and dvisvgm; those
+    # are not in the image and the script exits cleanly without them, using
+    # the committed content/docs. Freshness is docs.yml's job, not this one's.
+    runs-on: [self-hosted, "${{ matrix.label }}"]
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+        with:
+          # A stable name, which is the point of a machine that persists: left
+          # to itself the action creates builder-<random> every run, so BuildKit
+          # starts cold and rebuilds Drogon from source each time.
+          name: navrobotec-drone-${{ matrix.arch }}
+          keep-state: true
+
+      - name: Sign in to the registry
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push by digest
+        id: build
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: ${{ matrix.platform }}
+          # NEXT_PUBLIC_API_URL is deliberately empty. The site's browser
+          # code falls back to a relative /api/v1/..., which the Ingress
+          # routes to the API on this same host — the arrangement
+          # nginx/snippets/api.conf already implements in the stack repo.
+          # Same-origin means no CORS preflight, and the POST still carries
+          # an Origin header, which is what the API files the enquiry under.
+          build-args: |
+            NEXT_PUBLIC_SITE_URL=https://navrobotec.in
+            NEXT_PUBLIC_API_URL=
+          labels: |
+            org.opencontainers.image.title=Navrobotec VaiOS site
+            org.opencontainers.image.revision=${{ github.sha }}
+          # No tag here. Each architecture is pushed as a bare digest and the
+          # merge job names the result; tagging per architecture would leave the
+          # two halves overwriting each other under one name.
+          outputs: type=image,name=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }},push-by-digest=true,name-canonical=true,push=${{ github.event_name != 'pull_request' }}
+          provenance: false
+
+      - name: Export digest
+        if: github.event_name != 'pull_request'
+        shell: bash
+        env:
+          DIGEST: ${{ steps.build.outputs.digest }}
+        run: |
+          # Wiped first: a self-hosted runner's filesystem survives between
+          # jobs, so a digest left by an earlier run would be uploaded beside
+          # this one and the merge would reference an image that is gone.
+          rm -rf "${{ runner.temp }}/digests"
+          mkdir -p "${{ runner.temp }}/digests"
+          touch "${{ runner.temp }}/digests/${DIGEST#sha256:}"
+
+      - uses: actions/upload-artifact@v4
+        if: github.event_name != 'pull_request'
+        with:
+          name: digests-${{ matrix.arch }}
+          path: ${{ runner.temp }}/digests/*
+          if-no-files-found: error
+          retention-days: 1
+
+  merge:
+    name: combine into one image
+    needs: [prepare, build]
+    if: github.event_name != 'pull_request'
+    runs-on: [self-hosted, X64]
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      digest: ${{ steps.inspect.outputs.digest }}
+    steps:
+      - name: Clear stale digests
+        run: rm -rf "${{ runner.temp }}/digests"
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: ${{ runner.temp }}/digests
+          pattern: digests-*
+          merge-multiple: true
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create the manifest list
+        working-directory: ${{ runner.temp }}/digests
+        env:
+          IMAGE: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          TAG: ${{ needs.prepare.outputs.tag }}
+          MOVING: ${{ needs.prepare.outputs.environment }}-latest
+        run: |
+          docker buildx imagetools create -t "${IMAGE}:${TAG}" -t "${IMAGE}:${MOVING}" \
+            $(printf "${IMAGE}@sha256:%s " *)
+
+      - name: Show what was published
+        id: inspect
+        env:
+          IMAGE: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          TAG: ${{ needs.prepare.outputs.tag }}
+        run: |
+          docker buildx imagetools inspect "${IMAGE}:${TAG}"
+          echo "digest=$(docker buildx imagetools inspect "${IMAGE}:${TAG}" --format '{{json .Manifest.Digest}}' | tr -d '"')" >> "$GITHUB_OUTPUT"
+
+  deploy:
+    name: record the deployment
+    needs: [prepare, merge]
+    if: github.event_name != 'pull_request'
+    runs-on: [self-hosted, X64]
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    concurrency:
+      group: write-back-${{ needs.prepare.outputs.environment }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: Point the environment at the image that was just built
+        env:
+          OVERLAY: ${{ needs.prepare.outputs.overlay }}
+          IMAGE: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          TAG: ${{ needs.prepare.outputs.tag }}
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import os, sys
+          overlay, image, tag = os.environ["OVERLAY"], os.environ["IMAGE"].lower(), os.environ["TAG"]
+          lines = open(overlay).read().splitlines(keepends=True)
+          # The newTag on the line after `- name: <image>`, and only there. A
+          # blunt replace would also rewrite the base's entry or a second image.
+          for i, line in enumerate(lines):
+              if line.strip() == f"- name: {image}" and i + 1 < len(lines) \
+                 and lines[i + 1].strip().startswith("newTag:"):
+                  indent = lines[i + 1][:len(lines[i + 1]) - len(lines[i + 1].lstrip())]
+                  lines[i + 1] = f"{indent}newTag: {tag}\n"
+                  open(overlay, "w").writelines(lines)
+                  sys.exit(0)
+          sys.exit(f"no `- name: {image}` with a newTag in {overlay}")
+          PY
+
+      - name: Commit it
+        env:
+          OVERLAY: ${{ needs.prepare.outputs.overlay }}
+          TAG: ${{ needs.prepare.outputs.tag }}
+          ENVIRONMENT: ${{ needs.prepare.outputs.environment }}
+        shell: bash
+        run: |
+          if git diff --quiet -- "$OVERLAY"; then
+            echo "already at $TAG — nothing to record"
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$OVERLAY"
+          git commit -m "Deploy ${TAG} to ${ENVIRONMENT} [skip ci]" \
+                     -m "Built from ${GITHUB_SHA}. Written by the image workflow; Argo CD takes it from here."
+          for attempt in 1 2 3; do
+            git pull --rebase --quiet origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            echo "push raced, retrying ($attempt)"
+          done
+          exit 1

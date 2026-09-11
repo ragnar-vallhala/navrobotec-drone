@@ -1,0 +1,44 @@
+# The VaiOS site, synced from this repository's main branch.
+#
+# A third Application into the navrobotec namespace, alongside the API and the
+# services site. Three rather than one because they are three repositories on
+# three cadences: a copy change to one front should not wait on whatever state
+# the others' manifests happen to be in.
+#
+# The namespace and its SecretStore come from the navrobotec-backend
+# repository's k8s/prerequisites.yaml. This Application needs no secrets of
+# its own, but it does need the namespace and the ghcr pull secret to exist.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: navrobotec-drone-prod
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: git@github.com:ragnar-vallhala/navrobotec-drone.git
+    targetRevision: main
+    path: k8s/overlays/prod
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: navrobotec
+  syncPolicy:
+    automated:
+      selfHeal: true
+      # Nothing here holds state — no PVC, no Secret this Application owns.
+      prune: true
+    syncOptions:
+      - ServerSideApply=true
+      # Argo's client-side schema check downloads the API server's whole
+      # OpenAPI document, and the controller runs on a Pi across Tailscale
+      # where that times out. ServerSideApply means the API server still
+      # validates what it is asked to store.
+      - Validate=false
+  ignoreDifferences:
+    - group: apps
+      kind: Deployment
+      jqPathExpressions:
+        - '.spec.template.metadata.annotations."kubectl.kubernetes.io/restartedAt"'
+  revisionHistoryLimit: 10
