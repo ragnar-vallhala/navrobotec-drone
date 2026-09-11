@@ -46,7 +46,12 @@ COPY --from=build --chown=nextjs:nextjs /app/.next/standalone ./
 COPY --from=build --chown=nextjs:nextjs /app/.next/static ./.next/static
 COPY --from=build --chown=nextjs:nextjs /app/public ./public
 
-USER nextjs
+# Numeric, not `nextjs`. A kubelet asked to enforce runAsNonRoot has to verify
+# the user is not root before it starts the container, and it cannot resolve a
+# name inside an image it has not run — so a named USER fails with "container
+# has runAsNonRoot and image has non-numeric user", which reads like a
+# permissions problem and is a spelling one.
+USER 10001
 EXPOSE 3000
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=25s --retries=3 \

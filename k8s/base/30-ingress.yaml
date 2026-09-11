@@ -1,0 +1,44 @@
+# navrobotec.in — the drone and flight-stack arm.
+#
+# This Ingress owns the certificate for both names. The API's own Ingress adds
+# /api/ on these same hosts and deliberately carries no TLS block, so there is
+# one ACME order per hostname rather than two.
+#
+# www is listed because it must move here from Vercel, where it still points
+# today: the apex already resolves to the cluster, so right now navrobotec.in
+# 404s while www.navrobotec.in serves the old site. cert-manager will not
+# issue for a name that does not resolve here, so the DNS change comes first.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: navrobotec-drone
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: navrobotec.in
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: navrobotec-drone
+                port:
+                  name: http
+    - host: www.navrobotec.in
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: navrobotec-drone
+                port:
+                  name: http
+  tls:
+    - secretName: navrobotec-drone-tls
+      hosts:
+        - navrobotec.in
+        - www.navrobotec.in

@@ -1,0 +1,90 @@
+# The VaiOS site (navrobotec.in).
+#
+# On node3, which is the arm64 Pi with the most headroom left once the other
+# two were spoken for: node0 has the services site, node1 has ClamAV and the
+# API, and node2 is deliberately kept free for the GitHub Actions runners it
+# hosts for eight repositories.
+#
+# Unlike the services site this is not purely prerendered — lib/products.ts
+# fetches the catalogue from the API server-side — so it needs to reach the
+# API from inside the cluster as well as being reachable from outside.
+apiVersion: v1
+kind: Service
+metadata:
+  name: navrobotec-drone
+spec:
+  selector:
+    app.kubernetes.io/name: navrobotec-drone
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: navrobotec-drone
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: navrobotec-drone
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: navrobotec-drone
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: node3
+      tolerations:
+        - key: arch
+          operator: Equal
+          value: arm64
+          effect: NoSchedule
+      imagePullSecrets:
+        - name: navrobotec-registry
+      containers:
+        - name: site
+          image: ghcr.io/ragnar-vallhala/navrobotec-drone
+          ports:
+            - name: http
+              containerPort: 3000
+          env:
+            # Server-side only, and deliberately not the public hostname: this
+            # runs inside the cluster, where the API is a Service a few
+            # milliseconds away. Sending it out to the ingress and back would
+            # add a public round trip, a TLS handshake and a dependency on DNS
+            # resolving correctly from inside the cluster, to reach a process
+            # on the next node.
+            #
+            # The default in lib/products.ts is http://api:8848, which is the
+            # Compose service name and resolves to nothing here.
+            - name: API_INTERNAL_URL
+              value: http://navrobotec-api.navrobotec.svc.cluster.local
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              memory: 320Mi
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            # Longer than the services site: this one's first render fetches
+            # the product catalogue, and a cold start behind a cold API is
+            # slower than a prerendered page.
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            runAsUser: 10001
+            capabilities:
+              drop: ["ALL"]
