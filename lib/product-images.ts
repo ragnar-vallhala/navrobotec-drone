@@ -2,7 +2,7 @@
 // Keyed by product slug. The hash is the file's own content, so new
 // artwork always lands on a new URL.
 export const PRODUCT_IMAGES: Record<string, string> = {
-  "navix-smf446": "/images/product-navix-smf446.4540aecc.webp",
-  "navix-smh747": "/images/product-navix-smh747.44b014fb.webp",
+  "navix-smf446": "/images/product-navix-smf446.3df15d80.webp",
+  "navix-smh747": "/images/product-navix-smh747.558e141d.webp",
   "vidyut": "/images/product-vidyut.046b1326.webp",
 };
