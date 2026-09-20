@@ -1,0 +1,192 @@
+/* --- breadcrumb --------------------------------------------------------------
+   A product page is reachable straight from a search result, so it has to say
+   where it sits. aria-current on the last crumb rather than a class, so it is
+   announced as the current page and not only shaded. */
+.crumbs {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  font-family: var(--font-data);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.crumb { color: var(--signal); text-decoration: none; }
+.crumb:hover { text-decoration: underline; text-underline-offset: 0.25em; }
+.sep { color: var(--line-strong); }
+.here { color: var(--muted); }
+
+/* --- the lead ----------------------------------------------------------------
+   Render and copy side by side. A reader who followed a card has already seen
+   the render; putting the specifications below a full-width repeat of it would
+   make them scroll past the one thing they have seen to reach the one thing
+   they came for. */
+.lead {
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  align-items: start;
+}
+
+.frame {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  max-width: 100%;
+  background: var(--band);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.render { object-fit: contain; padding: 6%; }
+
+.intro { min-width: 0; }
+.name { margin-top: 0.75rem; letter-spacing: -0.03em; }
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.125rem;
+}
+.part {
+  padding: 0.25rem 0.625rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+.status {
+  padding: 0.25rem 0.625rem;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: var(--signal-wash);
+  color: var(--signal-deep);
+}
+.flag {
+  padding: 0.25rem 0.625rem;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: #c0392b;
+  color: #fff;
+}
+
+.summary { margin-top: 1.25rem; max-width: 40rem; color: var(--ink-2); }
+
+/* Per-product, and not emerald: emerald is this site's signal for a live
+   value, and this is a warning about the values below it. */
+.notice {
+  margin-top: 1.5rem;
+  padding: 0.9375rem 1.125rem;
+  border: 1px solid var(--line-strong);
+  border-left: 3px solid #c0392b;
+  border-radius: var(--radius);
+  background: var(--card);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--ink-2);
+  max-width: 40rem;
+}
+.notice strong { color: var(--ink); }
+:global([data-theme="dark"]) .notice { border-left-color: #ff8a7a; }
+
+.intro .btn, .intro a[class*="btn"] { margin-top: clamp(1.5rem, 3vw, 2rem); }
+
+/* --- specifications ----------------------------------------------------------
+   An instrument readout: the value leads and the label sits under it small,
+   because the figure is what a reader is scanning for. A twelve-rem grey label
+   column in front of every one of them was the shape of the database, not of
+   the question being asked. */
+.specsHead { margin-bottom: clamp(1.5rem, 3vw, 2rem); }
+.specs {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(13rem, 100%), 1fr));
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.spec {
+  padding: 1rem 1.125rem;
+  background: var(--paper);
+  display: grid;
+  gap: 0.3125rem;
+}
+.specValue { margin: 0; font-size: 1rem; color: var(--ink); line-height: 1.4; }
+.specLabel { display: block; color: var(--muted); }
+
+.caveat { margin-top: clamp(2rem, 4vw, 3rem); max-width: 46rem; }
+.link { color: var(--signal); text-decoration: underline; text-underline-offset: 2px; }
+.back { margin-top: 2rem; }
+
+/* --- the form ------------------------------------------------------------- */
+.head { max-width: 46rem; margin-bottom: clamp(2.5rem, 5vw, 3.5rem); }
+.head .label { display: block; margin-bottom: 1.125rem; }
+.head h2 + .lede { margin-top: 1.25rem; }
+.formCol { max-width: 44rem; }
+
+/* --- the rest of the catalogue -----------------------------------------------
+   Deliberately smaller than a card on the index: this is a way out of the page,
+   not a second catalogue competing with the product it sits under. */
+.alsoHead { display: block; margin-bottom: 1.5rem; color: var(--muted); }
+.also {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+  gap: clamp(1rem, 2vw, 1.5rem);
+}
+.alsoCard {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--card);
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 0.25s var(--ease), transform 0.25s var(--ease);
+}
+.alsoCard:hover { border-color: var(--line-strong); transform: translateY(-2px); }
+.alsoCard:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
+.alsoFrame {
+  position: relative;
+  flex: 0 0 5.5rem;
+  aspect-ratio: 1;
+  background: var(--band);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.alsoBody { display: flex; flex-direction: column; gap: 0.5rem; min-width: 0; }
+.alsoName { display: block; color: var(--ink); letter-spacing: -0.01em; }
+.alsoBody .part { align-self: flex-start; }
+
+@media (min-width: 60rem) {
+  /* Two columns only when the render can be large enough to be worth looking
+     at and the copy still has its measure beside it. */
+  .lead { grid-template-columns: minmax(0, 34rem) minmax(0, 1fr); gap: clamp(2.5rem, 5vw, 4rem); }
+}
+
+/* The frame with nothing in it yet. Centred, quiet, and on the band, so a row
+   without a render reads as pending rather than failed. */
+.awaiting {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  font-family: var(--font-data);
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--band-muted);
+  text-align: center;
+}
