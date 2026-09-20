@@ -56,6 +56,24 @@ LOCAL_SPREAD_MIN = 16              # checker ~30, a smooth painted panel ~2
 CLOSE = 9                          # closing kernel, in px, for the seams above
 SPECK_FLOOR = 0.0004               # a component smaller than this is noise
 
+# The other kind of source: a flat white studio ground with a soft drop
+# shadow under the board. Tone cannot separate that one either, and it fails
+# in exactly the way the checkerboard did — the boards' silver RJ45 shell and
+# USB-C shield sit around 215 against a 253 ground, so a flood keyed on tone
+# walks in off the border and punches the connector out. Keying high enough
+# to spare it leaves the shadow behind as a grey smear on the dark card.
+#
+# What separates them here is not texture but the edge. The white ground is
+# dead flat (local max-minus-min about 1) and the shadow is a smooth ramp,
+# while every real part begins with a step: ground to the jack's silver is
+# ~38 in a single pixel. Flooding only across pixels flatter than
+# WHITE_GRAD_MAX turns each of those steps into a wall, so the flood takes
+# the ground and the whole shadow and stops dead at the product — the jack
+# survives as an island the flood can never reach.
+WHITE_LUM_MIN = 140                # ground 250+, shadow to ~150, the board darker
+WHITE_SAT_TOL = 30                 # ground and shadow are grey; the connectors are cream
+WHITE_GRAD_MAX = 12                # flat ground ~1, a part's silhouette ~38
+
 
 def _local_spread(grey: np.ndarray, radius: int) -> np.ndarray:
     """Standard deviation in a box around each pixel.
@@ -205,6 +223,51 @@ def key_checkerboard(im: Image.Image) -> Image.Image:
     return out
 
 
+def key_white(im: Image.Image) -> Image.Image:
+    """Alpha from a flat white ground with a soft drop shadow."""
+    rgb = np.array(im.convert("RGB")).astype(int)
+    lum = rgb.max(axis=2)
+    sat = rgb.max(axis=2) - rgb.min(axis=2)
+
+    grey = Image.fromarray(np.array(im.convert("L")).astype(np.float32))
+    gradient = (np.array(grey.filter(ImageFilter.MaxFilter(3)))
+                - np.array(grey.filter(ImageFilter.MinFilter(3))))
+
+    candidate = ((lum >= WHITE_LUM_MIN) & (sat <= WHITE_SAT_TOL)
+                 & (gradient <= WHITE_GRAD_MAX))
+    background = _flood_from_border(candidate)
+
+    # The wall is built from the subject's own edge pixels, so the flood stops
+    # one pixel short of it and leaves a pale rim. Growing the background by a
+    # pixel takes that back — clipped to the ground's own tone and saturation,
+    # so the grow cannot bite into the product it just stopped at.
+    grown = Image.fromarray((background * 255).astype(np.uint8), "L")
+    background = np.array(grown.filter(ImageFilter.MaxFilter(3))) > 127
+    background &= (lum >= WHITE_LUM_MIN) & (sat <= WHITE_SAT_TOL)
+
+    alpha = np.where(background, 0, 255).astype(np.uint8)
+    alpha = np.where(_drop_specks(alpha > 0, SPECK_FLOOR), 255, 0).astype(np.uint8)
+
+    a = Image.fromarray(alpha, "L").filter(ImageFilter.MinFilter(3))
+    a = a.filter(ImageFilter.GaussianBlur(0.6))
+
+    out = im.convert("RGBA")
+    out.putalpha(a)
+    return out
+
+
+def on_white(im: Image.Image) -> bool:
+    """Is the ground a flat white sweep rather than the painted checker?
+
+    Read off the border ring: the white sources sit at 253 with a standard
+    deviation under 4, the checkered ones average about 170 and swing by 27
+    because the ring crosses squares.
+    """
+    rgb = np.array(im.convert("RGB")).astype(int)
+    ring = np.concatenate([rgb[0], rgb[-1], rgb[:, 0], rgb[:, -1]])
+    return bool(ring.mean() >= 240 and ring.std() <= 12)
+
+
 def frame(im: Image.Image) -> Image.Image:
     """Trim to the subject, then centre it in one common frame."""
     box = im.getbbox()
@@ -227,7 +290,12 @@ def main() -> int:
         im = Image.open(path)
         had_alpha = im.mode == "RGBA" and np.array(im)[..., 3].min() < 250
 
-        im = key_checkerboard(im) if not had_alpha else im.convert("RGBA")
+        if had_alpha:
+            im, how = im.convert("RGBA"), "had alpha"
+        elif on_white(im):
+            im, how = key_white(im), "white keyed"
+        else:
+            im, how = key_checkerboard(im), "checker keyed"
         out = frame(im)
 
         tmp = os.path.join(OUT, f".product-{name}.tmp.webp")
@@ -238,7 +306,7 @@ def main() -> int:
         written[name] = "/" + os.path.relpath(final, "public")
 
         clear = 100 * (np.array(out)[..., 3] < 16).mean()
-        print(f"{name:16} {'had alpha' if had_alpha else 'checker keyed':14} "
+        print(f"{name:16} {how:14} "
               f"-> {os.path.basename(final)}  transparent={clear:.0f}%  "
               f"{os.path.getsize(final) // 1024}KB")
 
