@@ -2,23 +2,26 @@ import Image from "next/image";
 import Link from "next/link";
 import Cinematic from "@/components/Cinematic";
 import EnquiryForm from "@/components/EnquiryForm";
-import { getProducts } from "@/lib/products";
+import { getCatalogue, INTEREST_OPTIONS } from "@/lib/products";
 import styles from "./page.module.css";
 
-/* The hardware, read from the API rather than written here.
+/* The catalogue: one card per product, each opening its own page.
  *
- * A catalogue in a page's source is a catalogue that needs a deploy to
- * correct, which is how a wrong figure stays up for a week. These rows come
- * from the products table; db/005_products.sql seeds them and the admin
- * PATCH endpoint changes them.
+ * This page used to be the catalogue entire — every specification of every
+ * product stacked down one column. That reads as a datasheet three products
+ * long: nothing can be compared, because no two things a reader would compare
+ * are ever on screen together, and the page grows unreadable with the fourth
+ * product rather than with the fourth paragraph.
  *
- * Rendered on the server at request time, so the specifications are in the
- * HTML a crawler and a reader both receive, and never cached — a cached page
- * would put the deploy back.
+ * A card carries only what tells two products apart — the render, the part,
+ * and one line of what it is for. The specifications belong on the page about
+ * that product, where there is room to lay them out and nothing else is
+ * competing for the reader.
  *
- * No photographs: none of this has shipped, and a render of an unbuilt board
- * beside a specification reads as a catalogue entry however carefully the
- * copy is worded. The frame is the plain Cinematic band for the same reason.
+ * Read from the API rather than written here. A catalogue in a page's source
+ * is a catalogue that needs a deploy to correct, which is how a wrong figure
+ * stays up for a week. These rows come from the products table;
+ * db/005_products.sql seeds them and the admin PATCH endpoint changes them.
  */
 
 export const metadata = {
@@ -31,28 +34,13 @@ export const metadata = {
    build time. */
 export const dynamic = "force-dynamic";
 
-/* The chips the API validates against, keyed by slug.
- *
- * Fixed labels rather than the product names from the database: the API
- * checks them against kInterests and drops what it does not know, so renaming
- * a product must not silently stop recording who asked for it. Keyed by slug
- * so a card can link to the form already saying which one it is about. */
-const INTEREST_BY_SLUG: Record<string, string> = {
-  "fc-f446": "NAVIX-SMF446",
-  "fc-h747": "NAVIX-SMH747",
-  "airframe-sub250": "Vidyut",
-};
-const INTEREST_OPTIONS = Object.values(INTEREST_BY_SLUG);
-
 export default async function Products({
   searchParams,
 }: {
   searchParams: Promise<{ want?: string }>;
 }) {
-  const [products, params] = await Promise.all([
-    getProducts(),
-    searchParams,
-  ]);
+  const [catalogue, params] = await Promise.all([getCatalogue(), searchParams]);
+  const products = catalogue.status === "ok" ? catalogue.products : [];
   const anyPlaceholder = products.some((product) => product.placeholder);
   const wanted = params.want ? [params.want] : [];
 
@@ -77,7 +65,7 @@ export default async function Products({
             </p>
           ) : null}
 
-          {products.length === 0 ? (
+          {catalogue.status === "unavailable" ? (
             <p className={styles.empty}>
               The catalogue could not be loaded just now. Please{" "}
               <Link href="/contact" className={styles.link}>
@@ -85,33 +73,56 @@ export default async function Products({
               </Link>{" "}
               and we will send it to you directly.
             </p>
+          ) : products.length === 0 ? (
+            /* Answered, and empty. Not the same thing as unreachable, and not
+               the same sentence: nothing is broken, there is just nothing here
+               yet. */
+            <p className={styles.empty}>
+              Nothing is listed yet. What we are building is described in{" "}
+              <Link href="/technology" className={styles.link}>
+                the technology
+              </Link>
+              , and we will list the hardware here when there is something to
+              say about it.
+            </p>
           ) : (
-            <ol className={styles.items}>
-              {products.map((product) => {
-                const interest = INTEREST_BY_SLUG[product.slug];
-                return (
-                  <li key={product.id} className={styles.item}>
-                    {/* The render carries the identity now, so the name goes
-                        back into the content where a heading belongs. */}
-                    <div className={styles.frame}>
+            <ul className={styles.grid}>
+              {products.map((product, index) => (
+                /* The whole card is the link, so the target is the card rather
+                   than a four-word phrase inside it. One anchor per card, too:
+                   a nested "read more" would put two links on one destination
+                   and have a screen reader announce the product twice. */
+                <li
+                  key={product.id}
+                  className={`rise ${styles.cell}`}
+                  style={{ animationDelay: `${index * 70}ms` }}
+                >
+                  <Link href={`/products/${product.slug}`} className={styles.card}>
+                    <span className={styles.frame}>
                       {product.image ? (
                         <Image
                           src={product.image}
-                          alt={`${product.name}, a render`}
+                          alt=""
                           fill
-                          sizes="(max-width: 48rem) 100vw, 30vw"
+                          sizes="(max-width: 48rem) 100vw, (max-width: 72rem) 50vw, 24rem"
                           className={styles.render}
                         />
-                      ) : null}
-                    </div>
+                      ) : (
+                        /* No render on this row yet. An empty dark rectangle
+                           reads as a broken image, so it says which it is. */
+                        <span className={styles.awaiting}>Render to come</span>
+                      )}
+                    </span>
 
-                    <div className={styles.body}>
-                      <h2 className={`h2 ${styles.name}`}>{product.name}</h2>
+                    <span className={styles.body}>
+                      <span className={`h3 ${styles.name}`}>{product.name}</span>
                       {product.kicker ? (
-                        <p className={`label ${styles.role}`}>{product.kicker}</p>
+                        <span className={`label ${styles.role}`}>
+                          {product.kicker}
+                        </span>
                       ) : null}
 
-                      <p className={styles.meta}>
+                      <span className={styles.meta}>
                         {product.part ? (
                           <span className={`data ${styles.part}`}>
                             {product.part}
@@ -127,43 +138,23 @@ export default async function Products({
                             Placeholder
                           </span>
                         ) : null}
-                      </p>
+                      </span>
 
                       {product.summary ? (
-                        <p className={`lede ${styles.summary}`}>
-                          {product.summary}
-                        </p>
+                        <span className={styles.summary}>{product.summary}</span>
                       ) : null}
 
-                      {product.specs.length > 0 ? (
-                        <dl className={styles.specs}>
-                          {product.specs.map((spec) => (
-                            <div key={spec.label} className={styles.spec}>
-                              <dt className={`label ${styles.specLabel}`}>
-                                {spec.label}
-                              </dt>
-                              <dd className={`data ${styles.specValue}`}>
-                                {spec.value}
-                              </dd>
-                            </div>
-                          ))}
-                        </dl>
-                      ) : null}
-
-                      {interest ? (
-                        <Link
-                          href={`/products?want=${encodeURIComponent(interest)}#interest`}
-                          className={styles.want}
-                        >
-                          Register interest in this
-                          <span aria-hidden>&rarr;</span>
-                        </Link>
-                      ) : null}
-                    </div>
-                  </li>
-                );
-              })}
-            </ol>
+                      <span className={styles.more} aria-hidden>
+                        {product.specs.length > 0
+                          ? `${product.specs.length} specifications`
+                          : "Details"}
+                        <span className={styles.arrow}>&rarr;</span>
+                      </span>
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
           )}
 
           <p className={`small muted ${styles.caveat}`}>

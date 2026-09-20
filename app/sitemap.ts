@@ -3,13 +3,14 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import { getBooks, getChapters, getTutorials } from "@/lib/docs";
+import { getProducts } from "@/lib/products";
 import { SITE_URL } from "@/lib/site";
 
 /**
  * Generates /sitemap.xml — all crawlable routes: static pages, blog posts,
  * and the generated docs (chapters + sections).
  */
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
   const staticRoutes: MetadataRoute.Sitemap = [
@@ -23,6 +24,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/blogs`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
     { url: `${SITE_URL}/docs`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
   ];
+
+  /* One URL per product, read from the catalogue rather than listed here.
+     getProducts() answers [] when the API cannot be reached, so an outage
+     costs the sitemap its product entries for one request instead of failing
+     the response. */
+  const productRoutes: MetadataRoute.Sitemap = (await getProducts()).map(
+    (product) => ({
+      url: `${SITE_URL}/products/${product.slug}`,
+      lastModified: product.updatedAt ? new Date(product.updatedAt) : now,
+      changeFrequency: "monthly",
+      priority: 0.6,
+    }),
+  );
 
   // Blog posts under public/blogs/*.md
   const blogRoutes: MetadataRoute.Sitemap = [];
@@ -84,5 +98,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }
   }
 
-  return [...staticRoutes, ...blogRoutes, ...docRoutes];
+  return [...staticRoutes, ...productRoutes, ...blogRoutes, ...docRoutes];
 }

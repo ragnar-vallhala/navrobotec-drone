@@ -19,50 +19,87 @@
 
 .empty { color: var(--muted); padding: 3rem 0; max-width: 40rem; }
 
-/* --- the products -----------------------------------------------------------
-   Cards, not rows in a table. The first version rendered the schema — a
-   label/value list per item, two of them headed "Flight controller" — and
-   read like the admin view of the products table, which is what it was.
-
-   What separates these two products is the part, so the part is the card's
-   subject: set large on a dark tile, which is also the only strong contrast
-   on an otherwise light page and the thing that gives the list a rhythm to
-   scroll through.
-*/
-.items {
+/* --- the grid ----------------------------------------------------------------
+   auto-fit rather than a fixed column count: there are three products today
+   and the number is a row count, not a layout decision. At 20rem the cards
+   fall to two across on a laptop and one on a phone without a media query
+   deciding it for them. */
+.grid {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  gap: clamp(1.25rem, 2.5vw, 2rem);
+  grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
+  gap: clamp(1.25rem, 2.5vw, 1.75rem);
 }
 
-.item {
-  display: grid;
+.cell { display: flex; }
+
+/* --- the card ----------------------------------------------------------------
+   The whole card is one anchor, so it is a single tab stop and a single
+   announcement rather than a picture, a heading and a "read more" that all go
+   to the same place. Laid out as a column so a short summary and a long one
+   still leave every card's footer on the same line. */
+.card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   overflow: hidden;
   background: var(--card);
   box-shadow: var(--shadow);
+  color: inherit;
+  text-decoration: none;
+  transition:
+    transform 0.25s var(--ease),
+    box-shadow 0.25s var(--ease),
+    border-color 0.25s var(--ease);
+}
+.card:hover {
+  transform: translateY(-3px);
+  border-color: var(--line-strong);
+  box-shadow: var(--shadow-card);
+}
+/* Rule 5: focus is always visible, in the signal colour. On the card itself,
+   because the card is the control. */
+.card:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 3px;
 }
 
-/* --- the render ------------------------------------------------------------
-   The dark panel is still what gives the list its rhythm, but it holds the
-   product now rather than its name. The renders are transparent PNGs keyed
-   out of their backgrounds, so they sit on the band directly — no plate, no
-   drop shadow, nothing that would read as a photograph of a boxed product. */
+/* --- the render --------------------------------------------------------------
+   The dark panel gives the grid its rhythm and holds the product. The renders
+   are transparent PNGs keyed out of their backgrounds, so they sit on the band
+   directly — no plate, no drop shadow, nothing that would read as a photograph
+   of a boxed product. */
 .frame {
   position: relative;
-  /* Stacked, the panel sets its own height from its width. Beside the copy it
-     must not: with `align-items: stretch` on the card, an aspect-ratio makes
-     the panel take its *width* from the stretched height, and it overflowed
-     its own grid track and sat on top of the text. The two-column rule below
-     turns it off. */
+  display: block;
   aspect-ratio: 4 / 3;
   background: var(--band);
   overflow: hidden;
 }
 .render { object-fit: contain; padding: 6%; }
+
+/* --- the content -------------------------------------------------------------
+   Everything here is a span: the card is an anchor, and an anchor may not
+   contain a heading or a paragraph. The type scale does the work the tags
+   would have done, and the product name is the card's accessible name because
+   it is the first text inside the link. */
+.body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: clamp(1.25rem, 2.5vw, 1.625rem);
+  min-width: 0;
+}
+.name { display: block; letter-spacing: -0.02em; color: var(--ink); }
+.role {
+  display: block;
+  margin-top: 0.5rem;
+  color: var(--muted);
+}
 
 .meta {
   display: flex;
@@ -77,77 +114,82 @@
   border-radius: 999px;
   font-size: 0.6875rem;
   letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--ink-2);
 }
 .status {
   padding: 0.25rem 0.625rem;
-  border: 1px solid var(--line-strong);
   border-radius: 999px;
   font-size: 0.6875rem;
   letter-spacing: 0.08em;
-  color: var(--ink-2);
+  text-transform: uppercase;
+  background: var(--signal-wash);
+  color: var(--signal-deep);
 }
 .flag {
   padding: 0.25rem 0.625rem;
   border-radius: 999px;
   font-size: 0.6875rem;
   letter-spacing: 0.08em;
+  text-transform: uppercase;
   background: #c0392b;
   color: #fff;
 }
 
-/* --- the content ---------------------------------------------------------- */
-.body { padding: clamp(1.5rem, 3vw, 2.25rem); min-width: 0; }
-.name { letter-spacing: -0.02em; }
-.role { display: block; margin-top: 0.625rem; color: var(--muted); }
-.summary { margin-top: 1.125rem; max-width: 42rem; color: var(--ink-2); }
-
-/* Specifications as an instrument readout: the value leads and the label sits
-   under it small, because the figure is what a reader is scanning for. A
-   twelve-rem grey label column in front of every one of them was the shape of
-   the database, not of the question being asked. */
-.specs {
-  margin: clamp(1.5rem, 3vw, 2rem) 0 0;
-  display: grid;
-  gap: 1px;
-  background: var(--line);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
+/* Three lines, so a long summary cannot make one card twice the height of the
+   one beside it. The whole summary is on the product's own page. */
+.summary {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
   overflow: hidden;
+  margin-top: 0.875rem;
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+  line-height: 1.6;
 }
-.spec { padding: 0.875rem 1rem; background: var(--paper); display: grid; gap: 0.3125rem; }
-.specValue { margin: 0; font-size: 0.9375rem; color: var(--ink); line-height: 1.4; }
-.specLabel { display: block; color: var(--muted); }
 
-.want {
-  display: inline-flex;
+/* Pinned to the foot by margin-top:auto, so the affordance sits on the same
+   line across a row however much copy each card carries. aria-hidden, because
+   "12 specifications →" adds nothing to a link already announced as the
+   product — it is there for the eye. */
+.more {
+  display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-top: clamp(1.5rem, 3vw, 2rem);
+  margin-top: auto;
+  padding-top: 1.25rem;
   font-family: var(--font-data);
   font-size: 0.75rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--signal);
-  transition: gap 0.25s var(--ease);
 }
-.want:hover { gap: 0.75rem; text-decoration: underline; text-underline-offset: 0.25em; }
+.arrow { transition: transform 0.25s var(--ease); }
+.card:hover .arrow { transform: translateX(0.25rem); }
 
 .caveat { margin-top: clamp(2.5rem, 5vw, 3.5rem); max-width: 46rem; }
 .link { color: var(--signal); text-decoration: underline; text-underline-offset: 2px; }
-
-@media (min-width: 48rem) {
-  /* The tile becomes a column and the specs go three across; below this the
-     card stacks, because a 2.5rem part number and a spec table do not both
-     fit beside each other on a phone. */
-  .item { grid-template-columns: minmax(15rem, 22rem) minmax(0, 1fr); align-items: stretch; }
-  .frame { aspect-ratio: auto; min-height: 15rem; }
-  .badge { align-content: flex-start; }
-  .specs { grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); }
-}
 
 /* --- the form ------------------------------------------------------------- */
 .head { max-width: 46rem; margin-bottom: clamp(2.5rem, 5vw, 3.5rem); }
 .head .label { display: block; margin-bottom: 1.125rem; }
 .head h2 + .lede { margin-top: 1.25rem; }
 .formCol { max-width: 44rem; }
+
+/* The frame with nothing in it yet. Centred, quiet, and on the band, so a row
+   without a render reads as pending rather than failed. */
+.awaiting {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  font-family: var(--font-data);
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--band-muted);
+  text-align: center;
+}
