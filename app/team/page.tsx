@@ -3,34 +3,41 @@ import Link from "next/link";
 import Cinematic from "@/components/Cinematic";
 import styles from "./page.module.css";
 
-/* Was a client component whose only use of JavaScript was to fade three cards
-   in on scroll. The cards are now three rows in the page, and the page ships
+/* Was a client component whose only use of JavaScript was to fade the cards
+   in on scroll. The cards are now rows in the page, and the page ships
    nothing. */
 
 export const metadata = {
   title: "Team",
   description:
-    "The three founders of NAVRobotec, and which layer of the flight stack each of them answers for.",
+    "The four co-founders of NAVRobotec, and which layer of the flight stack each of them answers for.",
 };
 
 const TEAM = [
   {
     name: "Nipun Singh",
-    role: "Founder & Director",
+    role: "Co-Founder & Director",
     owns: "Strategy · operations",
     photo: "/images/nipun.jpeg",
     body: "Leads the strategic direction and operations of NAVRobotec. Focused on scaling autonomous intelligence and establishing a foundation for secure, independent aviation.",
   },
   {
+    name: "Aryan Sheel",
+    role: "Co-Founder & CTO",
+    owns: "Backend · frontend · AI",
+    photo: "/images/aryan.jpeg",
+    body: "Full-stack engineer, and the company's CTO. Works across the backend services, the interfaces in front of them, and the applied AI — the software either side of the flight stack rather than the firmware inside it.",
+  },
+  {
     name: "Ashutosh Vishwakarma",
-    role: "Founder & Core Hardware",
+    role: "Co-Founder & Core Hardware",
     owns: "VaiOS · NavHAL · control",
     photo: "/images/Ashutosh.jpeg",
     body: "Embedded systems developer and controls theory specialist. Responsible for the VaiOS architecture, the NavHAL implementation, and the core flight stabilisation logic.",
   },
   {
     name: "Vibhu Gupta",
-    role: "Founder & Director",
+    role: "Co-Founder & Director",
     owns: "Perception · swarm",
     photo: "/images/vibhu.png",
     body: "Specialises in computer vision and collaborative swarm intelligence. Building the perception layers and the multi-agent coordination protocols for the Vayu stack.",
@@ -42,14 +49,14 @@ export default function Team() {
     <div className="page-flush">
       <Cinematic
         kicker="The team"
-        title={<>Three founders, one stack.</>}
+        title={<>Four co-founders, one stack.</>}
         lede="Every layer between the register and the air has somebody who answers for it. Here is who."
       />
 
       <section className="section">
         <div className="shell">
-          {/* A list, not a grid of cards. Three people read as three people;
-              three boxes read as a directory with two thirds missing. */}
+          {/* A list, not a grid of cards. Four people read as four people;
+              four boxes read as a directory with the rest of it missing. */}
           <ul className={styles.people}>
             {TEAM.map((person) => (
               <li key={person.name} className={styles.person}>

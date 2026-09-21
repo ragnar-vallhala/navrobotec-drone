@@ -16,10 +16,11 @@
   background: var(--paper);
 }
 .photo {
-  /* Forced square in CSS, not just in the width/height props: the three
-     sources are 1:1.01, 1:1.17 and 1:1.11, and next/image preserves the
-     intrinsic ratio — so a 50% radius on them drew three ovals of three
-     different shapes. */
+  /* Forced square in CSS, not just in the width/height props: the sources
+     are 1:1.01, 1:1, 1:1.17 and 1:1.11, and next/image preserves the
+     intrinsic ratio — so a 50% radius on them drew ovals of four different
+     shapes. Any new photograph should be cropped square before it lands
+     here; cover only hides the mismatch, it does not fix the framing. */
   width: 96px;
   height: 96px;
   border-radius: 50%;
