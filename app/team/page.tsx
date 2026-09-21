@@ -10,7 +10,7 @@ import styles from "./page.module.css";
 export const metadata = {
   title: "Team",
   description:
-    "The four co-founders of NAVRobotec, and which layer of the flight stack each of them answers for.",
+    "The co-founders of NAVRobotec, and which layer of the flight stack each of them answers for.",
 };
 
 const TEAM = [
@@ -49,14 +49,15 @@ export default function Team() {
     <div className="page-flush">
       <Cinematic
         kicker="The team"
-        title={<>Four co-founders, one stack.</>}
+        title={<>One stack, owned end to end.</>}
         lede="Every layer between the register and the air has somebody who answers for it. Here is who."
       />
 
       <section className="section">
         <div className="shell">
-          {/* A list, not a grid of cards. Four people read as four people;
-              four boxes read as a directory with the rest of it missing. */}
+          {/* A list, not a grid of cards. People in a row read as the team;
+              the same people in boxes read as a directory with the rest of
+              it missing. */}
           <ul className={styles.people}>
             {TEAM.map((person) => (
               <li key={person.name} className={styles.person}>

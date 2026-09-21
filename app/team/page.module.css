@@ -17,17 +17,17 @@
 }
 .photo {
   /* Forced square in CSS, not just in the width/height props: the sources
-     are 1:1.01, 1:1, 1:1.17 and 1:1.11, and next/image preserves the
-     intrinsic ratio — so a 50% radius on them drew ovals of four different
-     shapes. Any new photograph should be cropped square before it lands
-     here; cover only hides the mismatch, it does not fix the framing. */
+     are not all 1:1 and next/image preserves the intrinsic ratio, so a 50%
+     radius on them drew an oval of a different shape each. Any new
+     photograph should be cropped square before it lands here; cover hides
+     the mismatch, it does not fix the framing. */
   width: 96px;
   height: 96px;
   border-radius: 50%;
   object-fit: cover;
-  /* Enough to settle three differently-lit portraits into one row, and not so
-     much that the one shot against a pale background disappears into the
-     page — which full greyscale did. */
+  /* Enough to settle differently-lit portraits into one row, and not so much
+     that one shot against a pale background disappears into the page — which
+     full greyscale did. */
   filter: grayscale(0.65) contrast(1.02);
   background: var(--paper-2);
 }
