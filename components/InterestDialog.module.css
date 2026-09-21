@@ -1,0 +1,75 @@
+/* The dialog itself is only the box; ::backdrop is the ground behind it.
+   Both are painted here rather than by a wrapper div, which is the point of
+   using the element the platform provides. */
+.dialog {
+  /* Explicit, not inherited. A modal <dialog> is centred by the UA's
+     `margin: auto` against `inset: 0`, and something in the cascade here
+     resets it to 0 — which pins the panel to the top-left corner. */
+  margin: auto;
+  width: min(42rem, calc(100vw - 2 * var(--gutter)));
+  max-height: min(48rem, calc(100dvh - 2rem));
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--card);
+  color: var(--ink-2);
+  overflow: hidden;
+}
+.dialog::backdrop {
+  background: rgb(4 10 8 / 0.55);
+  backdrop-filter: blur(3px);
+}
+
+/* Entrance only, and it ends visible — the site's one motion rule. Under
+   reduced motion it simply appears. */
+.dialog[open] {
+  animation: lift 0.22s var(--ease) both;
+}
+.dialog[open]::backdrop {
+  animation: fade 0.22s var(--ease) both;
+}
+@keyframes lift {
+  from { opacity: 0; transform: translateY(0.75rem) scale(0.985); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dialog[open], .dialog[open]::backdrop { animation: none; }
+}
+
+/* The scroller is inside, so the close button can sit against the panel edge
+   and the dialog's own rounded corners are never cut by overflow. */
+.panel {
+  position: relative;
+  max-height: inherit;
+  overflow-y: auto;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  overscroll-behavior: contain;
+}
+
+.close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--muted);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+.close:hover { color: var(--ink); border-color: var(--line); }
+.close:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+
+.head { margin-bottom: clamp(1.5rem, 3vw, 2rem); padding-right: 2.5rem; }
+.title { margin-top: 0.75rem; }
+.lede { margin-top: 0.75rem; color: var(--ink-2); max-width: 34rem; }

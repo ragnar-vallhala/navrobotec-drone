@@ -172,12 +172,6 @@
 .caveat { margin-top: clamp(2.5rem, 5vw, 3.5rem); max-width: 46rem; }
 .link { color: var(--signal); text-decoration: underline; text-underline-offset: 2px; }
 
-/* --- the form ------------------------------------------------------------- */
-.head { max-width: 46rem; margin-bottom: clamp(2.5rem, 5vw, 3.5rem); }
-.head .label { display: block; margin-bottom: 1.125rem; }
-.head h2 + .lede { margin-top: 1.25rem; }
-.formCol { max-width: 44rem; }
-
 /* The frame with nothing in it yet. Centred, quiet, and on the band, so a row
    without a render reads as pending rather than failed. */
 .awaiting {

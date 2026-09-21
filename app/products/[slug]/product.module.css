@@ -125,12 +125,6 @@
 .link { color: var(--signal); text-decoration: underline; text-underline-offset: 2px; }
 .back { margin-top: 2rem; }
 
-/* --- the form ------------------------------------------------------------- */
-.head { max-width: 46rem; margin-bottom: clamp(2.5rem, 5vw, 3.5rem); }
-.head .label { display: block; margin-bottom: 1.125rem; }
-.head h2 + .lede { margin-top: 1.25rem; }
-.formCol { max-width: 44rem; }
-
 /* --- the rest of the catalogue -----------------------------------------------
    Deliberately smaller than a card on the index: this is a way out of the page,
    not a second catalogue competing with the product it sits under. */

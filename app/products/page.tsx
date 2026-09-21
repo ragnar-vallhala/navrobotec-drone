@@ -1,8 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import Cinematic from "@/components/Cinematic";
-import EnquiryForm from "@/components/EnquiryForm";
-import { getCatalogue, INTEREST_OPTIONS } from "@/lib/products";
+import { getCatalogue } from "@/lib/products";
 import styles from "./page.module.css";
 
 /* The catalogue: one card per product, each opening its own page.
@@ -34,15 +33,10 @@ export const metadata = {
    build time. */
 export const dynamic = "force-dynamic";
 
-export default async function Products({
-  searchParams,
-}: {
-  searchParams: Promise<{ want?: string }>;
-}) {
-  const [catalogue, params] = await Promise.all([getCatalogue(), searchParams]);
+export default async function Products() {
+  const catalogue = await getCatalogue();
   const products = catalogue.status === "ok" ? catalogue.products : [];
   const anyPlaceholder = products.some((product) => product.placeholder);
-  const wanted = params.want ? [params.want] : [];
 
   return (
     <div className="page-flush">
@@ -173,43 +167,6 @@ export default async function Products({
         </div>
       </section>
 
-      <section id="interest" className="section rule tinted">
-        <div className="shell">
-          <header className={styles.head}>
-            <p className="label">Register interest</p>
-            <h2 className="h1">Tell us which one.</h2>
-            <p className="lede">
-              What gets built first is decided by who is waiting for it. No
-              obligation and no mailing list — this reaches an engineer, and
-              the reply comes from one.
-            </p>
-          </header>
-
-          <div className={styles.formCol}>
-            <EnquiryForm
-              source="wishlist"
-              fields={[
-                { name: "name", label: "Name", type: "text", autoComplete: "name", required: true },
-                { name: "email", label: "Email", type: "email", autoComplete: "email", required: true },
-                { name: "company", label: "Company or team", type: "text", autoComplete: "organization", wide: true },
-              ]}
-              interests={{ legend: "Which of these", options: INTEREST_OPTIONS }}
-              defaultInterests={wanted}
-              message={{
-                label: "What would you use it for?",
-                placeholder:
-                  "The aircraft, the payload, the environment, how many — whatever would help us build the right one first.",
-                rows: 5,
-              }}
-              submit="Register interest"
-              done={{
-                title: "Thank you — that reached us.",
-                body: "You are on the list for it. We write when there is something real to show, not before.",
-              }}
-            />
-          </div>
-        </div>
-      </section>
     </div>
   );
 }
