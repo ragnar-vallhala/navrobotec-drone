@@ -41,14 +41,29 @@ export type Product = {
  * Fixed labels rather than the product names from the database: the API
  * checks them against kInterests and drops what it does not know, so renaming
  * a product must not silently stop recording who asked for it. Keyed by slug
- * so a card can link to the form already saying which one it is about. */
+ * so a card can link to the form already saying which one it is about.
+ *
+ * The map keeps every label the API knows, including products not currently
+ * listed — unpublishing a row must not lose the label that files the
+ * enquiries already recorded against it. Which of them to *offer* is a
+ * different question, and interestsFor() answers it from the catalogue. */
 export const INTEREST_BY_SLUG: Record<string, string> = {
   "fc-f446": "NAVIX-SMF446",
   "fc-h747": "NAVIX-SMH747",
   "airframe-sub250": "Vidyut",
 };
 
-export const INTEREST_OPTIONS = Object.values(INTEREST_BY_SLUG);
+/* The chips to offer, for the products actually on the site.
+ *
+ * Derived from the catalogue rather than from the map, so an unpublished
+ * product stops being offered without anybody remembering to edit a constant —
+ * and the labels still come from the map, so this never sends the API a
+ * product name it would silently drop. */
+export function interestsFor(products: Product[]): string[] {
+  return products
+    .map((product) => INTEREST_BY_SLUG[product.slug])
+    .filter((label): label is string => Boolean(label));
+}
 
 /* The catalogue, and why this is two outcomes rather than a Product[].
  *

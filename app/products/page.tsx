@@ -26,7 +26,7 @@ import styles from "./page.module.css";
 export const metadata = {
   title: "Products",
   description:
-    "The hardware NAVRobotec is building around VaiOS: the NAVIX-SMF446 and NAVIX-SMH747 flight controllers, and Vidyut, a sub-250 g airframe.",
+    "The hardware NAVRobotec is building around VaiOS: the NAVIX-SMF446 and NAVIX-SMH747 flight controllers.",
 };
 
 /* The catalogue changes without a deploy, so the page must not be baked at
@@ -43,7 +43,7 @@ export default async function Products() {
       <Cinematic
         kicker="Products"
         title={<>Hardware, built around the stack.</>}
-        lede="Flight controllers that run VaiOS and NavHAL because they were designed for them, and an aircraft light enough to fly almost anywhere."
+        lede="Flight controllers that run VaiOS and NavHAL because they were designed for them — the board the stack was written on, and the part it is being written towards."
       />
 
       <section className="section">
