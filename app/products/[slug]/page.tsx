@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import InterestDialog from "@/components/InterestDialog";
-import { getCatalogue, INTEREST_BY_SLUG, INTEREST_OPTIONS } from "@/lib/products";
+import { getCatalogue, INTEREST_BY_SLUG, interestsFor } from "@/lib/products";
 import styles from "./product.module.css";
 
 /* One product.
@@ -170,7 +170,7 @@ export default async function ProductPage({
                 title="Waiting on this one?"
                 lede="What gets built first is decided by who is waiting for it. No obligation and no mailing list — this reaches an engineer, and the reply comes from one."
                 interest={interest}
-                options={INTEREST_OPTIONS}
+                options={interestsFor(catalogue.products)}
               />
             </div>
           </div>
