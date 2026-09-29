@@ -156,11 +156,8 @@ export default async function Products() {
             manufactured yet. Nothing here is shipping and none of it has a
             date; the figures describe the parts these are built around, and
             anything measured on our own hardware is in{" "}
-            <Link
-              href="/docs/report/vaios/vaios-performance"
-              className={styles.link}
-            >
-              the benchmark
+            <Link href="/docs" className={styles.link}>
+              the documentation
             </Link>
             .
           </p>

@@ -165,13 +165,24 @@ export default async function ProductPage({
                 </p>
               ) : null}
 
-              <InterestDialog
-                label="Register interest"
-                title="Waiting on this one?"
-                lede="What gets built first is decided by who is waiting for it. No obligation and no mailing list — this reaches an engineer, and the reply comes from one."
-                interest={interest}
-                options={interestsFor(catalogue.products)}
-              />
+              <div className={styles.actions}>
+                <InterestDialog
+                  label="Register interest"
+                  title="Waiting on this one?"
+                  lede="What gets built first is decided by who is waiting for it. No obligation and no mailing list — this reaches an engineer, and the reply comes from one."
+                  interest={interest}
+                  options={interestsFor(catalogue.products)}
+                />
+                {/* The documentation entire, not one section of it. What a
+                    reader wants after a specification table is the stack the
+                    board runs, and that is a library rather than a page — the
+                    report and the per-layer guides both. Sending them to a
+                    single benchmark answers a question they have not asked
+                    yet and hides the rest behind it. */}
+                <Link href="/docs" className="btn btn-ghost">
+                  Read the documentation
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -195,11 +206,8 @@ export default async function ProductPage({
               manufactured. Nothing here is shipping and none of it has a date;
               the figures describe the parts it is built around, and anything
               measured on our own hardware is in{" "}
-              <Link
-                href="/docs/report/vaios/vaios-performance"
-                className={styles.link}
-              >
-                the benchmark
+              <Link href="/docs" className={styles.link}>
+                the documentation
               </Link>
               .
             </p>
