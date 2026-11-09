@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 /* Security headers. They live here rather than in nginx so they travel with
-   the image to every deployment (compose, cluster, Vercel); the compose proxy
+   the image to every deployment (compose, cluster); the compose proxy
    sets none of these, so nothing is sent twice.
 
    The CSP keeps 'unsafe-inline' for scripts and styles: Next's own bootstrap
