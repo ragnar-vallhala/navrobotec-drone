@@ -89,6 +89,7 @@
 .solid .contact:hover { color: var(--signal); }
 
 .toggle {
+  min-height: 2.75rem;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
