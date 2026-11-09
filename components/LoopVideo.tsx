@@ -29,7 +29,6 @@ export default function LoopVideo({
       setStill(true);
       return;
     }
-    if (controls) return;
     const watcher = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) video.play().catch(() => {});
@@ -39,7 +38,7 @@ export default function LoopVideo({
     );
     watcher.observe(video);
     return () => watcher.disconnect();
-  }, [controls]);
+  }, []);
 
   return (
     <video
@@ -49,7 +48,7 @@ export default function LoopVideo({
       poster={poster}
       muted
       playsInline
-      loop={!controls}
+      loop
       preload="metadata"
       controls={controls || still}
       aria-label={label}
