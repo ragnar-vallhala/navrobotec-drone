@@ -22,13 +22,6 @@ const TEAM = [
     body: "Leads the strategic direction and operations of NAVRobotec. Focused on scaling autonomous intelligence and establishing a foundation for secure, independent aviation.",
   },
   {
-    name: "Aryan Sheel",
-    role: "Co-Founder & CTO",
-    owns: "Backend · frontend · AI",
-    photo: "/images/aryan.jpeg",
-    body: "Full-stack engineer, and the company's CTO. Works across the backend services, the interfaces in front of them, and the applied AI — the software either side of the flight stack rather than the firmware inside it.",
-  },
-  {
     name: "Ashutosh Vishwakarma",
     role: "Co-Founder & Core Hardware",
     owns: "VaiOS · NavHAL · control",
