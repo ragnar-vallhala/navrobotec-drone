@@ -14,3 +14,7 @@
 @media (min-width: 62rem) {
   .layout { grid-template-columns: 1.6fr 1fr; gap: 5rem; align-items: start; }
 }
+
+/* 44px hit area without moving the text. */
+.link { position: relative; }
+.link::after { content: ""; position: absolute; inset: -0.75rem -0.25rem; }

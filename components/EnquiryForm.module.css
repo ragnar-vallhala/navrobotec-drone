@@ -89,3 +89,6 @@
   .row { grid-template-columns: 1fr 1fr; gap: 1.25rem 1.5rem; }
   .wide { grid-column: 1 / -1; }
 }
+
+.link { position: relative; }
+.link::after { content: ""; position: absolute; inset: -0.75rem -0.25rem; }
