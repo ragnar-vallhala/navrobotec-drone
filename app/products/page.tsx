@@ -1,7 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import ComingSoon from "@/components/ComingSoon";
+import BoardStage from "@/components/BoardStage";
 import Cinematic from "@/components/Cinematic";
+import { X427_MEDIA } from "@/lib/product-media";
 import { getCatalogue } from "@/lib/products";
 import styles from "./page.module.css";
 
@@ -46,8 +48,16 @@ export default async function Products() {
   return (
     <div className="page-flush">
       <Cinematic
-        src="/media/page-products.webp"
-        focus="50% 55%"
+        height="board"
+        art={
+          <BoardStage
+            src={X427_MEDIA.top.src}
+            alt="NAVIX X427 flight controller, top view"
+            sizes="(max-width: 48rem) 80vw, 56vw"
+            fit={46}
+            priority
+          />
+        }
         kicker="Products"
         title={<>Hardware, built around the stack.</>}
         lede="Flight controllers that run VaiOS and NavHAL because they were designed for them, starting with the NAVIX X427."

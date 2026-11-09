@@ -26,6 +26,9 @@ export default function Cinematic({
   focus = "center",
   /* Tall frames earn more height; a 1:1 render does not need 82vh of it. */
   height = "tall",
+  /* Drawn artwork in place of a photograph: it fills the stage, which is
+     sized by `height` as usual. Takes precedence over `src`. */
+  art,
 }: {
   /* Optional, and often absent on purpose. A cinematic opening does not
      require a photograph — it requires the page to begin with one idea and
@@ -39,17 +42,22 @@ export default function Cinematic({
   lede?: ReactNode;
   children?: ReactNode;
   focus?: string;
-  height?: "tall" | "short";
+  height?: "tall" | "short" | "board";
+  art?: ReactNode;
 }) {
+  const framed = Boolean(src || art);
   return (
-    <section className={`band ${styles.opening} ${src ? "" : styles.plain}`}>
-      {src ? (
+    <section className={`band ${styles.opening} ${framed ? "" : styles.plain}`}>
+      {framed ? (
         <div
-          className={`${styles.stage} ${height === "short" ? styles.short : ""}`}
-          aria-hidden
+          className={`${styles.stage} ${
+            height === "short" ? styles.short : height === "board" ? styles.board : ""
+          }`}
+          aria-hidden={src && !art ? true : undefined}
         >
+          {art ?? (
           <Image
-            src={src}
+            src={src!}
             alt=""
             fill
             priority
@@ -57,6 +65,7 @@ export default function Cinematic({
             className={styles.image}
             style={{ objectPosition: focus }}
           />
+          )}
           <div className={styles.fade} />
         </div>
       ) : (

@@ -12,6 +12,7 @@
   overflow: hidden;
 }
 .short { aspect-ratio: 21 / 7; max-height: 52vh; }
+.board { aspect-ratio: 21 / 9; }
 .image { object-fit: cover; }
 
 .fade {
@@ -48,4 +49,5 @@
   .stage { aspect-ratio: 1 / 1; max-height: 56vh; }
   .fade { height: 34%; }
   .short { aspect-ratio: 3 / 2; max-height: 44vh; }
+  .board { aspect-ratio: 4 / 3; max-height: 56vh; }
 }

@@ -1,8 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import BoardStage from "@/components/BoardStage";
 import ComingSoon from "@/components/ComingSoon";
 import InterestDialog from "@/components/InterestDialog";
+import { PRODUCT_MEDIA } from "@/lib/product-media";
 import { getCatalogue, INTEREST_BY_SLUG, interestsFor } from "@/lib/products";
 import styles from "./product.module.css";
 
@@ -91,6 +93,7 @@ export default async function ProductPage({
      must not tell a reader that the product they were linked to never existed. */
   if (!product) notFound();
 
+  const media = PRODUCT_MEDIA[product.slug];
   const interest = INTEREST_BY_SLUG[product.slug];
   const siblings = catalogue.products.filter(
     (other) => other.slug !== product.slug,
@@ -117,23 +120,54 @@ export default async function ProductPage({
       <section className="section-tight">
         <div className="shell">
           <div className={styles.lead}>
-            <div className={styles.frame}>
-              {product.image ? (
-                <Image
-                  src={product.image}
-                  alt={`${product.name}, a render`}
-                  fill
-                  sizes="(max-width: 60rem) 100vw, 34rem"
-                  className={styles.render}
-                  priority
-                />
-              ) : (
-                /* The row has no render yet. An empty dark rectangle reads as
-                   a broken image, so it says which it is. */
-                <ComingSoon
-                  kind={product.slug.startsWith("airframe") ? "airframe" : "board"}
-                />
-              )}
+            <div className={styles.visual}>
+              <div className={`${styles.frame} ${media ? styles.frameBoard : ""}`}>
+                {media ? (
+                  <BoardStage
+                    src={media.hero.src}
+                    alt={media.hero.alt}
+                    width={media.hero.width}
+                    height={media.hero.height}
+                    sizes="(max-width: 60rem) 100vw, 34rem"
+                    fit={90}
+                    framed
+                    priority
+                  />
+                ) : product.image ? (
+                  <Image
+                    src={product.image}
+                    alt={`${product.name}, a render`}
+                    fill
+                    sizes="(max-width: 60rem) 100vw, 34rem"
+                    className={styles.render}
+                    priority
+                  />
+                ) : (
+                  /* The row has no render yet. An empty dark rectangle reads as
+                     a broken image, so it says which it is. */
+                  <ComingSoon
+                    kind={product.slug.startsWith("airframe") ? "airframe" : "board"}
+                  />
+                )}
+              </div>
+
+              {media && media.gallery.length > 0 ? (
+                <ul className={styles.gallery}>
+                  {media.gallery.map((shot) => (
+                    <li key={shot.src} className={styles.shot}>
+                      <BoardStage
+                        src={shot.src}
+                        alt={shot.alt}
+                        width={shot.width}
+                        height={shot.height}
+                        sizes="(max-width: 60rem) 100vw, 34rem"
+                        fit={50}
+                        framed
+                      />
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
             </div>
 
             <div className={styles.intro}>
