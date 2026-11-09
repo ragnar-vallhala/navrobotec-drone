@@ -182,13 +182,16 @@ export default async function ProductPage({
               ) : null}
 
               <div className={styles.actions}>
-              <InterestDialog
-                label="Enquire"
-                title={`Enquire about ${product.name}`}
-                lede="Your message goes to an engineer, and the reply comes from one."
-                interest={interest}
-                options={interestsFor(catalogue.products)}
-              />
+                <InterestDialog
+                  label="Enquire"
+                  title={`Enquire about ${product.name}`}
+                  lede="Your message goes to an engineer, and the reply comes from one."
+                  interest={interest}
+                  options={interestsFor(catalogue.products)}
+                />
+                <Link href="/docs" className="btn btn-ghost">
+                  Read the documentation
+                </Link>
               </div>
             </div>
           </div>

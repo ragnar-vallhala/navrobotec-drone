@@ -102,7 +102,18 @@
 
 .summary { margin-top: 1.25rem; max-width: 40rem; color: var(--ink-2); }
 
-.actions { margin-top: clamp(1.5rem, 3vw, 2rem); }
+/* Two buttons, and they wrap rather than shrink: "Read the documentation" is
+   a long label, and on a narrow column the pair belongs on two lines at full
+   size rather than on one at half of it. The margin lives here rather than on
+   each button, so the gap is the row's and not a property of whichever child
+   happens to come first. */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: clamp(1.5rem, 3vw, 2rem);
+}
 
 /* --- specifications ----------------------------------------------------------
    An instrument readout: the value leads and the label sits under it small,
