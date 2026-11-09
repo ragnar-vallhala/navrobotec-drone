@@ -46,6 +46,7 @@
 .set legend { padding: 0; }
 .chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .chip {
+  min-height: 2.75rem;
   padding: 0.5rem 0.875rem;
   font: inherit;
   font-size: 0.875rem;
