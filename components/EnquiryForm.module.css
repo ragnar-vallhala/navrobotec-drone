@@ -80,6 +80,7 @@
 
 /* --- after ---------------------------------------------------------------- */
 .done { display: grid; gap: 1rem; max-width: 34rem; }
+.done:focus { outline: none; }
 .done .label { display: block; }
 .reference { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.08em; }
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import styles from "./EnquiryForm.module.css";
 
 /* The form, for both places on this site that ask for something.
@@ -57,7 +57,7 @@ export type EnquiryFormProps = {
 
 export default function EnquiryForm({
   source,
-  fields,
+  fields: fieldsProp,
   interests,
   defaultInterests,
   budget,
@@ -76,6 +76,31 @@ export default function EnquiryForm({
   const [reference, setReference] = useState("");
   /* Keyed by field name, plus "" for anything not about one field. */
   const [errors, setErrors] = useState<Record<string, string>>({});
+  /* A ref as well as the state: two clicks inside one frame both see
+     sending === false, because the render that disables the button has not
+     happened yet. */
+  const busy = useRef(false);
+  const formRef = useRef<HTMLFormElement>(null);
+  const doneRef = useRef<HTMLDivElement>(null);
+  const alertRef = useRef<HTMLParagraphElement>(null);
+  /* Ids are per instance, so two forms on one page cannot share them. */
+  const uid = useId();
+  const fid = (name: string) => `${uid}-f-${name}`;
+  const eid = (name: string) => `${uid}-e-${name}`;
+  /* Bumped on a failed submit, so focus moves once per failure and not on
+     every render. */
+  const [failure, setFailure] = useState(0);
+
+  useEffect(() => {
+    if (failure === 0) return;
+    const form = formRef.current;
+    const first = form?.querySelector<HTMLElement>('[aria-invalid="true"]');
+    (first ?? alertRef.current)?.focus();
+  }, [failure]);
+
+  useEffect(() => {
+    if (sent) doneRef.current?.focus();
+  }, [sent]);
 
   const toggle = (value: string) =>
     setChosen((current) =>
@@ -86,7 +111,8 @@ export default function EnquiryForm({
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (sending) return;
+    if (busy.current) return;
+    busy.current = true;
     const data = new FormData(event.currentTarget);
 
     setSending(true);
@@ -117,15 +143,32 @@ export default function EnquiryForm({
         const fields = body?.error?.fields as
           | { field: string; message: string }[]
           | undefined;
-        setErrors(
-          fields?.length
-            ? Object.fromEntries(fields.map((f) => [f.field, f.message]))
-            : {
-                "":
-                  body?.error?.message ??
-                  "Something went wrong sending that. Please try again, or write to us directly.",
-              },
-        );
+        /* Errors for fields this form renders sit beside their input; any
+           other (a field the API checks that is not on this form) goes into
+           the general message rather than being dropped. */
+        const shown = new Set<string>([
+          ...fieldsProp.map((f) => f.name),
+          "message",
+          ...(interests ? ["interests"] : []),
+          ...(budget ? ["budget"] : []),
+        ]);
+        const next: Record<string, string> = {};
+        const stray: string[] = [];
+        for (const f of fields ?? []) {
+          if (shown.has(f.field)) next[f.field] = f.message;
+          else stray.push(`${f.field}: ${f.message}`);
+        }
+        if (!fields?.length) {
+          next[""] =
+            body?.error?.message ??
+            (response.status === 429
+              ? "Too many requests just now. Please wait a minute and try again."
+              : "Something went wrong sending that. Please try again, or write to us directly.");
+        } else if (stray.length) {
+          next[""] = `Please check your details. ${stray.join("; ")}`;
+        }
+        setErrors(next);
+        setFailure((n) => n + 1);
         return;
       }
 
@@ -138,14 +181,21 @@ export default function EnquiryForm({
         "":
           "We could not reach the server. Please check your connection, or write to support@navrobotec.com.",
       });
+      setFailure((n) => n + 1);
     } finally {
+      busy.current = false;
       setSending(false);
     }
   };
 
   if (sent) {
     return (
-      <div className={styles.done}>
+      <div
+        className={styles.done}
+        role="status"
+        tabIndex={-1}
+        ref={doneRef}
+      >
         <p className="label label-signal">Received</p>
         <h2 className="h2">{done.title}</h2>
         <p className="body">{done.body}</p>
@@ -159,39 +209,44 @@ export default function EnquiryForm({
   }
 
   return (
-    <form onSubmit={onSubmit} className={styles.form} noValidate>
+    <form
+      onSubmit={onSubmit}
+      className={styles.form}
+      ref={formRef}
+      noValidate
+    >
       {errors[""] ? (
-        <p role="alert" className={styles.alert}>
+        <p role="alert" className={styles.alert} tabIndex={-1} ref={alertRef}>
           {errors[""]}
         </p>
       ) : null}
 
       <div className={styles.row}>
-        {fields.map((field) => (
+        {fieldsProp.map((field) => (
           <div
             key={field.name}
             className={`${styles.field} ${field.wide ? styles.wide : ""}`}
           >
-            <label className="label" htmlFor={`f-${field.name}`}>
+            <label className="label" htmlFor={fid(field.name)}>
               {field.label}
               {field.required ? null : (
                 <span className={styles.optional}> — optional</span>
               )}
             </label>
             <input
-              id={`f-${field.name}`}
+              id={fid(field.name)}
               name={field.name}
               type={field.type}
               autoComplete={field.autoComplete}
               required={field.required}
               aria-invalid={errors[field.name] ? true : undefined}
               aria-describedby={
-                errors[field.name] ? `e-${field.name}` : undefined
+                errors[field.name] ? eid(field.name) : undefined
               }
               className={styles.input}
             />
             {errors[field.name] ? (
-              <p id={`e-${field.name}`} className={styles.fieldError}>
+              <p id={eid(field.name)} className={styles.fieldError}>
                 {errors[field.name]}
               </p>
             ) : null}
@@ -218,6 +273,11 @@ export default function EnquiryForm({
               );
             })}
           </div>
+          {errors.interests ? (
+            <p role="alert" className={styles.fieldError}>
+              {errors.interests}
+            </p>
+          ) : null}
         </fieldset>
       ) : null}
 
@@ -244,27 +304,27 @@ export default function EnquiryForm({
             })}
           </div>
           {errors.budget ? (
-            <p className={styles.fieldError}>{errors.budget}</p>
+            <p role="alert" className={styles.fieldError}>{errors.budget}</p>
           ) : null}
         </fieldset>
       ) : null}
 
       <div className={styles.field}>
-        <label className="label" htmlFor="f-message">
+        <label className="label" htmlFor={fid("message")}>
           {message.label}
         </label>
         <textarea
-          id="f-message"
+          id={fid("message")}
           name="message"
           rows={message.rows ?? 6}
           required
           placeholder={message.placeholder}
           aria-invalid={errors.message ? true : undefined}
-          aria-describedby={errors.message ? "e-message" : undefined}
+          aria-describedby={errors.message ? eid("message") : undefined}
           className={`${styles.input} ${styles.textarea}`}
         />
         {errors.message ? (
-          <p id="e-message" className={styles.fieldError}>
+          <p id={eid("message")} className={styles.fieldError}>
             {errors.message}
           </p>
         ) : null}
@@ -274,9 +334,9 @@ export default function EnquiryForm({
           screen reader, with autocomplete off so a password manager does
           not helpfully fill it in and get a real person discarded. */}
       <div className={styles.honeypot} aria-hidden>
-        <label htmlFor="f-website">Website</label>
+        <label htmlFor={fid("website")}>Website</label>
         <input
-          id="f-website"
+          id={fid("website")}
           name="website"
           type="text"
           tabIndex={-1}
