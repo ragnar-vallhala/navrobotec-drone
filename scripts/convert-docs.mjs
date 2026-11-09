@@ -8,7 +8,7 @@
  * consumes.
  *
  * Safe to run anywhere. If pandoc / latex / dvisvgm are unavailable (e.g. a
- * Vercel build container), it logs a notice and exits 0 so the committed
+ * plain build container), it logs a notice and exits 0 so the committed
  * content/docs output is used as-is. It also no-ops when the LaTeX source is
  * unchanged since the last run, unless invoked with --force.
  *

@@ -7,15 +7,14 @@ import type { NextConfig } from "next";
    The CSP keeps 'unsafe-inline' for scripts and styles: Next's own bootstrap
    and flight-data scripts, the theme script in the layout and next/font and
    React style attributes are all inline, and a nonce would force every page
-   to be rendered per request. Everything else is locked to this origin. The
-   Vercel analytics host is allowed only on a Vercel build, which is the only
-   place those scripts are loaded. 'unsafe-eval' is for the dev server only. */
-const onVercel = Boolean(process.env.VERCEL);
+   to be rendered per request. Everything else is locked to this origin, and
+   the site loads no third-party scripts. 'unsafe-eval' is for the dev server
+   only. */
 const csp = [
   "default-src 'self'",
   `script-src 'self' 'unsafe-inline'${
     process.env.NODE_ENV === "production" ? "" : " 'unsafe-eval'"
-  }${onVercel ? " https://va.vercel-scripts.com" : ""}`,
+  }`,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob:",
   "media-src 'self'",

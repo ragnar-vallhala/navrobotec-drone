@@ -4,8 +4,6 @@ import "./globals.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { SITE_URL } from "../lib/site";
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 
 /* Three faces, each with a job.
  *
@@ -111,13 +109,6 @@ export default function RootLayout({
         <Navbar />
         <main id="main">{children}</main>
         <Footer />
-        {/* Vercel's scripts exist only there: elsewhere /_vercel/* 404s. */}
-        {process.env.VERCEL ? (
-          <>
-            <Analytics />
-            <SpeedInsights />
-          </>
-        ) : null}
       </body>
     </html>
   );
