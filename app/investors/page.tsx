@@ -50,6 +50,8 @@ export default function Investors() {
   return (
     <div className="page-flush">
       <Cinematic
+        src="/media/page-investors.webp"
+        focus="50% 70%"
         kicker="Investors"
         title={<>Backing a foundation, not a product.</>}
         lede="Most drone companies build on borrowed software. We build the foundation itself — VaiOS, a sovereign robotics runtime engineered from the silicon up."

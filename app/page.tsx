@@ -171,19 +171,22 @@ export default function Home() {
           <div className={styles.fade} />
         </div>
 
-        {/* Only the two ways in. The frame says what this is; a headline,
-            a paragraph and four figures underneath it were the page
-            explaining a picture that did not need explaining.
-
-            The numbers are not lost — the same four open /technology, where
-            they are the subject rather than a caption. */}
-        <div className={`shell ${styles.heroActions}`}>
-          <Link href="/technology" className="btn btn-primary">
-            The stack
-          </Link>
-          <Link href="/contact" className="btn btn-ghost">
-            Join the mission
-          </Link>
+        <div className={`shell ${styles.heroCopy}`}>
+          <h1 className={`display ${styles.heroTitle}`}>
+            Sovereign software for autonomous flight.
+          </h1>
+          <p className={`lede ${styles.heroLede}`}>
+            One runtime, built from the silicon up — from the register NavHAL
+            writes to, up to the aircraft VAYU flies.
+          </p>
+          <div className={styles.heroActions}>
+            <Link href="/technology" className="btn btn-primary">
+              The stack
+            </Link>
+            <Link href="/contact" className="btn btn-ghost">
+              Join the mission
+            </Link>
+          </div>
         </div>
 
         <div className={`shell ${styles.scrollCue}`} aria-hidden>
@@ -191,11 +194,6 @@ export default function Home() {
           <span className={styles.cueLine} />
         </div>
 
-        {/* The page still needs one, and the frame carries no text. Announced
-            to a screen reader and to a crawler; drawn for nobody. */}
-        <h1 className="sr-only">
-          NAVRobotec — sovereign software for autonomous flight
-        </h1>
       </section>
 
       {/* ---------------- the stack ----------------

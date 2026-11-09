@@ -43,6 +43,8 @@ export default function Vision() {
           speck of aircraft in it, which blown up to a full frame says less
           than the band does. */}
       <Cinematic
+        src="/media/page-vision.webp"
+        focus="50% 65%"
         kicker="The vision"
         title={
           <>

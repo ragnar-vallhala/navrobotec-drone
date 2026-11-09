@@ -41,6 +41,8 @@ export default async function Products() {
   return (
     <div className="page-flush">
       <Cinematic
+        src="/media/page-products.webp"
+        focus="50% 55%"
         kicker="Products"
         title={<>Hardware, built around the stack.</>}
         lede="Flight controllers that run VaiOS and NavHAL because they were designed for them — the board the stack was written on, and the part it is being written towards."
