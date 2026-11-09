@@ -1,0 +1,7 @@
+.image { object-fit: cover; }
+.narrow { display: none; }
+
+@media (max-width: 48rem) {
+  .wide { display: none; }
+  .narrow { display: block; }
+}

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import BoardStage from "@/components/BoardStage";
+import BoardPhoto from "@/components/BoardPhoto";
 import ComingSoon from "@/components/ComingSoon";
 import InterestDialog from "@/components/InterestDialog";
 import { PRODUCT_MEDIA } from "@/lib/product-media";
@@ -123,14 +123,9 @@ export default async function ProductPage({
             <div className={styles.visual}>
               <div className={`${styles.frame} ${media ? styles.frameBoard : ""}`}>
                 {media ? (
-                  <BoardStage
-                    src={media.hero.src}
-                    alt={media.hero.alt}
-                    width={media.hero.width}
-                    height={media.hero.height}
+                  <BoardPhoto
+                    shot={media.hero}
                     sizes="(max-width: 60rem) 100vw, 34rem"
-                    fit={90}
-                    framed
                     priority
                   />
                 ) : product.image ? (
@@ -155,14 +150,9 @@ export default async function ProductPage({
                 <ul className={styles.gallery}>
                   {media.gallery.map((shot) => (
                     <li key={shot.src} className={styles.shot}>
-                      <BoardStage
-                        src={shot.src}
-                        alt={shot.alt}
-                        width={shot.width}
-                        height={shot.height}
+                      <BoardPhoto
+                        shot={shot}
                         sizes="(max-width: 60rem) 100vw, 34rem"
-                        fit={50}
-                        framed
                       />
                     </li>
                   ))}

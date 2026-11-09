@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import ComingSoon from "@/components/ComingSoon";
-import BoardStage from "@/components/BoardStage";
+import BoardPhoto from "@/components/BoardPhoto";
 import Cinematic from "@/components/Cinematic";
-import { X427_MEDIA } from "@/lib/product-media";
+import { PRODUCT_MEDIA, PRODUCTS_OPENING } from "@/lib/product-media";
 import { getCatalogue } from "@/lib/products";
 import styles from "./page.module.css";
 
@@ -50,11 +50,10 @@ export default async function Products() {
       <Cinematic
         height="board"
         art={
-          <BoardStage
-            src={X427_MEDIA.top.src}
-            alt="NAVIX X427 flight controller, top view"
-            sizes="(max-width: 48rem) 80vw, 56vw"
-            fit={46}
+          <BoardPhoto
+            shot={PRODUCTS_OPENING.wide}
+            narrow={PRODUCTS_OPENING.narrow}
+            sizes="100vw"
             priority
           />
         }
@@ -110,7 +109,12 @@ export default async function Products() {
                 >
                   <Link href={`/products/${product.slug}`} className={styles.card}>
                     <span className={styles.frame}>
-                      {product.image ? (
+                      {PRODUCT_MEDIA[product.slug] ? (
+                        <BoardPhoto
+                          shot={PRODUCT_MEDIA[product.slug].card}
+                          sizes="(max-width: 48rem) 100vw, (max-width: 72rem) 50vw, 24rem"
+                        />
+                      ) : product.image ? (
                         <Image
                           src={product.image}
                           alt=""
