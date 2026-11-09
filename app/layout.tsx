@@ -44,8 +44,17 @@ export const metadata: Metadata = {
   },
   description:
     "VaiOS is a sovereign robotics runtime built from the silicon up: a hard real-time core, a hardware layer that speaks to the register, and VAYU flying on top. No black boxes, no foreign dependencies in the flight path.",
+  twitter: { card: "summary_large_image", images: ["/og-default.jpg"] },
   openGraph: {
     type: "website",
+    images: [
+      {
+        url: "/og-default.jpg",
+        width: 1200,
+        height: 630,
+        alt: "A quadcopter in the evening sky over a field, with its pilot in the foreground.",
+      },
+    ],
     siteName: "NAVRobotec",
     title: "NAVRobotec — Sovereign software for autonomous flight",
     description:
@@ -102,8 +111,13 @@ export default function RootLayout({
         <Navbar />
         <main id="main">{children}</main>
         <Footer />
-        <Analytics />
-        <SpeedInsights />
+        {/* Vercel's scripts exist only there: elsewhere /_vercel/* 404s. */}
+        {process.env.VERCEL ? (
+          <>
+            <Analytics />
+            <SpeedInsights />
+          </>
+        ) : null}
       </body>
     </html>
   );

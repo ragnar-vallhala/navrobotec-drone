@@ -61,6 +61,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Docs: book index pages.
   const docRoutes: MetadataRoute.Sitemap = [];
   for (const book of getBooks()) {
+    /* Stub guides ("being written") stay out of the sitemap until they have
+       content. */
+    if (book.comingSoon) continue;
     docRoutes.push({
       url: `${SITE_URL}${book.href}`,
       lastModified: now,
