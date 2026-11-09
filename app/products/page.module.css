@@ -158,5 +158,4 @@
 .arrow { transition: transform 0.25s var(--ease); }
 .card:hover .arrow { transform: translateX(0.25rem); }
 
-.caveat { margin-top: clamp(2.5rem, 5vw, 3.5rem); max-width: 46rem; }
 .link { color: var(--signal-deep); text-decoration: underline; text-underline-offset: 2px; }
