@@ -76,7 +76,7 @@ export default function Team() {
       <section className={`band ${styles.closing}`}>
         <div className="reticle" aria-hidden />
         <div className={`shell ${styles.closingInner}`}>
-          <p className="label label-signal">Working on it too</p>
+          <p className="label label-signal">Next</p>
           <h2 className="h1">The stack is open to read, and to build on.</h2>
           <div className={styles.actions}>
             <Link href="/docs" className="btn btn-primary">

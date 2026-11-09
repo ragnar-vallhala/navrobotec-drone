@@ -292,8 +292,8 @@ export default function Home() {
           <blockquote className={styles.quote}>
             <p className={styles.quoteText}>
               &ldquo;We are not building another autopilot. We are building the
-              foundation, a sovereign, silicon-native runtime that
-              belongs entirely to its operator. No black boxes. No foreign
+              foundation: a sovereign, silicon-native runtime that belongs
+              entirely to its operator. No black boxes. No foreign
               dependencies. Just pure, auditable control.&rdquo;
             </p>
             {/* The rule runs the whole measure and the attribution sits

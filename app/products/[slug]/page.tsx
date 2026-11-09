@@ -44,7 +44,7 @@ export async function generateMetadata({
     title: product.name,
     description: hasDetails(product.slug)
       ? product.summary || product.kicker || undefined
-      : undefined,
+      : `${product.name}: ${kindLabel(product.slug).toLowerCase()} from NAVRobotec, coming soon. Register your interest.`,
     /* No og:image. The renders are transparent PNGs keyed to sit on a dark
        band; a share card composites them on whatever it likes, and a board
        cut out against white nothing is a worse advertisement than no image. */
@@ -174,9 +174,7 @@ export default async function ProductPage({
                       </span>
                     ) : null}
                   </>
-                ) : (
-                  <span className={`data ${styles.soon}`}>Coming soon</span>
-                )}
+                ) : null}
               </p>
 
               {details && product.summary ? (
@@ -248,9 +246,7 @@ export default async function ProductPage({
                         other.part ? (
                           <span className={`data ${styles.part}`}>{other.part}</span>
                         ) : null
-                      ) : (
-                        <span className={`data ${styles.soon}`}>Coming soon</span>
-                      )}
+                      ) : null}
                     </span>
                   </Link>
                 </li>

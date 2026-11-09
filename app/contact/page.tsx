@@ -44,7 +44,7 @@ export default function Contact() {
     <div className="page-flush">
       <Cinematic
         kicker="Contact"
-        title={<>Tell us what you want it to fly.</>}
+        title={<>Talk to an engineer.</>}
         lede="Collaborations, developer integrations, pilot programmes, or a question about the stack — all reach the same inbox, and an engineer answers."
       />
 
@@ -67,8 +67,8 @@ export default function Contact() {
                 }}
                 submit="Send"
                 done={{
-                  title: "Thank you — that reached us.",
-                  body: "An engineer reads it and writes the reply. If it is urgent, support@navrobotec.com goes to the same place.",
+                  title: "Enquiry received.",
+                  body: "An engineer reads it and replies by email. For anything urgent, write to support@navrobotec.com.",
                 }}
               />
             </div>

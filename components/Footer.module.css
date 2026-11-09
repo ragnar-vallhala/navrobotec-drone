@@ -50,3 +50,12 @@
 @media (min-width: 62rem) {
   .inner { grid-template-columns: 1.6fr 1fr 1fr 1.2fr; }
 }
+
+/* Stacked links need a real 44px row, not an overlay: overlays on a column of
+   neighbours would fight over the same pixels. The gap moves into the row. */
+.list { gap: 0; }
+.link { display: inline-flex; align-items: center; min-height: 2.75rem; }
+.muted { display: flex; align-items: center; min-height: 2.75rem; }
+.social { gap: 0 1.25rem; }
+.brand { position: relative; }
+.brand::after { content: ""; position: absolute; inset: -0.75rem -0.25rem; }

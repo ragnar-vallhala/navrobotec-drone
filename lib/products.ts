@@ -88,7 +88,7 @@ const X427: Product = {
   part: "Rev A",
   kicker: "Flight controller",
   summary: "The flight controller board the VaiOS and NavHAL stack runs on.",
-  status: "Available to enquire",
+  status: "Enquire",
   image: "",
   imageIsRender: true,
   specs: [

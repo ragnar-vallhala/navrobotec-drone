@@ -132,3 +132,8 @@
   .links { display: flex; }
   .toggle, .drawer { display: none; }
 }
+
+/* Hit area of at least 44px without moving anything: the link keeps its
+   size, an invisible box around it grows. */
+.brand, .link, .contact { position: relative; }
+.brand::after, .link::after, .contact::after { content: ""; position: absolute; inset: -0.75rem -0.25rem; }

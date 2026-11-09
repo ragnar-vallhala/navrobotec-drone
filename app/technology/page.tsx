@@ -106,7 +106,7 @@ export default function Technology() {
         <div className="shell">
           <header className={tech.head}>
             <p className="label">The stack</p>
-            <h2 className="h1">Four layers, all ours.</h2>
+            <h2 className="h1">From the aircraft to the register.</h2>
             <p className="lede">
               The aircraft rests on an operating system, which rests on a
               hardware layer, which rests on the silicon. Read it top to bottom

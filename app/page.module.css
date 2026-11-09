@@ -631,3 +631,8 @@
   .track .depth,
   .track .scrub { display: none; }
 }
+
+/* Hit area of at least 44px without moving anything: the link keeps its
+   size, an invisible box around it grows. */
+.attribLink, .focusLink, .routeLink { position: relative; }
+.attribLink::after, .focusLink::after, .routeLink::after { content: ""; position: absolute; inset: -0.75rem -0.25rem; }

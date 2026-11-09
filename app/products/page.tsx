@@ -133,11 +133,7 @@ export default async function Products() {
                               </span>
                             ) : null}
                           </>
-                        ) : (
-                          <span className={`data ${styles.soon}`}>
-                            Coming soon
-                          </span>
-                        )}
+                        ) : null}
                       </span>
 
                       {details && product.summary ? (

@@ -76,8 +76,7 @@ export default function Investors() {
             <p className="label">Onboarding</p>
             <h2 className="h1">Tell us where you fit.</h2>
             <p className="lede">
-              Four questions, so the first conversation starts somewhere
-              useful.
+              A few details, so the first conversation starts somewhere useful.
             </p>
           </header>
 
@@ -104,8 +103,8 @@ export default function Investors() {
               }}
               submit="Send"
               done={{
-                title: "Thank you — that reached us.",
-                body: "A founder reads these and writes the reply, usually within two working days.",
+                title: "Enquiry received.",
+                body: "A founder reads these and replies by email.",
               }}
             />
           </div>
