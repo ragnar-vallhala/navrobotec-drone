@@ -27,22 +27,14 @@
 .stage {
   position: absolute;
   inset: 0;
-  /* One file, native, unresampled, q=96 — the point at which the encoder
-     stops being a visible contributor. q=100 costs another 85K for a
-     difference nobody can see, and lossless is 1.2MB.
-     
-     The remaining softness is not the encoder: this render is 1448px wide and
-     a full-bleed hero needs the viewport's device width, so it upscales about
-     1.3x on a 1080p window and 2.1x on a retina laptop. No encoder setting
-     fixes that — only a larger render does. Around 3000px wide would satisfy
-     every screen the site is likely to meet. */
-  background-image: url("/images/vayu-hero.webp");
-  /* Tell the browser to interpolate smoothly rather than sharpen an image it
-     is already stretching, which is what makes an upscale look like JPEG
-     artefacts rather than softness. */
-  image-rendering: auto;
+  /* Flight test frame, 2000px wide. A scrim is stacked over the photo so the
+     pale dusk sky sits inside the dark band and the header and buttons stay
+     legible; the drone is in the upper half, clear of both. */
+  background-image:
+    linear-gradient(to bottom, rgba(7, 19, 16, 0.55), rgba(7, 19, 16, 0.1) 30%, rgba(7, 19, 16, 0.3) 100%),
+    url("/images/hero-flight.webp");
   background-size: cover;
-  background-position: center 45%;
+  background-position: 50% 35%;
   background-repeat: no-repeat;
 }
 
@@ -599,8 +591,7 @@
    landscape screen and should get the landscape frame. */
 @media (orientation: portrait) and (max-width: 60rem) {
   .stage {
-    background-image: url("/images/vayu-hero-portrait.webp");
-    background-position: center 40%;
+    background-position: 50% 35%;
   }
 }
 

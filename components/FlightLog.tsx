@@ -8,32 +8,32 @@ const CLIPS = [
   {
     src: "/media/flight-day.mp4",
     poster: "/media/flight-day-poster.jpg",
-    caption: "Flight test, daylight",
+    caption: "Daylight flight test",
   },
   {
     src: "/media/flight-night.mp4",
     poster: "/media/flight-night-poster.jpg",
-    caption: "Flight test, night, September 2026",
+    caption: "Night flight, September 2026",
   },
   {
     src: "/media/flight-dusk.mp4",
     poster: "/media/flight-dusk-poster.jpg",
-    caption: "Flight test, dusk",
+    caption: "Dusk flight test",
   },
 ];
 
 const STILLS = [
   {
     src: "/media/ground-test.jpg",
-    alt: "The quadcopter on the grass before a test flight.",
-    caption: "Before a flight test",
+    alt: "Quadcopter on a grass field in daylight, before a flight test.",
+    caption: "Pre-flight, on the field",
     width: 1600,
     height: 1200,
   },
   {
     src: "/media/flight-sunset.jpg",
-    alt: "A person watching the quadcopter in the air at sunset.",
-    caption: "Flight test at sunset",
+    alt: "Operator watching the quadcopter in flight at sunset.",
+    caption: "Flight test, sunset",
     width: 1600,
     height: 900,
   },
@@ -44,8 +44,8 @@ export default function FlightLog() {
     <section className="section rule">
       <div className="shell">
         <header className={styles.head}>
-          <p className="label">On the field</p>
-          <h2 className="h1">The stack, flying.</h2>
+          <p className="label">Flight tests</p>
+          <h2 className="h1">Flight test footage</h2>
         </header>
 
         <ul className={styles.clips}>

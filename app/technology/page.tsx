@@ -143,19 +143,19 @@ export default function Technology() {
       <section className="section rule">
         <div className="shell">
           <header className={tech.head}>
-            <p className="label">The silicon</p>
-            <h2 className="h1">NAVIX X427, Rev A.</h2>
+            <p className="label">Hardware</p>
+            <h2 className="h1">NAVIX X427 Rev A</h2>
           </header>
           <figure className={tech.film}>
             <LoopVideo
               src="/media/navix-x427.mp4"
               poster="/media/navix-x427-poster.jpg"
-              label="Film of the NAVIX X427 Rev A flight controller board"
+              label="NAVIX X427 Rev A flight controller board"
               className={tech.filmVideo}
               controls
             />
             <figcaption className={`data ${tech.filmCaption}`}>
-              Board film, October 2026.
+              NAVIX X427 Rev A flight controller board
             </figcaption>
           </figure>
         </div>
