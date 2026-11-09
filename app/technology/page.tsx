@@ -46,7 +46,7 @@ const layers = [
     role: "The board it flies on",
     blurb:
       "The physical hardware the whole stack runs on — the NAVIX X427 flight controller.",
-    chips: ["STM32F401RE", "Cortex-M4F @ 84 MHz", "BMX160 IMU >1.5 kHz"],
+    chips: ["STM32F427VGT6", "Cortex-M4F @ 180 MHz", "1 MB flash · 256 KB SRAM"],
   },
 ];
 

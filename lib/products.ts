@@ -52,9 +52,7 @@ export const INTEREST_BY_SLUG: Record<string, string> = {
   "fc-f446": "NAVIX-SMF446",
   "fc-h747": "NAVIX-SMH747",
   "airframe-sub250": "Vidyut",
-  /* No product-named label for the board yet; the API already accepts this
-     one for flight controller enquiries. */
-  x427: "Flight controller hardware",
+  x427: "NAVIX X427",
 };
 
 /* The chips to offer, for the products actually on the site.
