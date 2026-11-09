@@ -10,33 +10,33 @@
 <table>
 <caption>Experimental platform configuration for VAIOS performance characterization.</caption>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: left;"><strong>Field</strong></th>
 <th style="text-align: left;"><strong>Value</strong></th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: left;">Board</td>
 <td style="text-align: left;">STM32F401RE (Nucleo-64)</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;">CPU</td>
 <td style="text-align: left;">Cortex-M4 @ 84 MHz</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;">FPU</td>
 <td style="text-align: left;">Enabled (hard-float ABI)</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;">DMA</td>
 <td style="text-align: left;">Enabled (UART logging)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;">SysTick</td>
 <td style="text-align: left;">1 ms period</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;">Build</td>
 <td style="text-align: left;">Release (-O2)</td>
 </tr>
@@ -49,7 +49,7 @@
 <table>
 <caption>VAIOS Benchmark Results Summary. All 14 tests passed, demonstrating robust subsystem integration and performance.</caption>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: left;"><strong>Benchmark</strong></th>
 <th style="text-align: center;"><strong>Status</strong></th>
 <th style="text-align: center;"><strong>Duration</strong></th>
@@ -57,79 +57,79 @@
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: left;">FPU: <code>sinf</code> throughput</td>
 <td style="text-align: center;">PASS</td>
 <td style="text-align: center;">4 ms</td>
 <td style="text-align: right;">250,000 ops/s</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;">FPU: <code>sqrtf</code> throughput</td>
 <td style="text-align: center;">PASS</td>
 <td style="text-align: center;">3 ms</td>
 <td style="text-align: right;">333,333 ops/s</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;">FPU: multi-task context-save</td>
 <td style="text-align: center;">PASS</td>
 <td style="text-align: center;">4 ms</td>
 <td style="text-align: right;">250,000 ops/s</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;">DMA: Memory-to-Memory (Looped)</td>
 <td style="text-align: center;">PASS</td>
 <td style="text-align: center;">20 ms</td>
 <td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>∼</mo><annotation encoding="application/x-tex">\sim</annotation></semantics></math>2,000 KB/s</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;">DMA: Concurrent Streams</td>
 <td style="text-align: center;">PASS</td>
 <td style="text-align: center;">21 ms</td>
 <td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>∼</mo><annotation encoding="application/x-tex">\sim</annotation></semantics></math>1,904 KB/s</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;">TASK: Context switch rate</td>
 <td style="text-align: center;">PASS</td>
 <td style="text-align: center;">212 ms</td>
 <td style="text-align: right;">3,773 sw/s</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;">TASK: Priority preemption</td>
 <td style="text-align: center;">PASS</td>
 <td style="text-align: center;">65 ms</td>
 <td style="text-align: right;">Verified</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;">TASK: Delay accuracy</td>
 <td style="text-align: center;">PASS</td>
 <td style="text-align: center;">101 ms</td>
 <td style="text-align: right;">1% Error</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;">IPC: Semaphore ping-pong</td>
 <td style="text-align: center;">PASS</td>
 <td style="text-align: center;">31 ms</td>
 <td style="text-align: right;">32,258 trips/s</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;">IPC: Mutex shared counter</td>
 <td style="text-align: center;">PASS</td>
 <td style="text-align: center;">69 ms</td>
 <td style="text-align: right;">Verified</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;">MEM: Alloc/free throughput</td>
 <td style="text-align: center;">PASS</td>
 <td style="text-align: center;">97 ms</td>
 <td style="text-align: right;">6,185 ops/s</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;">MEM: Fragmentation resilience</td>
 <td style="text-align: center;">PASS</td>
 <td style="text-align: center;">—</td>
 <td style="text-align: right;">Coalesced</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;">STRESS: All subsystems concurrent</td>
 <td style="text-align: center;">PASS</td>
 <td style="text-align: center;">8,004 ms</td>
@@ -140,7 +140,7 @@
 </div>
 <figure id="fig:memory_benchmarks">
 <img src="/docs/diagrams/tikz-8fba353af404.svg" />
-<figcaption>Aggregate memory allocation latency for varying workload sizes (Small: 1000 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>×</mo><annotation encoding="application/x-tex">\times</annotation></semantics></math> 32B, Medium: 500 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>×</mo><annotation encoding="application/x-tex">\times</annotation></semantics></math> 128B, Large: 100 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>×</mo><annotation encoding="application/x-tex">\times</annotation></semantics></math> 1024B). The linear search time is proportional to the total heap traversal depth.</figcaption>
+<figcaption>Aggregate memory allocation latency for varying workload sizes (Small: 1000 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>×</mi><annotation encoding="application/x-tex">\times</annotation></semantics></math> 32B, Medium: 500 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>×</mi><annotation encoding="application/x-tex">\times</annotation></semantics></math> 128B, Large: 100 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>×</mi><annotation encoding="application/x-tex">\times</annotation></semantics></math> 1024B). The linear search time is proportional to the total heap traversal depth.</figcaption>
 </figure>
 <p><strong>Task Scheduling:</strong> The scheduler achieved a context switch rate of approximately 3,773 switches per second under release build conditions at 84 MHz. This translates to approximately 22,000 clock cycles per context switch, including PendSV overhead and scheduler logic. Delay accuracy was measured with a 1% error margin (101 ms measured for a 100 ms requested delay), which is the theoretical limit for a 1 ms system tick.</p>
 <p><strong>Computational Performance:</strong> The hardware FPU demonstrates high efficiency, with <code>sqrtf</code> outperforming <code>sinf</code> by approximately 33%, consistent with the hardware-accelerated square root instruction set. Multi-tasking tests verified the FPU context preservation logic, with lazy stacking ensuring that only active FPU-using tasks incur the register save/restore overhead.</p>
