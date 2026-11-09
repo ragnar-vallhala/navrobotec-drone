@@ -39,12 +39,9 @@ const PILLARS = [
 export default function Vision() {
   return (
     <div className="page-flush">
-      {/* No frame: the only landscape to hand is a blurred hillside with a
-          speck of aircraft in it, which blown up to a full frame says less
-          than the band does. */}
       <Cinematic
-        src="/media/page-vision.webp"
-        focus="50% 65%"
+        src="/media/ground-test.jpg"
+        focus="50% 60%"
         kicker="The vision"
         title={
           <>

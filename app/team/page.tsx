@@ -41,8 +41,6 @@ export default function Team() {
   return (
     <div className="page-flush">
       <Cinematic
-        src="/media/page-team.webp"
-        focus="50% 60%"
         kicker="The team"
         title={<>One stack, owned end to end.</>}
         lede="Every layer between the register and the air has somebody who answers for it. Here is who."
