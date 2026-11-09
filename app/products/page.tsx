@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import ComingSoon from "@/components/ComingSoon";
 import Cinematic from "@/components/Cinematic";
 import { getCatalogue } from "@/lib/products";
 import styles from "./page.module.css";
@@ -26,12 +27,16 @@ import styles from "./page.module.css";
 export const metadata = {
   title: "Products",
   description:
-    "The hardware NAVRobotec is building around VaiOS: the NAVIX-SMF446 and NAVIX-SMH747 flight controllers.",
+    "The hardware NAVRobotec is building around VaiOS: the NAVIX X427 flight controller and the boards and airframe to follow.",
 };
 
 /* The catalogue changes without a deploy, so the page must not be baked at
    build time. */
 export const dynamic = "force-dynamic";
+
+function kindOf(product: { slug: string }) {
+  return product.slug.startsWith("airframe") ? "airframe" : "board";
+}
 
 export default async function Products() {
   const catalogue = await getCatalogue();
@@ -45,7 +50,7 @@ export default async function Products() {
         focus="50% 55%"
         kicker="Products"
         title={<>Hardware, built around the stack.</>}
-        lede="Flight controllers that run VaiOS and NavHAL because they were designed for them — the board the stack was written on, and the part it is being written towards."
+        lede="Flight controllers that run VaiOS and NavHAL because they were designed for them, starting with the NAVIX X427."
       />
 
       <section className="section">
@@ -106,7 +111,7 @@ export default async function Products() {
                       ) : (
                         /* No render on this row yet. An empty dark rectangle
                            reads as a broken image, so it says which it is. */
-                        <span className={styles.awaiting}>Render to come</span>
+                        <ComingSoon kind={kindOf(product)} />
                       )}
                     </span>
 
@@ -154,10 +159,9 @@ export default async function Products() {
           )}
 
           <p className={`small muted ${styles.caveat}`}>
-            The images are renders, not photographs — none of this has been
-            manufactured yet. Nothing here is shipping and none of it has a
-            date; the figures describe the parts these are built around, and
-            anything measured on our own hardware is in{" "}
+            Images are renders, not photographs. Dates and availability are
+            not published here; write to us to ask. Anything measured on our
+            own hardware is in{" "}
             <Link
               href="/docs/report/vaios/vaios-performance"
               className={styles.link}

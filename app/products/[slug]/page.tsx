@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import ComingSoon from "@/components/ComingSoon";
 import InterestDialog from "@/components/InterestDialog";
 import { getCatalogue, INTEREST_BY_SLUG, interestsFor } from "@/lib/products";
 import styles from "./product.module.css";
@@ -129,7 +130,9 @@ export default async function ProductPage({
               ) : (
                 /* The row has no render yet. An empty dark rectangle reads as
                    a broken image, so it says which it is. */
-                <span className={styles.awaiting}>Render to come</span>
+                <ComingSoon
+                  kind={product.slug.startsWith("airframe") ? "airframe" : "board"}
+                />
               )}
             </div>
 
@@ -166,9 +169,9 @@ export default async function ProductPage({
               ) : null}
 
               <InterestDialog
-                label="Register interest"
-                title="Waiting on this one?"
-                lede="What gets built first is decided by who is waiting for it. No obligation and no mailing list — this reaches an engineer, and the reply comes from one."
+                label="Enquire"
+                title="Ask about this one"
+                lede="No obligation and no mailing list — this reaches an engineer, and the reply comes from one."
                 interest={interest}
                 options={interestsFor(catalogue.products)}
               />
@@ -191,10 +194,9 @@ export default async function ProductPage({
             </dl>
 
             <p className={`small muted ${styles.caveat}`}>
-              The image is a render, not a photograph — this has not been
-              manufactured. Nothing here is shipping and none of it has a date;
-              the figures describe the parts it is built around, and anything
-              measured on our own hardware is in{" "}
+              The image is a render, not a photograph. Dates and availability
+              are not published here; use Enquire to ask. Anything measured on
+              our own hardware is in{" "}
               <Link
                 href="/docs/report/vaios/vaios-performance"
                 className={styles.link}
@@ -224,7 +226,12 @@ export default async function ProductPage({
                           sizes="12rem"
                           className={styles.render}
                         />
-                      ) : null}
+                      ) : (
+                        <ComingSoon
+                          compact
+                          kind={other.slug.startsWith("airframe") ? "airframe" : "board"}
+                        />
+                      )}
                     </span>
                     <span className={styles.alsoBody}>
                       <span className={`h3 ${styles.alsoName}`}>{other.name}</span>

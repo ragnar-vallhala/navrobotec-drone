@@ -52,6 +52,9 @@ export const INTEREST_BY_SLUG: Record<string, string> = {
   "fc-f446": "NAVIX-SMF446",
   "fc-h747": "NAVIX-SMH747",
   "airframe-sub250": "Vidyut",
+  /* No product-named label for the board yet; the API already accepts this
+     one for flight controller enquiries. */
+  x427: "Flight controller hardware",
 };
 
 /* The chips to offer, for the products actually on the site.
@@ -78,6 +81,35 @@ export function interestsFor(products: Product[]): string[] {
  * requests a minute and this fetch is server-side, so every visitor shares a
  * single bucket: a product page that asked for its own row and then for the
  * rest of the catalogue would spend two of those five on one page view. */
+/* NAVIX X427 ships with the site, so it is listed whether or not the API's
+   products table has a row for it. When the table does (db/010 in the api
+   repo), that row wins and this one is not used. */
+const X427: Product = {
+  id: "bundled-x427",
+  slug: "x427",
+  name: "NAVIX X427",
+  part: "Rev A",
+  kicker: "Flight controller",
+  summary: "The flight controller board the VaiOS and NavHAL stack runs on.",
+  status: "Available to enquire",
+  image: "",
+  imageIsRender: true,
+  specs: [
+    { label: "Board", value: "NAVIX X427 flight controller, Rev A" },
+    { label: "Size", value: "84.9 x 44.1 mm" },
+    { label: "Layers", value: "4" },
+    {
+      label: "Interfaces",
+      value:
+        "USB-C, microSD, CAN, 3x I2C, SPI, RC, GPS, TELEM1, SERIAL4, ADC, PWM main and aux, debug",
+    },
+    { label: "Stack", value: "NavHAL / VaiOS / VAYU" },
+  ],
+  published: true,
+  placeholder: false,
+  updatedAt: "2026-11-09T00:00:00Z",
+};
+
 export type Catalogue =
   | { status: "ok"; products: Product[] }
   | { status: "unavailable" };
@@ -99,10 +131,17 @@ export async function getCatalogue(): Promise<Catalogue> {
           status: "ok",
           /* A row with no image of its own takes the render bundled with the
              site for that slug. */
-          products: (products as Product[]).map((p) => ({
-            ...p,
-            image: p.image || PRODUCT_IMAGES[p.slug] || "",
-          })),
+          products: [
+            ...(products as Product[]),
+            ...((products as Product[]).some((p) => p.slug === X427.slug)
+              ? []
+              : [X427]),
+          ]
+            .map((p) => ({
+              ...p,
+              image: p.image || PRODUCT_IMAGES[p.slug] || "",
+            }))
+            .sort((a, b) => (a.slug === X427.slug ? -1 : b.slug === X427.slug ? 1 : 0)),
         }
       : { status: "unavailable" };
   } catch {

@@ -50,7 +50,7 @@ const STACK = [
     tier: "L0",
     name: "Silicon",
     role: "The board it flies on",
-    body: "The physical hardware the whole stack runs on — a reference board today, in-house boards next.",
+    body: "The physical hardware the whole stack runs on — the NAVIX X427 flight controller.",
     facts: ["STM32F401RE", "Cortex-M4F @ 84 MHz", "BMX160 IMU >1.5 kHz"],
   },
 ];

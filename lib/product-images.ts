@@ -4,5 +4,6 @@
 export const PRODUCT_IMAGES: Record<string, string> = {
   "navix-smf446": "/images/product-navix-smf446.3df15d80.webp",
   "navix-smh747": "/images/product-navix-smh747.558e141d.webp",
+  "x427": "/images/product-x427.61560150.webp", // scripts/make-x427-image.py
   "vidyut": "/images/product-vidyut.046b1326.webp",
 };

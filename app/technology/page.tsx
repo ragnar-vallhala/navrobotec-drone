@@ -45,7 +45,7 @@ const layers = [
     name: "Silicon",
     role: "The board it flies on",
     blurb:
-      "The physical hardware the whole stack runs on — a reference board today, in-house boards next.",
+      "The physical hardware the whole stack runs on — the NAVIX X427 flight controller.",
     chips: ["STM32F401RE", "Cortex-M4F @ 84 MHz", "BMX160 IMU >1.5 kHz"],
   },
 ];

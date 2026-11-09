@@ -1,0 +1,27 @@
+.root {
+  position: absolute;
+  inset: 0;
+  display: block;
+  color: var(--band-muted);
+}
+.art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.label {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 12%;
+  text-align: center;
+  font-family: var(--font-data);
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--band-muted);
+}
+.root[data-compact] .label {
+  display: none;
+}
