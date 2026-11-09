@@ -2,6 +2,8 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import tech from "./technology.module.css";
 import Cinematic from "@/components/Cinematic";
+import LoopVideo from "@/components/LoopVideo";
+import FlightLog from "@/components/FlightLog";
 import { PAGE_IMAGES } from "@/lib/page-images";
 
 export const metadata: Metadata = {
@@ -137,6 +139,29 @@ export default function Technology() {
           </ol>
         </div>
       </section>
+
+      <section className="section rule">
+        <div className="shell">
+          <header className={tech.head}>
+            <p className="label">The silicon</p>
+            <h2 className="h1">NAVIX X427, Rev A.</h2>
+          </header>
+          <figure className={tech.film}>
+            <LoopVideo
+              src="/media/navix-x427.mp4"
+              poster="/media/navix-x427-poster.jpg"
+              label="Film of the NAVIX X427 Rev A flight controller board"
+              className={tech.filmVideo}
+              controls
+            />
+            <figcaption className={`data ${tech.filmCaption}`}>
+              Board film, October 2026.
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <FlightLog />
 
       <section className="section rule">
         <div className="shell">

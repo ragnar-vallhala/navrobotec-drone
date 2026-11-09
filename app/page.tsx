@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import ScrollSteps from "@/components/ScrollSteps";
+import FlightLog from "@/components/FlightLog";
 import { PAGE_IMAGES } from "@/lib/page-images";
 import styles from "./page.module.css";
 
@@ -401,6 +402,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <FlightLog />
 
       {/* ---------------- join ---------------- */}
       <section className="section rule">
