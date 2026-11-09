@@ -1,10 +1,14 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import BoardPhoto from "@/components/BoardPhoto";
 import ComingSoon from "@/components/ComingSoon";
 import InterestDialog from "@/components/InterestDialog";
-import { PRODUCT_MEDIA } from "@/lib/product-media";
+import {
+  hasDetails,
+  kindLabel,
+  kindOf,
+  PRODUCT_MEDIA,
+} from "@/lib/product-media";
 import { getCatalogue, INTEREST_BY_SLUG, interestsFor } from "@/lib/products";
 import styles from "./product.module.css";
 
@@ -38,7 +42,9 @@ export async function generateMetadata({
 
   return {
     title: product.name,
-    description: product.summary || product.kicker || undefined,
+    description: hasDetails(product.slug)
+      ? product.summary || product.kicker || undefined
+      : undefined,
     /* No og:image. The renders are transparent PNGs keyed to sit on a dark
        band; a share card composites them on whatever it likes, and a board
        cut out against white nothing is a worse advertisement than no image. */
@@ -63,14 +69,13 @@ export default async function ProductPage({
         <section className="section">
           <div className="shell">
             <p className="label">Products</p>
-            <h1 className="h1">The catalogue is not answering.</h1>
+            <h1 className="h1">The catalogue could not be loaded.</h1>
             <p className="lede">
-              This is at our end, not yours — the product you were after does
-              exist. Try again in a moment, or{" "}
+              Try again shortly, or{" "}
               <Link href="/contact" className={styles.link}>
                 write to us
-              </Link>{" "}
-              and we will send its specifications directly.
+              </Link>
+              .
             </p>
             <p className={styles.back}>
               <Link href="/products" className={styles.link}>
@@ -93,7 +98,9 @@ export default async function ProductPage({
      must not tell a reader that the product they were linked to never existed. */
   if (!product) notFound();
 
+  const details = hasDetails(product.slug);
   const media = PRODUCT_MEDIA[product.slug];
+  const kind = kindOf(product.slug);
   const interest = INTEREST_BY_SLUG[product.slug];
   const siblings = catalogue.products.filter(
     (other) => other.slug !== product.slug,
@@ -101,7 +108,7 @@ export default async function ProductPage({
 
   return (
     <div className="page">
-      <section className="section-tight">
+      <section className={styles.crumbSection}>
         <div className="shell">
           <nav className={styles.crumbs} aria-label="Breadcrumb">
             <Link href="/products" className={styles.crumb}>
@@ -117,7 +124,7 @@ export default async function ProductPage({
         </div>
       </section>
 
-      <section className="section-tight">
+      <section className={styles.leadSection}>
         <div className="shell">
           <div className={styles.lead}>
             <div className={styles.visual}>
@@ -128,21 +135,10 @@ export default async function ProductPage({
                     sizes="(max-width: 60rem) 100vw, 34rem"
                     priority
                   />
-                ) : product.image ? (
-                  <Image
-                    src={product.image}
-                    alt={`${product.name}, a render`}
-                    fill
-                    sizes="(max-width: 60rem) 100vw, 34rem"
-                    className={styles.render}
-                    priority
-                  />
                 ) : (
-                  /* The row has no render yet. An empty dark rectangle reads as
-                     a broken image, so it says which it is. */
-                  <ComingSoon
-                    kind={product.slug.startsWith("airframe") ? "airframe" : "board"}
-                  />
+                  /* No published render. An empty dark rectangle reads as a
+                     broken image, so it says which it is. */
+                  <ComingSoon kind={kind} />
                 )}
               </div>
 
@@ -161,51 +157,48 @@ export default async function ProductPage({
             </div>
 
             <div className={styles.intro}>
-              {product.kicker ? (
-                <p className="label label-signal">{product.kicker}</p>
-              ) : null}
+              <p className="label label-signal">
+                {details && product.kicker ? product.kicker : kindLabel(product.slug)}
+              </p>
               <h1 className={`h1 ${styles.name}`}>{product.name}</h1>
 
               <p className={styles.meta}>
-                {product.part ? (
-                  <span className={`data ${styles.part}`}>{product.part}</span>
-                ) : null}
-                {product.status ? (
-                  <span className={`data ${styles.status}`}>
-                    {product.status}
-                  </span>
-                ) : null}
-                {product.placeholder ? (
-                  <span className={`data ${styles.flag}`}>Placeholder</span>
-                ) : null}
+                {details ? (
+                  <>
+                    {product.part ? (
+                      <span className={`data ${styles.part}`}>{product.part}</span>
+                    ) : null}
+                    {product.status ? (
+                      <span className={`data ${styles.status}`}>
+                        {product.status}
+                      </span>
+                    ) : null}
+                  </>
+                ) : (
+                  <span className={`data ${styles.soon}`}>Coming soon</span>
+                )}
               </p>
 
-              {product.summary ? (
+              {details && product.summary ? (
                 <p className={`lede ${styles.summary}`}>{product.summary}</p>
               ) : null}
 
-              {product.placeholder ? (
-                <p role="note" className={styles.notice}>
-                  <strong>Placeholder data.</strong> This entry still carries
-                  seeded stand-in copy and specifications. Treat the figures
-                  below as illustrative until this notice is gone.
-                </p>
-              ) : null}
-
+              <div className={styles.actions}>
               <InterestDialog
                 label="Enquire"
-                title="Ask about this one"
-                lede="No obligation and no mailing list — this reaches an engineer, and the reply comes from one."
+                title={`Enquire about ${product.name}`}
+                lede="Your message goes to an engineer, and the reply comes from one."
                 interest={interest}
                 options={interestsFor(catalogue.products)}
               />
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {product.specs.length > 0 ? (
-        <section className="section rule">
+      {details && product.specs.length > 0 ? (
+        <section className="section-tight rule">
           <div className="shell">
             <h2 className={`h2 ${styles.specsHead}`}>Specifications</h2>
             <dl className={styles.specs}>
@@ -217,10 +210,8 @@ export default async function ProductPage({
               ))}
             </dl>
 
-            <p className={`small muted ${styles.caveat}`}>
-              The image is a render, not a photograph. Dates and availability
-              are not published here; use Enquire to ask. Anything measured on
-              our own hardware is in{" "}
+            <p className={`small ${styles.caveat}`}>
+              The images are renders. Measured results are in{" "}
               <Link
                 href="/docs/report/vaios/vaios-performance"
                 className={styles.link}
@@ -234,34 +225,32 @@ export default async function ProductPage({
       ) : null}
 
       {siblings.length > 0 ? (
-        <section className="section rule">
+        <section className="section-tight rule">
           <div className="shell">
-            <h2 className={`label ${styles.alsoHead}`}>The rest of it</h2>
+            <h2 className={`label ${styles.alsoHead}`}>Other products</h2>
             <ul className={styles.also}>
               {siblings.map((other) => (
                 <li key={other.id}>
                   <Link href={`/products/${other.slug}`} className={styles.alsoCard}>
                     <span className={styles.alsoFrame}>
-                      {other.image ? (
-                        <Image
-                          src={other.image}
-                          alt=""
-                          fill
+                      {hasDetails(other.slug) ? (
+                        <BoardPhoto
+                          shot={PRODUCT_MEDIA[other.slug].card}
                           sizes="12rem"
-                          className={styles.render}
                         />
                       ) : (
-                        <ComingSoon
-                          compact
-                          kind={other.slug.startsWith("airframe") ? "airframe" : "board"}
-                        />
+                        <ComingSoon compact kind={kindOf(other.slug)} />
                       )}
                     </span>
                     <span className={styles.alsoBody}>
                       <span className={`h3 ${styles.alsoName}`}>{other.name}</span>
-                      {other.part ? (
-                        <span className={`data ${styles.part}`}>{other.part}</span>
-                      ) : null}
+                      {hasDetails(other.slug) ? (
+                        other.part ? (
+                          <span className={`data ${styles.part}`}>{other.part}</span>
+                        ) : null
+                      ) : (
+                        <span className={`data ${styles.soon}`}>Coming soon</span>
+                      )}
                     </span>
                   </Link>
                 </li>

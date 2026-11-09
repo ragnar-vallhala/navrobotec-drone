@@ -107,21 +107,21 @@ export default function InterestDialog({
                 { name: "email", label: "Email", type: "email", autoComplete: "email", required: true },
                 { name: "company", label: "Company or team", type: "text", autoComplete: "organization", wide: true },
               ]}
-              interests={{ legend: "Which of these", options }}
+              interests={{ legend: "Products", options }}
               /* Ticked on arrival, because the visitor opened this from the
                  product's own page. The others stay available: someone who
                  wants the H747 often wants the airframe too. */
               defaultInterests={interest ? [interest] : []}
               message={{
-                label: "What would you use it for?",
+                label: "What is it for?",
                 placeholder:
-                  "The aircraft, the payload, the environment, how many — whatever would help us build the right one first.",
+                  "Aircraft, payload, environment and quantity.",
                 rows: 4,
               }}
-              submit="Register interest"
+              submit="Send enquiry"
               done={{
-                title: "Thank you — that reached us.",
-                body: "You are on the list for it. We write when there is something real to show, not before.",
+                title: "Enquiry received.",
+                body: "We will reply by email.",
               }}
             />
           ) : null}

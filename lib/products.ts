@@ -31,8 +31,7 @@ export type Product = {
   imageIsRender: boolean;
   specs: Spec[];
   published: boolean;
-  /* True while the row still holds the seeded stand-in copy. The page says so
-     rather than presenting invented specifications as settled. */
+  /* Returned by the API; the site does not display it. */
   placeholder: boolean;
   updatedAt: string;
 };

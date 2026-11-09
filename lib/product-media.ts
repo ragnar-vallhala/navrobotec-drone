@@ -49,3 +49,18 @@ export const PRODUCT_MEDIA: Record<
     card: PRODUCTS_OPENING.narrow,
   },
 };
+
+/* A product has published details when it has its own renders. Every other
+   product is listed by name only, with a Coming soon frame, until its details
+   are published. */
+export function hasDetails(slug: string): boolean {
+  return slug in PRODUCT_MEDIA;
+}
+
+export function kindOf(slug: string): "board" | "airframe" {
+  return slug.startsWith("airframe") ? "airframe" : "board";
+}
+
+export function kindLabel(slug: string): string {
+  return kindOf(slug) === "airframe" ? "Airframe" : "Flight controller";
+}

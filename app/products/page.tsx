@@ -1,9 +1,14 @@
-import Image from "next/image";
 import Link from "next/link";
 import ComingSoon from "@/components/ComingSoon";
 import BoardPhoto from "@/components/BoardPhoto";
 import Cinematic from "@/components/Cinematic";
-import { PRODUCT_MEDIA, PRODUCTS_OPENING } from "@/lib/product-media";
+import {
+  hasDetails,
+  kindLabel,
+  kindOf,
+  PRODUCT_MEDIA,
+  PRODUCTS_OPENING,
+} from "@/lib/product-media";
 import { getCatalogue } from "@/lib/products";
 import styles from "./page.module.css";
 
@@ -36,14 +41,9 @@ export const metadata = {
    build time. */
 export const dynamic = "force-dynamic";
 
-function kindOf(product: { slug: string }) {
-  return product.slug.startsWith("airframe") ? "airframe" : "board";
-}
-
 export default async function Products() {
   const catalogue = await getCatalogue();
   const products = catalogue.status === "ok" ? catalogue.products : [];
-  const anyPlaceholder = products.some((product) => product.placeholder);
 
   return (
     <div className="page-flush">
@@ -64,40 +64,30 @@ export default async function Products() {
 
       <section className="section">
         <div className="shell">
-          {anyPlaceholder ? (
-            /* Loud, and it disappears on its own: it is driven by the
-               `placeholder` column, so clearing the flag on the last row
-               removes the notice. Nobody has to remember to delete it. */
-            <p role="note" className={styles.notice}>
-              <strong>Placeholder data.</strong> Some entries below still carry
-              the seeded stand-in copy and specifications. They are marked, and
-              this notice clears itself once the last one is corrected.
-            </p>
-          ) : null}
-
           {catalogue.status === "unavailable" ? (
             <p className={styles.empty}>
-              The catalogue could not be loaded just now. Please{" "}
+              The catalogue could not be loaded. Try again shortly, or{" "}
               <Link href="/contact" className={styles.link}>
                 write to us
-              </Link>{" "}
-              and we will send it to you directly.
+              </Link>
+              .
             </p>
           ) : products.length === 0 ? (
             /* Answered, and empty. Not the same thing as unreachable, and not
                the same sentence: nothing is broken, there is just nothing here
                yet. */
             <p className={styles.empty}>
-              Nothing is listed yet. What we are building is described in{" "}
+              No products are listed yet. The stack they run is described in{" "}
               <Link href="/technology" className={styles.link}>
-                the technology
+                Technology
               </Link>
-              , and we will list the hardware here when there is something to
-              say about it.
+              .
             </p>
           ) : (
             <ul className={styles.grid}>
-              {products.map((product, index) => (
+              {products.map((product, index) => {
+                const details = hasDetails(product.slug);
+                return (
                 /* The whole card is the link, so the target is the card rather
                    than a four-word phrase inside it. One anchor per card, too:
                    a nested "read more" would put two links on one destination
@@ -109,73 +99,67 @@ export default async function Products() {
                 >
                   <Link href={`/products/${product.slug}`} className={styles.card}>
                     <span className={styles.frame}>
-                      {PRODUCT_MEDIA[product.slug] ? (
+                      {details ? (
                         <BoardPhoto
                           shot={PRODUCT_MEDIA[product.slug].card}
                           sizes="(max-width: 48rem) 100vw, (max-width: 72rem) 50vw, 24rem"
                         />
-                      ) : product.image ? (
-                        <Image
-                          src={product.image}
-                          alt=""
-                          fill
-                          sizes="(max-width: 48rem) 100vw, (max-width: 72rem) 50vw, 24rem"
-                          className={styles.render}
-                        />
                       ) : (
                         /* No render on this row yet. An empty dark rectangle
                            reads as a broken image, so it says which it is. */
-                        <ComingSoon kind={kindOf(product)} />
+                        <ComingSoon kind={kindOf(product.slug)} />
                       )}
                     </span>
 
                     <span className={styles.body}>
-                      <span className={`h3 ${styles.name}`}>{product.name}</span>
-                      {product.kicker ? (
-                        <span className={`label ${styles.role}`}>
-                          {product.kicker}
-                        </span>
-                      ) : null}
+                      <span className={`label ${styles.role}`}>
+                        {details && product.kicker
+                          ? product.kicker
+                          : kindLabel(product.slug)}
+                      </span>
+                      <h2 className={`h3 ${styles.name}`}>{product.name}</h2>
 
                       <span className={styles.meta}>
-                        {product.part ? (
-                          <span className={`data ${styles.part}`}>
-                            {product.part}
+                        {details ? (
+                          <>
+                            {product.part ? (
+                              <span className={`data ${styles.part}`}>
+                                {product.part}
+                              </span>
+                            ) : null}
+                            {product.status ? (
+                              <span className={`data ${styles.status}`}>
+                                {product.status}
+                              </span>
+                            ) : null}
+                          </>
+                        ) : (
+                          <span className={`data ${styles.soon}`}>
+                            Coming soon
                           </span>
-                        ) : null}
-                        {product.status ? (
-                          <span className={`data ${styles.status}`}>
-                            {product.status}
-                          </span>
-                        ) : null}
-                        {product.placeholder ? (
-                          <span className={`data ${styles.flag}`}>
-                            Placeholder
-                          </span>
-                        ) : null}
+                        )}
                       </span>
 
-                      {product.summary ? (
+                      {details && product.summary ? (
                         <span className={styles.summary}>{product.summary}</span>
                       ) : null}
 
                       <span className={styles.more} aria-hidden>
-                        {product.specs.length > 0
+                        {details && product.specs.length > 0
                           ? `${product.specs.length} specifications`
-                          : "Details"}
+                          : "View"}
                         <span className={styles.arrow}>&rarr;</span>
                       </span>
                     </span>
                   </Link>
                 </li>
-              ))}
+                );
+              })}
             </ul>
           )}
 
-          <p className={`small muted ${styles.caveat}`}>
-            Images are renders, not photographs. Dates and availability are
-            not published here; write to us to ask. Anything measured on our
-            own hardware is in{" "}
+          <p className={`small ${styles.caveat}`}>
+            Images are renders. Measured results are in{" "}
             <Link
               href="/docs/report/vaios/vaios-performance"
               className={styles.link}

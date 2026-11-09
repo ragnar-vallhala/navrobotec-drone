@@ -11,10 +11,15 @@
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
-.crumb { color: var(--signal); text-decoration: none; }
+.crumb { color: var(--signal-deep); text-decoration: none; }
 .crumb:hover { text-decoration: underline; text-underline-offset: 0.25em; }
-.sep { color: var(--line-strong); }
-.here { color: var(--muted); }
+.sep { color: var(--muted); }
+.here { color: var(--ink-2); }
+
+.crumbSection { padding-top: clamp(1.5rem, 3vw, 2.25rem); }
+.leadSection {
+  padding-block: clamp(1.5rem, 3vw, 2.5rem) clamp(3rem, 6vw, 4.5rem);
+}
 
 /* --- the lead ----------------------------------------------------------------
    Render and copy side by side. A reader who followed a card has already seen
@@ -58,7 +63,7 @@
 }
 
 .intro { min-width: 0; }
-.name { margin-top: 0.75rem; letter-spacing: -0.03em; }
+.name { margin-top: 0.5rem; letter-spacing: -0.03em; }
 
 .meta {
   display: flex;
@@ -85,36 +90,19 @@
   background: var(--signal-wash);
   color: var(--signal-deep);
 }
-.flag {
+.soon {
   padding: 0.25rem 0.625rem;
+  border: 1px dashed var(--line-strong);
   border-radius: 999px;
   font-size: 0.6875rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  background: #c0392b;
-  color: #fff;
+  color: var(--ink-2);
 }
 
 .summary { margin-top: 1.25rem; max-width: 40rem; color: var(--ink-2); }
 
-/* Per-product, and not emerald: emerald is this site's signal for a live
-   value, and this is a warning about the values below it. */
-.notice {
-  margin-top: 1.5rem;
-  padding: 0.9375rem 1.125rem;
-  border: 1px solid var(--line-strong);
-  border-left: 3px solid #c0392b;
-  border-radius: var(--radius);
-  background: var(--card);
-  font-size: 0.9375rem;
-  line-height: 1.6;
-  color: var(--ink-2);
-  max-width: 40rem;
-}
-.notice strong { color: var(--ink); }
-:global([data-theme="dark"]) .notice { border-left-color: #ff8a7a; }
-
-.intro .btn, .intro a[class*="btn"] { margin-top: clamp(1.5rem, 3vw, 2rem); }
+.actions { margin-top: clamp(1.5rem, 3vw, 2rem); }
 
 /* --- specifications ----------------------------------------------------------
    An instrument readout: the value leads and the label sits under it small,
@@ -138,17 +126,17 @@
   display: grid;
   gap: 0.3125rem;
 }
-.specValue { margin: 0; font-size: 1rem; color: var(--ink); line-height: 1.4; }
-.specLabel { display: block; color: var(--muted); }
+.specValue { margin: 0; font-size: 0.9375rem; color: var(--ink); line-height: 1.4; }
+.specLabel { display: block; color: var(--ink-2); }
 
 .caveat { margin-top: clamp(2rem, 4vw, 3rem); max-width: 46rem; }
-.link { color: var(--signal); text-decoration: underline; text-underline-offset: 2px; }
+.link { color: var(--signal-deep); text-decoration: underline; text-underline-offset: 2px; }
 .back { margin-top: 2rem; }
 
 /* --- the rest of the catalogue -----------------------------------------------
    Deliberately smaller than a card on the index: this is a way out of the page,
    not a second catalogue competing with the product it sits under. */
-.alsoHead { display: block; margin-bottom: 1.5rem; color: var(--muted); }
+.alsoHead { display: block; margin: 0 0 1.5rem; color: var(--ink-2); }
 .also {
   list-style: none;
   margin: 0;
@@ -181,7 +169,7 @@
 }
 .alsoBody { display: flex; flex-direction: column; gap: 0.5rem; min-width: 0; }
 .alsoName { display: block; color: var(--ink); letter-spacing: -0.01em; }
-.alsoBody .part { align-self: flex-start; }
+.alsoBody .part, .alsoBody .soon { align-self: flex-start; }
 
 @media (min-width: 60rem) {
   /* Two columns only when the render can be large enough to be worth looking
@@ -189,18 +177,6 @@
   .lead { grid-template-columns: minmax(0, 34rem) minmax(0, 1fr); gap: clamp(2.5rem, 5vw, 4rem); }
 }
 
-/* The frame with nothing in it yet. Centred, quiet, and on the band, so a row
-   without a render reads as pending rather than failed. */
-.awaiting {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  padding: 1rem;
-  font-family: var(--font-data);
-  font-size: 0.6875rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--band-muted);
-  text-align: center;
+@media (max-width: 30rem) {
+  .actions :global(.btn) { width: 100%; }
 }
