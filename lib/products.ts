@@ -1,4 +1,5 @@
 import "server-only";
+import { PRODUCT_IMAGES } from "./product-images";
 
 /* The catalogue, read from the API at request time.
  *
@@ -94,7 +95,15 @@ export async function getCatalogue(): Promise<Catalogue> {
     const body = await response.json();
     const products = body?.data?.products;
     return Array.isArray(products)
-      ? { status: "ok", products: products as Product[] }
+      ? {
+          status: "ok",
+          /* A row with no image of its own takes the render bundled with the
+             site for that slug. */
+          products: (products as Product[]).map((p) => ({
+            ...p,
+            image: p.image || PRODUCT_IMAGES[p.slug] || "",
+          })),
+        }
       : { status: "unavailable" };
   } catch {
     /* The API is down, or this is a build machine with no API to reach. The
