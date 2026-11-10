@@ -1,8 +1,9 @@
 /**
  * Canonical site origin, used for sitemap, robots.txt and metadata.
  *
- * This site is the flight stack — navrobotec.in. navrobotec.com is the
- * services company, which is a different site in a different repository.
+ * navrobotec.in is the canonical host. navrobotec.com serves the same site, so
+ * metadata, the sitemap and robots.txt always name .in: search engines then
+ * treat the two names as one.
  *
  * Override per-environment with NEXT_PUBLIC_SITE_URL (a preview URL, a local
  * host). Empty counts as unset: `??` alone falls back only on undefined, and

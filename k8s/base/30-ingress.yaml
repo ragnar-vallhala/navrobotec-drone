@@ -1,4 +1,5 @@
-# navrobotec.in — the drone and flight-stack arm.
+# navrobotec.in and navrobotec.com — one site, served from both names.
+# (navrobotec.in is the canonical host: see lib/site.ts.)
 #
 # This Ingress owns the certificate for both names. The API's own Ingress adds
 # /api/ on these same hosts and deliberately carries no TLS block, so there is
@@ -37,8 +38,35 @@ spec:
                 name: navrobotec-drone
                 port:
                   name: http
+    - host: navrobotec.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: navrobotec-drone
+                port:
+                  name: http
+    - host: www.navrobotec.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: navrobotec-drone
+                port:
+                  name: http
   tls:
     - secretName: navrobotec-drone-tls
       hosts:
         - navrobotec.in
         - www.navrobotec.in
+    # navrobotec.com serves this same site. A second secret, so the certificate
+    # for navrobotec.in is not reissued (and not put at risk) when these names
+    # are added.
+    - secretName: navrobotec-drone-com-tls
+      hosts:
+        - navrobotec.com
+        - www.navrobotec.com
