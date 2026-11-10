@@ -5,9 +5,9 @@ import { getChapters, readDocFile } from "@/lib/docs";
 import styles from "../DocsPage.module.css";
 
 export const metadata: Metadata = {
-  title: "Vayu Technical Report",
+  title: "VAYU Technical Report",
   description:
-    "Technical report for the Vayu flight control stack — system architecture, hardware, and the NavHAL and VaiOS platform.",
+    "Technical report for the VAYU flight control stack — system architecture, hardware, and the NavHAL and VaiOS platform.",
 };
 
 export default function ReportIndex() {
@@ -19,7 +19,7 @@ export default function ReportIndex() {
         <Link href="/docs" className={styles.label}>
           <ArrowLeft size={12} /> Documentation
         </Link>
-        <h1 className={styles.title}>Vayu Technical Report</h1>
+        <h1 className={styles.title}>VAYU Technical Report</h1>
       </header>
 
       <p className={styles.lead}>
@@ -85,7 +85,7 @@ export default function ReportIndex() {
             <FileText size={20} className={styles.downloadIcon} />
             <span className={styles.downloadText}>
               <span className={styles.downloadTitle}>
-                Vayu Technical Report
+                VAYU Technical Report
               </span>
               <span className={styles.downloadMeta}>PDF · v0.1.1 · 5.8 MB</span>
             </span>

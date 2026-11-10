@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
-import BookPlaceholder from "../BookPlaceholder";
+import BookInPreparation from "../BookInPreparation";
 import { getBook } from "@/lib/docs";
 
 export function generateMetadata(): Metadata {
   const book = getBook("vaios");
   return {
     title: `${book?.title ?? "VaiOS Guide"}`,
+    // Reachable, but kept out of search until the guide is written.
+    robots: { index: false, follow: true },
     description:
       book?.description ??
       "Tutorial-style walkthrough of the VaiOS real-time kernel.",
@@ -13,5 +15,5 @@ export function generateMetadata(): Metadata {
 }
 
 export default function VaiosBookPage() {
-  return <BookPlaceholder slug="vaios" />;
+  return <BookInPreparation slug="vaios" />;
 }

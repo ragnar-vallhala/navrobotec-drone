@@ -5,13 +5,13 @@ import layout from "./DocsLayout.module.css";
 import styles from "./DocsPage.module.css";
 
 /**
- * A book whose guide has not been written yet.
+ * A guide that is still in preparation.
  *
  * It does not apologise and stop. The same material exists in reference form
  * in the report, so the page's job is to hand the reader that chapter rather
  * than to tell them to come back later.
  */
-export default function BookPlaceholder({ slug }: { slug: string }) {
+export default function BookInPreparation({ slug }: { slug: string }) {
   const book = getBook(slug);
   if (!book) return null;
 
@@ -33,8 +33,8 @@ export default function BookPlaceholder({ slug }: { slug: string }) {
           <p className={styles.lead}>{book.description}</p>
 
           <p className={styles.pending}>
-            This guide is being written. Until it lands, the reference material
-            it is drawn from is already published.
+            This guide is in preparation. In the meantime, the reference
+            material it draws on is published in the technical report.
           </p>
 
           {chapter && (

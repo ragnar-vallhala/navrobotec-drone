@@ -8,7 +8,7 @@ import styles from "./DocsPage.module.css";
 export const metadata: Metadata = {
   title: "Documentation",
   description:
-    "Documentation for the VaiOS stack — the Vayu technical report plus per-layer guides for NavHAL, VaiOS, and Vayu.",
+    "Documentation for the VaiOS stack — the VAYU technical report plus per-layer guides for NavHAL, VaiOS, and VAYU.",
 };
 
 /* The hub.
@@ -37,7 +37,7 @@ export default function DocsHub() {
             VaiOS is our sovereign robotics runtime, built from the silicon up.
             The technical report is the reference; the per-layer guides walk
             through the same ground in the order you would learn it — NavHAL at
-            the hardware, the VaiOS core above it, Vayu in the air.
+            the hardware, the VaiOS core above it, VAYU in the air.
           </p>
 
           {report && (
@@ -67,7 +67,7 @@ export default function DocsHub() {
                   <p className={styles.bookDesc}>{b.description}</p>
                   <span className={styles.bookFooter}>
                     {b.comingSoon ? (
-                      <span className={styles.soon}>In progress</span>
+                      <span className={styles.soon}>In preparation</span>
                     ) : (
                       <span className={styles.bookCta}>
                         Open <ArrowRight size={14} />
@@ -109,7 +109,7 @@ export default function DocsHub() {
                 <FileText size={20} className={styles.downloadIcon} />
                 <span className={styles.downloadText}>
                   <span className={styles.downloadTitle}>
-                    Vayu Technical Report
+                    VAYU Technical Report
                   </span>
                   <span className={styles.downloadMeta}>
                     PDF · v0.1.1 · 5.8 MB

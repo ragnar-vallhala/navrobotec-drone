@@ -18,8 +18,8 @@ export async function generateMetadata({
   const found = getChapters().find((c) => c.slug === chapter);
   if (!found) return {};
   return {
-    title: `${found.title} · Vayu Technical Report`,
-    description: `${found.title} — technical documentation for the Vayu flight control stack.`,
+    title: `${found.title} · VAYU Technical Report`,
+    description: `${found.title} — technical documentation for the VAYU flight control stack.`,
   };
 }
 

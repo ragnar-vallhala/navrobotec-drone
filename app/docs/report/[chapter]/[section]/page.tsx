@@ -22,7 +22,7 @@ export async function generateMetadata({
   if (!ch || !sec) return {};
   return {
     title: `${sec.title} · ${ch.title}`,
-    description: `${sec.title}, part of ${ch.title} — technical documentation for the Vayu flight control stack.`,
+    description: `${sec.title}, part of ${ch.title} — technical documentation for the VAYU flight control stack.`,
   };
 }
 
