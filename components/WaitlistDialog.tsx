@@ -58,7 +58,7 @@ type Joined = {
 const DUPLICATE =
   "That email address is already on the X427 waitlist. You do not need to join again.";
 
-function WaitlistForm() {
+export function WaitlistForm() {
   const [sending, setSending] = useState(false);
   const [joined, setJoined] = useState<Joined | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});

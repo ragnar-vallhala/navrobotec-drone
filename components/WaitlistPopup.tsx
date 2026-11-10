@@ -3,15 +3,13 @@
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import WaitlistCarousel from "./WaitlistCarousel";
-import WaitlistDialog from "./WaitlistDialog";
+import { useWaitlist } from "./WaitlistProvider";
 import styles from "./WaitlistPopup.module.css";
 import { POPUP_SHOTS } from "@/lib/product-media";
 import {
   isWaitlisted,
   markPopupShown,
   popupShownThisVisit,
-  WAITLIST_LEDE,
-  WAITLIST_TITLE,
 } from "@/lib/waitlist";
 
 /* A one-time nudge towards the X427 waitlist, mounted once in the root layout.
@@ -36,7 +34,7 @@ import {
 
 const SHOW_AFTER_MS = 2000;
 const HIDE_AFTER_MS = 12000;
-const EXCLUDED = ["/docs", "/admin"];
+const EXCLUDED = ["/docs", "/admin", "/waitlist"];
 
 function excluded(path: string | null): boolean {
   return EXCLUDED.some((p) => path === p || path?.startsWith(`${p}/`));
@@ -47,8 +45,7 @@ const SHOTS = POPUP_SHOTS;
 export default function WaitlistPopup() {
   const pathname = usePathname();
   const [show, setShow] = useState(false);
-  const [formMounted, setFormMounted] = useState(false);
-  const [formOpen, setFormOpen] = useState(false);
+  const { openWaitlist } = useWaitlist();
   const ref = useRef<HTMLDialogElement>(null);
   const titleId = useId();
 
@@ -118,8 +115,7 @@ export default function WaitlistPopup() {
 
   const join = () => {
     close();
-    setFormMounted(true);
-    setFormOpen(true);
+    openWaitlist();
   };
 
   return (
@@ -194,14 +190,6 @@ export default function WaitlistPopup() {
         </dialog>
       ) : null}
 
-      {formMounted ? (
-        <WaitlistDialog
-          title={WAITLIST_TITLE}
-          lede={WAITLIST_LEDE}
-          open={formOpen}
-          onClosed={() => setFormOpen(false)}
-        />
-      ) : null}
     </>
   );
 }

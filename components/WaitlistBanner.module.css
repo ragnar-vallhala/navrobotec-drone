@@ -1,0 +1,56 @@
+.banner {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 1001;
+  height: var(--banner-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding-inline: 2.75rem;
+  background: var(--band);
+  color: var(--band-text);
+  font-family: var(--font-data);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  overflow: hidden;
+}
+.text { margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.text strong { font-weight: 600; }
+.long { display: none; }
+@media (min-width: 40rem) { .long { display: inline; } }
+.join {
+  flex: none;
+  padding: 0.25rem 0.75rem;
+  border: 1px solid var(--signal-lit);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--signal-lit);
+  font: inherit;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+}
+.join:hover { background: var(--signal-lit); color: var(--band); }
+.close {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.75rem;
+  height: 1.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.75;
+}
+.close:hover { opacity: 1; }
+.banner :where(button):focus-visible { outline: 2px solid var(--signal-lit); outline-offset: 2px; }

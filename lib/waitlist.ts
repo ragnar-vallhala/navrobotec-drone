@@ -16,6 +16,28 @@ export function markWaitlisted(): void {
   } catch {
     /* Nothing to do: the prompt may show again, which is harmless. */
   }
+  /* The top banner is hidden by this attribute (see WaitlistBanner), so it
+     goes at once rather than at the next page load. */
+  document.documentElement.dataset.wlBanner = "off";
+}
+
+/* The banner's own dismissal, separate from having joined. */
+export const BANNER_DISMISSED_KEY = "navrobotec.waitlistBannerDismissed";
+
+export function dismissBanner(): void {
+  try {
+    window.localStorage.setItem(BANNER_DISMISSED_KEY, "1");
+  } catch {
+    /* Dismissed for this page load only. */
+  }
+}
+
+export function bannerDismissed(): boolean {
+  try {
+    return window.localStorage.getItem(BANNER_DISMISSED_KEY) !== null;
+  } catch {
+    return false;
+  }
 }
 
 export function isWaitlisted(): boolean {

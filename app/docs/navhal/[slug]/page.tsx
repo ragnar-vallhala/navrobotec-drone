@@ -1,3 +1,4 @@
+import WaitlistCallout from "@/components/WaitlistCallout";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -70,6 +71,8 @@ export default async function NavhalTutorialPage({
         className={styles.prose}
         dangerouslySetInnerHTML={{ __html: html }}
       />
+
+      <WaitlistCallout />
 
       <footer className={styles.footer}>
         <div className={styles.pagination}>

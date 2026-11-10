@@ -1,4 +1,5 @@
 import Link from "next/link";
+import WaitlistButton from "@/components/WaitlistButton";
 import Image from "@/components/Photo";
 import ScrollSteps from "@/components/ScrollSteps";
 import FlightLog from "@/components/FlightLog";
@@ -186,7 +187,14 @@ export default function Home() {
             <Link href="/contact" className="btn btn-ghost">
               Join the mission
             </Link>
+            <WaitlistButton
+              label="Join the X427 waitlist"
+              className="btn btn-ghost"
+            />
           </div>
+          <p className={styles.heroNote}>
+            Free board for the first 50 students.
+          </p>
         </div>
 
         <div className={`shell ${styles.scrollCue}`} aria-hidden>

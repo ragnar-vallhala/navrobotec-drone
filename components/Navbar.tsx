@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Mark from "./Mark";
+import { useWaitlist } from "./WaitlistProvider";
 import styles from "./Navbar.module.css";
 
 /* The bar.
@@ -31,6 +32,7 @@ const LINKS = [
 
 export default function Navbar() {
   const pathname = usePathname();
+  const { openWaitlist } = useWaitlist();
   const [scrolled, setScrolled] = useState(false);
   /* The drawer is closed by the link that navigates, not by an effect
      watching for the pathname to change afterwards: the click is the event,
@@ -108,6 +110,9 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
+          <button type="button" className={styles.waitlist} onClick={openWaitlist}>
+            Waitlist
+          </button>
           <Link href="/contact" className={styles.contact}>
             Contact
           </Link>
@@ -140,6 +145,16 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
+          <button
+            type="button"
+            className={styles.drawerLink}
+            onClick={() => {
+              setOpen(false);
+              openWaitlist();
+            }}
+          >
+            Join the X427 waitlist
+          </button>
           <Link
             href="/contact"
             className={styles.drawerLink}

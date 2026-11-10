@@ -1,8 +1,8 @@
 .bar {
   position: fixed;
-  inset: 0 0 auto 0;
+  inset: var(--banner-h) 0 auto 0;
   z-index: 1000;
-  height: var(--bar);
+  height: var(--bar-nav);
   /* Transparent over the hero band, but never bare: a scrim keeps the links
      legible over whatever the band turns out to hold. */
   background: linear-gradient(to bottom, rgba(7, 19, 16, 0.7), rgba(7, 19, 16, 0));
@@ -19,7 +19,7 @@
 .bar[data-open] { height: auto; background: var(--paper); color: var(--ink); }
 
 .inner {
-  height: var(--bar);
+  height: var(--bar-nav);
   max-width: var(--measure);
   margin-inline: auto;
   padding-inline: var(--gutter);
@@ -88,6 +88,25 @@
 .contact:hover { opacity: 1; color: var(--signal-lit); }
 .solid .contact:hover { color: var(--signal); }
 
+.waitlist {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--signal-lit);
+  border-radius: var(--radius);
+  background: transparent;
+  font-family: var(--font-data);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--signal-lit);
+  cursor: pointer;
+  transition: background-color 0.2s var(--ease), color 0.2s var(--ease);
+}
+.waitlist:hover { background: var(--signal-lit); color: var(--band); }
+.solid .waitlist { border-color: var(--signal); color: var(--signal); }
+.solid .waitlist:hover { background: var(--signal); color: #fff; }
+.waitlist:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+
 .toggle {
   min-height: 2.75rem;
   display: inline-flex;
@@ -124,6 +143,7 @@
   color: var(--ink-2);
 }
 .drawerLink[aria-current="page"] { color: var(--signal); }
+button.drawerLink { background: none; border-width: 0 0 1px; text-align: left; cursor: pointer; font: inherit; font-family: var(--font-data); font-size: 0.9375rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--signal); border-bottom: 1px solid var(--line); }
 
 /* 64rem, not 62. Seven links plus the wordmark and the Contact button need
    about 1001px with the gutters, and the desktop nav used to switch on at
@@ -136,5 +156,5 @@
 
 /* Hit area of at least 44px without moving anything: the link keeps its
    size, an invisible box around it grows. */
-.brand, .link, .contact { position: relative; }
-.brand::after, .link::after, .contact::after { content: ""; position: absolute; inset: -0.75rem -0.25rem; }
+.brand, .link, .contact, .waitlist { position: relative; }
+.brand::after, .link::after, .contact::after, .waitlist::after { content: ""; position: absolute; inset: -0.75rem -0.25rem; }

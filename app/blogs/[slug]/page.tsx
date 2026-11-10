@@ -4,6 +4,7 @@ import matter from 'gray-matter';
 import { marked, type Tokens } from 'marked';
 import markedKatex from 'marked-katex-extension';
 import 'katex/dist/katex.min.css';
+import WaitlistCallout from '@/components/WaitlistCallout';
 import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
@@ -145,6 +146,8 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
                     dangerouslySetInnerHTML={{ __html: htmlContent }}
                 />
                 <Mermaid container="#blog-markdown" />
+
+                <WaitlistCallout />
 
                 {/* The end of a post is a place to offer the next thing, not
                     to shout. */}

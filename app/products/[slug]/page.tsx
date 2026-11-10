@@ -3,14 +3,13 @@ import { notFound } from "next/navigation";
 import BoardPhoto from "@/components/BoardPhoto";
 import ComingSoon from "@/components/ComingSoon";
 import InterestDialog from "@/components/InterestDialog";
-import WaitlistDialog from "@/components/WaitlistDialog";
+import WaitlistButton from "@/components/WaitlistButton";
 import {
   hasDetails,
   kindLabel,
   kindOf,
   PRODUCT_MEDIA,
 } from "@/lib/product-media";
-import { WAITLIST_LEDE, WAITLIST_TITLE } from "@/lib/waitlist";
 import { getCatalogue, INTEREST_BY_SLUG, interestsFor } from "@/lib/products";
 import styles from "./product.module.css";
 
@@ -195,10 +194,7 @@ export default async function ProductPage({
                     Enquire rather than replacing it: one is a question for an
                     engineer, the other a place in the line. */}
                 {product.slug === "x427" ? (
-                  <WaitlistDialog
-                    title={WAITLIST_TITLE}
-                    lede={WAITLIST_LEDE}
-                  />
+                  <WaitlistButton label="Join waitlist" />
                 ) : null}
                 <Link href="/docs" className="btn btn-ghost">
                   Read the documentation

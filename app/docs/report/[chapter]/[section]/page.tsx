@@ -1,3 +1,4 @@
+import WaitlistCallout from "@/components/WaitlistCallout";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -68,6 +69,8 @@ export default async function SectionPage({
           This section is being written. Please check back soon.
         </p>
       )}
+
+      <WaitlistCallout />
 
       <footer className={styles.footer}>
         <div className={styles.pagination}>

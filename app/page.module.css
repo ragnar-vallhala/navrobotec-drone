@@ -636,3 +636,14 @@
    size, an invisible box around it grows. */
 .attribLink, .focusLink, .routeLink { position: relative; }
 .attribLink::after, .focusLink::after, .routeLink::after { content: ""; position: absolute; inset: -0.75rem -0.25rem; }
+
+.heroNote {
+  margin: 0.875rem 0 0;
+  font-family: var(--font-data);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--band-text);
+  opacity: 0.7;
+  animation: rise 0.7s var(--ease) both 0.4s;
+}

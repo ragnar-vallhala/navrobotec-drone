@@ -4,6 +4,8 @@ import "./globals.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import WaitlistPopup from "../components/WaitlistPopup";
+import WaitlistProvider from "../components/WaitlistProvider";
+import WaitlistBanner, { BANNER_SCRIPT } from "../components/WaitlistBanner";
 import { SITE_URL } from "../lib/site";
 
 /* Three faces, each with a job.
@@ -100,6 +102,7 @@ export default function RootLayout({
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+        <script dangerouslySetInnerHTML={{ __html: BANNER_SCRIPT }} />
         {/* The homepage frame is a CSS background, which the browser cannot
             discover until it has parsed the stylesheet. This tells it
             now, so the first paint is not waiting on CSS. */}
@@ -110,10 +113,13 @@ export default function RootLayout({
         <a className="skip" href="#main">
           Skip to content
         </a>
-        <Navbar />
-        <main id="main">{children}</main>
-        <Footer />
-        <WaitlistPopup />
+        <WaitlistProvider>
+          <WaitlistBanner />
+          <Navbar />
+          <main id="main">{children}</main>
+          <Footer />
+          <WaitlistPopup />
+        </WaitlistProvider>
       </body>
     </html>
   );

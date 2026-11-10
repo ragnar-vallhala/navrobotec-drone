@@ -1,4 +1,5 @@
 import Link from "next/link";
+import WaitlistButton from "@/components/WaitlistButton";
 import ComingSoon from "@/components/ComingSoon";
 import BoardPhoto from "@/components/BoardPhoto";
 import Cinematic from "@/components/Cinematic";
@@ -109,6 +110,9 @@ export default async function Products() {
                            reads as a broken image, so it says which it is. */
                         <ComingSoon kind={kindOf(product.slug)} />
                       )}
+                      {product.slug === "x427" ? (
+                        <span className={styles.badge}>Waitlist open</span>
+                      ) : null}
                     </span>
 
                     <span className={styles.body}>
@@ -153,6 +157,20 @@ export default async function Products() {
               })}
             </ul>
           )}
+
+          <aside className={styles.waitlist} aria-labelledby="products-wl">
+            <div>
+              <p className="label label-signal">X427 waitlist</p>
+              <h2 id="products-wl" className="h3">
+                X427 waitlist is open
+              </h2>
+              <p className="body small">
+                Open to everyone. The first 50 college students on the
+                waitlist receive a free board, first come, first served.
+              </p>
+            </div>
+            <WaitlistButton label="Join the waitlist" className="btn btn-primary" />
+          </aside>
 
         </div>
       </section>
