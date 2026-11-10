@@ -1,7 +1,7 @@
 <p>The performance of VAIOS was evaluated using a comprehensive benchmark suite executed on 5 March 2026. The benchmarks were designed to assess the behavior of key subsystems including task scheduling, inter-task communication, memory management, floating-point computation, and DMA-based data transfer. All tests were conducted on an STM32F401RE (Cortex-M4) platform with a 1 ms system tick.</p>
 <p>The benchmark suite covered a total of 14 test cases spanning multiple subsystems, all of which completed successfully without errors, timeouts, or failures. The results demonstrate stable operation under both isolated and concurrent workloads.</p>
 <figure id="fig:vaios_benchmarks">
-<p><img src="/docs/diagrams/tikz-c8f07a763b1e.svg" alt="image" /> <img src="/docs/diagrams/tikz-ee70094375bc.svg" alt="image" /></p>
+<p><img src="/docs/diagrams/tikz-c8f07a763b1e.svg" alt="Performance benchmarks for VAIOS subsystems on STM32F401RE. The results demonstrate efficient kernel execution and high computational throughput using the hardware FPU. (image 1 of 2)" width="148" height="187" /> <img src="/docs/diagrams/tikz-ee70094375bc.svg" alt="Performance benchmarks for VAIOS subsystems on STM32F401RE. The results demonstrate efficient kernel execution and high computational throughput using the hardware FPU. (image 2 of 2)" width="147" height="186" /></p>
 <figcaption>Performance benchmarks for VAIOS subsystems on STM32F401RE. The results demonstrate efficient kernel execution and high computational throughput using the hardware FPU.</figcaption>
 </figure>
 <h3 id="experimental-platform">Experimental Platform</h3>
@@ -139,7 +139,7 @@
 </table>
 </div>
 <figure id="fig:memory_benchmarks">
-<img src="/docs/diagrams/tikz-8fba353af404.svg" />
+<img src="/docs/diagrams/tikz-8fba353af404.svg" alt="Aggregate memory allocation latency for varying workload sizes (Small: 1000 × 32B, Medium: 500 × 128B, Large: 100 × 1024B). The linear search time is proportional to the total heap traversal depth." width="205" height="159" />
 <figcaption>Aggregate memory allocation latency for varying workload sizes (Small: 1000 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>×</mi><annotation encoding="application/x-tex">\times</annotation></semantics></math> 32B, Medium: 500 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>×</mi><annotation encoding="application/x-tex">\times</annotation></semantics></math> 128B, Large: 100 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>×</mi><annotation encoding="application/x-tex">\times</annotation></semantics></math> 1024B). The linear search time is proportional to the total heap traversal depth.</figcaption>
 </figure>
 <p><strong>Task Scheduling:</strong> The scheduler achieved a context switch rate of approximately 3,773 switches per second under release build conditions at 84 MHz. This translates to approximately 22,000 clock cycles per context switch, including PendSV overhead and scheduler logic. Delay accuracy was measured with a 1% error margin (101 ms measured for a 100 ms requested delay), which is the theoretical limit for a 1 ms system tick.</p>

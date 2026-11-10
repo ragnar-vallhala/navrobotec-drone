@@ -2,7 +2,7 @@
 <h3 id="control-architecture">Control Architecture</h3>
 <p>The system follows a hierarchical structure where the attitude controller computes desired angular rates, which are then tracked by the rate controller. This separation enables robust stabilization while allowing intuitive control through orientation commands.</p>
 <figure>
-<img src="/docs/diagrams/tikz-9882658d8d09.svg" />
+<img src="/docs/diagrams/tikz-9882658d8d09.svg" alt="Cascaded control structure in Vayu." width="375" height="72" />
 <figcaption>Cascaded control structure in Vayu.</figcaption>
 </figure>
 <p>The attitude controller converts user commands into target angles and computes desired angular rates using PID control. The rate controller then tracks these target rates using gyroscope feedback and produces control outputs for each axis.</p>

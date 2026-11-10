@@ -5,7 +5,7 @@
 <p>Timer 1, an advanced-control timer, is used for driving the primary four motors. Its enhanced capabilities, such as higher resolution and synchronized channel outputs, make it well-suited for precise multi-channel motor control.</p>
 <p>Figure <a href="/docs/report/hardware/hw-actuation#fig:actuation_flow">4.4</a> demonstrates the forward control path from the processing unit to the physical actuators.</p>
 <figure id="fig:actuation_flow">
-<img src="/docs/diagrams/tikz-e07693ae903e.svg" />
+<img src="/docs/diagrams/tikz-e07693ae903e.svg" alt="Actuation signal flow illustrating the transition from software control logic to physical motor thrust via hardware timers and speed controllers." width="413" height="39" />
 <figcaption>Actuation signal flow illustrating the transition from software control logic to physical motor thrust via hardware timers and speed controllers.</figcaption>
 </figure>
 <p>The use of hardware timers ensures precise timing and high-resolution signal generation, which is critical for stable and responsive motor control. Consistent PWM update rates are maintained to ensure smooth motor response and avoid control oscillations.</p>

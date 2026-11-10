@@ -1,6 +1,6 @@
 <p>VAIOS follows a task-based execution model, where each unit of execution is represented as an independent task managed by the kernel. Each task is described by a Task Control Block (TCB), which stores all information required for scheduling, context switching, and lifecycle management.</p>
 <figure id="fig:vaios_tcb">
-<img src="/docs/diagrams/tikz-bb3c910fa06f.svg" />
+<img src="/docs/diagrams/tikz-bb3c910fa06f.svg" alt="Memory layout of the VAIOS Task Control Block (TCB) showing field groupings by functional role." width="220" height="235" />
 <figcaption>Memory layout of the VAIOS Task Control Block (TCB) showing field groupings by functional role.</figcaption>
 </figure>
 <p>The TCB , shown in Fig. <a href="/docs/report/vaios/vaios-task-model#fig:vaios_tcb">6.2</a>, maintains the execution context of a task, including the current stack pointer, stack memory base, entry function, and argument. It also stores scheduling-related metadata such as priority, delay information, and runtime statistics. Additional fields are used for tracking synchronization state, linking tasks within scheduling lists, and ensuring system integrity through sanity checks. This structure enables efficient context switching and flexible task management while keeping all relevant task information localized.</p>

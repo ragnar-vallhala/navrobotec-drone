@@ -20,6 +20,7 @@ import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
 import { spawnSync } from "node:child_process";
+import { pathToFileURL } from "node:url";
 
 const ROOT = process.cwd();
 const SRC = path.join(ROOT, "public/data/report");
@@ -108,6 +109,79 @@ ${colors}
     { cwd: work, stdio: "ignore" },
   );
   return svg.status === 0 && fs.existsSync(outSvg);
+}
+
+/** Intrinsic pixel size of a PNG / JPEG / SVG file, or null. */
+function imageSize(file) {
+  try {
+    const buf = fs.readFileSync(file);
+    if (buf.slice(1, 4).toString() === "PNG") {
+      return { w: buf.readUInt32BE(16), h: buf.readUInt32BE(20) };
+    }
+    if (buf[0] === 0xff && buf[1] === 0xd8) {
+      let i = 2;
+      while (i + 9 < buf.length) {
+        if (buf[i] !== 0xff) {
+          i++;
+          continue;
+        }
+        const marker = buf[i + 1];
+        if (marker >= 0xc0 && marker <= 0xcf && ![0xc4, 0xc8, 0xcc].includes(marker)) {
+          return { w: buf.readUInt16BE(i + 7), h: buf.readUInt16BE(i + 5) };
+        }
+        i += 2 + buf.readUInt16BE(i + 2);
+      }
+      return null;
+    }
+    const head = buf.slice(0, 2048).toString("utf8");
+    const vb = head.match(/viewBox=['"]\s*[-\d.]+[ ,]+[-\d.]+[ ,]+([\d.]+)[ ,]+([\d.]+)/);
+    if (vb) return { w: Math.round(+vb[1]), h: Math.round(+vb[2]) };
+  } catch {
+    /* fall through */
+  }
+  return null;
+}
+
+/** Plain text of a figcaption: MathML becomes its TeX source, tags dropped. */
+function captionText(html) {
+  return html
+    .replace(/<math\b[\s\S]*?<annotation[^>]*>([\s\S]*?)<\/annotation>[\s\S]*?<\/math>/g, (_m, tex) =>
+      tex.replace(/\\times/g, "×").replace(/\\/g, ""),
+    )
+    .replace(/<[^>]+>/g, "")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/**
+ * Give every <img> alt text (taken from its figure caption) and intrinsic
+ * width/height so the page does not shift while images load.
+ */
+function enhanceImages(html) {
+  return html.replace(/<figure\b[\s\S]*?<\/figure>|<img\b[^>]*>/g, (block) => {
+    const cap = block.match(/<figcaption[^>]*>([\s\S]*?)<\/figcaption>/);
+    const caption = cap ? captionText(cap[1]) : "";
+    const total = (block.match(/<img\b/g) || []).length;
+    let n = 0;
+    return block.replace(/<img\b([^>]*?)\s*\/?>/g, (_m, attrs) => {
+      n++;
+      attrs = attrs.replace(/\s(?:alt|width|height)="[^"]*"/g, "");
+      const src = (attrs.match(/src="([^"]+)"/) || [])[1] || "";
+      const file = src.startsWith("/docs/diagrams/")
+        ? path.join(OUT_DIAGRAMS, path.basename(src))
+        : path.join(SRC, "img", path.basename(src));
+      const size = imageSize(file);
+      let alt = caption || "Figure";
+      if (total > 1) alt += ` (image ${n} of ${total})`;
+      alt = alt.replace(/"/g, "&quot;");
+      const dims = size ? ` width="${size.w}" height="${size.h}"` : "";
+      return `<img${attrs} alt="${alt}"${dims} />`;
+    });
+  });
 }
 
 function convert() {
@@ -289,13 +363,13 @@ function convert() {
     const introFile = `${dir}/_intro.html`;
     fs.writeFileSync(
       path.join(OUT_HTML, introFile),
-      `${rewriteRefs(ch.intro, ch.num)}\n`,
+      `${enhanceImages(rewriteRefs(ch.intro, ch.num))}\n`,
     );
     const sections = ch.sections.map((sec) => {
       const file = `${dir}/${sec.slug}.html`;
       fs.writeFileSync(
         path.join(OUT_HTML, file),
-        `${rewriteRefs(sec.html, ch.num)}\n`,
+        `${enhanceImages(rewriteRefs(sec.html, ch.num))}\n`,
       );
       return { slug: sec.slug, title: sec.title, file };
     });
@@ -366,4 +440,9 @@ function main() {
   }
 }
 
-main();
+// Run only when invoked directly, so the helpers can be imported.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  main();
+}
+
+export { enhanceImages };

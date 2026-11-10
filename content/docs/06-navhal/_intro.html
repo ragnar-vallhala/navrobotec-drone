@@ -4,7 +4,7 @@
 <p>NavHAL addresses these limitations by adopting a minimal and deterministic design philosophy. It provides direct yet controlled access to hardware through memory-mapped register abstractions, lightweight APIs, and modular subsystems. All implementations are selected at compile time, ensuring that only the required components are included in the final binary, thereby reducing both code size and runtime overhead.</p>
 <p>A key design principle of NavHAL is execution-layer independence. The abstraction layer operates natively in bare-metal environments while remaining compatible with higher-level execution frameworks such as VAIOS. This allows system designers to choose between fully deterministic bare-metal execution and structured multitasking without modifying the underlying hardware interface.</p>
 <figure id="fig:navhal_architecture_comparison">
-<img src="/docs/diagrams/tikz-db39bd603309.svg" />
+<img src="/docs/diagrams/tikz-db39bd603309.svg" alt="Comparison between conventional layered HAL architectures and the NavHAL design. NavHAL eliminates unnecessary abstraction layers and supports both bare-metal execution and optional RTOS integration without compromising determinism." width="483" height="225" />
 <figcaption>Comparison between conventional layered HAL architectures and the NavHAL design. NavHAL eliminates unnecessary abstraction layers and supports both bare-metal execution and optional RTOS integration without compromising determinism.</figcaption>
 </figure>
 <p>This chapter presents the motivation, design goals, architecture, and implementation details of NavHAL. It further discusses its integration with the VAIOS execution layer and compares it with existing abstraction approaches.</p>

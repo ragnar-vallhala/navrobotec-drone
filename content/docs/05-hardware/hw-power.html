@@ -3,7 +3,7 @@
 <p>The system is powered from an external supply, typically a battery source, which is regulated through a two-stage power conversion architecture.</p>
 <p>Figure <a href="/docs/report/hardware/hw-power#fig:power_architecture">4.5</a> illustrates the two-stage regulation approach used to provide stable power rails to the system.</p>
 <figure id="fig:power_architecture">
-<img src="/docs/diagrams/tikz-a579e74c0534.svg" />
+<img src="/docs/diagrams/tikz-a579e74c0534.svg" alt="Two-stage power regulation architecture with integrated battery monitoring via the PDB, providing real-time diagnostics to the MCU." width="483" height="156" />
 <figcaption>Two-stage power regulation architecture with integrated battery monitoring via the PDB, providing real-time diagnostics to the MCU.</figcaption>
 </figure>
 <p>In the first stage, a switching regulator (buck converter) is used to step down the input voltage to a stable 5V rail. This stage is implemented using a high-efficiency regulator, enabling the system to handle varying input voltages while minimizing power loss. Additionally, the system can be powered via a 5V input from an external Battery Elimination Circuit (BEC) integrated within the Electronic Speed Controllers (ESCs). This provides a redundant or alternative power source for the 5V rail, particularly useful in secondary system testing or when the main battery-fed regulator is not active.</p>

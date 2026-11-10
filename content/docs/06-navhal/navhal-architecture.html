@@ -1,7 +1,7 @@
 <p>NavHAL is structured as a statically configured abstraction layer that separates hardware interaction across three orthogonal domains: processor architecture, vendor-specific implementation, and board-level configuration. This separation enables fine-grained hardware control while maintaining portability and scalability.</p>
 <p>At a high level, NavHAL consists of a unified interface layer built on top of an architecture-specific core, which is specialized through three components: <em>core</em>, <em>vendor</em>, and <em>board</em>. These components are selected at build time, ensuring that only the required implementation is included in the final binary.</p>
 <figure>
-<img src="/docs/diagrams/tikz-e9cdd0c0ac7c.svg" />
+<img src="/docs/diagrams/tikz-e9cdd0c0ac7c.svg" alt="NavHAL architecture illustrating separation across processor, vendor, and board layers." width="469" height="109" />
 <figcaption>NavHAL architecture illustrating separation across processor, vendor, and board layers.</figcaption>
 </figure>
 <p>The <strong>Interface Layer</strong> provides a consistent and hardware-agnostic API for peripherals such as GPIO, UART, I2C, SPI, and timers. It defines the contract used by upper layers without exposing implementation details.</p>

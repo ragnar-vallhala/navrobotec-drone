@@ -1,11 +1,11 @@
 <p>VAIOS employs a preemptive, priority-based scheduling strategy with round-robin execution among tasks of equal priority. The scheduler is designed to provide deterministic task selection with minimal overhead, making it suitable for real-time embedded systems. The flow is shown in Fig. <a href="/docs/report/vaios/vaios-scheduler-design#fig:vaios_scheduler_flow">6.3</a>.</p>
 <figure id="fig:vaios_scheduler_flow">
-<img src="/docs/diagrams/tikz-a5f0ec16b59f.svg" />
+<img src="/docs/diagrams/tikz-a5f0ec16b59f.svg" alt="Operational flowchart of the VAIOS preemptive scheduler illustrating context management and priority-based selection logic." width="272" height="343" />
 <figcaption>Operational flowchart of the VAIOS preemptive scheduler illustrating context management and priority-based selection logic.</figcaption>
 </figure>
 <p>Tasks are organized into multiple ready queues, one for each priority level. The system supports a fixed range of priorities, where higher numerical values correspond to higher scheduling priority. Each ready queue is implemented as a linked list, allowing tasks of the same priority to be scheduled in a round-robin manner. When a running task exhausts its time slice or yields execution, it is reinserted at the end of its corresponding ready queue, ensuring fair execution among tasks with equal priority. The structure is shown in Fig. <a href="/docs/report/vaios/vaios-scheduler-design#fig:vaios_queues">6.4</a>.</p>
 <figure id="fig:vaios_queues">
-<img src="/docs/diagrams/tikz-0d7cd27baa3c.svg" />
+<img src="/docs/diagrams/tikz-0d7cd27baa3c.svg" alt="Priority-based ready queue structure in VAIOS. The scheduler uses a bitmap to identify the highest active queue, ensuring deterministic task selection complexity." width="275" height="186" />
 <figcaption>Priority-based ready queue structure in VAIOS. The scheduler uses a bitmap to identify the highest active queue, ensuring deterministic task selection complexity.</figcaption>
 </figure>
 <p>To enable efficient selection of the next task, VAIOS maintains a bitmap that tracks which priority levels have ready tasks. This allows the scheduler to identify the highest-priority ready task without scanning all queues. The highest active priority is determined by inspecting this bitmap, after which the corresponding ready queue is accessed to select the next task. This approach significantly reduces scheduling overhead and ensures predictable behavior.</p>

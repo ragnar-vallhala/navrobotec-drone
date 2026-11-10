@@ -1,6 +1,6 @@
 <p>VAIOS provides a set of inter-task communication (IPC) primitives that enable coordination and data exchange between tasks. These mechanisms are designed to support synchronization, resource sharing, and event-driven execution while maintaining predictable behavior in a preemptive environment.</p>
 <figure id="fig:vaios_ipc_interaction">
-<img src="/docs/diagrams/tikz-6df877e150cf.svg" />
+<img src="/docs/diagrams/tikz-6df877e150cf.svg" alt="Interaction model for VAIOS inter-task communication. Tasks coordinate through kernel primitives, with support for blocking operations and automated wait-list management." width="313" height="197" />
 <figcaption>Interaction model for VAIOS inter-task communication. Tasks coordinate through kernel primitives, with support for blocking operations and automated wait-list management.</figcaption>
 </figure>
 <p>The core IPC primitives include binary semaphores, counting semaphores, mutexes, and recursive mutexes. Semaphores are used for signaling and resource counting, allowing tasks to block until a resource becomes available or an event occurs. Mutexes provide mutual exclusion for shared resources, ensuring that only one task can access a critical section at a time. Recursive mutexes extend this behavior by allowing the owning task to acquire the same lock multiple times, maintaining an internal recursion count.</p>

@@ -1,7 +1,7 @@
 <p>The architecture of Vayu is organized as a layered and data-driven pipeline, where information flows from sensors to control algorithms and finally to actuator outputs. Each stage of the system is implemented as a set of modular components that interact through well-defined interfaces, enabling clear separation of responsibilities and ease of extension.</p>
 <p>At a high level, the system can be viewed as a sequence of processing stages: sensor acquisition, state estimation, control computation, and actuation. Supporting subsystems such as communication and logging operate alongside this pipeline without interfering with time-critical operations.</p>
 <figure id="fig:vayu_architecture">
-<img src="/docs/diagrams/tikz-b45409957e7f.svg" />
+<img src="/docs/diagrams/tikz-b45409957e7f.svg" alt="High-level architecture of the Vayu flight control system showing the flow from sensing to actuation along with supporting subsystems." width="433" height="72" />
 <figcaption>High-level architecture of the Vayu flight control system showing the flow from sensing to actuation along with supporting subsystems.</figcaption>
 </figure>
 <p>Sensor acquisition forms the first stage of the pipeline. High-frequency inertial data from the BMX160 is continuously updated using a DMA-driven loop, ensuring minimal latency and consistent sampling. Additional sensor inputs, such as barometric pressure from the BMP180, are integrated at lower frequencies to provide complementary information.</p>

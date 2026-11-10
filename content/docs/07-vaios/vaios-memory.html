@@ -2,7 +2,7 @@
 <p>The heap is initialized as a contiguous memory region and managed as a sequence of variable-sized blocks. Each allocated region is preceded by a metadata header that stores information such as block size, allocation status, and a sanity check value. This structure allows the allocator to track memory usage and detect errors such as invalid frees or heap corruption.</p>
 <p>Memory allocation follows a linear first-fit strategy. The allocator scans the heap to find a suitable free block or an uninitialized region that can satisfy the requested size. Allocated blocks are aligned to ensure proper access on the target architecture. When a free block is larger than required, it is split into two blocks, allowing efficient utilization of memory.</p>
 <figure id="fig:vaios_memory_search">
-<img src="/docs/diagrams/tikz-1060dd0df6e3.svg" />
+<img src="/docs/diagrams/tikz-1060dd0df6e3.svg" alt="Visual representation of the VAIOS first-fit memory allocation search. The allocator traverses the block list, inspecting headers to find the first suitable free or fresh memory region." width="468" height="123" />
 <figcaption>Visual representation of the VAIOS first-fit memory allocation search. The allocator traverses the block list, inspecting headers to find the first suitable free or fresh memory region.</figcaption>
 </figure>
 <p>Deallocation marks a block as free and attempts to merge it with adjacent free blocks to reduce fragmentation. Both forward and backward coalescing are performed when possible, helping to maintain larger contiguous memory regions over time. This approach balances simplicity with basic fragmentation control without introducing complex data structures.</p>
