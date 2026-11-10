@@ -1,5 +1,5 @@
 ---
-title: "Cutting the Cable: Reading Vayu’s First Wireless Rig Log"
+title: "Cutting the Cable: Reading VAYU’s First Wireless Rig Log"
 date: "June 17, 2026"
 author: "Ashutosh Vishwakarma"
 excerpt: "We had logged the flight controller on the bench before — but always down a USB cable, which is exactly what kept it pinned to the bench. A new UDP/WiFi telemetry bridge cut that cable and let the airframe move freely on a rig for the first time. A frame-by-frame read of that first untethered log: the transport, an attitude loop that shakes itself apart under its own feedback, and the sensors and telemetry bugs underneath."
@@ -116,7 +116,7 @@ it.
 
 ### Why it oscillates — the control architecture
 
-Vayu's attitude control is a textbook cascade, but the gains are the story:
+VAYU's attitude control is a textbook cascade, but the gains are the story:
 
 ```mermaid
 flowchart LR

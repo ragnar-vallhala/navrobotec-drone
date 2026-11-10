@@ -1,5 +1,5 @@
 ---
-title: "Eight Bugs Between a File and the Ground: Debugging Vayu’s Transfer Stack on Hardware"
+title: "Eight Bugs Between a File and the Ground: Debugging VAYU’s Transfer Stack on Hardware"
 date: "June 24, 2026"
 author: "Ashutosh Vishwakarma"
 excerpt: "I wanted to copy a file off the flight controller’s SD card and get the same bytes back. Small files worked; anything past a kilobyte stalled or came back subtly wrong, non-deterministically. The hunt that followed: an isolation ladder that exonerated the SD card, a plausible theory ruled out by measuring instead of guessing, and two bugs with the exact same shape. Eight fixes later, the round-trip is byte-perfect to 64 KB."

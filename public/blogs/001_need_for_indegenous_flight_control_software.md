@@ -6,8 +6,6 @@ excerpt: "Why building drones isn't enough—and why India needs sovereign, zero
 coverImage: "/images/blog_001_hero.png"
 ---
 
-# The Need for Indigenous Flight Control Software in India
-
 India is experiencing a silent technological transformation. Across the country, drones are beginning to move beyond research labs and hobbyist workshops into real-world deployment. They are surveying farmland, inspecting infrastructure, monitoring disaster zones, supporting defense operations, and slowly becoming a part of everyday industrial systems. The drone ecosystem in India is growing rapidly, fueled by startups, government initiatives, research institutions, and a new wave of young engineers who want to build autonomous systems within the country.
 
 But beneath this visible growth lies an uncomfortable reality: while India is building drones, much of the intelligence powering them still depends on software ecosystems developed elsewhere.

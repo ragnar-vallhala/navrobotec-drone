@@ -2,7 +2,7 @@
 title: "From Mesh to Motion: The Mechanics and Numerics of a Flight Simulator"
 date: "June 17, 2026"
 author: "Ashutosh Vishwakarma"
-excerpt: "vsim_d is the physics daemon that flies Vayu’s real firmware in software. A field report from the seam where Newton–Euler rigid-body mechanics meets RK4, quaternion drift, impulse contact, and a hard-real-time loop — including the cleanest way I know to turn a triangle mesh into an inertia tensor, and the bugs where the physics was right but the numerics (or the systems) lied."
+excerpt: "vsim_d is the physics daemon that flies VAYU’s real firmware in software. A field report from the seam where Newton–Euler rigid-body mechanics meets RK4, quaternion drift, impulse contact, and a hard-real-time loop — including the cleanest way I know to turn a triangle mesh into an inertia tensor, and the bugs where the physics was right but the numerics (or the systems) lied."
 coverImage: "/images/physics.png"
 ---
 
@@ -210,4 +210,4 @@ Which is, I suppose, the usual shape of engineering.
 
 ---
 
-*Vayu is an in-house flight stack: STM32 firmware on a custom HAL, a Qt6 ground station, and the `vsim_d` physics daemon (`tools/vsim/`). The mass-properties integral lives ground-station-side (`software/src/vsim/MassProperties.cpp`) and is pushed to the daemon over the control pipe. Every figure in this post is computed by a small harness that mirrors the daemon's own algorithms — the Eberly integral, the RK4 quaternion update, the bias random walk, the Dryden filter. Each is reproducible directly from the equations above.*
+*VAYU is an in-house flight stack: STM32 firmware on a custom HAL, a Qt6 ground station, and the `vsim_d` physics daemon (`tools/vsim/`). The mass-properties integral lives ground-station-side (`software/src/vsim/MassProperties.cpp`) and is pushed to the daemon over the control pipe. Every figure in this post is computed by a small harness that mirrors the daemon's own algorithms — the Eberly integral, the RK4 quaternion update, the bias random walk, the Dryden filter. Each is reproducible directly from the equations above.*

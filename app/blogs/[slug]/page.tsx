@@ -87,7 +87,21 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
     const { data, content } = matter(fileContents);
 
     // Convert Markdown to HTML
-    const htmlContent = await marked(content);
+    let htmlContent = await marked(content);
+
+    // Stamp each body image with its intrinsic size so the browser reserves
+    // the space before it loads (CSS keeps them fluid via height: auto).
+    const imgTags = Array.from(
+        new Set(htmlContent.match(/<img src="\/[^"]+"[^>]*>/g) ?? []),
+    );
+    for (const tag of imgTags) {
+        const src = /src="([^"]+)"/.exec(tag)?.[1];
+        const meta = src ? await getImageMeta(src) : null;
+        if (!meta) continue;
+        htmlContent = htmlContent
+            .split(tag)
+            .join(tag.replace('<img ', `<img width="${meta.width}" height="${meta.height}" `));
+    }
 
     // Read the cover's real dimensions (so the hero renders at its natural
     // aspect ratio, no crop) plus a tiny blur placeholder for progressive load.

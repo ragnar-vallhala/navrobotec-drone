@@ -5,7 +5,7 @@ author: "Ashutosh Vishwakarma"
 excerpt: "We built a closed-loop PID autotuner that flies its own experiments in simulation and searches the gain space — eight optimizers, a chatter-aware cost, and two failure modes that looked solved but weren't. A deep dive into the system, the algorithms, and the fixes."
 coverImage: "/blogs/blog_3.png"
 ---
-Tuning the attitude controller of a multirotor by hand is a special kind of tedium. You nudge a gain, arm, fly, watch it wobble, disarm, nudge again. Every change is a context switch, every flight is a risk, and the "feel" you're chasing is hard to quantify. On **Vayu** — our from-scratch flight stack (C firmware, a Qt ground station called *Navigator*, and a software-in-the-loop physics daemon `vsim_d`) — I wanted the loop closed: let the aircraft fly its own experiments and search the gain space itself.
+Tuning the attitude controller of a multirotor by hand is a special kind of tedium. You nudge a gain, arm, fly, watch it wobble, disarm, nudge again. Every change is a context switch, every flight is a risk, and the "feel" you're chasing is hard to quantify. On **VAYU** — our from-scratch flight stack (C firmware, a Qt ground station called *Navigator*, and a software-in-the-loop physics daemon `vsim_d`) — I wanted the loop closed: let the aircraft fly its own experiments and search the gain space itself.
 
 This post walks through how we built that: the plant model, the cost function, the eight search algorithms we pitted against each other, and — more interestingly — the two failure modes that *looked* solved but weren't. The autotuner now reliably produces a flyable tune in a couple of minutes, but getting there meant discovering that a "good" number on a dashboard can hide a controller that's about to shake itself apart.
 
@@ -13,9 +13,9 @@ This post walks through how we built that: the plant model, the cost function, t
 
 ## 1. System architecture
 
-Vayu is three pieces that share one contract:
+VAYU is three pieces that share one contract:
 
-![Vayu SITL system architecture](/blogs/pid-autotuning/system.png)
+![VAYU SITL system architecture](/blogs/pid-autotuning/system.png)
 
 - **Firmware** — the flight code in C: a Mahony attitude estimator, the cascaded PID controller, the geometry-derived mixer, the NavLink comms protocol, and a small virtual file system (VFS) that persists the tune. The decisive design choice is that **this is the exact same binary that runs on the vehicle.** On hardware it talks to a real BMX160 IMU and the ESCs through our HAL (NavHAL) on an STM32; in SITL it's compiled as a host process that talks to the simulator instead — nothing in the control or estimation path knows the difference.
 - **`vsim_d`** — a standalone physics daemon. It integrates rigid-body dynamics at 8 kHz and synthesizes IMU + magnetometer samples at 1 kHz with calibrated sensor noise, swapping in for the real sensors and ESCs. Firmware and daemon exchange three streams over named pipes: **motor PWM** down, **IMU frames** up, and a **pose** stream out for visualization, plus a control channel for configuration (geometry, world, rates).
@@ -103,7 +103,7 @@ We implemented eight optimizers behind a common `Evaluator` interface so they sh
 | **hybrid** | Coarse random exploration to find a basin, then SPSA local refinement. | Global+local; consistently strong. |
 | **portfolio** | Split the budget across SPSA + Nelder-Mead + coordinate, keep the global best. | Diversified hedge against any one method failing. |
 
-#### The gradient methods, in math
+### The gradient methods, in math
 
 Since $J$ has no analytic gradient, the descent methods *estimate* it. The literal one, **FDGD**, uses central differences along each axis — $2n$ evaluations per step:
 
@@ -222,4 +222,4 @@ It took building the search, then breaking it twice in instructive ways, to trus
 
 ---
 
-*Vayu is an in-house flight stack: STM32 firmware on a custom HAL, a Qt6 ground station, and a SITL physics daemon. The autotuner lives in `tools/autotune/`. All plots in this post are from real SITL runs and flight logs.*
+*VAYU is an in-house flight stack: STM32 firmware on a custom HAL, a Qt6 ground station, and a SITL physics daemon. The autotuner lives in `tools/autotune/`. All plots in this post are from real SITL runs and flight logs.*
