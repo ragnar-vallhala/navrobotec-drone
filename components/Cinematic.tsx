@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "@/components/Photo";
 import styles from "./Cinematic.module.css";
 import type { ReactNode } from "react";
 

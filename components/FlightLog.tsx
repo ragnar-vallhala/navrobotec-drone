@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "@/components/Photo";
 import LoopVideo from "./LoopVideo";
 import styles from "./FlightLog.module.css";
 

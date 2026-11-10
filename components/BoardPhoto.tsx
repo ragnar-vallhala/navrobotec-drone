@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "@/components/Photo";
 import styles from "./BoardPhoto.module.css";
 import type { Shot } from "@/lib/product-media";
 

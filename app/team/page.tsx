@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "@/components/Photo";
 import Link from "next/link";
 import Cinematic from "@/components/Cinematic";
 import styles from "./page.module.css";

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import Image from "@/components/Photo";
 import ScrollSteps from "@/components/ScrollSteps";
 import FlightLog from "@/components/FlightLog";
 import { PAGE_IMAGES } from "@/lib/page-images";
