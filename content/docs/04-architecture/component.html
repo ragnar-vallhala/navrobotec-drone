@@ -8,7 +8,7 @@
 <li><p><strong>Actuation and Motor Output</strong>: This module translates control outputs into actuator-specific commands. It applies a mixing strategy to map roll, pitch, yaw, and thrust commands to individual motor PWM signals, supporting configurations such as X4 multi-rotor systems.</p></li>
 </ul>
 <p>These components operate as a coordinated pipeline within the VAIOS execution environment. Time-critical modules such as sensor acquisition, estimation, and control are executed deterministically, while auxiliary functionalities such as telemetry and monitoring operate asynchronously.</p>
-<p>Figure <a href="/docs/architecture/component#fig:system_components">3.2</a> illustrates the logical organization and interaction of these components within the Vayu control stack.</p>
+<p>Figure <a href="/docs/report/architecture/component#fig:system_components">3.2</a> illustrates the logical organization and interaction of these components within the Vayu control stack.</p>
 <figure id="fig:system_components">
 <img src="/docs/diagrams/tikz-d61e3ba35bce.svg" />
 <figcaption>Logical organization and data flow between core components of the Vayu control stack.</figcaption>

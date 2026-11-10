@@ -262,7 +262,7 @@ function convert() {
     }
   }
 
-  // Rewrite pandoc \ref anchors to absolute /docs URLs, fixing pandoc's
+  // Rewrite pandoc \ref anchors to absolute /docs/report URLs, fixing pandoc's
   // chapter-local "1." numbering prefix to the real chapter number.
   const rewriteRefs = (html, chapterNum) =>
     html.replace(
@@ -270,11 +270,11 @@ function convert() {
       (_m, id, text) => {
         const label = text.replace(/^1\./, `${chapterNum}.`);
         if (chapLabels[id]) {
-          return `<a href="/docs/${chapLabels[id].slug}">${chapLabels[id].num}</a>`;
+          return `<a href="/docs/report/${chapLabels[id].slug}">${chapLabels[id].num}</a>`;
         }
         const loc = idLoc[id];
         if (!loc) return `<a href="#${id}">${label}</a>`;
-        let href = `/docs/${loc.chap}`;
+        let href = `/docs/report/${loc.chap}`;
         if (loc.section) href += `/${loc.section}`;
         if (!loc.head) href += `#${id}`;
         return `<a href="${href}">${label}</a>`;

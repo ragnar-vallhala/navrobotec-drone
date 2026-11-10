@@ -1,6 +1,6 @@
 <p>The stack implements a deterministic, high-frequency data flow pipeline designed to minimize latency and ensure consistent control performance. Data moves through the system in a structured sequence of sensing, estimation, command processing, and actuation.</p>
 <h3 id="data-processing-pipeline">Data Processing Pipeline</h3>
-<p>The core data flow follows a strictly defined path as illustrated in Figure <a href="/docs/architecture/dataflow#fig:data_flow_pipeline">3.3</a>:</p>
+<p>The core data flow follows a strictly defined path as illustrated in Figure <a href="/docs/report/architecture/dataflow#fig:data_flow_pipeline">3.3</a>:</p>
 <ol>
 <li><p><strong>Sensor Acquisition</strong>: Raw measurements are read from the BMX160 IMU and Magnetometer. These values are buffered and low-pass filtered to remove high-frequency noise.</p></li>
 <li><p><strong>State Estimation</strong>: The filtered measurements are processed by the sensor fusion module (e.g., Mahony filter) to compute the vehicle’s current orientation (Roll, Pitch, Yaw).</p></li>
@@ -24,7 +24,7 @@
 <div class="center">
 <p><code>Sensors → Estimation → Control → Mixing → Actuation</code></p>
 </div>
-<p>Figure <a href="/docs/architecture/dataflow#fig:data_flow">3.4</a> illustrates the end-to-end data flow within the Vayu system.</p>
+<p>Figure <a href="/docs/report/architecture/dataflow#fig:data_flow">3.4</a> illustrates the end-to-end data flow within the Vayu system.</p>
 <figure id="fig:data_flow">
 <img src="/docs/diagrams/tikz-2094f9192dce.svg" />
 <figcaption>Data flow pipeline from sensor acquisition to actuator output</figcaption>

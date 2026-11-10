@@ -32,7 +32,7 @@
 <h3 id="relevance-to-control-systems">Relevance to Control Systems</h3>
 <p>Accurate representation of coordinate frames and attitude is critical for transforming sensor measurements into meaningful state estimates. For example, inertial measurements obtained from an IMU in the body frame must be transformed into the inertial frame for tasks such as stabilization and navigation.</p>
 <p>Similarly, control algorithms often compute desired orientations or angular rates in a specific frame, requiring consistent transformation between reference frames. Errors in these transformations can lead to incorrect state estimation and unstable control behavior.</p>
-<p>Thus, a well-defined coordinate system framework forms the foundation for sensor fusion, state estimation, and control in embedded flight systems. Figure <a href="/docs/preliminary/coordinate#fig:coordinate_frames">2.4</a> illustrates the relationship between the fixed inertial frame and the drone’s body frame, along with the convention for Euler angle rotations.</p>
+<p>Thus, a well-defined coordinate system framework forms the foundation for sensor fusion, state estimation, and control in embedded flight systems. Figure <a href="/docs/report/preliminary/coordinate#fig:coordinate_frames">2.4</a> illustrates the relationship between the fixed inertial frame and the drone’s body frame, along with the convention for Euler angle rotations.</p>
 <figure id="fig:coordinate_frames">
 <img src="/docs/diagrams/tikz-cf21f3085a5e.svg" />
 <figcaption>Refined 3D coordinate systems showing the Inertial (NED) and Body frames side-by-side.</figcaption>

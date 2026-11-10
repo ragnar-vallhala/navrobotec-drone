@@ -8,7 +8,7 @@
 <li><p><strong>Tier 3: Asynchronous Utilities (Priority 0)</strong>: Lower-priority tasks such as <code>comm_processor</code> (telemetry), <code>heartbeat</code>, and <code>logger</code>. These tasks utilize the remaining CPU cycles to handle non-critical data exchange and system monitoring.</p></li>
 </ul>
 <h3 id="execution-timing-diagram">Execution Timing Diagram</h3>
-<p>Figure <a href="/docs/architecture/execution#fig:execution_timeline">3.5</a> illustrates the interleaved execution of high and low priority tasks over a single control cycle.</p>
+<p>Figure <a href="/docs/report/architecture/execution#fig:execution_timeline">3.5</a> illustrates the interleaved execution of high and low priority tasks over a single control cycle.</p>
 <figure id="fig:execution_timeline">
 <img src="/docs/diagrams/tikz-b8151f544e23.svg" />
 <figcaption>Preemptive scheduling model of VAIOS, showing how sensor tasks interrupt lower-priority execution to ensure deterministic timing.</figcaption>

@@ -8,7 +8,7 @@
 </ul>
 <p>These layers interact in a hierarchical manner, where each layer depends only on the services provided by the layer immediately below it. This separation of concerns allows changes in one layer—such as adapting to new hardware or modifying execution strategies—without affecting the functionality of other layers.</p>
 <p>The layered architecture also enables clear data and control flow across the system. Sensor data is acquired at the hardware level, abstracted by NavHAL, processed within the control layer, and translated into actuator commands that propagate back down to the hardware.</p>
-<p>Figure <a href="/docs/architecture/layered-arch#fig:layered_arch">3.1</a> illustrates the high-level layered structure of the Vayu system.</p>
+<p>Figure <a href="/docs/report/architecture/layered-arch#fig:layered_arch">3.1</a> illustrates the high-level layered structure of the Vayu system.</p>
 <figure id="fig:layered_arch">
 <img src="/docs/diagrams/tikz-8c19396a9b21.svg" />
 <figcaption>Layered architecture of the Vayu flight control system</figcaption>

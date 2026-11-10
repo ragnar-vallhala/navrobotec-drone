@@ -3,7 +3,7 @@
 <p>The microcontroller generates pulse-width modulation (PWM) signals using its internal timer peripherals. These signals are routed to ESCs, which regulate the speed of the motors based on the duty cycle of the PWM input.</p>
 <p>In the current implementation, conventional PWM (CPWM) is used with an update frequency of approximately <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>400</mn><mspace width="0.167em"></mspace><mtext mathvariant="normal">Hz</mtext></mrow><annotation encoding="application/x-tex">400\,\text{Hz}</annotation></semantics></math>, which is compatible with standard ESCs. This frequency provides a balance between control responsiveness and signal stability.</p>
 <p>Timer 1, an advanced-control timer, is used for driving the primary four motors. Its enhanced capabilities, such as higher resolution and synchronized channel outputs, make it well-suited for precise multi-channel motor control.</p>
-<p>Figure <a href="/docs/hardware/hw-actuation#fig:actuation_flow">4.4</a> demonstrates the forward control path from the processing unit to the physical actuators.</p>
+<p>Figure <a href="/docs/report/hardware/hw-actuation#fig:actuation_flow">4.4</a> demonstrates the forward control path from the processing unit to the physical actuators.</p>
 <figure id="fig:actuation_flow">
 <img src="/docs/diagrams/tikz-e07693ae903e.svg" />
 <figcaption>Actuation signal flow illustrating the transition from software control logic to physical motor thrust via hardware timers and speed controllers.</figcaption>
