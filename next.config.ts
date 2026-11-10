@@ -55,7 +55,21 @@ const nextConfig: NextConfig = {
   },
 
   async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
+    return [
+      { source: "/:path*", headers: securityHeaders },
+      /* The pre-generated sizes. Not "immutable": the names carry the source's
+         name and width, not a hash of its bytes, so replaced artwork has to be
+         able to show up within a day. */
+      {
+        source: "/_v/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=86400, stale-while-revalidate=604800",
+          },
+        ],
+      },
+    ];
   },
 
   /* A self-contained server bundle in .next/standalone, so the runtime image
