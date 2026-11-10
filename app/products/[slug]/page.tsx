@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import BoardPhoto from "@/components/BoardPhoto";
 import ComingSoon from "@/components/ComingSoon";
 import InterestDialog from "@/components/InterestDialog";
+import WaitlistDialog from "@/components/WaitlistDialog";
 import {
   hasDetails,
   kindLabel,
@@ -189,6 +190,15 @@ export default async function ProductPage({
                   interest={interest}
                   options={interestsFor(catalogue.products)}
                 />
+                {/* The student waitlist is for the X427 only, and sits beside
+                    Enquire rather than replacing it: one is a question for an
+                    engineer, the other a place in the line. */}
+                {product.slug === "x427" ? (
+                  <WaitlistDialog
+                    title="Join the X427 waitlist"
+                    lede="For college students and clubs. The first 50 on the waitlist receive a free kit."
+                  />
+                ) : null}
                 <Link href="/docs" className="btn btn-ghost">
                   Read the documentation
                 </Link>
