@@ -36,6 +36,9 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
+  /* Every page names its own .in URL as canonical, so the same page served from
+     navrobotec.com is not indexed as a duplicate. */
+  alternates: { canonical: "./" },
   title: {
     default: "NAVRobotec — Sovereign software for autonomous flight",
     template: "%s — NAVRobotec",
