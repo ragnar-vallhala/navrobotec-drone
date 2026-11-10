@@ -1,9 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import WaitlistDialog from "./WaitlistDialog";
 import styles from "./WaitlistPopup.module.css";
+import { PRODUCT_MEDIA } from "@/lib/product-media";
 import {
   isWaitlisted,
   markPopupShown,
@@ -18,33 +20,36 @@ import {
  * not /docs or /admin, unless this browser has already joined (localStorage)
  * or the prompt has already been shown in this visit (sessionStorage; a new
  * tab or visit shows it once more). The session flag is set the moment it
- * appears, so no later page in the visit shows it again, whether or not it was
- * dismissed.
+ * appears, so no later page in the visit shows it again.
  *
- * What it will not do: take focus, dim the page, or move anything. It is a
- * non-modal card in the bottom corner. It goes away on its own after about 8
- * seconds (the countdown pauses while the pointer or keyboard focus is on it),
- * with the X, with Escape, or with "Not now".
+ * It is a native modal <dialog>, like InterestDialog: focus moves in and
+ * returns, the page behind is inert, Escape and a click on the backdrop close
+ * it, and so do the X and "Not now". It also closes by itself after about 12
+ * seconds; the countdown pauses while the pointer is over it or a control
+ * inside it has keyboard focus. Initial focus goes to the dialog itself, not a
+ * button, so merely appearing does not count as interaction.
  *
- * "Join the waitlist" opens the same WaitlistDialog as the X427 page, rendered
- * here in controlled mode, so there is one form. It works on every page. */
+ * "Join the waitlist" closes it and opens the same WaitlistDialog as the X427
+ * page, rendered here in controlled mode, so there is one form. */
 
 const SHOW_AFTER_MS = 2000;
-const HIDE_AFTER_MS = 8000;
+const HIDE_AFTER_MS = 12000;
 const EXCLUDED = ["/docs", "/admin"];
 
 function excluded(path: string | null): boolean {
   return EXCLUDED.some((p) => path === p || path?.startsWith(`${p}/`));
 }
 
+const SHOT = PRODUCT_MEDIA.x427.hero;
+
 export default function WaitlistPopup() {
   const pathname = usePathname();
-  const [visible, setVisible] = useState(false);
-  const [dialogMounted, setDialogMounted] = useState(false);
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [show, setShow] = useState(false);
+  const [formMounted, setFormMounted] = useState(false);
+  const [formOpen, setFormOpen] = useState(false);
+  const ref = useRef<HTMLDialogElement>(null);
   const titleId = useId();
 
-  /* The hide countdown, kept in refs so pausing does not re-render. */
   const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const remaining = useRef(HIDE_AFTER_MS);
   const startedAt = useRef(0);
@@ -54,123 +59,146 @@ export default function WaitlistPopup() {
     hideTimer.current = null;
   }, []);
 
-  const dismiss = useCallback(() => {
+  const close = useCallback(() => {
     stopTimer();
-    setVisible(false);
+    ref.current?.close();
   }, [stopTimer]);
 
   const startTimer = useCallback(() => {
     stopTimer();
     startedAt.current = Date.now();
-    hideTimer.current = setTimeout(dismiss, remaining.current);
-  }, [dismiss, stopTimer]);
+    hideTimer.current = setTimeout(close, remaining.current);
+  }, [close, stopTimer]);
 
   const pause = useCallback(() => {
     if (!hideTimer.current) return;
     remaining.current = Math.max(
-      1000,
+      1500,
       remaining.current - (Date.now() - startedAt.current),
     );
     stopTimer();
   }, [stopTimer]);
 
-  /* Decide, per page, whether to show. Reads storage only inside the effect,
-     so the server and the first client render agree (both render nothing). */
+  /* Decide, per page, whether to show. Storage is read only inside effects,
+     so the server and first client render agree (both render nothing). */
   useEffect(() => {
     if (excluded(pathname)) return;
     if (isWaitlisted() || popupShownThisVisit()) return;
-
     const timer = setTimeout(() => {
-      /* Re-checked at the moment of showing: a form may have been opened, or
-         the visitor may have joined in another tab, in the meantime. */
       if (isWaitlisted() || popupShownThisVisit()) return;
       if (document.querySelector("dialog[open]")) return;
       markPopupShown();
       remaining.current = HIDE_AFTER_MS;
-      setVisible(true);
+      setShow(true);
     }, SHOW_AFTER_MS);
     return () => clearTimeout(timer);
   }, [pathname]);
 
-  /* Start the countdown when it appears; clean up when it goes. */
+  /* Open as modal once rendered; lock the page's scroll like InterestDialog. */
   useEffect(() => {
-    if (!visible) return;
+    if (!show) return;
+    const dialog = ref.current;
+    if (!dialog) return;
+    const root = document.documentElement;
+    const gap = window.innerWidth - root.clientWidth;
+    const { overflow, paddingRight } = root.style;
+    root.style.overflow = "hidden";
+    if (gap > 0) root.style.paddingRight = `${gap}px`;
+    if (!dialog.open) dialog.showModal();
+    dialog.focus();
     startTimer();
-    return stopTimer;
-  }, [visible, startTimer, stopTimer]);
-
-  /* Escape closes it without needing focus to be inside it. */
-  useEffect(() => {
-    if (!visible) return;
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") dismiss();
+    return () => {
+      stopTimer();
+      root.style.overflow = overflow;
+      root.style.paddingRight = paddingRight;
     };
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, [visible, dismiss]);
-
-  /* Leaving for a page where it must not show also takes it down. */
-  useEffect(() => {
-    if (excluded(pathname)) dismiss();
-  }, [pathname, dismiss]);
+  }, [show, startTimer, stopTimer]);
 
   const join = () => {
-    dismiss();
-    setDialogMounted(true);
-    setDialogOpen(true);
+    close();
+    setFormMounted(true);
+    setFormOpen(true);
   };
 
   return (
     <>
-      {visible ? (
-        <section
-          role="dialog"
-          aria-modal="false"
+      {show ? (
+        <dialog
+          ref={ref}
+          tabIndex={-1}
+          className={styles.dialog}
           aria-labelledby={titleId}
-          className={styles.card}
-          onPointerEnter={pause}
+          onClose={() => setShow(false)}
+          onClick={(event) => {
+            if (event.target === ref.current) close();
+          }}
+          /* A pointer over the backdrop reports the dialog itself as its
+             target, so only the panel's own contents count as hovering. */
+          onPointerMove={(event) => {
+            if (event.target === ref.current) {
+              if (!hideTimer.current) startTimer();
+            } else pause();
+          }}
           onPointerLeave={() => {
             if (!hideTimer.current) startTimer();
           }}
-          onFocus={pause}
+          onFocus={(event) => {
+            if (event.target !== ref.current) pause();
+          }}
           onBlur={(event) => {
-            if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+            if (
+              !event.currentTarget.contains(event.relatedTarget as Node | null)
+            ) {
               startTimer();
             }
           }}
         >
-          <button
-            type="button"
-            className={styles.close}
-            onClick={dismiss}
-            aria-label="Close"
-          >
-            <span aria-hidden>&times;</span>
-          </button>
-          <h2 id={titleId} className={`h3 ${styles.title}`}>
-            X427 waitlist is open
-          </h2>
-          <p className={styles.text}>
-            College students get a free board, first come, first served: the
-            first 50.
-          </p>
-          <div className={styles.actions}>
-            <button type="button" className="btn btn-primary" onClick={join}>
-              Join the waitlist
+          <div className={styles.panel}>
+            <button
+              type="button"
+              className={styles.close}
+              onClick={close}
+              aria-label="Close"
+            >
+              <span aria-hidden>&times;</span>
             </button>
-            <button type="button" className="btn btn-ghost" onClick={dismiss}>
-              Not now
-            </button>
+            <div className={styles.visual}>
+              <Image
+                src={SHOT.src}
+                alt={SHOT.alt}
+                fill
+                sizes="(max-width: 44rem) 90vw, 26rem"
+                className={styles.image}
+              />
+            </div>
+            <div className={styles.body}>
+              <p className="label label-signal">X427 waitlist</p>
+              <h2 id={titleId} className={`h2 ${styles.title}`}>
+                X427 waitlist is open
+              </h2>
+              <p className={styles.text}>
+                College students get a free board, first come, first served:
+                the first 50.
+              </p>
+              <div className={styles.actions}>
+                <button type="button" className="btn btn-primary" onClick={join}>
+                  Join the waitlist
+                </button>
+                <button type="button" className="btn btn-ghost" onClick={close}>
+                  Not now
+                </button>
+              </div>
+            </div>
           </div>
-        </section>
+        </dialog>
       ) : null}
 
-      {dialogMounted ? (
+      {formMounted ? (
         <WaitlistDialog
           title={WAITLIST_TITLE}
           lede={WAITLIST_LEDE}
-          open={dialogOpen}
-          onClosed={() => setDialogOpen(false)}
+          open={formOpen}
+          onClosed={() => setFormOpen(false)}
         />
       ) : null}
     </>

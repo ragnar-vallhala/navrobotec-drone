@@ -1,59 +1,83 @@
-/* A small card in the bottom corner. Fixed, so it never moves the page; not
-   modal, so nothing behind it is dimmed or inert. */
-.card {
-  position: fixed;
-  z-index: 60;
-  left: var(--gutter);
-  right: var(--gutter);
-  bottom: max(1rem, env(safe-area-inset-bottom));
-  display: grid;
-  gap: 0.75rem;
-  padding: 1.125rem 1.25rem 1.25rem;
+/* A centred modal, painted like the site's other dialogs. The <dialog> is only
+   the box; ::backdrop is the ground behind it. */
+.dialog {
+  margin: auto;
+  width: min(52rem, calc(100vw - 2 * var(--gutter)));
+  max-height: calc(100dvh - 2rem);
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
   background: var(--card);
   color: var(--ink-2);
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow);
-  animation: rise 0.28s var(--ease) both;
+  overflow: hidden;
 }
-@media (min-width: 40rem) {
-  .card {
-    left: auto;
-    right: max(1.5rem, env(safe-area-inset-right));
-    bottom: max(1.5rem, env(safe-area-inset-bottom));
-    width: 22rem;
-  }
+.dialog:focus { outline: none; }
+.dialog::backdrop {
+  background: rgb(4 10 8 / 0.55);
+  backdrop-filter: blur(3px);
 }
-
-@keyframes rise {
-  from { opacity: 0; transform: translateY(0.75rem); }
+/* Entrance only, and it ends visible. Under reduced motion it just appears. */
+.dialog[open] { animation: lift 0.26s var(--ease) both; }
+.dialog[open]::backdrop { animation: fade 0.26s var(--ease) both; }
+@keyframes lift {
+  from { opacity: 0; transform: translateY(0.75rem) scale(0.985); }
   to   { opacity: 1; transform: none; }
 }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) {
-  .card { animation: none; }
+  .dialog[open], .dialog[open]::backdrop { animation: none; }
 }
 
-.title { margin: 0; padding-right: 2rem; }
-.text { margin: 0; font-size: 0.9375rem; line-height: 1.5; }
+.panel {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  max-height: inherit;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+@media (min-width: 44rem) {
+  .panel { grid-template-columns: 1fr 1fr; }
+}
 
-.actions { display: flex; flex-wrap: wrap; gap: 0.5rem 0.75rem; margin-top: 0.25rem; }
+/* The frame keeps its shape before the picture arrives, so nothing shifts. */
+.visual {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  background: var(--band);
+}
+@media (min-width: 44rem) {
+  .visual { aspect-ratio: auto; min-height: 24rem; }
+}
+.image { object-fit: contain; padding: 6%; }
+
+.body {
+  display: grid;
+  align-content: center;
+  gap: 0.875rem;
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+}
+.title { margin: 0; }
+.text { margin: 0; font-size: 1rem; line-height: 1.55; }
+.actions { display: flex; flex-wrap: wrap; gap: 0.5rem 0.75rem; margin-top: 0.5rem; }
 
 .close {
   position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
+  z-index: 1;
+  top: 0.75rem;
+  right: 0.75rem;
   display: grid;
   place-items: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  border: 1px solid transparent;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--line-strong);
   border-radius: 50%;
-  background: transparent;
-  color: var(--muted);
+  background: var(--card);
+  color: var(--ink);
   font-size: 1.5rem;
   line-height: 1;
   cursor: pointer;
-  transition: color 0.2s var(--ease), border-color 0.2s var(--ease);
+  transition: border-color 0.2s var(--ease);
 }
-.close:hover { color: var(--ink); border-color: var(--line); }
+.close:hover { border-color: var(--signal); }
 .close:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
