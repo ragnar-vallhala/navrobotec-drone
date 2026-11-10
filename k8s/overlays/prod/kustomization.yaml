@@ -15,4 +15,4 @@ labels:
 
 images:
   - name: ghcr.io/ragnar-vallhala/navrobotec-drone
-    newTag: prod-20261110-1116-a52f217
+    newTag: prod-20261110-1451-574d9e2
