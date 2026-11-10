@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import form from "./EnquiryForm.module.css";
 import styles from "./InterestDialog.module.css";
+import own from "./WaitlistDialog.module.css";
+import { markWaitlisted } from "@/lib/waitlist";
 
 /* The X427 student waitlist, in the same kind of dialog as InterestDialog.
  *
@@ -12,9 +14,15 @@ import styles from "./InterestDialog.module.css";
  * a native <dialog> and why the form is mounted only while it is open; the
  * scroll lock below is the same one.
  *
- * Copy is limited to the offer as stated: the first 50 college students and
- * clubs on the waitlist receive a free kit. Nothing here says when, or what
- * is in it.
+ * Anyone can join with a name and an email. A tick-box says whether they are
+ * a college student; only then are college or club, year and city asked (and
+ * sent), and only students are in the free-board offer: the first 50 college
+ * students, first come first served. Nothing here says when, or what is in
+ * the box.
+ *
+ * The same dialog is used by the X427 page's button and by WaitlistPopup,
+ * which opens it controlled (`open`) with no button of its own, so there is
+ * one form.
  *
  * As in EnquiryForm, the API decides what is valid and field errors come back
  * keyed by the `name` attributes below.
@@ -32,9 +40,20 @@ const YEARS = [
   "Not applicable",
 ];
 
-type FieldName = "name" | "email" | "college_or_club" | "year" | "city";
+type FieldName =
+  | "name"
+  | "email"
+  | "college_or_club"
+  | "year"
+  | "city"
+  | "is_student";
 
-type Joined = { position: number; email: string };
+type Joined = {
+  position: number;
+  email: string;
+  student: boolean;
+  withinFreeKits: boolean;
+};
 
 const DUPLICATE =
   "That email address is already on the X427 waitlist. You do not need to join again.";
@@ -51,6 +70,7 @@ function WaitlistForm() {
   const fid = (name: string) => `${uid}-f-${name}`;
   const eid = (name: string) => `${uid}-e-${name}`;
   const [failure, setFailure] = useState(0);
+  const [student, setStudent] = useState(false);
 
   useEffect(() => {
     if (failure === 0) return;
@@ -82,9 +102,15 @@ function WaitlistForm() {
         body: JSON.stringify({
           name: get("name"),
           email: get("email"),
-          college_or_club: get("college_or_club"),
-          year: get("year"),
-          city: get("city"),
+          is_student: student,
+          /* Unticked, these fields are not on the page and are not sent. */
+          ...(student
+            ? {
+                college_or_club: get("college_or_club"),
+                year: get("year"),
+                city: get("city"),
+              }
+            : {}),
           /* The honeypot, as on the enquiry form. */
           website: get("website"),
         }),
@@ -92,6 +118,8 @@ function WaitlistForm() {
       const body = await response.json().catch(() => null);
 
       if (response.status === 409) {
+        /* They are on the list already, which is what the prompt wanted. */
+        markWaitlisted();
         setErrors({ email: DUPLICATE });
         setFailure((n) => n + 1);
         return;
@@ -107,6 +135,7 @@ function WaitlistForm() {
           "college_or_club",
           "year",
           "city",
+          "is_student",
         ] satisfies FieldName[]);
         const next: Record<string, string> = {};
         const stray: string[] = [];
@@ -128,14 +157,16 @@ function WaitlistForm() {
         return;
       }
 
+      markWaitlisted();
       const position = Number(body?.data?.position);
-      if (!Number.isFinite(position) || position < 1) {
+      setJoined({
         /* The API accepted it but did not say where: say that much and no
            more, rather than inventing a number. */
-        setJoined({ position: 0, email: get("email").trim() });
-      } else {
-        setJoined({ position, email: get("email").trim() });
-      }
+        position: Number.isFinite(position) && position >= 1 ? position : 0,
+        email: get("email").trim(),
+        student,
+        withinFreeKits: student && body?.data?.within_free_kits === true,
+      });
     } catch {
       setErrors({
         "":
@@ -158,8 +189,12 @@ function WaitlistForm() {
             : "You are on the X427 waitlist."}
         </h2>
         <p className="body">
-          The first 50 college students and clubs on the waitlist receive a
-          free kit. We will email you at {joined.email} about next steps.
+          {joined.withinFreeKits
+            ? "You are inside the first 50 college students, who receive a free board on a first-come, first-served basis. "
+            : joined.student
+              ? "You are on the list. "
+              : ""}
+          We will email you at {joined.email} about next steps.
         </p>
       </div>
     );
@@ -209,40 +244,66 @@ function WaitlistForm() {
       <div className={form.row}>
         {input("name", "Name", "text", "name", { required: true, maxLength: 120 })}
         {input("email", "Email", "email", "email", { required: true, maxLength: 254 })}
-        {input("college_or_club", "College or club", "text", "organization", {
-          required: true,
-          wide: true,
-          maxLength: 160,
-        })}
 
-        <div className={form.field}>
-          <label className="label" htmlFor={fid("year")}>
-            Year of study
-            <span className={form.optional}> — optional</span>
+        <div className={`${form.field} ${own.student}`}>
+          <label className={own.check} htmlFor={fid("is_student")}>
+            <input
+              id={fid("is_student")}
+              type="checkbox"
+              checked={student}
+              onChange={(event) => setStudent(event.target.checked)}
+              aria-controls={fid("student-fields")}
+              aria-describedby={errors.is_student ? eid("is_student") : undefined}
+            />
+            <span>I am a college student</span>
           </label>
-          <select
-            id={fid("year")}
-            name="year"
-            defaultValue=""
-            aria-invalid={errors.year ? true : undefined}
-            aria-describedby={errors.year ? eid("year") : undefined}
-            className={form.input}
-          >
-            <option value="">Select</option>
-            {YEARS.map((year) => (
-              <option key={year} value={year}>
-                {year}
-              </option>
-            ))}
-          </select>
-          {errors.year ? (
-            <p id={eid("year")} className={form.fieldError}>
-              {errors.year}
+          {errors.is_student ? (
+            <p id={eid("is_student")} className={form.fieldError}>
+              {errors.is_student}
             </p>
           ) : null}
         </div>
 
-        {input("city", "City", "text", "address-level2", { maxLength: 80 })}
+        <div id={fid("student-fields")} className={own.more} hidden={!student}>
+          {student ? (
+            <>
+              {input("college_or_club", "College or club", "text", "organization", {
+                required: true,
+                wide: true,
+                maxLength: 160,
+              })}
+
+              <div className={form.field}>
+                <label className="label" htmlFor={fid("year")}>
+                  Year of study
+                  <span className={form.optional}> — optional</span>
+                </label>
+                <select
+                  id={fid("year")}
+                  name="year"
+                  defaultValue=""
+                  aria-invalid={errors.year ? true : undefined}
+                  aria-describedby={errors.year ? eid("year") : undefined}
+                  className={form.input}
+                >
+                  <option value="">Select</option>
+                  {YEARS.map((year) => (
+                    <option key={year} value={year}>
+                      {year}
+                    </option>
+                  ))}
+                </select>
+                {errors.year ? (
+                  <p id={eid("year")} className={form.fieldError}>
+                    {errors.year}
+                  </p>
+                ) : null}
+              </div>
+
+              {input("city", "City", "text", "address-level2", { maxLength: 80 })}
+            </>
+          ) : null}
+        </div>
       </div>
 
       <div className={form.honeypot} aria-hidden>
@@ -276,11 +337,18 @@ export default function WaitlistDialog({
   label = "Join waitlist",
   title,
   lede,
+  open: wanted,
+  onClosed,
 }: {
   label?: string;
   title: string;
   lede: string;
+  /* Controlled use, for WaitlistPopup: when given, there is no button and the
+     dialog opens when this turns true. `onClosed` says it has shut again. */
+  open?: boolean;
+  onClosed?: () => void;
 }) {
+  const controlled = wanted !== undefined;
   const ref = useRef<HTMLDialogElement>(null);
   const [open, setOpen] = useState(false);
   const titleId = useId();
@@ -300,24 +368,36 @@ export default function WaitlistDialog({
     };
   }, [open]);
 
+  useEffect(() => {
+    if (wanted && ref.current && !ref.current.open) {
+      ref.current.showModal();
+      setOpen(true);
+    }
+  }, [wanted]);
+
   return (
     <>
-      <button
-        type="button"
-        className="btn btn-ghost"
-        onClick={() => {
-          ref.current?.showModal();
-          setOpen(true);
-        }}
-      >
-        {label}
-      </button>
+      {controlled ? null : (
+        <button
+          type="button"
+          className="btn btn-ghost"
+          onClick={() => {
+            ref.current?.showModal();
+            setOpen(true);
+          }}
+        >
+          {label}
+        </button>
+      )}
 
       <dialog
         ref={ref}
         className={styles.dialog}
         aria-labelledby={titleId}
-        onClose={() => setOpen(false)}
+        onClose={() => {
+          setOpen(false);
+          onClosed?.();
+        }}
         onClick={(event) => {
           if (event.target === ref.current) close();
         }}

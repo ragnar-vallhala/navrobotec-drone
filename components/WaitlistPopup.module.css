@@ -1,0 +1,59 @@
+/* A small card in the bottom corner. Fixed, so it never moves the page; not
+   modal, so nothing behind it is dimmed or inert. */
+.card {
+  position: fixed;
+  z-index: 60;
+  left: var(--gutter);
+  right: var(--gutter);
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  display: grid;
+  gap: 0.75rem;
+  padding: 1.125rem 1.25rem 1.25rem;
+  background: var(--card);
+  color: var(--ink-2);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  animation: rise 0.28s var(--ease) both;
+}
+@media (min-width: 40rem) {
+  .card {
+    left: auto;
+    right: max(1.5rem, env(safe-area-inset-right));
+    bottom: max(1.5rem, env(safe-area-inset-bottom));
+    width: 22rem;
+  }
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(0.75rem); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .card { animation: none; }
+}
+
+.title { margin: 0; padding-right: 2rem; }
+.text { margin: 0; font-size: 0.9375rem; line-height: 1.5; }
+
+.actions { display: flex; flex-wrap: wrap; gap: 0.5rem 0.75rem; margin-top: 0.25rem; }
+
+.close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--muted);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+.close:hover { color: var(--ink); border-color: var(--line); }
+.close:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }

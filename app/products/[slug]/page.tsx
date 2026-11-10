@@ -10,6 +10,7 @@ import {
   kindOf,
   PRODUCT_MEDIA,
 } from "@/lib/product-media";
+import { WAITLIST_LEDE, WAITLIST_TITLE } from "@/lib/waitlist";
 import { getCatalogue, INTEREST_BY_SLUG, interestsFor } from "@/lib/products";
 import styles from "./product.module.css";
 
@@ -195,8 +196,8 @@ export default async function ProductPage({
                     engineer, the other a place in the line. */}
                 {product.slug === "x427" ? (
                   <WaitlistDialog
-                    title="Join the X427 waitlist"
-                    lede="For college students and clubs. The first 50 on the waitlist receive a free kit."
+                    title={WAITLIST_TITLE}
+                    lede={WAITLIST_LEDE}
                   />
                 ) : null}
                 <Link href="/docs" className="btn btn-ghost">

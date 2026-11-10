@@ -1,0 +1,29 @@
+/* The student tick-box and the fields it reveals. Everything else in the form
+   comes from EnquiryForm.module.css. */
+.student { grid-column: 1 / -1; }
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 2.75rem;
+  cursor: pointer;
+  color: var(--ink);
+  font-size: 0.9375rem;
+}
+.check input {
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: 0;
+  accent-color: var(--signal);
+  cursor: pointer;
+}
+.check input:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+
+.more { display: grid; gap: 1.25rem; grid-column: 1 / -1; }
+@media (min-width: 44rem) {
+  .more { grid-template-columns: 1fr 1fr; gap: 1.25rem 1.5rem; }
+}
+.moreWide { grid-column: 1 / -1; }
+.more[hidden] { display: none; }
