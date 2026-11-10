@@ -37,24 +37,23 @@
   overscroll-behavior: contain;
 }
 @media (min-width: 44rem) {
-  .panel { grid-template-columns: 1.3fr 1fr; }
+  .panel { grid-template-columns: 1.6fr 1fr; }
 }
 
-/* The frame keeps its shape before the picture arrives, so nothing shifts. */
+/* A fixed 5:4 box, the shape of the popup images, so they are never cropped
+   and the card does not change size between slides. */
 .visual {
   position: relative;
-  aspect-ratio: 3 / 2;
+  aspect-ratio: 5 / 4;
+  align-self: start;
   background: var(--band);
-}
-@media (min-width: 44rem) {
-  .visual { aspect-ratio: auto; min-height: 22rem; }
 }
 
 .body {
   display: grid;
   align-content: center;
   gap: 0.875rem;
-  padding: clamp(1.25rem, 4vw, 2.5rem);
+  padding: clamp(1.25rem, 3vw, 2rem);
 }
 .title { margin: 0; }
 .text { margin: 0; font-size: 1rem; line-height: 1.55; }

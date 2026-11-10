@@ -7,7 +7,8 @@ Each view is cropped to the aspect ratio of the frame that shows it, so the
 board is never cut by object-fit, then resized and written as WebP. The hash
 in each name is the file's content, so new artwork lands on a new URL.
 
-Run:  python3 scripts/make-x427-renders.py <top_4k.png> <bottom_4k.png>
+Run:  python3 scripts/make-x427-renders.py <top_4k.png> <bottom_4k.png> [name ...]
+With names, only those jobs are built (the others keep their files).
 Then update lib/product-media.ts with the printed paths.
 Needs Pillow.
 """
@@ -23,11 +24,22 @@ JOBS = [
     ("products-hero-narrow", "top", (1940, 1090), 2500, 4 / 3, 1200, 0.56),
     ("x427-top", "top", (1940, 1090), 2445, 3 / 2, 1600, 0.50),
     ("x427-bottom", "bottom", (1936, 1096), 3000, 7 / 3, 1200, 0.50),
+    # The waitlist popup's image panel is a fixed 5:4 box (see
+    # components/WaitlistPopup.module.css), so these two are 5:4 with the
+    # whole board in frame and nothing left for object-fit to cut. The board is
+    # about 1.8:1, so the margin above and below is the render's own dark
+    # ground. 2500 px of the 4k source is the widest 5:4 that stays inside it
+    # with the board centred.
+    ("x427-popup-top", "top", (1940, 1090), 2500, 5 / 4, 1200, 0.50),
+    ("x427-popup-bottom", "bottom", (1936, 1096), 2500, 5 / 4, 1200, 0.50),
 ]
 src = {"top": Image.open(sys.argv[1]).convert("RGB"),
        "bottom": Image.open(sys.argv[2]).convert("RGB")}
 
+only = set(sys.argv[3:])
 for name, view, (cx, cy), cw, aspect, out_w, above in JOBS:
+    if only and name not in only:
+        continue
     im = src[view]
     ch = round(cw / aspect)
     left = min(max(cx - cw // 2, 0), im.width - cw)

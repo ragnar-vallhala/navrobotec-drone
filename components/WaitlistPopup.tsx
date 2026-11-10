@@ -5,7 +5,7 @@ import { useCallback, useEffect, useId, useRef, useState } from "react";
 import WaitlistCarousel from "./WaitlistCarousel";
 import WaitlistDialog from "./WaitlistDialog";
 import styles from "./WaitlistPopup.module.css";
-import { PRODUCT_MEDIA, PRODUCTS_OPENING } from "@/lib/product-media";
+import { POPUP_SHOTS } from "@/lib/product-media";
 import {
   isWaitlisted,
   markPopupShown,
@@ -42,13 +42,7 @@ function excluded(path: string | null): boolean {
   return EXCLUDED.some((p) => path === p || path?.startsWith(`${p}/`));
 }
 
-/* Only renders already on the site: the X427 top and bottom views and the
-   closer top crop used on /products. */
-const SHOTS = [
-  PRODUCT_MEDIA.x427.hero,
-  ...PRODUCT_MEDIA.x427.gallery,
-  PRODUCTS_OPENING.narrow,
-];
+const SHOTS = POPUP_SHOTS;
 
 export default function WaitlistPopup() {
   const pathname = usePathname();

@@ -50,6 +50,25 @@ export const PRODUCT_MEDIA: Record<
   },
 };
 
+/* The waitlist popup's image panel is a fixed 5:4 box. These two renders are
+   cropped to exactly 5:4 by scripts/make-x427-renders.py with the whole board
+   in frame, so nothing is cut at any size. There are only two source stills
+   (top and bottom), so there are two slides. */
+export const POPUP_SHOTS: Shot[] = [
+  {
+    src: "/images/x427-popup-top.5087ae33.webp",
+    alt: TOP_ALT,
+    width: 1200,
+    height: 960,
+  },
+  {
+    src: "/images/x427-popup-bottom.7c094814.webp",
+    alt: BOTTOM_ALT,
+    width: 1200,
+    height: 960,
+  },
+];
+
 /* A product has published details when it has its own renders. Every other
    product is listed by name only, with a Coming soon frame, until its details
    are published. */
