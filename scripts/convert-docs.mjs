@@ -111,6 +111,37 @@ ${colors}
   return svg.status === 0 && fs.existsSync(outSvg);
 }
 
+/** Site spelling of the product names, for prose only (never code or markup). */
+function normalizeText(t) {
+  return t
+    .replace(/\bVAIOS\b/g, "VaiOS")
+    .replace(/\bNAVHAL\b/g, "NavHAL")
+    .replace(/\bVayu\b/g, "VAYU");
+}
+
+/** Pages render their own <h1>; content headings start one level below it. */
+function promoteHeadings(html) {
+  return html.replace(/<(\/?)h([3-6])\b/g, (_m, slash, n) => `<${slash}h${n - 1}`);
+}
+
+/** Apply normalizeText to text nodes and alt text, skipping code/pre/math. */
+function normalizeNames(html) {
+  let skip = 0;
+  return html
+    .split(/(<[^>]+>)/)
+    .map((part) => {
+      if (part.startsWith("<")) {
+        const open = part.match(/^<(code|pre|math|script|style)\b/i);
+        const close = part.match(/^<\/(code|pre|math|script|style)\b/i);
+        if (open) skip++;
+        else if (close) skip = Math.max(0, skip - 1);
+        return part.replace(/\balt="([^"]*)"/, (_m, a) => `alt="${normalizeText(a)}"`);
+      }
+      return skip ? part : normalizeText(part);
+    })
+    .join("");
+}
+
 /** Intrinsic pixel size of a PNG / JPEG / SVG file, or null. */
 function imageSize(file) {
   try {
@@ -277,7 +308,7 @@ function convert() {
     const titleMatch = fs
       .readFileSync(chFile, "utf8")
       .match(/\\chapter\*?\{([^}]+)\}/);
-    const title = titleMatch ? titleMatch[1].trim() : slug;
+    const title = normalizeText(titleMatch ? titleMatch[1].trim() : slug);
 
     const html = r.stdout
       // Drop the leading <h1> — the route renders the chapter title itself.
@@ -297,7 +328,7 @@ function convert() {
         continue;
       }
       const id = (m[1].match(/id="([^"]+)"/) || [])[1] || null;
-      const secTitle = m[2].replace(/<[^>]+>/g, "").trim();
+      const secTitle = normalizeText(m[2].replace(/<[^>]+>/g, "").trim());
       const base =
         (id ? id.replace(/^sec:/, "") : secTitle)
           .toLowerCase()
@@ -363,13 +394,13 @@ function convert() {
     const introFile = `${dir}/_intro.html`;
     fs.writeFileSync(
       path.join(OUT_HTML, introFile),
-      `${enhanceImages(rewriteRefs(ch.intro, ch.num))}\n`,
+      `${normalizeNames(promoteHeadings(enhanceImages(rewriteRefs(ch.intro, ch.num))))}\n`,
     );
     const sections = ch.sections.map((sec) => {
       const file = `${dir}/${sec.slug}.html`;
       fs.writeFileSync(
         path.join(OUT_HTML, file),
-        `${enhanceImages(rewriteRefs(sec.html, ch.num))}\n`,
+        `${normalizeNames(promoteHeadings(enhanceImages(rewriteRefs(sec.html, ch.num))))}\n`,
       );
       return { slug: sec.slug, title: sec.title, file };
     });
@@ -445,4 +476,4 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   main();
 }
 
-export { enhanceImages };
+export { promoteHeadings, enhanceImages, normalizeNames, normalizeText };

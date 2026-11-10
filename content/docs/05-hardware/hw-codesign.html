@@ -1,11 +1,11 @@
-<p>The Vayu flight control system is developed using a hardware–software co-design approach, where the hardware platform and software architecture are designed in tandem to achieve deterministic performance, modularity, and scalability.</p>
-<p>Figure <a href="/docs/report/hardware/hw-codesign#fig:hw_sw_stack">4.8</a> illustrates the layered architecture of the Vayu platform, highlighting the abstraction between the physical hardware and high-level application logic.</p>
+<p>The VAYU flight control system is developed using a hardware–software co-design approach, where the hardware platform and software architecture are designed in tandem to achieve deterministic performance, modularity, and scalability.</p>
+<p>Figure <a href="/docs/report/hardware/hw-codesign#fig:hw_sw_stack">4.8</a> illustrates the layered architecture of the VAYU platform, highlighting the abstraction between the physical hardware and high-level application logic.</p>
 <figure id="fig:hw_sw_stack">
 <img src="/docs/diagrams/tikz-02bc7f6aad19.svg" alt="Layered system architecture demonstrating the hierarchy from physical hardware to application-level flight control tasks through abstraction layers." width="230" height="158" />
 <figcaption>Layered system architecture demonstrating the hierarchy from physical hardware to application-level flight control tasks through abstraction layers.</figcaption>
 </figure>
 <p>Rather than treating hardware and software as independent layers, the system is structured such that hardware capabilities directly inform software design decisions, and software requirements guide hardware selection and configuration.</p>
-<h3 id="mapping-of-hardware-resources-to-software-modules">Mapping of Hardware Resources to Software Modules</h3>
+<h2 id="mapping-of-hardware-resources-to-software-modules">Mapping of Hardware Resources to Software Modules</h2>
 <p>Each hardware component in the system is accessed through a corresponding software module, ensuring a clear and structured interface between physical devices and application logic.</p>
 <div id="tab:hw_sw_mapping">
 <table>
@@ -52,18 +52,18 @@
 </table>
 </div>
 <p>This structured mapping ensures that all hardware interactions are mediated through well-defined software interfaces, enabling modular development and easier system maintenance.</p>
-<h3 id="role-of-navhal">Role of NavHAL</h3>
+<h2 id="role-of-navhal">Role of NavHAL</h2>
 <p>The Hardware Abstraction Layer (NavHAL) acts as the bridge between hardware and higher-level software components. It provides standardized interfaces for peripherals such as communication buses, timers, and GPIO.</p>
 <p>By abstracting hardware-specific details, NavHAL allows the upper layers—including estimation, control, and communication modules—to operate independently of the underlying microcontroller. This enables portability across different hardware platforms without requiring significant changes to application logic.</p>
-<h3 id="execution-support-through-hardware-features">Execution Support through Hardware Features</h3>
-<p>The hardware platform is specifically selected to support the deterministic execution model implemented by VAIOS. Key hardware features that enable this include:</p>
+<h2 id="execution-support-through-hardware-features">Execution Support through Hardware Features</h2>
+<p>The hardware platform is specifically selected to support the deterministic execution model implemented by VaiOS. Key hardware features that enable this include:</p>
 <ul>
 <li><p><strong>Timers</strong>: Used for precise scheduling of control loops and generation of PWM signals.</p></li>
 <li><p><strong>Interrupts</strong>: Enable low-latency handling of sensor data and communication events.</p></li>
 <li><p><strong>Multiple Communication Interfaces</strong>: Allow concurrent data exchange without resource contention.</p></li>
 </ul>
 <p>These features ensure that time-critical tasks such as sensor acquisition and control computation can be executed reliably at fixed intervals.</p>
-<h3 id="design-alignment-and-scalability">Design Alignment and Scalability</h3>
+<h2 id="design-alignment-and-scalability">Design Alignment and Scalability</h2>
 <p>The co-design approach ensures that the system remains scalable and adaptable to future enhancements. For example, the addition of new sensors or communication protocols can be accommodated by extending the corresponding modules without modifying the overall architecture.</p>
 <p>Similarly, hardware upgrades—such as transitioning to higher-performance microcontrollers—can be achieved with minimal impact on higher-level software due to the abstraction provided by NavHAL.</p>
-<p>This tight integration between hardware and software enables the Vayu system to achieve predictable performance, efficient resource utilization, and long-term maintainability.</p>
+<p>This tight integration between hardware and software enables the VAYU system to achieve predictable performance, efficient resource utilization, and long-term maintainability.</p>

@@ -1,5 +1,5 @@
 <p>Communication systems enable data exchange between different components of an embedded system as well as between the system and external entities such as ground control stations, companion computers, and other devices. In flight control systems, communication plays a crucial role in telemetry, command reception, configuration, and debugging.</p>
-<h3 id="communication-interfaces">Communication Interfaces</h3>
+<h2 id="communication-interfaces">Communication Interfaces</h2>
 <p>Embedded systems support a variety of communication interfaces, each suited for different use cases:</p>
 <ul>
 <li><p><strong>UART (Universal Asynchronous Receiver-Transmitter)</strong>: A simple and widely used serial communication interface. UART is commonly used for telemetry, debugging, and communication with external modules such as GPS or radio transceivers.</p></li>
@@ -8,7 +8,7 @@
 <li><p><strong>CAN (Controller Area Network)</strong>: A robust communication protocol designed for reliability in noisy environments. It is widely used in automotive and increasingly in drone systems for inter-module communication.</p></li>
 </ul>
 <p>Each interface presents trade-offs in terms of speed, complexity, reliability, and wiring requirements, and the choice of interface depends on system constraints and application needs.</p>
-<h3 id="communication-protocols">Communication Protocols</h3>
+<h2 id="communication-protocols">Communication Protocols</h2>
 <p>Beyond physical interfaces, communication protocols define how data is structured, transmitted, and interpreted. In flight control systems, protocols are used to standardize communication between components.</p>
 <p>Protocols typically define:</p>
 <ul>
@@ -18,14 +18,14 @@
 <li><p>Synchronization and sequencing</p></li>
 </ul>
 <p>Well-defined protocols ensure interoperability between different system components and enable reliable communication even in the presence of noise or packet loss.</p>
-<h3 id="telemetry-and-command-systems">Telemetry and Command Systems</h3>
+<h2 id="telemetry-and-command-systems">Telemetry and Command Systems</h2>
 <p>Communication in embedded flight systems is broadly divided into two categories:</p>
 <ul>
 <li><p><strong>Telemetry</strong>: Transmission of system data such as sensor readings, state estimates, and system status to external systems. This is essential for monitoring and debugging.</p></li>
 <li><p><strong>Command and Control</strong>: Reception of external inputs such as pilot commands, mission instructions, or configuration parameters. These inputs directly influence system behavior and must be handled with low latency and high reliability.</p></li>
 </ul>
 <p>These communication pathways must be carefully designed to ensure timely and consistent data exchange, especially in real-time systems.</p>
-<h3 id="design-considerations">Design Considerations</h3>
+<h2 id="design-considerations">Design Considerations</h2>
 <p>Designing communication systems for embedded applications involves several practical considerations:</p>
 <ul>
 <li><p><strong>Latency</strong>: Communication delays can affect system responsiveness, particularly in control loops.</p></li>

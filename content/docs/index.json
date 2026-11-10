@@ -210,7 +210,7 @@
       },
       {
         "slug": "navhal-vaios-integration",
-        "title": "Integration with VAIOS",
+        "title": "Integration with VaiOS",
         "file": "06-navhal/navhal-vaios-integration.html"
       },
       {
@@ -232,7 +232,7 @@
   },
   {
     "slug": "vaios",
-    "title": "VAIOS",
+    "title": "VaiOS",
     "order": 7,
     "intro": "07-vaios/_intro.html",
     "sections": [
@@ -278,7 +278,7 @@
       },
       {
         "slug": "vaios-vayu-integration",
-        "title": "Integration with Vayu",
+        "title": "Integration with VAYU",
         "file": "07-vaios/vaios-vayu-integration.html"
       },
       {
@@ -295,7 +295,7 @@
   },
   {
     "slug": "vayu",
-    "title": "Vayu",
+    "title": "VAYU",
     "order": 8,
     "intro": "08-vayu/_intro.html",
     "sections": [

@@ -1,5 +1,5 @@
 <p>The interface design of NavHAL is centered around simplicity, consistency, and explicit control over hardware behavior. The API is intentionally designed to provide a development experience similar to high-level frameworks, while preserving the determinism and performance required in real-time embedded systems.</p>
-<h3 class="unnumbered" id="design-principles">Design Principles</h3>
+<h2 class="unnumbered" id="design-principles">Design Principles</h2>
 <p>The following principles guide the API design:</p>
 <ul>
 <li><p><strong>Simplicity:</strong> APIs are designed to be minimal and intuitive, reducing the amount of boilerplate required for common operations.</p></li>
@@ -8,7 +8,7 @@
 <li><p><strong>Low Overhead:</strong> APIs are implemented as lightweight functions, with internal operations resolved using inline functions and macros to minimize runtime cost.</p></li>
 <li><p><strong>Hardware Abstraction:</strong> Peripheral identifiers and configurations abstract underlying hardware details, allowing code to remain portable across platforms.</p></li>
 </ul>
-<h3 class="unnumbered" id="api-structure">API Structure</h3>
+<h2 class="unnumbered" id="api-structure">API Structure</h2>
 <p>NavHAL follows a consistent naming convention across all modules:</p>
 <div class="center">
 <p><code>hal_&lt;peripheral&gt;_&lt;operation&gt;</code></p>
@@ -21,7 +21,7 @@
 <li><p><code>hal_i2c_read()</code></p></li>
 </ul>
 <p>This structure ensures that all peripherals expose a uniform and predictable interface.</p>
-<h3 class="unnumbered" id="example-gpio-interface">Example: GPIO Interface</h3>
+<h2 class="unnumbered" id="example-gpio-interface">Example: GPIO Interface</h2>
 <p>A representative example of the API design is shown below:</p>
 <div class="sourceCode" id="cb1" data-language="C" data-caption="Example LED blink using NavHAL"><pre class="sourceCode objectivec"><code class="sourceCode objectivec"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define CORTEX_M4</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;navhal.h&quot;</span></span>
@@ -47,9 +47,9 @@
 <li><p><strong>Abstract Pin Representation:</strong> Identifiers such as <code>GPIO_PA05</code> abstract the underlying hardware mapping, enabling portability.</p></li>
 <li><p><strong>Deterministic Execution:</strong> No hidden scheduling or background processes are involved; all operations are directly controlled by the application.</p></li>
 </ul>
-<h3 class="unnumbered" id="compile-time-resolution">Compile-Time Resolution</h3>
+<h2 class="unnumbered" id="compile-time-resolution">Compile-Time Resolution</h2>
 <p>NavHAL APIs are designed such that most hardware-specific details are resolved at compile time. Peripheral identifiers are represented as compile-time constants, which are translated into register-level operations through inline functions and macros within the core and vendor layers.</p>
 <p>This approach ensures that API usage does not introduce significant runtime overhead, and that generated code remains close to hand-written low-level implementations.</p>
-<h3 class="unnumbered" id="design-trade-offs">Design Trade-offs</h3>
+<h2 class="unnumbered" id="design-trade-offs">Design Trade-offs</h2>
 <p>To maintain simplicity and performance, NavHAL avoids introducing complex configuration objects or runtime polymorphism. While this reduces flexibility in dynamic scenarios, it ensures predictable behavior and minimal overhead, which are critical in embedded flight control systems.</p>
 <p>Additionally, NavHAL does not manage resource ownership or concurrency. These responsibilities are delegated to the execution layer when required, allowing the API to remain lightweight and execution-model agnostic.</p>

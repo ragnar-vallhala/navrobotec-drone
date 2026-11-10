@@ -7,10 +7,10 @@
 <li><p><strong>Cascaded PID Control</strong>: The control system is implemented as a cascaded architecture consisting of an outer angle loop and an inner rate loop. The outer loop regulates orientation, while the inner loop regulates angular velocity, enabling fast response and stable control.</p></li>
 <li><p><strong>Actuation and Motor Output</strong>: This module translates control outputs into actuator-specific commands. It applies a mixing strategy to map roll, pitch, yaw, and thrust commands to individual motor PWM signals, supporting configurations such as X4 multi-rotor systems.</p></li>
 </ul>
-<p>These components operate as a coordinated pipeline within the VAIOS execution environment. Time-critical modules such as sensor acquisition, estimation, and control are executed deterministically, while auxiliary functionalities such as telemetry and monitoring operate asynchronously.</p>
-<p>Figure <a href="/docs/report/architecture/component#fig:system_components">3.2</a> illustrates the logical organization and interaction of these components within the Vayu control stack.</p>
+<p>These components operate as a coordinated pipeline within the VaiOS execution environment. Time-critical modules such as sensor acquisition, estimation, and control are executed deterministically, while auxiliary functionalities such as telemetry and monitoring operate asynchronously.</p>
+<p>Figure <a href="/docs/report/architecture/component#fig:system_components">3.2</a> illustrates the logical organization and interaction of these components within the VAYU control stack.</p>
 <figure id="fig:system_components">
-<img src="/docs/diagrams/tikz-d61e3ba35bce.svg" alt="Logical organization and data flow between core components of the Vayu control stack." width="341" height="183" />
-<figcaption>Logical organization and data flow between core components of the Vayu control stack.</figcaption>
+<img src="/docs/diagrams/tikz-d61e3ba35bce.svg" alt="Logical organization and data flow between core components of the VAYU control stack." width="341" height="183" />
+<figcaption>Logical organization and data flow between core components of the VAYU control stack.</figcaption>
 </figure>
 <p>This component-based organization enables a clear separation between sensing, estimation, control, and actuation, forming a scalable and maintainable foundation for embedded flight control systems.</p>

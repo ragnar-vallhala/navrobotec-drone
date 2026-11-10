@@ -15,5 +15,5 @@
 <p>This separation allows independent evolution of each domain. Supporting a new board requires only board-level changes, while adapting to a different microcontroller primarily affects the vendor layer.</p>
 <p>The abstraction is resolved at compile time through build configuration parameters (processor, vendor, and board). This eliminates unused components and reduces binary size.</p>
 <p>To maintain efficiency, the design minimizes runtime indirection. Public APIs remain lightweight, while internal operations rely on inline functions and macros. As a result, most interactions map closely to direct register access.</p>
-<p>NavHAL operates as a stateless access layer and does not enforce resource ownership or concurrency control. These responsibilities are delegated to the execution layer (e.g., VAIOS) when present, allowing NavHAL to remain lightweight and flexible.</p>
+<p>NavHAL operates as a stateless access layer and does not enforce resource ownership or concurrency control. These responsibilities are delegated to the execution layer (e.g., VaiOS) when present, allowing NavHAL to remain lightweight and flexible.</p>
 <p>Overall, the architecture combines structured abstraction with direct hardware access, enabling portability without sacrificing performance.</p>
