@@ -63,10 +63,12 @@ spec:
       hosts:
         - navrobotec.in
         - www.navrobotec.in
-    # navrobotec.com serves this same site. A second secret, so the certificate
-    # for navrobotec.in is not reissued (and not put at risk) when these names
-    # are added.
-    - secretName: navrobotec-drone-com-tls
+    # navrobotec.com serves this same site. The secret is the one the services
+    # site's Ingress already filled for these two names, so the certificate is
+    # adopted rather than ordered again, and the names do not go without one
+    # during the move. A separate secret from navrobotec.in's, so that one is
+    # not touched.
+    - secretName: navrobotec-site-tls
       hosts:
         - navrobotec.com
         - www.navrobotec.com
