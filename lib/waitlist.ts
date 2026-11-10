@@ -1,17 +1,14 @@
 /* What the browser remembers about the X427 waitlist.
  *
- * Two keys, two lifetimes. `navrobotec.waitlisted` is in localStorage and set
- * once someone has joined (or been told they already had), so the prompt never
- * returns for them. `navrobotec.waitlistPopupShown` is in sessionStorage and
- * set the first time the prompt appears in a visit, so it shows on the first
- * page of a visit and not on the ones after; a new tab or a new visit is a new
- * sessionStorage and shows it again.
+ * `navrobotec.waitlisted` is in localStorage and set once someone has joined
+ * (or been told they already had), so the prompt never returns for them. Whether
+ * the prompt has already appeared is only in memory (see `popupShown`): it
+ * shows once per page load.
  *
  * Every access is wrapped: storage throws in some private modes and with site
  * data blocked, and the site has to work the same without it. */
 
 export const WAITLISTED_KEY = "navrobotec.waitlisted";
-export const POPUP_SHOWN_KEY = "navrobotec.waitlistPopupShown";
 
 export function markWaitlisted(): void {
   try {
@@ -29,20 +26,19 @@ export function isWaitlisted(): boolean {
   }
 }
 
+/* In memory on purpose, not in sessionStorage: sessionStorage survives a
+   reload, and a reload should bring the prompt back. A module variable lives
+   exactly as long as the page load: it is reset by a refresh, a new tab or a
+   hard navigation to another URL, and kept across client-side (Next Link)
+   navigation, which does not reload the page. */
+let popupShown = false;
+
 export function popupShownThisVisit(): boolean {
-  try {
-    return window.sessionStorage.getItem(POPUP_SHOWN_KEY) !== null;
-  } catch {
-    return false;
-  }
+  return popupShown;
 }
 
 export function markPopupShown(): void {
-  try {
-    window.sessionStorage.setItem(POPUP_SHOWN_KEY, "1");
-  } catch {
-    /* Without sessionStorage the prompt could repeat; see the popup. */
-  }
+  popupShown = true;
 }
 
 /* The dialog's heading and lede, shared by the X427 page and the popup so the
