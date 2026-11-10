@@ -40,3 +40,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# build products of scripts/make-image-variants.mjs
+/public/_v/
+/lib/image-variants.json

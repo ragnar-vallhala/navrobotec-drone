@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "convert:docs": "node scripts/convert-docs.mjs",
-    "predev": "node scripts/convert-docs.mjs",
+    "predev": "node scripts/convert-docs.mjs && node scripts/make-image-variants.mjs",
     "dev": "next dev",
-    "prebuild": "node scripts/convert-docs.mjs",
+    "prebuild": "node scripts/convert-docs.mjs && node scripts/make-image-variants.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"

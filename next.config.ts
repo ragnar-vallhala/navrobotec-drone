@@ -47,6 +47,13 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   poweredByHeader: false,
 
+  /* Pictures are resized at build time, not on request: see
+     scripts/make-image-variants.mjs for why. */
+  images: {
+    loader: "custom",
+    loaderFile: "./lib/imageLoader.ts",
+  },
+
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
