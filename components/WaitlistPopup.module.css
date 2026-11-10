@@ -49,7 +49,6 @@
 @media (min-width: 44rem) {
   .visual { aspect-ratio: auto; min-height: 24rem; }
 }
-.image { object-fit: contain; padding: 6%; }
 
 .body {
   display: grid;
@@ -74,10 +73,10 @@
   border-radius: 50%;
   background: var(--card);
   color: var(--ink);
-  font-size: 1.5rem;
-  line-height: 1;
+  padding: 0;
   cursor: pointer;
   transition: border-color 0.2s var(--ease);
 }
+.close svg { display: block; }
 .close:hover { border-color: var(--signal); }
 .close:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }

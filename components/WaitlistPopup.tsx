@@ -1,11 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
+import WaitlistCarousel from "./WaitlistCarousel";
 import WaitlistDialog from "./WaitlistDialog";
 import styles from "./WaitlistPopup.module.css";
-import { PRODUCT_MEDIA } from "@/lib/product-media";
+import { PRODUCT_MEDIA, PRODUCTS_OPENING } from "@/lib/product-media";
 import {
   isWaitlisted,
   markPopupShown,
@@ -42,7 +42,13 @@ function excluded(path: string | null): boolean {
   return EXCLUDED.some((p) => path === p || path?.startsWith(`${p}/`));
 }
 
-const SHOT = PRODUCT_MEDIA.x427.hero;
+/* Only renders already on the site: the X427 top and bottom views and the
+   closer top crop used on /products. */
+const SHOTS = [
+  PRODUCT_MEDIA.x427.hero,
+  ...PRODUCT_MEDIA.x427.gallery,
+  PRODUCTS_OPENING.narrow,
+];
 
 export default function WaitlistPopup() {
   const pathname = usePathname();
@@ -162,15 +168,15 @@ export default function WaitlistPopup() {
               onClick={close}
               aria-label="Close"
             >
-              <span aria-hidden>&times;</span>
+              <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <path d="M2 2l10 10M12 2 2 12" />
+              </svg>
             </button>
             <div className={styles.visual}>
-              <Image
-                src={SHOT.src}
-                alt={SHOT.alt}
-                fill
+              <WaitlistCarousel
+                shots={SHOTS}
                 sizes="(max-width: 44rem) 90vw, 26rem"
-                className={styles.image}
+                label="X427 board renders"
               />
             </div>
             <div className={styles.body}>
