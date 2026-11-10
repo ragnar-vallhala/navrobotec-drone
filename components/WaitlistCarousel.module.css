@@ -1,66 +1,12 @@
-/* Fills its positioned parent (the popup's fixed-size image panel), so the card
-   never changes size between slides. */
-.carousel { position: absolute; inset: 0; overflow: hidden; touch-action: pan-y; user-select: none; }
-.carousel:focus-visible { outline: 2px solid var(--signal); outline-offset: -4px; }
+/* Fills its positioned parent (the popup's fixed-size image panel) edge to
+   edge, so the card never changes size between slides. Slides are stacked and
+   cross-fade; nothing in here is interactive. */
+.carousel { position: absolute; inset: 0; overflow: hidden; background: var(--band); }
+.slide { position: absolute; inset: 0; opacity: 0; transition: opacity 0.6s var(--ease); }
+.on { opacity: 1; }
+.image { object-fit: cover; object-position: center; }
 
-.track { display: flex; height: 100%; transition: transform 0.5s var(--ease); }
-.slide { position: relative; flex: 0 0 100%; height: 100%; }
-.image { object-fit: contain; padding: 6% 6% 12%; pointer-events: none; -webkit-user-drag: none; }
-
+/* Reduced motion: slides still swap every 2 seconds, but with no fade. */
 @media (prefers-reduced-motion: reduce) {
-  .track { transition: none; }
+  .slide { transition: none; }
 }
-
-.arrow {
-  position: absolute;
-  top: calc(50% - 1rem);
-  z-index: 1;
-  display: grid;
-  place-items: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  padding: 0;
-  border: 1px solid rgb(230 239 234 / 0.28);
-  border-radius: 50%;
-  background: rgb(7 19 16 / 0.6);
-  color: #e6efea;
-  cursor: pointer;
-  transition: border-color 0.2s var(--ease);
-}
-.arrow:hover { border-color: var(--signal-lit); }
-.arrow:focus-visible { outline: 2px solid var(--signal-lit); outline-offset: 2px; }
-.arrow svg { display: block; }
-.prev { left: 0.5rem; }
-.next { right: 0.5rem; }
-
-.dots {
-  position: absolute;
-  z-index: 1;
-  left: 0;
-  right: 0;
-  bottom: 0.25rem;
-  display: flex;
-  justify-content: center;
-  gap: 0;
-}
-/* A 2.75rem tap target around a small dot. */
-.dot {
-  display: grid;
-  place-items: center;
-  width: 2rem;
-  height: 2rem;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  cursor: pointer;
-}
-.dot::before {
-  content: "";
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 50%;
-  background: rgb(230 239 234 / 0.35);
-  transition: background-color 0.2s var(--ease), transform 0.2s var(--ease);
-}
-.dot[aria-current="true"]::before { background: var(--signal-lit); transform: scale(1.25); }
-.dot:focus-visible { outline: 2px solid var(--signal-lit); outline-offset: -2px; border-radius: 50%; }

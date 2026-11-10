@@ -37,7 +37,7 @@
   overscroll-behavior: contain;
 }
 @media (min-width: 44rem) {
-  .panel { grid-template-columns: 1fr 1fr; }
+  .panel { grid-template-columns: 1.3fr 1fr; }
 }
 
 /* The frame keeps its shape before the picture arrives, so nothing shifts. */
@@ -47,7 +47,7 @@
   background: var(--band);
 }
 @media (min-width: 44rem) {
-  .visual { aspect-ratio: auto; min-height: 24rem; }
+  .visual { aspect-ratio: auto; min-height: 22rem; }
 }
 
 .body {

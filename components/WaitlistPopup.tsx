@@ -176,7 +176,6 @@ export default function WaitlistPopup() {
               <WaitlistCarousel
                 shots={SHOTS}
                 sizes="(max-width: 44rem) 90vw, 26rem"
-                label="X427 board renders"
               />
             </div>
             <div className={styles.body}>
