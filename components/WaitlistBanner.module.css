@@ -1,3 +1,5 @@
+/* Solid signal green with near-black text (about 11:1) and a near-black
+   button on it (signal green on #071310 is the same ratio). */
 .banner {
   position: fixed;
   inset: 0 0 auto 0;
@@ -8,32 +10,60 @@
   justify-content: center;
   gap: 0.75rem;
   padding-inline: 2.75rem;
-  background: var(--band);
-  color: var(--band-text);
+  background: var(--signal-lit);
+  color: #071310;
   font-family: var(--font-data);
-  font-size: 0.75rem;
-  letter-spacing: 0.04em;
+  font-size: 0.8125rem;
+  letter-spacing: 0.03em;
   line-height: 1.2;
   overflow: hidden;
 }
 .text { margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
-.text strong { font-weight: 600; }
+.text strong { font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; }
+@media (max-width: 47.99rem) {
+  .banner { padding-inline: 0.75rem 2.5rem; gap: 0.5rem; font-size: 0.6875rem; letter-spacing: 0; }
+  .dot { display: none; }
+  .text strong { letter-spacing: 0.02em; }
+  .join { padding-inline: 0.625rem; letter-spacing: 0.04em; }
+}
 .long { display: none; }
-@media (min-width: 40rem) { .long { display: inline; } }
+.short { display: inline; }
+@media (min-width: 48rem) {
+  .long { display: inline; }
+  .short { display: none; }
+}
+.dot {
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: #071310;
+  box-shadow: 0 0 0 0 rgba(7, 19, 16, 0.55);
+  animation: pulse 1.8s ease-out infinite;
+}
+@keyframes pulse {
+  70% { box-shadow: 0 0 0 0.5rem rgba(7, 19, 16, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(7, 19, 16, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dot { animation: none; }
+}
 .join {
   flex: none;
-  padding: 0.25rem 0.75rem;
-  border: 1px solid var(--signal-lit);
+  padding: 0.3125rem 0.875rem;
+  border: 0;
   border-radius: var(--radius);
-  background: transparent;
+  background: #071310;
   color: var(--signal-lit);
   font: inherit;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   cursor: pointer;
+  position: relative;
 }
-.join:hover { background: var(--signal-lit); color: var(--band); }
+.join::after { content: ""; position: absolute; inset: -0.4rem -0.25rem; }
+.join:hover { background: #fff; color: #071310; }
 .close {
   position: absolute;
   right: 0.5rem;
@@ -50,7 +80,6 @@
   background: transparent;
   color: inherit;
   cursor: pointer;
-  opacity: 0.75;
 }
-.close:hover { opacity: 1; }
-.banner :where(button):focus-visible { outline: 2px solid var(--signal-lit); outline-offset: 2px; }
+.close:hover { background: rgba(7, 19, 16, 0.14); }
+.banner :where(button):focus-visible { outline: 2px solid #071310; outline-offset: 2px; }

@@ -29,15 +29,18 @@ export default function WaitlistBanner() {
   }, [pathname]);
 
   return (
-    <div className={styles.banner} data-wl-banner-el role="region" aria-label="X427 waitlist">
+    <div className={styles.banner} data-wl-banner-el role="region" aria-label="X427 free board offer">
+      <span className={styles.dot} aria-hidden />
       <p className={styles.text}>
-        <strong>X427 waitlist is open</strong>
+        <strong>FREE X427 board</strong>
+        <span className={styles.long}> for the first 50 college students</span>
+        <span className={styles.short}> · first 50</span>
         <span className={styles.long}>
-          <span aria-hidden> · </span>first 50 college students get a free board
+          <span aria-hidden> · </span>offer ends 31 Dec
         </span>
       </p>
       <button type="button" className={styles.join} onClick={openWaitlist}>
-        Join
+        Claim yours
       </button>
       <button
         type="button"
@@ -48,7 +51,7 @@ export default function WaitlistBanner() {
           document.documentElement.dataset.wlBanner = "off";
         }}
       >
-        <svg width="12" height="12" viewBox="0 0 14 14" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+        <svg width="12" height="12" viewBox="0 0 14 14" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round">
           <path d="M2 2l10 10M12 2 2 12" />
         </svg>
       </button>
