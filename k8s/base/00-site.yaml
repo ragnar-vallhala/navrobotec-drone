@@ -1,9 +1,11 @@
 # The VaiOS site (navrobotec.in).
 #
-# On node3, which is the arm64 Pi with the most headroom left once the other
-# two were spoken for: node0 has the services site, node1 has ClamAV and the
-# API, and node2 is deliberately kept free for the GitHub Actions runners it
-# hosts for eight repositories.
+# Two replicas, never on the same node, so one node dropping out does not take
+# the site down (a single replica on node3 returned 503 during a node3 blip).
+# Allowed nodes: node3, node0 and node1 (arm64) and the control plane srv1237670
+# (amd64, preferred for one replica). Not node2, which is kept free for the
+# GitHub Actions runners, and not the heavily loaded amd64 worker. The image is
+# built for both architectures.
 #
 # Unlike the services site this is not purely prerendered — lib/products.ts
 # fetches the catalogue from the API server-side — so it needs to reach the
@@ -25,7 +27,7 @@ kind: Deployment
 metadata:
   name: navrobotec-drone
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app.kubernetes.io/name: navrobotec-drone
@@ -34,8 +36,27 @@ spec:
       labels:
         app.kubernetes.io/name: navrobotec-drone
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: node3
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values: [node3, node0, node1, srv1237670]
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              preference:
+                matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values: [srv1237670]
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: navrobotec-drone
       tolerations:
         - key: arch
           operator: Equal
