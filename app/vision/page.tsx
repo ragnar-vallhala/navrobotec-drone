@@ -40,8 +40,8 @@ export default function Vision() {
   return (
     <div className="page-flush">
       <Cinematic
-        src="/media/ground-test.jpg"
-        focus="50% 60%"
+        src="/media/vision-hero.png"
+        focus="30% 50%"
         kicker="The vision"
         title={
           <>
