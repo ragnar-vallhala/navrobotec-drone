@@ -46,7 +46,8 @@ type FieldName =
   | "college_or_club"
   | "year"
   | "city"
-  | "is_student";
+  | "is_student"
+  | "terms";
 
 type Joined = {
   position: number;
@@ -71,6 +72,7 @@ export function WaitlistForm() {
   const eid = (name: string) => `${uid}-e-${name}`;
   const [failure, setFailure] = useState(0);
   const [student, setStudent] = useState(false);
+  const [agreed, setAgreed] = useState(false);
 
   useEffect(() => {
     if (failure === 0) return;
@@ -87,6 +89,13 @@ export function WaitlistForm() {
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (busy.current) return;
+    /* The free-board terms must be accepted by anyone claiming the offer.
+       Checked here only: the API does not take or check it. */
+    if (student && !agreed) {
+      setErrors({ terms: "Please agree to the free board offer terms to continue." });
+      setFailure((n) => n + 1);
+      return;
+    }
     busy.current = true;
     const data = new FormData(event.currentTarget);
     const get = (key: string) => String(data.get(key) ?? "");
@@ -301,6 +310,36 @@ export function WaitlistForm() {
               </div>
 
               {input("city", "City", "text", "address-level2", { maxLength: 80 })}
+
+              <div className={`${form.field} ${form.wide}`}>
+                <label className={own.check} htmlFor={fid("terms")}>
+                  <input
+                    id={fid("terms")}
+                    type="checkbox"
+                    checked={agreed}
+                    onChange={(event) => setAgreed(event.target.checked)}
+                    required
+                    aria-invalid={errors.terms ? true : undefined}
+                    aria-describedby={errors.terms ? eid("terms") : undefined}
+                  />
+                  <span>
+                    I have read and agree to the{" "}
+                    <a
+                      href="/waitlist/terms"
+                      target="_blank"
+                      rel="noopener"
+                      className={form.link}
+                    >
+                      free board offer terms
+                    </a>
+                  </span>
+                </label>
+                {errors.terms ? (
+                  <p id={eid("terms")} className={form.fieldError}>
+                    {errors.terms}
+                  </p>
+                ) : null}
+              </div>
             </>
           ) : null}
         </div>
@@ -322,7 +361,10 @@ export function WaitlistForm() {
           {sending ? "Joining…" : "Join waitlist"}
         </button>
         <p className={`small muted ${form.aside}`}>
-          Or write to{" "}
+          <a href="/waitlist/terms" target="_blank" rel="noopener" className={form.link}>
+            Free board offer terms
+          </a>
+          . Or write to{" "}
           <a href="mailto:support@navrobotec.com" className={form.link}>
             support@navrobotec.com
           </a>
