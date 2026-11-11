@@ -1,11 +1,8 @@
 import Link from "next/link";
 import styles from "./page.module.css";
 
-/* The terms of the X427 free board offer, and nothing wider.
- *
- * Only facts the offer states are written as facts. Everything else is a
- * visible TO CONFIRM blank for the owner to fill before this ships; none of it
- * is invented. Plain language, not legal advice. */
+/* The terms of the X427 free board offer, and nothing wider. Plain language,
+ * not legal advice. */
 
 export const metadata = {
   title: "Free board offer terms",
@@ -13,10 +10,6 @@ export const metadata = {
     "Terms of the NAVIX X427 free board offer for the first 50 college students on the waitlist.",
   alternates: { canonical: "/waitlist/terms" },
 };
-
-const Tc = ({ children }: { children: string }) => (
-  <mark className={styles.tc}>[TO CONFIRM: {children}]</mark>
-);
 
 export default function WaitlistTerms() {
   return (
@@ -50,32 +43,33 @@ export default function WaitlistTerms() {
             </li>
           </ul>
 
-          <h2 className="h3">Still being decided</h2>
+          <h2 className="h3">Shipping, eligibility and claiming</h2>
           <ul className={styles.list}>
             <li>
-              Shipping, delivery and who pays for it: <Tc>shipping terms</Tc>
+              Shipping: Navrobotec pays the shipping charge when it is under
+              INR 500. If it is more than INR 500, you pay it and Navrobotec
+              refunds up to INR 500.
             </li>
             <li>
-              Countries or regions the offer covers: <Tc>eligible regions</Tc>
+              The offer covers every region India Post can deliver to.
             </li>
+            <li>The offer closes on 31 December 2026.</li>
             <li>
-              Deadline for claiming the offer: <Tc>deadline</Tc>
-            </li>
-            <li>
-              How student status is checked: <Tc>verification method</Tc>
-            </li>
-            <li>
-              What happens after the first 50 students: <Tc>over-50 handling</Tc>
-            </li>
-            <li>
-              How your details are used and how we contact you:{" "}
-              <Tc>data use and contact</Tc>
-            </li>
-            <li>
-              Whether the offer can be changed or withdrawn:{" "}
-              <Tc>change or withdrawal terms</Tc>
+              Students selected for a free board must submit their student ID.
             </li>
           </ul>
+
+          <h2 className="h3">Your details</h2>
+          <p className="body">
+            We collect your email address when you join the waitlist and use it
+            to contact you.
+          </p>
+
+          <h2 className="h3">Changes</h2>
+          <p className="body">
+            All rights over the rules and terms of this offer rest with
+            Navrobotec.
+          </p>
 
           <p className="body small">
             Questions: write to{" "}
