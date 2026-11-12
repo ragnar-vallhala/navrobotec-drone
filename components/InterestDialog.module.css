@@ -72,4 +72,7 @@
 
 .head { margin-bottom: clamp(1.5rem, 3vw, 2rem); padding-right: 2.5rem; }
 .title { margin-top: 0.75rem; }
-.lede { margin-top: 0.75rem; color: var(--ink-2); max-width: 34rem; }
+/* The dialog sits inside the dark hero band in the DOM, so `.band h2` would turn
+   this heading pale on the light panel. */
+.dialog .title { color: var(--ink); }
+.lede, .dialog .lede { margin-top: 0.75rem; color: var(--ink-2); max-width: 34rem; }
