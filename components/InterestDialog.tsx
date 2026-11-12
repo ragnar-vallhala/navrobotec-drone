@@ -23,7 +23,9 @@ export default function InterestDialog({
   lede,
   interest,
   options,
+  buttonClassName = "btn btn-primary",
 }: {
+  buttonClassName?: string;
   label: string;
   title: string;
   lede: string;
@@ -58,7 +60,7 @@ export default function InterestDialog({
     <>
       <button
         type="button"
-        className="btn btn-primary"
+        className={buttonClassName}
         onClick={() => {
           ref.current?.showModal();
           setOpen(true);
