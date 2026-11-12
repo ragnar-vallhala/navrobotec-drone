@@ -2,6 +2,8 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { ArrowLeft, ArrowRight, Clock } from "lucide-react";
 import { getBook, getTutorials } from "@/lib/docs";
+import PartBody from "../PartBody";
+import { getPart } from "@/lib/parts";
 import styles from "../DocsPage.module.css";
 
 const BOOK_SLUG = "navhal";
@@ -19,6 +21,7 @@ export function generateMetadata(): Metadata {
 export default function NavhalIndex() {
   const book = getBook(BOOK_SLUG);
   const tutorials = getTutorials(BOOK_SLUG);
+  const part = getPart(BOOK_SLUG);
 
   return (
     <article className={styles.article}>
@@ -29,8 +32,9 @@ export default function NavhalIndex() {
         <h1 className={styles.title}>{book?.title ?? "NavHAL Guide"}</h1>
       </header>
 
-      <p className={styles.lead}>{book?.description}</p>
+      {part ? <PartBody part={part} /> : <p className={styles.lead}>{book?.description}</p>}
 
+      <h2 className={styles.partH2}>Guide chapters</h2>
       {tutorials.length > 0 ? (
         <nav className={styles.chapterList}>
           {tutorials.map((t, i) => (

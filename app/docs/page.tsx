@@ -1,27 +1,25 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { ArrowRight, Download, FileText } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { getBooks, getChapters } from "@/lib/docs";
+import { PARTS } from "@/lib/parts";
 import layout from "./DocsLayout.module.css";
 import styles from "./DocsPage.module.css";
 
 export const metadata: Metadata = {
   title: "Documentation",
   description:
-    "Documentation for the VaiOS stack — the VAYU technical report plus per-layer guides for NavHAL, VaiOS, and VAYU.",
+    "Documentation for the NAVRobotec stack: NavHAL, VaiOS, Vayu, NavLink, Navigator and nav, with the technical report as the reference.",
 };
 
 /* The hub.
  *
- * Four books, but only one of them is written. The layout says so: the report
- * takes the full width and the three guides sit under it as rows, one of them
- * partly written and two marked as coming. A four-up grid of equal cards would
- * have claimed the opposite.
+ * One card per part of the stack, and the technical report above them as the
+ * reference. Each part's page says what it lacks as well as what it has.
  */
 export default function DocsHub() {
   const books = getBooks();
   const report = books.find((b) => b.slug === "report");
-  const guides = books.filter((b) => b.slug !== "report");
   const chapters = getChapters();
 
   return (
@@ -34,10 +32,11 @@ export default function DocsHub() {
           </header>
 
           <p className={styles.lead}>
-            VaiOS is our sovereign robotics runtime, built from the silicon up.
-            The technical report is the reference; the per-layer guides walk
-            through the same ground in the order you would learn it — NavHAL at
-            the hardware, the VaiOS core above it, VAYU in the air.
+            The stack is a set of parts that fit together: NavHAL at the
+            hardware, VaiOS above it, Vayu in the air, NavLink between the
+            aircraft and the ground, Navigator on the ground, and nav to build
+            it all. Each part has its own page. The technical report is the
+            reference for the design as a whole.
           </p>
 
           {report && (
@@ -58,82 +57,20 @@ export default function DocsHub() {
             </Link>
           )}
 
-          <nav className={styles.bookGrid} aria-label="Guides">
-            {guides.map((b) => {
-              const body = (
-                <>
-                  <span className={styles.bookKicker}>{b.kicker}</span>
-                  <h2 className={styles.bookTitle}>{b.title}</h2>
-                  <p className={styles.bookDesc}>{b.description}</p>
-                  <span className={styles.bookFooter}>
-                    {b.comingSoon ? (
-                      <span className={styles.soon}>In preparation</span>
-                    ) : (
-                      <span className={styles.bookCta}>
-                        Open <ArrowRight size={14} />
-                      </span>
-                    )}
+          <nav className={styles.bookGrid} aria-label="Parts of the stack">
+            {PARTS.map((part) => (
+              <Link key={part.slug} href={part.href} className={styles.bookCard}>
+                <span className={styles.bookKicker}>{part.kicker}</span>
+                <h2 className={styles.bookTitle}>{part.title}</h2>
+                <p className={styles.bookDesc}>{part.summary}</p>
+                <span className={styles.bookFooter}>
+                  <span className={styles.bookCta}>
+                    Open <ArrowRight size={14} />
                   </span>
-                </>
-              );
-
-              /* A guide with nothing behind it is shown, not linked. Sending a
-                 reader to a page that only says "coming soon" wastes the
-                 click; the row already told them. */
-              return b.comingSoon ? (
-                <div
-                  key={b.slug}
-                  className={`${styles.bookCard} ${styles.bookCardSoon}`}
-                >
-                  {body}
-                </div>
-              ) : (
-                <Link key={b.slug} href={b.href} className={styles.bookCard}>
-                  {body}
-                </Link>
-              );
-            })}
+                </span>
+              </Link>
+            ))}
           </nav>
-
-          <section className={styles.downloads}>
-            <span className={`label ${styles.downloadsLabel}`}>
-              Or take it with you
-            </span>
-            <div className={styles.downloadGrid}>
-              <a
-                href="/report_v0.1.1.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.download}
-              >
-                <FileText size={20} className={styles.downloadIcon} />
-                <span className={styles.downloadText}>
-                  <span className={styles.downloadTitle}>
-                    VAYU Technical Report
-                  </span>
-                  <span className={styles.downloadMeta}>
-                    PDF · v0.1.1 · 5.8 MB
-                  </span>
-                </span>
-              </a>
-              <a
-                href="/summary_report_v0.1.1.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.download}
-              >
-                <Download size={20} className={styles.downloadIcon} />
-                <span className={styles.downloadText}>
-                  <span className={styles.downloadTitle}>
-                    Executive Summary
-                  </span>
-                  <span className={styles.downloadMeta}>
-                    PDF · v0.1.1 · 236 KB
-                  </span>
-                </span>
-              </a>
-            </div>
-          </section>
         </article>
       </div>
     </div>

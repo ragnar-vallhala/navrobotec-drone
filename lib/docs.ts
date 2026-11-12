@@ -46,7 +46,7 @@ export interface DocBook {
   kicker: string;
   /** Where the book lives. */
   href: string;
-  /** Marks tutorial books that don't yet have content. */
+  /** Marks books that don't yet have content. */
   comingSoon: boolean;
 }
 
@@ -68,24 +68,6 @@ export const BOOKS: DocBook[] = [
     kicker: "Tutorial",
     href: "/docs/navhal",
     comingSoon: false,
-  },
-  {
-    slug: "vaios",
-    title: "VaiOS Guide",
-    description:
-      "Tutorial-style walkthrough of the VaiOS real-time kernel — task model, scheduler, IPC, and timing.",
-    kicker: "Tutorial",
-    href: "/docs/vaios",
-    comingSoon: true,
-  },
-  {
-    slug: "vayu",
-    title: "VAYU Guide",
-    description:
-      "Tutorial-style walkthrough of the VAYU flight control stack — sensors, estimation, control, telemetry, and extensibility.",
-    kicker: "Tutorial",
-    href: "/docs/vayu",
-    comingSoon: true,
   },
 ];
 

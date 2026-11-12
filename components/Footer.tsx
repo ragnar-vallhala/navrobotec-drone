@@ -22,6 +22,18 @@ const SECTIONS = [
     ],
   },
   {
+    title: "Documentation",
+    links: [
+      { href: "/docs/navhal", label: "NavHAL" },
+      { href: "/docs/vaios", label: "VaiOS" },
+      { href: "/docs/vayu", label: "Vayu" },
+      { href: "/docs/navlink", label: "NavLink" },
+      { href: "/docs/navigator", label: "Navigator" },
+      { href: "/docs/nav", label: "nav" },
+      { href: "/docs/report", label: "Technical report" },
+    ],
+  },
+  {
     title: "Company",
     links: [
       { href: "/team", label: "Team" },

@@ -241,50 +241,6 @@ a.label:hover { color: var(--signal); }
   white-space: nowrap;
 }
 
-/* --- the two PDFs ------------------------------------------------------------
-   These used to be styled as previous/next pagination, which told a reader
-   the executive summary came after the hub in reading order. They are
-   downloads; they look like downloads. */
-
-.downloads {
-  margin-top: clamp(3rem, 6vw, 4.5rem);
-  padding-top: 2rem;
-  border-top: 1px solid var(--line);
-}
-.downloadsLabel { display: block; margin-bottom: 1.25rem; }
-.downloadGrid { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; }
-
-.download {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1.25rem 1.375rem;
-  background: var(--card);
-  transition: background-color 0.2s var(--ease);
-}
-.download:hover { background: var(--paper-2); }
-.download:hover .downloadTitle { color: var(--signal); }
-.downloadIcon { flex-shrink: 0; color: var(--signal); }
-.downloadText { min-width: 0; }
-.downloadTitle {
-  display: block;
-  font-size: 0.9375rem;
-  font-weight: 500;
-  color: var(--ink);
-  transition: color 0.2s var(--ease);
-}
-.downloadMeta {
-  display: block;
-  margin-top: 0.25rem;
-  font-family: var(--font-data);
-  font-size: 0.75rem;
-  color: var(--muted);
-}
-
-@media (min-width: 44rem) {
-  .downloadGrid { grid-template-columns: 1fr 1fr; }
-}
-
 /* --- previous / next --------------------------------------------------------- */
 
 .footer {
@@ -495,3 +451,52 @@ a.label:hover { color: var(--signal); }
   .bookLead:hover { transform: none; }
   .chapterItem:hover { padding-left: 0; }
 }
+
+/* --- a part of the stack ------------------------------------------------------ */
+.partKicker {
+  margin-top: 0.75rem;
+  font-family: var(--font-data);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--signal-deep);
+}
+.part { max-width: 46rem; }
+.partFacts {
+  margin: 0 0 clamp(2rem, 4vw, 3rem);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr));
+  gap: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.partFacts > div { background: var(--paper); outline: 1px solid var(--line); outline-offset: -0.5px; padding: 0.875rem 1.125rem; display: grid; gap: 0.3125rem; align-content: start; }
+.partFacts dt { color: var(--ink-2); }
+.partFacts dd { margin: 0; font-size: 0.9375rem; color: var(--ink); line-height: 1.45; }
+.partSection { margin-top: clamp(2rem, 4vw, 3rem); color: var(--ink-2); line-height: 1.65; }
+.partSection p { margin: 0 0 0.875rem; }
+.partH2 {
+  margin: 0 0 1rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.375rem, 2.4vw, 1.75rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+h2.partH2 { margin-top: clamp(2rem, 4vw, 3rem); }
+.partSection .partH2 { margin-top: 0; }
+.partList { margin: 0 0 0.875rem; padding-left: 1.25rem; display: grid; gap: 0.4rem; }
+.partPaths { list-style: none; padding-left: 0; }
+.partSection code, .partCode { font-family: var(--font-data); font-size: 0.8125rem; }
+.partSection li code { overflow-wrap: anywhere; }
+.partCode {
+  margin: 0 0 1rem;
+  padding: 1rem 1.125rem;
+  background: var(--band);
+  color: #e8efe9;
+  border-radius: var(--radius);
+  overflow-x: auto;
+  line-height: 1.6;
+}
+.partCode:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }

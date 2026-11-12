@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { ArrowLeft, ArrowRight, Download, FileText } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { getChapters, readDocFile } from "@/lib/docs";
 import styles from "../DocsPage.module.css";
 
@@ -70,40 +70,6 @@ export default function ReportIndex() {
           The report is being prepared. Please check back soon.
         </p>
       )}
-
-      <section className={styles.downloads}>
-        <span className={`label ${styles.downloadsLabel}`}>
-          Or take it with you
-        </span>
-        <div className={styles.downloadGrid}>
-          <a
-            href="/report_v0.1.1.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.download}
-          >
-            <FileText size={20} className={styles.downloadIcon} />
-            <span className={styles.downloadText}>
-              <span className={styles.downloadTitle}>
-                VAYU Technical Report
-              </span>
-              <span className={styles.downloadMeta}>PDF · v0.1.1 · 5.8 MB</span>
-            </span>
-          </a>
-          <a
-            href="/summary_report_v0.1.1.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.download}
-          >
-            <Download size={20} className={styles.downloadIcon} />
-            <span className={styles.downloadText}>
-              <span className={styles.downloadTitle}>Executive Summary</span>
-              <span className={styles.downloadMeta}>PDF · v0.1.1 · 236 KB</span>
-            </span>
-          </a>
-        </div>
-      </section>
     </article>
   );
 }

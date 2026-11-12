@@ -3,6 +3,7 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import { getBooks, getChapters, getTutorials } from "@/lib/docs";
+import { PARTS } from "@/lib/parts";
 import { getProducts } from "@/lib/products";
 import { SITE_URL } from "@/lib/site";
 
@@ -83,6 +84,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         });
       }
     }
+  }
+
+  // One page per part of the stack. NavHAL's is its book index, added above.
+  for (const part of PARTS) {
+    if (part.slug === "navhal") continue;
+    docRoutes.push({
+      url: `${SITE_URL}${part.href}`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.8,
+    });
   }
 
   // Report book: chapter pages and their section pages.
