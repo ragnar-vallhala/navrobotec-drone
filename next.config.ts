@@ -83,6 +83,8 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       { source: "/wishlist", destination: "/products", permanent: true },
+      /* NAVIX-SMF446 became the X427 Mini. */
+      { source: "/products/fc-f446", destination: "/products/x427-mini", permanent: true },
       /* The technical report is gone as a single reference; its chapters live on
          as the NavHAL, VaiOS and Vayu books. Old links land on the right book
          page, and anything else under /docs/report on the hub. */

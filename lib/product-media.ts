@@ -48,6 +48,23 @@ export const PRODUCT_MEDIA: Record<
     ],
     card: PRODUCTS_OPENING.narrow,
   },
+  /* The X427 Mini: one Blender still from Navix/stills/mini, cut to 4:3 by
+     hand (the board on black), used for the card and the page. */
+  "x427-mini": {
+    hero: {
+      src: "/images/product-x427-mini.d5457b8b.webp",
+      alt: "NAVIX X427 Mini flight controller, top view at an angle",
+      width: 1400,
+      height: 1050,
+    },
+    gallery: [],
+    card: {
+      src: "/images/product-x427-mini.d5457b8b.webp",
+      alt: "NAVIX X427 Mini flight controller, top view at an angle",
+      width: 1400,
+      height: 1050,
+    },
+  },
 };
 
 /* The waitlist popup's image panel is a fixed 5:4 box. These two renders are

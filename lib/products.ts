@@ -52,6 +52,8 @@ export const INTEREST_BY_SLUG: Record<string, string> = {
   "fc-h747": "NAVIX-SMH747",
   "airframe-sub250": "Vidyut",
   x427: "NAVIX X427",
+  /* fc-f446 stays above: files already recorded under that label keep it. */
+  "x427-mini": "NAVIX X427 Mini",
 };
 
 /* The chips to offer, for the products actually on the site.
@@ -107,6 +109,41 @@ const X427: Product = {
   updatedAt: "2026-11-09T00:00:00Z",
 };
 
+/* NAVIX X427 Mini, which replaced the F446 board. Carried here for the same
+   reason as the X427: the card shows whether or not the API row has been
+   migrated (db/015 in the api repo). The old fc-f446 row, if the API still
+   has it, is swapped for this in place. Facts from the board's KiCad project
+   and ST's datasheet; see that migration. */
+const X427_MINI: Product = {
+  id: "bundled-x427-mini",
+  slug: "x427-mini",
+  name: "NAVIX X427 Mini",
+  part: "STM32F427",
+  kicker: "Flight controller",
+  summary: "The NAVIX X427 made small: the same STM32F427 on a 36 x 36 mm board.",
+  status: "In design",
+  image: "",
+  imageIsRender: true,
+  specs: [
+    { label: "Board", value: "NAVIX X427 Mini flight controller" },
+    { label: "Size", value: "36 x 36 mm" },
+    { label: "Layers", value: "4" },
+    {
+      label: "MCU",
+      value: "STM32F427VGT6, Cortex-M4F @ 180 MHz, 1 MB flash / 256 KB SRAM",
+    },
+    { label: "Sensors", value: "LSM6DSOX IMU, BMP585 barometer" },
+    { label: "Storage", value: "16 MB SPI flash (W25Q128JV)" },
+    {
+      label: "Interfaces",
+      value: "USB-C, CAN, I2C, RC, PWM, TELEM1, SERIAL4, power",
+    },
+  ],
+  published: true,
+  placeholder: false,
+  updatedAt: "2026-11-12T00:00:00Z",
+};
+
 export type Catalogue =
   | { status: "ok"; products: Product[] }
   | { status: "unavailable" };
@@ -129,10 +166,17 @@ export async function getCatalogue(): Promise<Catalogue> {
           /* A row with no image of its own takes the render bundled with the
              site for that slug. */
           products: [
-            ...(products as Product[]),
+            ...(products as Product[]).map((p) =>
+              p.slug === "fc-f446" ? X427_MINI : p,
+            ),
             ...((products as Product[]).some((p) => p.slug === X427.slug)
               ? []
               : [X427]),
+            ...((products as Product[]).some(
+              (p) => p.slug === X427_MINI.slug || p.slug === "fc-f446",
+            )
+              ? []
+              : [X427_MINI]),
           ]
             .map((p) => ({
               ...p,
