@@ -1,3 +1,4 @@
+import { rehighlightPandoc } from "@/lib/highlight";
 /**
  * Accessors for the generated docs in content/docs/.
  *
@@ -48,7 +49,7 @@ export function getChapters(): DocChapter[] {
 /** Read a generated HTML fragment by its index-relative path. */
 export function readDocFile(relativePath: string): string {
   try {
-    return fs.readFileSync(path.join(DOCS_DIR, relativePath), "utf8").trim();
+    return rehighlightPandoc(fs.readFileSync(path.join(DOCS_DIR, relativePath), "utf8").trim());
   } catch {
     return "";
   }

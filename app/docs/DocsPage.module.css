@@ -502,3 +502,43 @@ h2.partH2 { margin-top: clamp(2rem, 4vw, 3rem); }
   line-height: 1.6;
 }
 .partCode:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+
+/* --- code: syntax colours (AA on both the light and dark code ground) ------- */
+.prose {
+  --tk-k: #6d3bbf; --tk-s: #a3470c; --tk-n: #0b6a8a; --tk-c: #566660; --tk-v: #0a7a55;
+  --tk-f: #b0306a; --tk-fn: #2447c8; --tk-m: #7a5200;
+}
+:global([data-theme="dark"]) .prose {
+  --tk-k: #c4a1ff; --tk-s: #f0a870; --tk-n: #6fd3e8; --tk-c: #8fa399; --tk-v: #5fe0b8;
+  --tk-f: #ff8fb8; --tk-fn: #8fb4ff; --tk-m: #f2d38a;
+}
+.prose :global(.tok-k) { color: var(--tk-k); font-weight: 600; }
+.prose :global(.tok-t) { color: var(--tk-k); }
+.prose :global(.tok-s) { color: var(--tk-s); }
+.prose :global(.tok-n) { color: var(--tk-n); }
+.prose :global(.tok-c) { color: var(--tk-c); font-style: italic; }
+.prose :global(.tok-v) { color: var(--tk-v); }
+.prose :global(.tok-f), .prose :global(.tok-p) { color: var(--tk-f); }
+.prose :global(.tok-fn) { color: var(--tk-fn); }
+.prose :global(.tok-m) { color: var(--tk-m); }
+.prose :global(.tok-pr) { color: var(--muted); user-select: none; }
+
+/* Code block chrome: language label and copy button, outside the scrolling pre. */
+.prose :global(.codeblock) { position: relative; }
+.prose :global(.codeblock) > pre { padding-right: 7.5rem; }
+.prose :global(.codelang) {
+  position: absolute; top: 0.65rem; right: 6.5rem;
+  font-family: var(--font-data); font-size: 0.625rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--muted); pointer-events: none;
+}
+.prose :global(.codecopy) {
+  position: absolute; top: 0.375rem; right: 0.5rem;
+  min-width: 3.75rem; height: 1.75rem; padding: 0 0.5rem;
+  font-family: var(--font-data); font-size: 0.6875rem; letter-spacing: 0.04em;
+  color: var(--ink); background: var(--card); border: 1px solid var(--line-strong);
+  border-radius: 6px; cursor: pointer;
+}
+.prose :global(.codecopy):hover { border-color: var(--signal); }
+.prose :global(.codecopy):focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+.prose :global(.codecopy[data-done]) { color: var(--signal-deep); border-color: var(--signal); }
+@media (hover: none) { .prose :global(.codecopy) { height: 2.25rem; min-width: 4.25rem; } }

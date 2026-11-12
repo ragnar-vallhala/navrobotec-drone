@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
+import CodeCopy from "./CodeCopy";
 import styles from "./FigureZoom.module.css";
 
 /**
@@ -56,8 +57,10 @@ export default function FigureZoom() {
     };
   }, [fig]);
 
-  if (!fig) return null;
+  if (!fig) return <CodeCopy />;
   return (
+    <>
+    <CodeCopy />
     <div className={styles.overlay} role="dialog" aria-modal="true" aria-label={fig.alt || "Figure"} onClick={() => setFig(null)}>
       <button ref={closeRef} type="button" className={styles.close} aria-label="Close figure" onClick={() => setFig(null)}>
         <X size={20} />
@@ -67,5 +70,6 @@ export default function FigureZoom() {
         <img src={fig.src} alt={fig.alt} className={styles.img} onClick={(e) => e.stopPropagation()} />
       </div>
     </div>
+    </>
   );
 }
