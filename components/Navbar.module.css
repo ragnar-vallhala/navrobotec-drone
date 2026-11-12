@@ -98,11 +98,11 @@
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--band);
+  color: #fff;
   cursor: pointer;
   transition: background-color 0.2s var(--ease), color 0.2s var(--ease);
 }
-.waitlist:hover { background: transparent; color: var(--signal-lit); }
+.waitlist:hover { background: transparent; color: #fff; }
 .solid .waitlist { border-color: var(--signal); background: var(--signal); color: #fff; }
 .solid .waitlist:hover { background: transparent; color: var(--signal); }
 .waitlist:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }

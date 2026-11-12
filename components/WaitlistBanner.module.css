@@ -1,5 +1,5 @@
-/* Solid signal green with near-black text (about 11:1) and a near-black
-   button on it (signal green on #071310 is the same ratio). */
+/* Solid signal green with white text, and a near-black button on it with
+   white text. */
 .banner {
   position: fixed;
   inset: 0 0 auto 0;
@@ -11,7 +11,7 @@
   gap: 0.75rem;
   padding-inline: 2.75rem;
   background: var(--signal-lit);
-  color: #071310;
+  color: #fff;
   font-family: var(--font-data);
   font-size: 0.8125rem;
   letter-spacing: 0.03em;
@@ -37,13 +37,13 @@
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 50%;
-  background: #071310;
-  box-shadow: 0 0 0 0 rgba(7, 19, 16, 0.55);
+  background: #fff;
+  box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.55);
   animation: pulse 1.8s ease-out infinite;
 }
 @keyframes pulse {
-  70% { box-shadow: 0 0 0 0.5rem rgba(7, 19, 16, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(7, 19, 16, 0); }
+  70% { box-shadow: 0 0 0 0.5rem rgba(255, 255, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
 }
 @media (prefers-reduced-motion: reduce) {
   .dot { animation: none; }
@@ -54,7 +54,7 @@
   border: 0;
   border-radius: var(--radius);
   background: #071310;
-  color: var(--signal-lit);
+  color: #fff;
   font: inherit;
   font-weight: 700;
   text-transform: uppercase;
@@ -81,5 +81,5 @@
   color: inherit;
   cursor: pointer;
 }
-.close:hover { background: rgba(7, 19, 16, 0.14); }
-.banner :where(button):focus-visible { outline: 2px solid #071310; outline-offset: 2px; }
+.close:hover { background: rgba(255, 255, 255, 0.18); }
+.banner :where(button):focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
