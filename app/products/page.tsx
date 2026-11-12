@@ -144,9 +144,7 @@ export default async function Products() {
                       ) : null}
 
                       <span className={styles.more} aria-hidden>
-                        {details && product.specs.length > 0
-                          ? `${product.specs.length} specifications`
-                          : "View"}
+                        View
                         <span className={styles.arrow}>&rarr;</span>
                       </span>
                     </span>
