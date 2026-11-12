@@ -6,7 +6,9 @@ import markedKatex from 'marked-katex-extension';
 import 'katex/dist/katex.min.css';
 import WaitlistCallout from '@/components/WaitlistCallout';
 import Link from 'next/link';
-import Image from 'next/image';
+import Image from '@/components/Photo';
+import RevealAll from '@/components/RevealAll';
+import imageLoader from '@/lib/imageLoader';
 import { notFound } from 'next/navigation';
 import styles from './blog.module.css';
 import Mermaid from '../../../components/Mermaid';
@@ -41,7 +43,7 @@ marked.use({
         image(token: Tokens.Image) {
             const src = token.href || '';
             const alt = (token.text || '').replace(/"/g, '&quot;');
-            const img = `<img src="${src}" alt="${alt}" loading="lazy" />`;
+            const img = `<img src="${src}" alt="${alt}" loading="lazy" data-reveal />`;
             if (token.title) {
                 return `<figure>${img}<figcaption>${token.title}</figcaption></figure>`;
             }
@@ -99,13 +101,18 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
         const src = /src="([^"]+)"/.exec(tag)?.[1];
         const meta = src ? await getImageMeta(src) : null;
         if (!meta) continue;
-        htmlContent = htmlContent
-            .split(tag)
-            .join(tag.replace('<img ', `<img width="${meta.width}" height="${meta.height}" `));
+        // The pre-made sizes, not the full-size original (a 2 MB PNG).
+        const sizes = [640, 1080, 1920];
+        const srcset = sizes.map((w) => `${imageLoader({ src: src!, width: w })} ${w}w`).join(', ');
+        const small = imageLoader({ src: src!, width: 1080 });
+        const rewritten = tag
+            .replace('<img ', `<img width="${meta.width}" height="${meta.height}" `)
+            .replace(`src="${src}"`, small === src ? `src="${src}"` : `src="${small}" srcset="${srcset}" sizes="(max-width: 1024px) 100vw, 1024px"`);
+        htmlContent = htmlContent.split(tag).join(rewritten);
     }
 
     // Read the cover's real dimensions (so the hero renders at its natural
-    // aspect ratio, no crop) plus a tiny blur placeholder for progressive load.
+    // aspect ratio, no crop) .
     const coverMeta = data.coverImage ? await getImageMeta(data.coverImage) : null;
 
     return (
@@ -132,8 +139,6 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
                             width={coverMeta.width}
                             height={coverMeta.height}
                             priority
-                            placeholder="blur"
-                            blurDataURL={coverMeta.blurDataURL}
                             sizes="(max-width: 1024px) 100vw, 1024px"
                             style={{ width: '100%', height: 'auto', display: 'block' }}
                         />
@@ -145,6 +150,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
                     className={styles.prose}
                     dangerouslySetInnerHTML={{ __html: htmlContent }}
                 />
+                <RevealAll />
                 <Mermaid container="#blog-markdown" />
 
                 <WaitlistCallout />

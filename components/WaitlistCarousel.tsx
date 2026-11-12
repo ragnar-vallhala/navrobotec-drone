@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image from "@/components/Photo";
 import { useEffect, useState } from "react";
 import styles from "./WaitlistCarousel.module.css";
 import type { Shot } from "@/lib/product-media";

@@ -1,5 +1,6 @@
 import { Unbounded, Dancing_Script } from "next/font/google";
 import Mark from "./Mark";
+import BgReady from "./BgReady";
 import styles from "./Banner.module.css";
 
 /* The brand banner: a clay relief of South Asia, the name with the rotor
@@ -22,6 +23,9 @@ const script = Dancing_Script({
 export default function Banner() {
   return (
     <section className={styles.banner} aria-label="NAVRobotec — man meets machine">
+      <div className={styles.bg} data-bgreveal aria-hidden>
+        <BgReady />
+      </div>
       <div className={styles.lock}>
         <p className={`${styles.name} ${unbounded.className}`} aria-hidden>
           <span className={styles.left}>NAVR</span>

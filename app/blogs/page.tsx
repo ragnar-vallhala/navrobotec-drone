@@ -3,9 +3,8 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import Link from "next/link";
-import Image from "next/image";
+import Image from "@/components/Photo";
 import type { Metadata } from "next";
-import { getImageMeta } from "../../lib/imageMeta";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
@@ -22,7 +21,6 @@ type Post = {
   date: string;
   excerpt: string;
   coverImage?: string;
-  blurDataURL?: string;
 };
 
 async function getPosts(): Promise<Post[]> {
@@ -47,17 +45,7 @@ async function getPosts(): Promise<Post[]> {
     } satisfies Post;
   });
 
-  const withCovers = await Promise.all(
-    posts
-      .filter((p) => p.title)
-      .map(async (p) => {
-        if (!p.coverImage) return p;
-        const meta = await getImageMeta(p.coverImage);
-        return { ...p, blurDataURL: meta?.blurDataURL };
-      }),
-  );
-
-  return withCovers.sort(
+  return posts.filter((p) => p.title).sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
   );
 }
@@ -118,9 +106,6 @@ export default async function Blogs() {
                   priority
                   sizes="(max-width: 62rem) 100vw, 62rem"
                   className={styles.cover}
-                  {...(lead.blurDataURL
-                    ? { placeholder: "blur" as const, blurDataURL: lead.blurDataURL }
-                    : {})}
                 />
               </div>
             ) : null}
@@ -156,9 +141,6 @@ export default async function Blogs() {
                           fill
                           sizes="12rem"
                           className={styles.cover}
-                          {...(post.blurDataURL
-                            ? { placeholder: "blur" as const, blurDataURL: post.blurDataURL }
-                            : {})}
                         />
                       </div>
                     ) : null}

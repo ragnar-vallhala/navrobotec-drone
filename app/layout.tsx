@@ -84,7 +84,7 @@ export const metadata: Metadata = {
  * cleanup in its effect. This script exists for the first paint of a hard
  * load, which that effect is too late for. */
 const READING = ["/blogs", "/docs"];
-const THEME_SCRIPT = `try{var p=location.pathname;if(${JSON.stringify(
+const THEME_SCRIPT = `document.documentElement.dataset.js="1";try{var p=location.pathname;if(${JSON.stringify(
   READING,
 )}.some(function(r){return p===r||p.indexOf(r+"/")===0})){var t=localStorage.getItem("navrobotec.theme");if(t==="dark"||t==="light"){document.documentElement.dataset.theme=t}}}catch(e){}`;
 

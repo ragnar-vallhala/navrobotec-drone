@@ -1,6 +1,7 @@
 import Link from "next/link";
 import WaitlistButton from "@/components/WaitlistButton";
 import Image from "@/components/Photo";
+import BgReady from "@/components/BgReady";
 import ScrollSteps from "@/components/ScrollSteps";
 import FlightLog from "@/components/FlightLog";
 import { PAGE_IMAGES } from "@/lib/page-images";
@@ -168,7 +169,8 @@ export default function Home() {
             Preloaded, with the same media conditions, so making it a
             background does not cost the first paint: without this the browser
             does not know about the file until it has parsed the stylesheet. */}
-        <div className={styles.stage} aria-hidden>
+        <div className={styles.stage} data-bgreveal aria-hidden>
+          <BgReady />
           <div className={styles.fade} />
         </div>
 

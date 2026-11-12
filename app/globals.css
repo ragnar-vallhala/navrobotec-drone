@@ -382,3 +382,18 @@ a { color: inherit; text-decoration: none; }
 
 html[data-wl-banner="off"] { --banner-h: 0px; }
 html[data-wl-banner="off"] [data-wl-banner-el] { display: none; }
+
+/* --- pictures appear whole ---------------------------------------------------
+   A browser paints a picture as its bytes arrive, so a large one fills in from
+   the top. Photo (components/Photo.tsx) and BgReady (components/BgReady.tsx)
+   keep a picture invisible until the whole file is downloaded and decoded, then
+   mark it data-ready and it fades in. Only when the page's script has run
+   (html[data-js]); without it pictures load the ordinary way. */
+html[data-js] img[data-reveal]:not([data-ready]),
+html[data-js] [data-bgreveal]:not([data-ready]) { opacity: 0; }
+img[data-reveal][data-ready] { animation: reveal-in 0.35s ease backwards; }
+[data-bgreveal][data-ready] { animation: reveal-in 0.5s ease backwards; }
+@keyframes reveal-in { from { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  img[data-reveal][data-ready], [data-bgreveal][data-ready] { animation: none; }
+}
