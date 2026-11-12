@@ -4,7 +4,7 @@ import styles from "./DocsLayout.module.css";
 /**
  * Outer shell for the /docs hub. The flex container holds either:
  *   • the hub or an in-preparation guide page (full-width <main>), or
- *   • the report book (sidebar + <main>, supplied by /docs/report/layout.tsx).
+ *   • a book (sidebar + <main>, supplied by the book's own layout).
  */
 export default function DocsLayout({
   children,

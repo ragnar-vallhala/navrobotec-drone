@@ -199,7 +199,7 @@ export const PARTS: Part[] = [
         heading: "Performance",
         blocks: [
           p(
-            "Measured results are in the technical report's VaiOS performance section, and the repository's docs/changelog/README.md tells the benchmark story. This page quotes no numbers of its own.",
+            "Measured results are in the VaiOS book's performance chapter, and the repository's docs/changelog/README.md tells the benchmark story. This page quotes no numbers of its own.",
           ),
         ],
       },

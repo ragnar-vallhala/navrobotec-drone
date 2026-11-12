@@ -42,7 +42,6 @@ const DOCS = [
   [
     { href: "/docs/navigator", label: "Navigator" },
     { href: "/docs/nav", label: "nav" },
-    { href: "/docs/report", label: "Technical report" },
   ],
 ];
 

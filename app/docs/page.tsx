@@ -1,7 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { ArrowRight } from "lucide-react";
-import { getChapters } from "@/lib/docs";
 import { getAllBooks, readyChapters } from "@/lib/books";
 import { getPart } from "@/lib/parts";
 import layout from "./DocsLayout.module.css";
@@ -11,17 +10,16 @@ import bk from "./Book.module.css";
 export const metadata: Metadata = {
   title: "Documentation",
   description:
-    "Documentation for the NAVRobotec stack: NavHAL, VaiOS, Vayu, NavLink, Navigator and nav, with the technical report as the reference.",
+    "Documentation for the NAVRobotec stack: NavHAL, VaiOS, Vayu, NavLink, Navigator and nav.",
 };
 
 /* The hub.
  *
- * One card per part of the stack, and the technical report above them as the
- * reference. Each part's page says what it lacks as well as what it has.
+ * One card per part of the stack. Each part's page says what it lacks as well as
+ * what it has.
  */
 export default function DocsHub() {
   const books = getAllBooks();
-  const chapters = getChapters();
 
   return (
     <div className={layout.hubContent}>
@@ -36,26 +34,8 @@ export default function DocsHub() {
             The stack is a set of parts that fit together: NavHAL at the
             hardware, VaiOS above it, Vayu in the air, NavLink between the
             aircraft and the ground, Navigator on the ground, and nav to build
-            it all. Each part is its own book, read chapter by chapter. The technical report is the
-            reference for the design as a whole.
+            it all. Each part is its own book, read chapter by chapter.
           </p>
-
-          <Link href="/docs/report" className={styles.bookLead}>
-            <div className={styles.bookLeadBody}>
-              <span className={styles.bookKicker}>Reference</span>
-              <h2 className={styles.bookTitle}>Technical Report</h2>
-              <p className={styles.bookDesc}>
-                End-to-end technical report covering system architecture,
-                hardware, NavHAL, VaiOS, and VAYU, generated from the
-                project&apos;s LaTeX source. The whole design in one document.
-              </p>
-            </div>
-            <span className={styles.bookFooter}>
-              <span className={styles.bookCta}>
-                {chapters.length} chapters <ArrowRight size={14} />
-              </span>
-            </span>
-          </Link>
 
           <h2 className={bk.h2}>One book per part</h2>
           <nav className={styles.bookGrid} aria-label="Books, one per part of the stack">

@@ -81,7 +81,14 @@ const nextConfig: NextConfig = {
   /* /wishlist was this page's first name, briefly. A rename is not a reason
      for a link to stop working. */
   async redirects() {
-    return [{ source: "/wishlist", destination: "/products", permanent: true }];
+    return [
+      { source: "/wishlist", destination: "/products", permanent: true },
+      /* The technical report is gone as a single reference; its chapters live on
+         as the NavHAL, VaiOS and Vayu books. Old links land on the right book
+         page, and anything else under /docs/report on the hub. */
+      { source: "/docs/report/:part(navhal|vaios|vayu)/:part2(navhal|vaios|vayu)-:section", destination: "/docs/:part/:section", permanent: false },
+      { source: "/docs/report/:path*", destination: "/docs", permanent: false },
+    ];
   },
 };
 

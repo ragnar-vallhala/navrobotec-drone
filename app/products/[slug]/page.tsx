@@ -252,7 +252,7 @@ export default async function ProductPage({
             <p className={`small ${styles.caveat}`}>
               The images are renders. Measured results are in{" "}
               <Link
-                href="/docs/report/vaios/vaios-performance"
+                href="/docs/vaios/performance"
                 className={styles.link}
               >
                 the benchmark

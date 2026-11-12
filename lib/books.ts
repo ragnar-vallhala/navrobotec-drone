@@ -4,7 +4,7 @@
  * Two sources feed them, and neither is rewritten here:
  *   - NavHAL, VaiOS and Vayu are the report's own chapters (content/docs,
  *     generated from the LaTeX), re-homed as standalone books. The report
- *     keeps the same chapters under /docs/report.
+ *     is not published separately any more.
  *   - NavLink, nav and Navigator are markdown chapters copied from their
  *     repositories into content/docs-books/ by scripts/sync-books.mjs, with
  *     manifest.json recording the repository and ref each file came from.

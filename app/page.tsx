@@ -85,7 +85,7 @@ const FOCUS = [
     title: "Real-time reliability",
     body: "A flight core that never misses its deadline. VaiOS holds the control loop to a fixed schedule every cycle — benchmarked head to head against FreeRTOS and Zephyr on the same hardware.",
     proof: "~5.9 µs task-wake · 1 kHz / 250 Hz loops",
-    href: "/docs/report/vaios/vaios-performance" as const,
+    href: "/docs/vaios/performance" as const,
     cta: "Read the benchmark",
   },
   {
@@ -442,7 +442,7 @@ export default function Home() {
           <p className="label label-signal">Next</p>
           <h2 className="display">Read it before you trust it.</h2>
           <p className={`lede ${styles.closingLede}`}>
-            The technical report, the per-layer guides, and the benchmarks
+            The per-layer guides and the benchmarks
             against FreeRTOS and Zephyr are all public. Start there — or write
             to us about putting the runtime in your fleet.
           </p>

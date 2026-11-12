@@ -2,7 +2,6 @@ import type { MetadataRoute } from "next";
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
-import { getChapters } from "@/lib/docs";
 import { getAllBooks, readyChapters } from "@/lib/books";
 import { getProducts } from "@/lib/products";
 import { SITE_URL } from "@/lib/site";
@@ -61,10 +60,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // No blogs directory — skip.
   }
 
-  // Docs: the hub, the report, and one book per part.
-  const docRoutes: MetadataRoute.Sitemap = [
-    { url: `${SITE_URL}/docs/report`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
-  ];
+  // Docs: the hub and one book per part.
+  const docRoutes: MetadataRoute.Sitemap = [];
   for (const book of getAllBooks()) {
     docRoutes.push({
       url: `${SITE_URL}/docs/${book.slug}`,
@@ -82,23 +79,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  // Report book: chapter pages and their section pages.
-  for (const chapter of getChapters()) {
-    docRoutes.push({
-      url: `${SITE_URL}/docs/report/${chapter.slug}`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.7,
-    });
-    for (const section of chapter.sections) {
-      docRoutes.push({
-        url: `${SITE_URL}/docs/report/${chapter.slug}/${section.slug}`,
-        lastModified: now,
-        changeFrequency: "monthly",
-        priority: 0.6,
-      });
-    }
-  }
 
   return [...staticRoutes, ...productRoutes, ...blogRoutes, ...docRoutes];
 }
