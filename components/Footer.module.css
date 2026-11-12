@@ -59,3 +59,13 @@
 .social { gap: 0 1.25rem; }
 .brand { position: relative; }
 .brand::after { content: ""; position: absolute; inset: -0.75rem -0.25rem; }
+
+/* Phones: the two link groups sit side by side, so the footer is not a long column. */
+@media (max-width: 47.99rem) {
+  .inner { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.75rem 1.25rem; padding-bottom: 2rem; }
+  .brandCol { grid-column: 1 / -1; }
+  .inner > :last-child { grid-column: 1 / -1; }
+  .colTitle { margin-bottom: 0.5rem; }
+  .blurb { margin-top: 0.75rem; }
+  .legal { margin-top: 1rem; line-height: 1.7; }
+}

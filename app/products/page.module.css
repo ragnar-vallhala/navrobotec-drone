@@ -38,9 +38,9 @@
     border-color 0.25s var(--ease);
 }
 .card:hover {
-  transform: translateY(-2px);
-  border-color: var(--line-strong);
-  box-shadow: var(--shadow-card);
+  transform: translateY(-4px);
+  border-color: var(--signal);
+  box-shadow: 0 18px 40px -18px rgba(5, 150, 105, 0.45), var(--shadow-card);
 }
 /* Rule 5: focus is always visible, in the signal colour. On the card itself,
    because the card is the control. */
@@ -195,7 +195,7 @@
 /* Placeholder for a product with no render yet: a quiet light tile, not a dark box. */
 .soonFrame {
   position: absolute; inset: 0; display: grid; place-items: center;
-  background: var(--band-text-soft, #eef2f0); color: var(--ink-2);
+  background: var(--card); color: var(--ink-2);
   font-family: var(--font-data); font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase;
   border: 1px dashed var(--line);
 }

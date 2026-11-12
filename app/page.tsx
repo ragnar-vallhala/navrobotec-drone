@@ -181,16 +181,16 @@ export default function Home() {
             writes to, up to the aircraft VAYU flies.
           </p>
           <div className={styles.heroActions}>
-            <Link href="/technology" className="btn btn-primary">
+            <WaitlistButton
+              label="Join the X427 waitlist"
+              className="btn btn-primary"
+            />
+            <Link href="/technology" className="btn btn-ghost">
               The stack
             </Link>
             <Link href="/contact" className="btn btn-ghost">
               Join the mission
             </Link>
-            <WaitlistButton
-              label="Join the X427 waitlist"
-              className="btn btn-ghost"
-            />
           </div>
           <p className={styles.heroNote}>
             Free board for the first 50 students.

@@ -149,7 +149,8 @@ export default function Technology() {
           <figure className={tech.film}>
             <LoopVideo
               src="/media/navix-x427.mp4"
-              poster="/media/navix-x427-poster.jpg"
+              poster="/media/x427-clip-poster.jpg"
+              from={8}
               label="NAVIX X427 Rev A flight controller board"
               className={tech.filmVideo}
               controls

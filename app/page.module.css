@@ -277,7 +277,7 @@
     grid-template-columns: 5.5rem minmax(0, 1fr);
     grid-template-rows: auto auto auto;
     column-gap: clamp(1.5rem, 3vw, 2.5rem);
-    row-gap: clamp(1.75rem, 4vh, 3rem);
+    row-gap: clamp(2.75rem, 7vh, 4.5rem);
     align-items: center;
   }
   .track[data-enhanced] .stackHead { grid-area: 1 / 2; }
@@ -305,14 +305,19 @@
     /* Out of frame in the direction of travel: the next layer waits below,
        the one just left rises out of the top. The reader is falling. */
     transform: translateY(4rem);
-    transition: opacity 0.5s var(--ease), transform 0.65s var(--ease);
+    /* The outgoing layer is gone (opacity and visibility) in 0.18s, before
+       the incoming one starts, so the two never overlap. */
+    visibility: hidden;
+    transition: opacity 0.18s linear, transform 0.5s var(--ease), visibility 0s linear 0.18s;
     pointer-events: none;
   }
   .track[data-enhanced] .slide[data-step-state="past"] { transform: translateY(-4rem); }
   .track[data-enhanced] .slide[data-step-state="active"] {
     opacity: 1;
+    visibility: visible;
     transform: none;
     pointer-events: auto;
+    transition: opacity 0.35s var(--ease) 0.2s, transform 0.55s var(--ease) 0.2s, visibility 0s linear 0.2s;
   }
 
   .track[data-enhanced] .slideName {
