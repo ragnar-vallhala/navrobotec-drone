@@ -16,9 +16,9 @@ import {
  *
  * When it appears: about 2 seconds after the first page of a visit that is
  * not /docs or /admin, unless this browser has already joined (localStorage)
- * or the prompt has already appeared in this page load (an in-memory flag in
- * lib/waitlist.ts). A refresh, a new tab or a hard navigation is a new page
- * load and shows it again; client-side navigation between pages does not. If
+ * or the prompt has already appeared to this visitor (a localStorage flag in
+ * lib/waitlist.ts, with an in-memory fallback when storage is blocked). It
+ * shows once per visitor: a refresh or a later visit does not bring it back. If
  * the first page is /docs or /admin it is simply skipped there and can show on
  * the next client-side page, since the flag is only set when it appears.
  *

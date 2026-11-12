@@ -274,23 +274,23 @@ export default async function ProductPage({
               {siblings.map((other) => (
                 <li key={other.id}>
                   <Link href={`/products/${other.slug}`} className={styles.alsoCard}>
-                    <span className={styles.alsoFrame}>
-                      {hasDetails(other.slug) ? (
+                    {hasDetails(other.slug) ? (
+                      <span className={styles.alsoFrame}>
                         <BoardPhoto
                           shot={PRODUCT_MEDIA[other.slug].card}
                           sizes="12rem"
                         />
-                      ) : (
-                        <ComingSoon compact kind={kindOf(other.slug)} />
-                      )}
-                    </span>
+                      </span>
+                    ) : null}
                     <span className={styles.alsoBody}>
                       <span className={`h3 ${styles.alsoName}`}>{other.name}</span>
                       {hasDetails(other.slug) ? (
                         other.part ? (
                           <span className={`data ${styles.part}`}>{other.part}</span>
                         ) : null
-                      ) : null}
+                      ) : (
+                        <span className={`data ${styles.soon}`}>Coming soon</span>
+                      )}
                     </span>
                   </Link>
                 </li>

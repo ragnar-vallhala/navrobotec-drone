@@ -191,3 +191,11 @@
 .waitlist .label { display: block; margin-bottom: 0.5rem; }
 .waitlist h2 { margin: 0 0 0.5rem; }
 .waitlist p.body { margin: 0; color: var(--ink-2); }
+
+/* Placeholder for a product with no render yet: a quiet light tile, not a dark box. */
+.soonFrame {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  background: var(--band-text-soft, #eef2f0); color: var(--ink-2);
+  font-family: var(--font-data); font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase;
+  border: 1px dashed var(--line);
+}

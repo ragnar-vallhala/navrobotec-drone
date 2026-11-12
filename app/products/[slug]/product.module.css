@@ -197,3 +197,4 @@
 .crumb, .link { position: relative; }
 .crumb::after, .link::after { content: ""; position: absolute; inset: -0.75rem -0.25rem; }
 
+.soon { color: var(--ink-2); }

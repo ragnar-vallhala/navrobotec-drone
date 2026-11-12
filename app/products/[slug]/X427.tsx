@@ -9,10 +9,10 @@ import {
   Zap,
 } from "lucide-react";
 import BoardPhoto from "@/components/BoardPhoto";
-import InterestDialog from "@/components/InterestDialog";
 import LoopVideo from "@/components/LoopVideo";
+import InterestDialog from "@/components/InterestDialog";
 import WaitlistButton from "@/components/WaitlistButton";
-import { PRODUCT_MEDIA, PRODUCTS_OPENING } from "@/lib/product-media";
+import { PRODUCT_MEDIA } from "@/lib/product-media";
 import {
   DEV_TOOLS,
   FAQ,
@@ -98,32 +98,38 @@ export default function X427({
       <section className={`band ${styles.hero}`} id="top">
         <div className="reticle" aria-hidden />
         <div className="shell">
-          <div className={`rise ${styles.heroText}`}>
-            <p className={styles.crumb}>
-              <Link href="/products">Products</Link>
-            </p>
-            <p className="label label-signal">Flight controller · Rev A</p>
-            <h1 className={styles.heroName}>{name}</h1>
-            <p className={styles.headline}>The F4 flight controller built for the NavHAL / VaiOS / VAYU stack.</p>
-            <p className={`lede ${styles.sub}`}>
-              An STM32F427 at 180 MHz, up to three IMUs, DroneCAN, 14 PWM
-              outputs and microSD logging, on a board of 84.9 x 44.1 mm.
-            </p>
-            <div className={styles.ctas}>
-              <WaitlistButton label="Join waitlist" className="btn btn-primary" />
-              {enquire}
-              <Link href="/docs" className="btn btn-ghost">
-                Read the docs
-              </Link>
+          <div className={styles.heroGrid}>
+            <div className={`rise ${styles.heroText}`}>
+              <p className={styles.crumb}>
+                <Link href="/products">Products</Link>
+              </p>
+              <p className="label label-signal">Flight controller · Rev A</p>
+              <h1 className={styles.heroName}>{name}</h1>
+              <p className={styles.headline}>
+                The F4 flight controller built for the NavHAL / VaiOS / VAYU stack.
+              </p>
+              <p className={`lede ${styles.sub}`}>
+                An STM32F427 at 180 MHz, up to three IMUs, DroneCAN, 14 PWM
+                outputs and microSD logging, on a board of 84.9 x 44.1 mm.
+              </p>
+              <div className={styles.ctas}>
+                <WaitlistButton label="Join waitlist" className="btn btn-primary" />
+                {enquire}
+                <Link href="/docs" className="btn btn-ghost">
+                  Read the docs
+                </Link>
+              </div>
             </div>
-          </div>
-          <div className={`rise ${styles.banner}`} style={{ animationDelay: "0.15s" }}>
-            <BoardPhoto
-              shot={PRODUCTS_OPENING.wide}
-              narrow={PRODUCTS_OPENING.narrow}
-              sizes="(max-width: 80rem) 100vw, 76rem"
-              priority
-            />
+            <div
+              className={`rise ${styles.banner}`}
+              style={{ animationDelay: "0.15s" }}
+            >
+              <BoardPhoto
+                shot={media.hero}
+                sizes="(max-width: 60rem) 100vw, 40rem"
+                priority
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -143,7 +149,7 @@ export default function X427({
             {STATS.map((stat) => (
               <div key={stat.label} className={styles.stat}>
                 <dt className={styles.statValue}>
-                  {stat.value}
+                  <span className={styles.statNum}>{stat.value}</span>
                   <span className={styles.statUnit}>{stat.unit}</span>
                 </dt>
                 <dd className={`label ${styles.statLabel}`}>{stat.label}</dd>
@@ -156,7 +162,7 @@ export default function X427({
       {/* --- gallery --- */}
       <section className="section-tight rule" id="gallery">
         <div className="shell">
-          <div className={styles.galleryGrid}>
+          <div className={styles.bento}>
             <div className={styles.galleryCopy}>
               <p className="label">Overview</p>
               <h2 className="h2">Both sides, in detail.</h2>
@@ -166,25 +172,25 @@ export default function X427({
                 the fast signals kept to that side of the board.
               </p>
               <p className={`small ${styles.note}`}>
-                The still images are renders. The clip is the Rev A board.
+                The still images are renders. The video is the Rev A board.
               </p>
             </div>
-            <ul className={styles.gallery}>
-              <li className={`${styles.shot} ${styles.shotTop}`}>
-                <BoardPhoto shot={media.hero} sizes="(max-width: 60rem) 100vw, 40rem" />
-              </li>
-              <li className={`${styles.shot} ${styles.shotBottom}`}>
-                <BoardPhoto shot={media.gallery[0]} sizes="(max-width: 60rem) 100vw, 40rem" />
-              </li>
-              <li className={`${styles.shot} ${styles.shotVideo}`}>
-                <LoopVideo
-                  src="/media/navix-x427.mp4"
-                  poster="/media/navix-x427-poster.jpg"
-                  label="NAVIX X427 Rev A flight controller board"
-                  className={styles.video}
-                />
-              </li>
-            </ul>
+            <div className={`${styles.shot} ${styles.shotTop}`}>
+              <BoardPhoto shot={media.hero} sizes="(max-width: 60rem) 100vw, 44rem" />
+            </div>
+            <div className={`${styles.shot} ${styles.shotBottom}`}>
+              <BoardPhoto shot={media.gallery[0]} sizes="(max-width: 60rem) 100vw, 40rem" />
+            </div>
+            <div className={`${styles.shot} ${styles.shotVideo}`}>
+              <LoopVideo
+                src="/media/navix-x427.mp4"
+                poster="/media/x427-clip-poster.jpg"
+                label="NAVIX X427 Rev A flight controller board, video"
+                className={styles.video}
+                from={8}
+                controls
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -251,8 +257,16 @@ export default function X427({
               </li>
             ))}
             <li className={styles.layerBase}>
-              <span className="h3">NAVIX X427</span>
-              <span className="label">STM32F427 flight controller</span>
+              <span className={styles.baseThumb}>
+                <BoardPhoto shot={media.hero} sizes="10rem" />
+              </span>
+              <span className={styles.baseText}>
+                <span className={`label ${styles.baseLabel}`}>Hardware</span>
+                <span className={`h3 ${styles.baseName}`}>NAVIX X427</span>
+                <span className={styles.baseBody}>
+                  STM32F427 flight controller, STM32F4 family, Cortex-M4F
+                </span>
+              </span>
             </li>
           </ol>
         </div>
@@ -360,7 +374,7 @@ export default function X427({
       <section className={`band ${styles.closing}`} id="join">
         <div className="reticle" aria-hidden />
         <div className="shell">
-          <h2 className="h1">Fly it when it is ready.</h2>
+          <h2 className="h1">Be first to build with it.</h2>
           <p className="lede">
             Join the waitlist to hear when the X427 is available, or write to
             an engineer with your questions.

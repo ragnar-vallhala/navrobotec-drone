@@ -48,19 +48,29 @@ export function isWaitlisted(): boolean {
   }
 }
 
-/* In memory on purpose, not in sessionStorage: sessionStorage survives a
-   reload, and a reload should bring the prompt back. A module variable lives
-   exactly as long as the page load: it is reset by a refresh, a new tab or a
-   hard navigation to another URL, and kept across client-side (Next Link)
-   navigation, which does not reload the page. */
+/* The popup shows once per visitor: the first time it appears it is recorded
+   in localStorage, so a refresh, a new tab or a later visit does not bring it
+   back. The in-memory flag still covers a browser that blocks storage, for the
+   rest of that page load. */
+const POPUP_SEEN_KEY = "navrobotec.waitlist.popup-seen";
 let popupShown = false;
 
 export function popupShownThisVisit(): boolean {
-  return popupShown;
+  if (popupShown) return true;
+  try {
+    return window.localStorage.getItem(POPUP_SEEN_KEY) !== null;
+  } catch {
+    return false;
+  }
 }
 
 export function markPopupShown(): void {
   popupShown = true;
+  try {
+    window.localStorage.setItem(POPUP_SEEN_KEY, "1");
+  } catch {
+    /* Storage blocked: the in-memory flag still applies to this page load. */
+  }
 }
 
 /* The dialog's heading and lede, shared by the X427 page and the popup so the

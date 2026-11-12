@@ -12,12 +12,15 @@ export default function LoopVideo({
   label,
   className,
   controls = false,
+  from = 0,
 }: {
   src: string;
   poster: string;
   label: string;
   className?: string;
   controls?: boolean;
+  /* Seconds to start (and restart) from, to skip an opening title card. */
+  from?: number;
 }) {
   const ref = useRef<HTMLVideoElement>(null);
   const [still, setStill] = useState(false);
@@ -40,6 +43,18 @@ export default function LoopVideo({
     return () => watcher.disconnect();
   }, []);
 
+  /* A loop that restarts at `from` rather than 0. */
+  const restart = () => {
+    const video = ref.current;
+    if (!video || from <= 0) return;
+    video.currentTime = from;
+    video.play().catch(() => {});
+  };
+  const seekStart = () => {
+    const video = ref.current;
+    if (video && from > 0 && video.currentTime < from) video.currentTime = from;
+  };
+
   return (
     <video
       ref={ref}
@@ -48,7 +63,10 @@ export default function LoopVideo({
       poster={poster}
       muted
       playsInline
-      loop
+      loop={from <= 0}
+      onLoadedMetadata={seekStart}
+      onPlay={seekStart}
+      onEnded={restart}
       preload="metadata"
       controls={controls || still}
       aria-label={label}
