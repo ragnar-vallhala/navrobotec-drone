@@ -1,0 +1,62 @@
+/* The relief is a fixed picture, so the text over it is always light: it does
+   not follow the page theme. */
+.banner {
+  position: relative;
+  container-type: inline-size;
+  width: 100%;
+  aspect-ratio: 1916 / 450;
+  overflow: hidden;
+  background: #5b6669 url("/images/banner-south-asia.jpg") center / cover no-repeat;
+  color: #fff;
+}
+.banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(40, 52, 54, 0.22);
+}
+.lock {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 2.2cqw;
+  text-shadow: 0 0.15cqw 1.6cqw rgba(10, 20, 20, 0.6);
+}
+/* Three equal-width columns put the rotor on the exact centre of the picture,
+   which is where the middle of the Indian peninsula sits. */
+.name {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  width: 100%;
+  margin: 0;
+  font-size: 6.4cqw;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+.left { text-align: right; }
+.right { text-align: left; }
+.mark {
+  width: 0.94em;
+  height: 0.94em;
+  margin-inline: 0.02em;
+  filter: drop-shadow(0 0.15cqw 1.2cqw rgba(10, 20, 20, 0.6));
+}
+.tagline {
+  margin: 1.2cqw 0 0;
+  font-size: 3.6cqw;
+  line-height: 1;
+}
+
+/* On a phone the wide frame would make the name tiny: take a taller frame (the
+   picture crops about its centre) and a larger name. */
+@media (max-width: 640px) {
+  .banner { aspect-ratio: 4 / 3; }
+  .lock { padding-top: 4cqw; }
+  .name { font-size: 10.5cqw; }
+  .tagline { margin-top: 2.4cqw; font-size: 7cqw; }
+}

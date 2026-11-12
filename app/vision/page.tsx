@@ -1,3 +1,4 @@
+import Banner from "@/components/Banner";
 import Link from "next/link";
 import Cinematic from "@/components/Cinematic";
 import styles from "./page.module.css";
@@ -74,6 +75,8 @@ export default function Vision() {
           </div>
         </section>
       ))}
+
+      <Banner />
 
       <section className={`band ${styles.closing}`}>
         <div className="reticle" aria-hidden />

@@ -1,3 +1,4 @@
+import Banner from "@/components/Banner";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import BoardPhoto from "@/components/BoardPhoto";
@@ -299,6 +300,8 @@ export default async function ProductPage({
           </div>
         </section>
       ) : null}
+
+      <Banner />
     </div>
   );
 }

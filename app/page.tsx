@@ -1,3 +1,4 @@
+import Banner from "@/components/Banner";
 import Link from "next/link";
 import WaitlistButton from "@/components/WaitlistButton";
 import Image from "@/components/Photo";
@@ -432,6 +433,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <Banner />
 
       {/* ---------------- closing ---------------- */}
       <section className={`band ${styles.closing}`}>
