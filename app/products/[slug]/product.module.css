@@ -196,3 +196,37 @@
    size, an invisible box around it grows. */
 .crumb, .link { position: relative; }
 .crumb::after, .link::after { content: ""; position: absolute; inset: -0.75rem -0.25rem; }
+
+/* --- X427 detail ------------------------------------------------------------- */
+.groups { display: grid; gap: clamp(2rem, 4vw, 3rem); }
+.groupHead { margin: 0 0 1rem; }
+.table { margin: 0; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.row { display: grid; gap: 0.25rem; padding: 0.875rem 1.125rem; background: var(--paper); }
+.row + .row { border-top: 1px solid var(--line); }
+.rowLabel { color: var(--ink-2); }
+.rowValue { margin: 0; color: var(--ink); line-height: 1.5; font-size: 0.9375rem; }
+@media (min-width: 40rem) {
+  .row { grid-template-columns: 13rem minmax(0, 1fr); gap: 1.5rem; }
+}
+.stack {
+  list-style: none; margin: 0; padding: 0; display: grid; gap: clamp(1rem, 2vw, 1.5rem);
+  grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
+}
+.stackCard {
+  display: flex; flex-direction: column; gap: 0.625rem; height: 100%; padding: 1.25rem;
+  border: 1px solid var(--line); border-radius: var(--radius); background: var(--card);
+  color: inherit; text-decoration: none;
+  transition: border-color 0.25s var(--ease), transform 0.25s var(--ease);
+}
+.stackCard:hover { border-color: var(--line-strong); transform: translateY(-2px); }
+.stackCard:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
+.stackName { color: var(--ink); }
+.stackBody { color: var(--ink-2); line-height: 1.5; }
+.stackGo { color: var(--signal-deep); margin-top: auto; font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.plain { max-width: 46rem; color: var(--ink-2); line-height: 1.65; display: grid; gap: 0.875rem; padding-left: 1.25rem; margin: 0; }
+div.plain { padding-left: 0; }
+.faq { max-width: 46rem; border-top: 1px solid var(--line); }
+.faqItem { border-bottom: 1px solid var(--line); }
+.faqQ { cursor: pointer; padding: 1rem 0; font-weight: 600; color: var(--ink); min-height: 2.75rem; }
+.faqQ:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+.faqA { margin: 0 0 1.125rem; color: var(--ink-2); line-height: 1.6; }
