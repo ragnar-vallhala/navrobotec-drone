@@ -1,3 +1,4 @@
+import Banner from "@/components/Banner";
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
@@ -168,6 +169,8 @@ export default async function Blogs() {
           ) : null}
         </div>
       )}
+
+      <Banner />
     </div>
   );
 }

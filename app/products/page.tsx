@@ -1,3 +1,4 @@
+import Banner from "@/components/Banner";
 import Link from "next/link";
 import WaitlistButton from "@/components/WaitlistButton";
 import BoardPhoto from "@/components/BoardPhoto";
@@ -173,6 +174,8 @@ export default async function Products() {
         </div>
       </section>
 
+
+      <Banner />
     </div>
   );
 }
