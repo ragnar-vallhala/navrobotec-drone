@@ -29,7 +29,7 @@ export default function DocsHub() {
         <article className={styles.article}>
           <header className={styles.header}>
             <span className={styles.label}>Documentation</span>
-            <h1 className={styles.title}>The VaiOS stack, written down.</h1>
+            <h1 className={styles.title}>The whole stack, written down.</h1>
           </header>
 
           <p className={styles.lead}>

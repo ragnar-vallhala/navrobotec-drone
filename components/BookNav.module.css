@@ -68,3 +68,5 @@ a.itemActive:hover {
   border-radius: 999px;
   padding: 0.1rem 0.45rem;
 }
+
+:global([data-theme="dark"]) .toggleFix { color: #06130f; }

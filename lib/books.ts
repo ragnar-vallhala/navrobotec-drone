@@ -17,6 +17,7 @@ import path from "path";
 import { Marked } from "marked";
 import { getChapters, readDocFile } from "@/lib/docs";
 import { getPart } from "@/lib/parts";
+import { highlight } from "@/lib/highlight";
 
 const BOOKS_DIR = path.join(process.cwd(), "content/docs-books");
 
@@ -55,7 +56,7 @@ function firstSentence(text: string): string {
     .replace(/&lt;/g, "<")
     .replace(/&gt;/g, ">")
     .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
-    .replace(/[*_`]/g, "")
+    .replace(/[*`]/g, "")
     .replace(/\s+/g, " ")
     .trim();
   let s = "";
@@ -66,7 +67,7 @@ function firstSentence(text: string): string {
     s = s ? `${s} ${one}` : one;
     rest = rest.slice(one.length).trim();
   }
-  return s.length > 220 ? `${s.slice(0, 217).trimEnd()}...` : s;
+  return s.length > 220 ? `${s.slice(0, 217).replace(/\s+\S*$/, "")}...` : s;
 }
 
 function htmlBlurb(html: string): string {
@@ -107,7 +108,7 @@ type Manifest = Record<
   {
     repo: string;
     total: number;
-    chapters: { n: number; status: string; file?: string; ref?: string; sha?: string }[];
+    chapters: { n: number; status: string; title?: string; file?: string; ref?: string; sha?: string }[];
   }
 >;
 
@@ -154,7 +155,7 @@ function markdownBook(slug: string): { chapters: BookChapter[]; repo?: string } 
   if (!entry) return { chapters: [] };
   const chapters = entry.chapters.map((c): BookChapter => {
     if (c.status !== "ready" || !c.file) {
-      return { n: c.n, slug: String(c.n).padStart(2, "0"), title: `Chapter ${c.n}`, status: "coming", blurb: "" };
+      return { n: c.n, slug: String(c.n).padStart(2, "0"), title: c.title ?? `Chapter ${c.n}`, status: "coming", blurb: "" };
     }
     const text = fs.readFileSync(path.join(BOOKS_DIR, slug, c.file), "utf8");
     const { title, blurb } = mdParts(text);
@@ -197,9 +198,16 @@ export function readyChapters(book: Book): BookChapter[] {
 export function renderChapter(ch: BookChapter): string {
   const src = ch.source;
   if (!src) return "";
-  if (src.kind === "html") return readDocFile(src.file);
+  if (src.kind === "html") return wrapTables(readDocFile(src.file));
   const text = fs.readFileSync(path.join(BOOKS_DIR, src.part, src.file), "utf8");
   return renderMarkdown(mdParts(text).body);
+}
+
+/* Wide tables scroll inside their own box instead of widening the page. */
+function wrapTables(html: string): string {
+  return html
+    .replace(/<table(\s[^>]*)?>/g, (m) => `<div class="table-wrap">${m}`)
+    .replace(/<\/table>/g, "</table></div>");
 }
 
 const esc = (s: string) =>
@@ -231,11 +239,9 @@ function renderMarkdown(md: string): string {
       code({ text, lang }) {
         const l = (lang ?? "").trim().split(/\s+/)[0];
         const cls = l ? ` class="language-${esc(l)}"` : "";
-        return `<pre${l ? ` data-lang="${esc(l)}"` : ""} tabindex="0"><code${cls}>${esc(text)}\n</code></pre>\n`;
+        return `<pre${l ? ` data-lang="${esc(l)}"` : ""} tabindex="0"><code${cls}>${highlight(text, l)}\n</code></pre>\n`;
       },
     },
   });
-  return (marked.parse(md, { async: false }) as string)
-    .replace(/<table>/g, '<div class="table-wrap"><table>')
-    .replace(/<\/table>/g, "</table></div>");
+  return wrapTables(marked.parse(md, { async: false }) as string);
 }

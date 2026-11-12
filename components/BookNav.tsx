@@ -37,7 +37,7 @@ export default function BookNav({
     <>
       <button
         type="button"
-        className={styles.toggle}
+        className={`${styles.toggle} ${book.toggleFix}`}
         onClick={() => setOpen((v) => !v)}
         aria-label="Toggle chapter navigation"
       >
@@ -68,7 +68,7 @@ export default function BookNav({
                   <li key={c.slug} className={`${book.item} ${book.soon}`}>
                     <span className={book.num}>{num}</span>
                     <span className={book.name}>{c.title}</span>
-                    <span className={book.badge}>Coming</span>
+                    <span className={book.badge}>Coming soon</span>
                   </li>
                 );
               }

@@ -87,7 +87,7 @@ export default async function BookLanding({
                 <span className={bk.tocBody}>
                   <span className={bk.tocTitle}>{c.title}</span>
                 </span>
-                <span className={styles.soon}>Coming</span>
+                <span className={styles.soon}>Coming soon</span>
               </li>
             );
           }

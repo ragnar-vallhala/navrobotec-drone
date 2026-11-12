@@ -153,3 +153,11 @@ a.tocRow:hover svg { color: var(--signal); }
 .prose :where(ul) { list-style: disc; }
 .prose :where(ol) { list-style: decimal; }
 .prose th { white-space: normal; }
+
+.prose :global(.tok-c) { color: var(--muted); font-style: italic; }
+.prose :global(.tok-s) { color: var(--signal); }
+.prose :global(.tok-n) { color: var(--signal-deep); }
+.prose :global(.tok-k) { color: var(--ink); font-weight: 600; }
+
+/* White on the dark theme's bright signal green is unreadable: use dark ink. */
+:global([data-theme="dark"]) .start { color: #06130f; }
