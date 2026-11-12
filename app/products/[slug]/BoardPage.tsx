@@ -10,23 +10,11 @@ import {
 } from "lucide-react";
 import BoardPhoto from "@/components/BoardPhoto";
 import LoopVideo from "@/components/LoopVideo";
+import { PRODUCT_MEDIA } from "@/lib/product-media";
 import InterestDialog from "@/components/InterestDialog";
 import WaitlistButton from "@/components/WaitlistButton";
-import { PRODUCT_MEDIA } from "@/lib/product-media";
-import {
-  DEV_TOOLS,
-  FAQ,
-  FEATURES,
-  LAYERS,
-  MECHANICAL,
-  ON_BOARD,
-  PORTS,
-  POWER,
-  STATS,
-  STATUS,
-  type Feature,
-  type Row,
-} from "@/lib/x427-details";
+import type { BoardPage as Page } from "@/lib/board-page";
+import { DEV_TOOLS, LAYERS, type Feature, type Row } from "@/lib/x427-details";
 import styles from "./x427.module.css";
 
 const ICONS: Record<Feature["icon"], typeof Cpu> = {
@@ -71,16 +59,23 @@ function Spec({
   );
 }
 
-export default function X427({
+/* The long product page, for the X427 and the X427 Mini. The layout is shared;
+   `page` carries the words, the numbers and the pictures. */
+export default function BoardPage({
   name,
   interest,
   options,
+  page,
 }: {
   name: string;
   interest: string;
   options: string[];
+  page: Page;
 }) {
-  const media = PRODUCT_MEDIA.x427;
+  const media = PRODUCT_MEDIA[page.mediaKey];
+  const join = page.waitlist ? (
+    <WaitlistButton label="Join waitlist" className="btn btn-primary" />
+  ) : null;
   const enquire = (
     <InterestDialog
       label="Enquire"
@@ -103,17 +98,14 @@ export default function X427({
               <p className={styles.crumb}>
                 <Link href="/products">Products</Link>
               </p>
-              <p className="label label-signal">Flight controller · Rev A</p>
+              <p className="label label-signal">{page.badge}</p>
               <h1 className={styles.heroName}>{name}</h1>
               <p className={styles.headline}>
-                The F4 flight controller built for the NavHAL / VaiOS / VAYU stack.
+                {page.headline}
               </p>
-              <p className={`lede ${styles.sub}`}>
-                An STM32F427 at 180 MHz, up to three IMUs, DroneCAN, 14 PWM
-                outputs and microSD logging, on a board of 84.9 x 44.1 mm.
-              </p>
+              <p className={`lede ${styles.sub}`}>{page.sub}</p>
               <div className={styles.ctas}>
-                <WaitlistButton label="Join waitlist" className="btn btn-primary" />
+                {join}
                 {enquire}
                 <Link href="/docs" className="btn btn-ghost">
                   Read the docs
@@ -138,15 +130,11 @@ export default function X427({
       <section className="section-tight" id="at-a-glance">
         <div className="shell">
           <div className={styles.intro}>
-            <h2 className="h2">A flight controller made for a flight stack.</h2>
-            <p className="lede">
-              The X427 is a small, four-layer board with the sensors, power
-              path and ports a multirotor needs, built for a flight software
-              stack written in-house. The hardware is at Rev A.
-            </p>
+            <h2 className="h2">{page.introTitle}</h2>
+            <p className="lede">{page.introBody}</p>
           </div>
           <dl className={styles.stats}>
-            {STATS.map((stat) => (
+            {page.stats.map((stat) => (
               <div key={stat.label} className={styles.stat}>
                 <dt className={styles.statValue}>
                   <span className={styles.statNum}>{stat.value}</span>
@@ -165,31 +153,32 @@ export default function X427({
           <div className={styles.bento}>
             <div className={styles.galleryCopy}>
               <p className="label">Overview</p>
-              <h2 className="h2">Both sides, in detail.</h2>
-              <p className="lede">
-                Connectors, buttons and indicators sit on the top. The
-                processor, sensors and power parts are all on the bottom, with
-                the fast signals kept to that side of the board.
-              </p>
-              <p className={`small ${styles.note}`}>
-                The still images are renders. The video is the Rev A board.
-              </p>
+              <h2 className="h2">{page.gallery.title}</h2>
+              <p className="lede">{page.gallery.body}</p>
+              <p className={`small ${styles.note}`}>{page.gallery.note}</p>
             </div>
             <div className={`${styles.shot} ${styles.shotTop}`}>
-              <BoardPhoto shot={media.hero} sizes="(max-width: 60rem) 100vw, 44rem" />
+              <BoardPhoto shot={page.gallery.top} sizes="(max-width: 60rem) 100vw, 44rem" />
             </div>
-            <div className={`${styles.shot} ${styles.shotBottom}`}>
-              <BoardPhoto shot={media.gallery[0]} sizes="(max-width: 60rem) 100vw, 40rem" />
+            <div className={`${styles.shot} ${styles.shotBottom}`} style={{ aspectRatio: `${page.gallery.bottom.width} / ${page.gallery.bottom.height}` }}>
+              <BoardPhoto shot={page.gallery.bottom} sizes="(max-width: 60rem) 100vw, 40rem" />
             </div>
-            <div className={`${styles.shot} ${styles.shotVideo}`}>
-              <LoopVideo
-                src="/media/navix-x427.mp4"
-                poster="/media/x427-clip-poster.jpg"
-                label="NAVIX X427 Rev A flight controller board, video"
-                className={styles.video}
-                from={8}
-                controls
-              />
+            <div className={`${styles.shot} ${styles.shotVideo}`} style={page.gallery.third.kind === "shot" ? { aspectRatio: `${page.gallery.third.shot.width} / ${page.gallery.third.shot.height}` } : undefined}>
+              {page.gallery.third.kind === "video" ? (
+                <LoopVideo
+                  src={page.gallery.third.src}
+                  poster={page.gallery.third.poster}
+                  label={page.gallery.third.label}
+                  className={styles.video}
+                  from={page.gallery.third.from}
+                  controls
+                />
+              ) : (
+                <BoardPhoto
+                  shot={page.gallery.third.shot}
+                  sizes="(max-width: 60rem) 100vw, 36rem"
+                />
+              )}
             </div>
           </div>
         </div>
@@ -200,10 +189,10 @@ export default function X427({
         <div className="shell">
           <header className={styles.sectionHead}>
             <p className="label">What it does</p>
-            <h2 className="h1">Six things worth knowing.</h2>
+            <h2 className="h1">{page.featuresTitle}</h2>
           </header>
           <ul className={styles.features}>
-            {FEATURES.map((feature) => {
+            {page.features.map((feature) => {
               const Icon = ICONS[feature.icon];
               return (
                 <li key={feature.title} className={styles.feature}>
@@ -224,7 +213,7 @@ export default function X427({
             })}
           </ul>
           <div className={styles.ctaRow}>
-            <WaitlistButton label="Join waitlist" className="btn btn-primary" />
+            {join}
             <a href="#specs" className="btn btn-ghost">
               Full specifications
             </a>
@@ -238,12 +227,7 @@ export default function X427({
           <header className={styles.sectionHead}>
             <p className="label label-signal">The platform</p>
             <h2 className="h1">From silicon to flight code, one stack.</h2>
-            <p className="lede">
-              The X427 is an STM32F4-family, Cortex-M4 board: the same
-              architecture as the NAVIXSM-F401RE our stack already runs on.
-              Here is the software family it is built for, each layer with its
-              own documentation.
-            </p>
+            <p className="lede">{page.platform.body}</p>
           </header>
           <ol className={styles.layers} aria-label="The software family, top to bottom">
             {LAYERS.map((layer) => (
@@ -262,10 +246,8 @@ export default function X427({
               </span>
               <span className={styles.baseText}>
                 <span className={`label ${styles.baseLabel}`}>Hardware</span>
-                <span className={`h3 ${styles.baseName}`}>NAVIX X427</span>
-                <span className={styles.baseBody}>
-                  STM32F427 flight controller, STM32F4 family, Cortex-M4F
-                </span>
+                <span className={`h3 ${styles.baseName}`}>{page.platform.hardwareName}</span>
+                <span className={styles.baseBody}>{page.platform.hardwareBody}</span>
               </span>
             </li>
           </ol>
@@ -306,15 +288,19 @@ export default function X427({
               <h2 className="h2">Where it stands.</h2>
             </div>
             <div className={styles.statusBody}>
-              {STATUS.map((line) => (
+              {page.status.map((line) => (
                 <p key={line}>{line}</p>
               ))}
-              <div className={styles.ctaRow}>
-                <WaitlistButton label="Join waitlist" className="btn btn-primary" />
-                <Link href="/waitlist" className="btn btn-ghost">
-                  Free board offer for students
-                </Link>
-              </div>
+              {page.waitlist ? (
+                <div className={styles.ctaRow}>
+                  {join}
+                  <Link href="/waitlist" className="btn btn-ghost">
+                    Free board offer for students
+                  </Link>
+                </div>
+              ) : (
+                <div className={styles.ctaRow}>{enquire}</div>
+              )}
             </div>
           </div>
         </div>
@@ -328,13 +314,14 @@ export default function X427({
             <h2 className="h1">Full specifications.</h2>
           </header>
           <div className={styles.specs}>
-            {ON_BOARD.map((group, i) => (
+            {page.specs.onBoard.map((group, i) => (
               <Spec key={group.title} title={group.title} rows={group.rows} open={i === 0} />
             ))}
-            <Spec title="Ports and interfaces" rows={PORTS} />
-            <Spec title="Power design" rows={POWER} />
-            <Spec title="Mechanical" rows={MECHANICAL} />
+            <Spec title="Ports and interfaces" rows={page.specs.ports} />
+            <Spec title="Power design" rows={page.specs.power} />
+            <Spec title="Mechanical" rows={page.specs.mechanical} />
           </div>
+          {page.reportLinks ? (
           <p className={`small ${styles.note}`}>
             More in the{" "}
             <Link href="/docs/report/hardware/hw-overview" className={styles.link}>
@@ -350,6 +337,7 @@ export default function X427({
             </Link>
             .
           </p>
+          ) : null}
         </div>
       </section>
 
@@ -360,7 +348,7 @@ export default function X427({
             <h2 className="h2">Questions.</h2>
           </header>
           <div className={styles.faq}>
-            {FAQ.map((item) => (
+            {page.faq.map((item) => (
               <details key={item.q} className={styles.faqItem}>
                 <summary className={styles.faqQ}>{item.q}</summary>
                 <p className={styles.faqA}>{item.a}</p>
@@ -374,13 +362,10 @@ export default function X427({
       <section className={`band ${styles.closing}`} id="join">
         <div className="reticle" aria-hidden />
         <div className="shell">
-          <h2 className="h1">Be first to build with it.</h2>
-          <p className="lede">
-            Join the waitlist to hear when the X427 is available, or write to
-            an engineer with your questions.
-          </p>
+          <h2 className="h1">{page.closing.title}</h2>
+          <p className="lede">{page.closing.body}</p>
           <div className={styles.ctas}>
-            <WaitlistButton label="Join waitlist" className="btn btn-primary" />
+            {join}
             {enquire}
           </div>
         </div>

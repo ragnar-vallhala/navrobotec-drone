@@ -12,7 +12,9 @@ import {
   PRODUCT_MEDIA,
 } from "@/lib/product-media";
 import { getCatalogue, INTEREST_BY_SLUG, interestsFor } from "@/lib/products";
-import X427 from "./X427";
+import BoardPage from "./BoardPage";
+import { X427_PAGE } from "@/lib/x427-details";
+import { X427_MINI_PAGE } from "@/lib/x427-mini-details";
 import styles from "./product.module.css";
 
 /* One product.
@@ -108,6 +110,7 @@ export default async function ProductPage({
   const kind = kindOf(product.slug);
   const interest = INTEREST_BY_SLUG[product.slug];
   const isX427 = product.slug === "x427";
+  const isMini = product.slug === "x427-mini";
   const jsonLd = isX427
     ? {
         "@context": "https://schema.org",
@@ -133,8 +136,9 @@ export default async function ProductPage({
           }}
         />
       ) : null}
-      {isX427 ? (
-        <X427
+      {isX427 || isMini ? (
+        <BoardPage
+          page={isMini ? X427_MINI_PAGE : X427_PAGE}
           name={product.name}
           interest={interest}
           options={interestsFor(catalogue.products)}

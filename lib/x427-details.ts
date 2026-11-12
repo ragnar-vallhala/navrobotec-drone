@@ -8,6 +8,9 @@
  * wording says so.
  */
 
+import type { BoardPage } from "./board-page";
+import { PRODUCT_MEDIA } from "./product-media";
+
 export type Row = { label: string; value: string };
 export type Group = { title: string; rows: Row[] };
 
@@ -236,3 +239,46 @@ export const DEV_TOOLS = [
     href: "/docs/navlink",
   },
 ];
+
+/* --- the X427 page, assembled ---------------------------------------------- */
+
+export const X427_PAGE: BoardPage = {
+  mediaKey: "x427",
+  badge: "Flight controller · Rev A",
+  headline: "The F4 flight controller built for the NavHAL / VaiOS / VAYU stack.",
+  sub: "An STM32F427 at 180 MHz, up to three IMUs, DroneCAN, 14 PWM outputs and microSD logging, on a board of 84.9 x 44.1 mm.",
+  waitlist: true,
+  introTitle: "A flight controller made for a flight stack.",
+  introBody:
+    "The X427 is a small, four-layer board with the sensors, power path and ports a multirotor needs, built for a flight software stack written in-house. The hardware is at Rev A.",
+  stats: STATS,
+  gallery: {
+    title: "Both sides, in detail.",
+    body: "Connectors, buttons and indicators sit on the top. The processor, sensors and power parts are all on the bottom, with the fast signals kept to that side of the board.",
+    note: "The still images are renders. The video is the Rev A board.",
+    top: PRODUCT_MEDIA.x427.hero,
+    bottom: PRODUCT_MEDIA.x427.gallery[0],
+    third: {
+      kind: "video",
+      src: "/media/navix-x427.mp4",
+      poster: "/media/x427-clip-poster.jpg",
+      label: "NAVIX X427 Rev A flight controller board, video",
+      from: 8,
+    },
+  },
+  featuresTitle: "Six things worth knowing.",
+  features: FEATURES,
+  platform: {
+    body: "The X427 is an STM32F4-family, Cortex-M4 board: the same architecture as the NAVIXSM-F401RE our stack already runs on. Here is the software family it is built for, each layer with its own documentation.",
+    hardwareName: "NAVIX X427",
+    hardwareBody: "STM32F427 flight controller, STM32F4 family, Cortex-M4F",
+  },
+  status: STATUS,
+  specs: { onBoard: ON_BOARD, ports: PORTS, power: POWER, mechanical: MECHANICAL },
+  reportLinks: true,
+  faq: FAQ,
+  closing: {
+    title: "Be first to build with it.",
+    body: "Join the waitlist to hear when the X427 is available, or write to an engineer with your questions.",
+  },
+};
