@@ -104,7 +104,7 @@ export default function X427({
             </p>
             <p className="label label-signal">Flight controller · Rev A</p>
             <h1 className={styles.heroName}>{name}</h1>
-            <p className={styles.headline}>The board the whole stack runs on.</p>
+            <p className={styles.headline}>The F4 flight controller built for the NavHAL / VaiOS / VAYU stack.</p>
             <p className={`lede ${styles.sub}`}>
               An STM32F427 at 180 MHz, up to three IMUs, DroneCAN, 14 PWM
               outputs and microSD logging, on a board of 84.9 x 44.1 mm.
@@ -135,8 +135,8 @@ export default function X427({
             <h2 className="h2">A flight controller made for a flight stack.</h2>
             <p className="lede">
               The X427 is a small, four-layer board with the sensors, power
-              path and ports a multirotor needs, and the software that flies it
-              written for it. It is at Rev A today.
+              path and ports a multirotor needs, built for a flight software
+              stack written in-house. The hardware is at Rev A.
             </p>
           </div>
           <dl className={styles.stats}>
@@ -233,11 +233,13 @@ export default function X427({
             <p className="label label-signal">The platform</p>
             <h2 className="h1">From silicon to flight code, one stack.</h2>
             <p className="lede">
-              The X427 is the hardware layer of a stack we write end to end.
-              Each layer has its own documentation.
+              The X427 is an STM32F4-family, Cortex-M4 board: the same
+              architecture as the NAVIXSM-F401RE our stack already runs on.
+              Here is the software family it is built for, each layer with its
+              own documentation.
             </p>
           </header>
-          <ol className={styles.layers} aria-label="Software layers, top to bottom">
+          <ol className={styles.layers} aria-label="The software family, top to bottom">
             {LAYERS.map((layer) => (
               <li key={layer.name}>
                 <Link href={layer.href} className={styles.layer}>

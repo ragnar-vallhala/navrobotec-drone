@@ -45,7 +45,7 @@ export async function generateMetadata({
   return {
     title: product.name,
     description: product.slug === "x427"
-      ? "NAVIX X427 Rev A: STM32F427 flight controller with dual-IMU option, DroneCAN, 14 PWM outputs, microSD logging and a power mux, built for the NavHAL, VaiOS and VAYU stack."
+      ? "NAVIX X427 Rev A: STM32F427 flight controller with dual-IMU option, DroneCAN, 14 PWM outputs, microSD logging and a power mux, from the STM32F4 family, built for the NavHAL, VaiOS and VAYU stack."
       : hasDetails(product.slug)
       ? product.summary || product.kicker || undefined
       : `${product.name}: ${kindLabel(product.slug).toLowerCase()} from NAVRobotec, coming soon. Register your interest.`,
@@ -114,7 +114,7 @@ export default async function ProductPage({
         name: product.name,
         category: "Flight controller",
         description:
-          "STM32F427 flight controller board, Rev A, for the NavHAL, VaiOS and VAYU stack.",
+          "STM32F427 (STM32F4, Cortex-M4F) flight controller board, Rev A, built for the NavHAL, VaiOS and VAYU stack.",
         brand: { "@type": "Brand", name: "NAVRobotec" },
       }
     : null;

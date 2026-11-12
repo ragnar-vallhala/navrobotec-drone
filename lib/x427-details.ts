@@ -101,14 +101,14 @@ export const STACK = [
 
 export const STATUS: string[] = [
   "The X427 is at Rev A. The design has been checked part by part against the manufacturers' datasheets, and the pin assignment has been checked by script against the chip vendor's pin data.",
-  "Some items are still bring-up checks on real boards, for example the 3.3 V load (about 190 mA average is a design estimate, to be measured) and the supply start-up timing of the sensors.",
-  "The board is not on general sale yet. Join the waitlist to be told when it is, or enquire to talk to an engineer.",
+  "Bring-up on real boards is next: measuring the 3.3 V load (about 190 mA average is a design estimate) and the sensor supply start-up timing.",
+  "Join the waitlist to hear when boards are available, or enquire to talk to an engineer.",
 ];
 
 export const FAQ: { q: string; a: string }[] = [
   {
-    q: "Which firmware runs on it?",
-    a: "The in-house NavHAL, VaiOS and VAYU stack. The board is pin-for-pin compatible with the 2 MB STM32F427VIT6 if more flash is ever needed.",
+    q: "Which software is it built for?",
+    a: "The in-house NavHAL, VaiOS and VAYU stack. The X427 uses the same STM32F4 family and Cortex-M4 architecture as the NAVIXSM-F401RE that stack runs on today, and it is pin-for-pin compatible with the 2 MB STM32F427VIT6 if more flash is needed.",
   },
   {
     q: "Does it have a compass?",
@@ -186,9 +186,9 @@ export const FEATURES: Feature[] = [
   },
   {
     icon: "stack",
-    title: "Hardware and flight stack, designed together.",
-    body: "The X427 is the board the in-house NavHAL, VaiOS and VAYU stack runs on. Its pin assignment, DMA streams included, was settled as a whole and checked by script against the chip vendor's own pin data.",
-    chips: ["NavHAL", "VaiOS", "VAYU"],
+    title: "Built for the NavHAL / VaiOS / VAYU family.",
+    body: "The X427 is an STM32F4-family, Cortex-M4 board: the same architecture as the NAVIXSM-F401RE our stack already runs on. Its pin assignment, DMA streams included, was settled as a whole and checked by script against the chip vendor's own pin data.",
+    chips: ["STM32F4", "Cortex-M4F", "NavHAL", "VaiOS", "VAYU"],
   },
 ];
 
