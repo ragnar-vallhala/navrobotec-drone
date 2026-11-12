@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import WaitlistCallout from "@/components/WaitlistCallout";
+import FigureZoom from "@/components/FigureZoom";
 import {
   BOOK_ORDER,
   getBookBySlug,
@@ -69,7 +70,9 @@ export default async function ChapterPage({
         <h1 className={styles.title}>{ch.title}</h1>
       </header>
 
+      <FigureZoom />
       <div
+        data-zoom
         className={`${styles.prose} ${bk.prose}`}
         dangerouslySetInnerHTML={{ __html: html }}
       />

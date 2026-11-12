@@ -1,4 +1,5 @@
 import WaitlistCallout from "@/components/WaitlistCallout";
+import FigureZoom from "@/components/FigureZoom";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -53,10 +54,14 @@ export default async function ChapterPage({
       </header>
 
       {intro ? (
-        <div
-          className={styles.prose}
-          dangerouslySetInnerHTML={{ __html: intro }}
-        />
+        <>
+          <FigureZoom />
+          <div
+            data-zoom
+            className={styles.prose}
+            dangerouslySetInnerHTML={{ __html: intro }}
+          />
+        </>
       ) : current.sections.length === 0 ? (
         <p className={styles.pending}>
           This chapter is being written. Please check back soon.

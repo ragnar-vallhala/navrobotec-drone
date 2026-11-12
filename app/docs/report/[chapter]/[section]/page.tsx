@@ -1,4 +1,5 @@
 import WaitlistCallout from "@/components/WaitlistCallout";
+import FigureZoom from "@/components/FigureZoom";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -60,10 +61,14 @@ export default async function SectionPage({
       </header>
 
       {html ? (
-        <div
-          className={styles.prose}
-          dangerouslySetInnerHTML={{ __html: html }}
-        />
+        <>
+          <FigureZoom />
+          <div
+            data-zoom
+            className={styles.prose}
+            dangerouslySetInnerHTML={{ __html: html }}
+          />
+        </>
       ) : (
         <p className={styles.pending}>
           This section is being written. Please check back soon.

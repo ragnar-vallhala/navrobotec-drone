@@ -390,6 +390,8 @@ a.label:hover { color: var(--signal); }
 }
 
 .prose figure { margin-inline: 0; text-align: center; }
+/* Figures take the full reading width; they are SVG, so they stay sharp. */
+.prose figure img { width: 100%; height: auto; max-height: 85vh; object-fit: contain; }
 .prose figcaption {
   margin-top: 0.875rem;
   font-size: 0.875rem;

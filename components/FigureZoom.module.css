@@ -1,0 +1,46 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(7, 19, 16, 0.86);
+  display: flex;
+}
+.close {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 10000;
+  width: 2.75rem;
+  height: 2.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 999px;
+  background: #fff;
+  color: #06130f;
+  cursor: pointer;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+}
+/* Scrolls both ways and allows pinch zoom on touch screens. */
+.scroller {
+  flex: 1;
+  overflow: auto;
+  touch-action: pan-x pan-y pinch-zoom;
+  padding: 3.5rem 1rem 1.5rem;
+  display: flex;
+}
+.img {
+  background: #fff;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: auto;
+  width: min(96vw, 1800px);
+  max-width: none;
+  flex-shrink: 0;
+  height: auto;
+  cursor: default;
+}
+@media (max-width: 48rem) {
+  .img { width: 220vw; }
+}

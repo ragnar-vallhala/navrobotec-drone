@@ -17,7 +17,7 @@ import path from "path";
 import { Marked } from "marked";
 import { getChapters, readDocFile } from "@/lib/docs";
 import { getPart } from "@/lib/parts";
-import { highlight } from "@/lib/highlight";
+import { detectLang, highlight } from "@/lib/highlight";
 
 const BOOKS_DIR = path.join(process.cwd(), "content/docs-books");
 
@@ -237,7 +237,7 @@ function renderMarkdown(md: string): string {
         return `<h${depth} id="${id}">${inner}<a class="anchor" href="#${id}" aria-label="Link to this heading">#</a></h${depth}>\n`;
       },
       code({ text, lang }) {
-        const l = (lang ?? "").trim().split(/\s+/)[0];
+        const l = (lang ?? "").trim().split(/\s+/)[0] || detectLang(text);
         const cls = l ? ` class="language-${esc(l)}"` : "";
         return `<pre${l ? ` data-lang="${esc(l)}"` : ""} tabindex="0"><code${cls}>${highlight(text, l)}\n</code></pre>\n`;
       },
