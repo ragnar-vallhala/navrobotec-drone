@@ -1,4 +1,3 @@
-import Banner from "@/components/Banner";
 import Link from "next/link";
 import type { Metadata } from "next";
 import tech from "./technology.module.css";
@@ -202,8 +201,6 @@ export default function Technology() {
           </div>
         </div>
       </section>
-
-      <Banner />
     </div>
   );
 }
