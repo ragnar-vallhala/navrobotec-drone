@@ -92,19 +92,19 @@
   padding: 0.5rem 1rem;
   border: 1px solid var(--signal-lit);
   border-radius: var(--radius);
-  background: transparent;
+  background: var(--signal-lit);
   font-family: var(--font-data);
   font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--signal-lit);
+  color: var(--band);
   cursor: pointer;
   transition: background-color 0.2s var(--ease), color 0.2s var(--ease);
 }
-.waitlist:hover { background: var(--signal-lit); color: var(--band); }
-.solid .waitlist { border-color: var(--signal); color: var(--signal); }
-.solid .waitlist:hover { background: var(--signal); color: #fff; }
+.waitlist:hover { background: transparent; color: var(--signal-lit); }
+.solid .waitlist { border-color: var(--signal); background: var(--signal); color: #fff; }
+.solid .waitlist:hover { background: transparent; color: var(--signal); }
 .waitlist:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
 
 .toggle {

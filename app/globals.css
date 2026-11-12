@@ -214,6 +214,7 @@ h1, h2, h3, h4, h5, h6 {
 p { margin: 0; }
 .lede { font-size: clamp(1.0625rem, 1.5vw, 1.25rem); line-height: 1.6; max-width: 60ch; }
 .body { max-width: 68ch; }
+:where(h1, h2, h3, .h1, .h2, .display) + .lede { margin-top: 1.125rem; }
 .small { font-size: 0.9375rem; }
 .muted { color: var(--muted); }
 

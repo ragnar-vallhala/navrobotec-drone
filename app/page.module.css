@@ -257,7 +257,7 @@
   .track[data-enhanced] {
     /* One frame to hold in, plus a screen of travel per layer. This and the
        number of layers are the only two things that set the pace. */
-    --step: 62vh;
+    --step: 46vh;
     height: calc(100vh + 4 * var(--step));
     height: calc(100svh + 4 * var(--step));
   }
