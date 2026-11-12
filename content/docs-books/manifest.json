@@ -1,0 +1,222 @@
+{
+  "navlink": {
+    "part": "navlink",
+    "repo": "ragnar-vallhala/navlink",
+    "total": 10,
+    "chapters": [
+      {
+        "n": 1,
+        "status": "ready",
+        "file": "01-what-navlink-is.md",
+        "ref": "docs/book-ch1-3",
+        "sha": "8062600"
+      },
+      {
+        "n": 2,
+        "status": "ready",
+        "file": "02-architecture.md",
+        "ref": "docs/book-ch1-3",
+        "sha": "8062600"
+      },
+      {
+        "n": 3,
+        "status": "ready",
+        "file": "03-the-frame.md",
+        "ref": "docs/book-ch1-3",
+        "sha": "8062600"
+      },
+      {
+        "n": 4,
+        "status": "ready",
+        "file": "04-integrity.md",
+        "ref": "docs/book-ch4-6",
+        "sha": "9f7351e"
+      },
+      {
+        "n": 5,
+        "status": "ready",
+        "file": "05-field-encoding-and-time.md",
+        "ref": "docs/book-ch4-6",
+        "sha": "9f7351e"
+      },
+      {
+        "n": 6,
+        "status": "ready",
+        "file": "06-dialect-and-catalog.md",
+        "ref": "docs/book-ch4-6",
+        "sha": "9f7351e"
+      },
+      {
+        "n": 7,
+        "status": "ready",
+        "file": "07-services.md",
+        "ref": "docs/book-ch7-10",
+        "sha": "0fa9088"
+      },
+      {
+        "n": 8,
+        "status": "ready",
+        "file": "08-faults-and-security.md",
+        "ref": "docs/book-ch7-10",
+        "sha": "0fa9088"
+      },
+      {
+        "n": 9,
+        "status": "ready",
+        "file": "09-using-navlink.md",
+        "ref": "docs/book-ch7-10",
+        "sha": "0fa9088"
+      },
+      {
+        "n": 10,
+        "status": "ready",
+        "file": "10-compatibility-and-limits.md",
+        "ref": "docs/book-ch7-10",
+        "sha": "0fa9088"
+      }
+    ]
+  },
+  "nav": {
+    "part": "nav",
+    "repo": "ragnar-vallhala/nav",
+    "total": 10,
+    "chapters": [
+      {
+        "n": 1,
+        "status": "ready",
+        "file": "01-what-nav-is.md",
+        "ref": "docs/book-ch1-3",
+        "sha": "64fa8f1"
+      },
+      {
+        "n": 2,
+        "status": "ready",
+        "file": "02-design-goals.md",
+        "ref": "docs/book-ch1-3",
+        "sha": "64fa8f1"
+      },
+      {
+        "n": 3,
+        "status": "ready",
+        "file": "03-install-and-first-project.md",
+        "ref": "docs/book-ch1-3",
+        "sha": "64fa8f1"
+      },
+      {
+        "n": 4,
+        "status": "ready",
+        "file": "04-architecture.md",
+        "ref": "docs/book-ch4-6",
+        "sha": "6dd767e"
+      },
+      {
+        "n": 5,
+        "status": "ready",
+        "file": "05-the-project-file-nav-toml.md",
+        "ref": "docs/book-ch4-6",
+        "sha": "6dd767e"
+      },
+      {
+        "n": 6,
+        "status": "ready",
+        "file": "06-configuration-with-kconfig.md",
+        "ref": "docs/book-ch4-6",
+        "sha": "6dd767e"
+      },
+      {
+        "n": 7,
+        "status": "coming"
+      },
+      {
+        "n": 8,
+        "status": "coming"
+      },
+      {
+        "n": 9,
+        "status": "coming"
+      },
+      {
+        "n": 10,
+        "status": "coming"
+      }
+    ]
+  },
+  "navigator": {
+    "part": "navigator",
+    "repo": "ragnar-vallhala/navigator",
+    "total": 11,
+    "chapters": [
+      {
+        "n": 1,
+        "status": "ready",
+        "file": "01-what-navigator-is.md",
+        "ref": "main",
+        "sha": "b2a6ed0"
+      },
+      {
+        "n": 2,
+        "status": "ready",
+        "file": "02-architecture-and-threading.md",
+        "ref": "main",
+        "sha": "b2a6ed0"
+      },
+      {
+        "n": 3,
+        "status": "ready",
+        "file": "03-links-and-telemetry-state-machine.md",
+        "ref": "main",
+        "sha": "b2a6ed0"
+      },
+      {
+        "n": 4,
+        "status": "ready",
+        "file": "04-navlink-on-the-gcs.md",
+        "ref": "main",
+        "sha": "b2a6ed0"
+      },
+      {
+        "n": 5,
+        "status": "ready",
+        "file": "05-the-flight-screens.md",
+        "ref": "main",
+        "sha": "b2a6ed0"
+      },
+      {
+        "n": 6,
+        "status": "ready",
+        "file": "06-the-in-app-simulator.md",
+        "ref": "main",
+        "sha": "b2a6ed0"
+      },
+      {
+        "n": 7,
+        "status": "ready",
+        "file": "07-record-and-replay.md",
+        "ref": "main",
+        "sha": "b2a6ed0"
+      },
+      {
+        "n": 8,
+        "status": "ready",
+        "file": "08-autotune-and-the-headless-sdk.md",
+        "ref": "main",
+        "sha": "b2a6ed0"
+      },
+      {
+        "n": 9,
+        "status": "coming"
+      },
+      {
+        "n": 10,
+        "status": "ready",
+        "file": "10-build-install-test.md",
+        "ref": "main",
+        "sha": "b2a6ed0"
+      },
+      {
+        "n": 11,
+        "status": "coming"
+      }
+    ]
+  }
+}

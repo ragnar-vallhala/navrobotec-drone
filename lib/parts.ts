@@ -363,7 +363,7 @@ export const PARTS: Part[] = [
     audience: "Pilots and developers tuning and testing Vayu flight controllers.",
     version: [
       { label: "Navigator", value: "1.0.0 in CMake, not tagged or released" },
-      { label: "NavLink submodule", value: "v2.2.1" },
+      { label: "NavLink submodule", value: "v2.4.0" },
       { label: "Simulator SDK", value: "Vayu v0.2.1" },
       { label: "vayu_headless", value: "0.0.1" },
     ],

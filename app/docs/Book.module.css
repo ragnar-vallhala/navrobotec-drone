@@ -1,0 +1,155 @@
+/* Pages of a part's book: the landing page and the chapter head. The reading
+   typography is DocsPage.module.css's .prose; this adds what only books need. */
+
+.kicker {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+  margin-top: 1.5rem;
+  font-family: var(--font-data);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--signal);
+}
+.dot { width: 4px; height: 4px; border-radius: 50%; background: var(--muted); }
+.kicker + :global(h1) { margin-top: 0.75rem; }
+
+/* --- landing ---------------------------------------------------------------- */
+
+.facts {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  margin: 0 0 clamp(1.75rem, 3vw, 2.25rem);
+}
+.facts > div { display: grid; gap: 0.3125rem; align-content: start; padding: 0.875rem 1.125rem; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-lg); }
+.facts dt { color: var(--muted); }
+.facts dd { margin: 0; font-size: 0.9375rem; line-height: 1.45; color: var(--ink); overflow-wrap: anywhere; }
+
+.start {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.875rem 1.375rem;
+  border-radius: var(--radius-lg);
+  background: var(--signal);
+  color: #fff;
+  font-weight: 600;
+  transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+.start:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+.startSub { flex-basis: 100%; font-weight: 400; font-size: 0.8125rem; opacity: 0.85; }
+
+.h2 {
+  margin: clamp(2.5rem, 5vw, 3.5rem) 0 1.25rem;
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.toc {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-block: 1px solid var(--line);
+  display: grid;
+  gap: 1px;
+  background: var(--line);
+}
+.toc > li { background: var(--paper); }
+.tocRow {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr auto;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 1.125rem 0.5rem 1.125rem 0;
+  transition: background-color 0.2s var(--ease), padding-left 0.2s var(--ease);
+}
+a.tocRow:hover { background: var(--paper-2); padding-left: 0.5rem; }
+a.tocRow:hover .tocTitle { color: var(--signal); }
+.tocRow svg { align-self: center; color: var(--muted); }
+a.tocRow:hover svg { color: var(--signal); }
+.tocNo { font-family: var(--font-data); font-size: 0.8125rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.tocBody { display: grid; gap: 0.3rem; min-width: 0; }
+.tocTitle { font-size: 1.0625rem; font-weight: 500; line-height: 1.35; color: var(--ink); transition: color 0.2s var(--ease); }
+.tocBlurb { font-size: 0.9rem; line-height: 1.55; color: var(--ink-2); max-width: 60ch; }
+.tocSoon { padding: 1.125rem 0.5rem 1.125rem 0; display: grid; grid-template-columns: 2.5rem 1fr auto; gap: 1rem; align-items: baseline; }
+.tocSoon .tocTitle { color: var(--muted); font-weight: 400; }
+
+.note {
+  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--signal);
+  border-radius: var(--radius-lg);
+  background: var(--paper-2);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+.noteHead { margin: 0 0 0.5rem; font-family: var(--font-data); font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); font-weight: 400; }
+.note ul { margin: 0; padding-left: 1.25rem; display: grid; gap: 0.375rem; }
+
+.provenance { margin-top: 1.5rem; font-size: 0.8125rem; color: var(--muted); line-height: 1.6; }
+
+/* --- chapter body (markdown books) -------------------------------------------- */
+
+.prose { max-width: 100%; }
+.prose :where(h2) { padding-top: 1.75rem; border-top: 1px solid var(--line); margin-top: 3em; }
+.prose :where(h2, h3, h4) { position: relative; }
+.prose :global(.anchor) {
+  margin-left: 0.5rem;
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 400;
+  opacity: 0;
+  transition: opacity 0.2s var(--ease);
+}
+.prose :where(h2, h3, h4):hover :global(.anchor),
+.prose :global(.anchor):focus-visible { opacity: 1; }
+@media (hover: none) { .prose :global(.anchor) { display: none; } }
+
+.prose pre { position: relative; }
+.prose pre[data-lang]::before {
+  content: attr(data-lang);
+  position: absolute;
+  top: 0.375rem;
+  right: 0.75rem;
+  font-family: var(--font-data);
+  font-size: 0.625rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.prose :global(.table-wrap) { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); }
+.prose table { display: table; width: 100%; border-collapse: collapse; overflow: visible; }
+.prose :where(thead th) { background: var(--paper-2); border-bottom: 1px solid var(--line-strong); }
+.prose :where(tbody tr:nth-child(even)) { background: var(--paper-2); }
+.prose :where(td code, th code) { white-space: nowrap; }
+
+/* --- hub card meta ------------------------------------------------------------ */
+.cardMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  font-family: var(--font-data);
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+@media (min-width: 48rem) {
+  .cardMeta { grid-column: 2; grid-row: 3; }
+}
+
+.h2 + :global(nav), .h2 + nav { margin-top: 0 !important; }
+
+/* Long paths and identifiers in the sources lists must wrap, not widen the page. */
+.prose :where(p, li, h1, h2, h3, h4, blockquote) { overflow-wrap: anywhere; }
+.prose :where(ul) { list-style: disc; }
+.prose :where(ol) { list-style: decimal; }
+.prose th { white-space: normal; }

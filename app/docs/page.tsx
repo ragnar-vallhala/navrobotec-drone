@@ -1,10 +1,12 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { ArrowRight } from "lucide-react";
-import { getBooks, getChapters } from "@/lib/docs";
-import { PARTS } from "@/lib/parts";
+import { getChapters } from "@/lib/docs";
+import { getAllBooks, readyChapters } from "@/lib/books";
+import { getPart } from "@/lib/parts";
 import layout from "./DocsLayout.module.css";
 import styles from "./DocsPage.module.css";
+import bk from "./Book.module.css";
 
 export const metadata: Metadata = {
   title: "Documentation",
@@ -18,8 +20,7 @@ export const metadata: Metadata = {
  * reference. Each part's page says what it lacks as well as what it has.
  */
 export default function DocsHub() {
-  const books = getBooks();
-  const report = books.find((b) => b.slug === "report");
+  const books = getAllBooks();
   const chapters = getChapters();
 
   return (
@@ -35,41 +36,58 @@ export default function DocsHub() {
             The stack is a set of parts that fit together: NavHAL at the
             hardware, VaiOS above it, Vayu in the air, NavLink between the
             aircraft and the ground, Navigator on the ground, and nav to build
-            it all. Each part has its own page. The technical report is the
+            it all. Each part is its own book, read chapter by chapter. The technical report is the
             reference for the design as a whole.
           </p>
 
-          {report && (
-            <Link href={report.href} className={styles.bookLead}>
-              <div className={styles.bookLeadBody}>
-                <span className={styles.bookKicker}>{report.kicker}</span>
-                <h2 className={styles.bookTitle}>{report.title}</h2>
-                <p className={styles.bookDesc}>{report.description}</p>
-              </div>
-              <span className={styles.bookFooter}>
-                <span className={styles.bookCta}>
-                  {chapters.length > 0
-                    ? `${chapters.length} chapters`
-                    : "Open"}{" "}
-                  <ArrowRight size={14} />
-                </span>
+          <Link href="/docs/report" className={styles.bookLead}>
+            <div className={styles.bookLeadBody}>
+              <span className={styles.bookKicker}>Reference</span>
+              <h2 className={styles.bookTitle}>Technical Report</h2>
+              <p className={styles.bookDesc}>
+                End-to-end technical report covering system architecture,
+                hardware, NavHAL, VaiOS, and VAYU, generated from the
+                project&apos;s LaTeX source. The whole design in one document.
+              </p>
+            </div>
+            <span className={styles.bookFooter}>
+              <span className={styles.bookCta}>
+                {chapters.length} chapters <ArrowRight size={14} />
               </span>
-            </Link>
-          )}
+            </span>
+          </Link>
 
-          <nav className={styles.bookGrid} aria-label="Parts of the stack">
-            {PARTS.map((part) => (
-              <Link key={part.slug} href={part.href} className={styles.bookCard}>
-                <span className={styles.bookKicker}>{part.kicker}</span>
-                <h2 className={styles.bookTitle}>{part.title}</h2>
-                <p className={styles.bookDesc}>{part.summary}</p>
-                <span className={styles.bookFooter}>
-                  <span className={styles.bookCta}>
-                    Open <ArrowRight size={14} />
+          <h2 className={bk.h2}>One book per part</h2>
+          <nav className={styles.bookGrid} aria-label="Books, one per part of the stack">
+            {books.map((book) => {
+              const part = getPart(book.slug);
+              const ready = readyChapters(book).length;
+              const count =
+                ready === book.chapters.length
+                  ? `${ready} chapters`
+                  : `${ready} of ${book.chapters.length} chapters`;
+              const v = part?.version[0];
+              return (
+                <Link key={book.slug} href={`/docs/${book.slug}`} className={styles.bookCard}>
+                  <span className={styles.bookKicker}>{book.kicker}</span>
+                  <h2 className={styles.bookTitle}>{book.title}</h2>
+                  <p className={styles.bookDesc}>{book.summary}</p>
+                  <span className={bk.cardMeta}>
+                    <span>{count}</span>
+                    {v && (
+                      <span>
+                        {v.label}: {v.value}
+                      </span>
+                    )}
                   </span>
-                </span>
-              </Link>
-            ))}
+                  <span className={styles.bookFooter}>
+                    <span className={styles.bookCta}>
+                      Open <ArrowRight size={14} />
+                    </span>
+                  </span>
+                </Link>
+              );
+            })}
           </nav>
         </article>
       </div>

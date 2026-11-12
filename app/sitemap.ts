@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
-import { getBooks, getChapters, getTutorials } from "@/lib/docs";
-import { PARTS } from "@/lib/parts";
+import { getChapters } from "@/lib/docs";
+import { getAllBooks, readyChapters } from "@/lib/books";
 import { getProducts } from "@/lib/products";
 import { SITE_URL } from "@/lib/site";
 
@@ -61,40 +61,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // No blogs directory — skip.
   }
 
-  // Docs: book index pages.
-  const docRoutes: MetadataRoute.Sitemap = [];
-  for (const book of getBooks()) {
-    /* Stub guides ("being written") stay out of the sitemap until they have
-       content. */
-    if (book.comingSoon) continue;
+  // Docs: the hub, the report, and one book per part.
+  const docRoutes: MetadataRoute.Sitemap = [
+    { url: `${SITE_URL}/docs/report`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
+  ];
+  for (const book of getAllBooks()) {
     docRoutes.push({
-      url: `${SITE_URL}${book.href}`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: book.comingSoon ? 0.5 : 0.8,
-    });
-    // Tutorial pages under each non-report book.
-    if (book.slug !== "report") {
-      for (const tutorial of getTutorials(book.slug)) {
-        docRoutes.push({
-          url: `${SITE_URL}${book.href}/${tutorial.slug}`,
-          lastModified: now,
-          changeFrequency: "monthly",
-          priority: 0.7,
-        });
-      }
-    }
-  }
-
-  // One page per part of the stack. NavHAL's is its book index, added above.
-  for (const part of PARTS) {
-    if (part.slug === "navhal") continue;
-    docRoutes.push({
-      url: `${SITE_URL}${part.href}`,
+      url: `${SITE_URL}/docs/${book.slug}`,
       lastModified: now,
       changeFrequency: "weekly",
       priority: 0.8,
     });
+    for (const ch of readyChapters(book)) {
+      docRoutes.push({
+        url: `${SITE_URL}/docs/${book.slug}/${ch.slug}`,
+        lastModified: now,
+        changeFrequency: "monthly",
+        priority: 0.7,
+      });
+    }
   }
 
   // Report book: chapter pages and their section pages.

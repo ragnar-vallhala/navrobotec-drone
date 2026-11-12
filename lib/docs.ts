@@ -1,16 +1,14 @@
 /**
  * Accessors for the generated docs in content/docs/.
  *
- * The /docs section is organised as a hub of "books". The technical report
- * (chapters 01-09, generated from LaTeX by scripts/convert-docs.mjs) is one
- * book; per-layer tutorial books for NavHAL, VaiOS, and VAYU sit alongside it
- * and are still in preparation.
+ * The technical report (chapters 01-09, generated from LaTeX by
+ * scripts/convert-docs.mjs) is the Reference book on /docs. The per-part
+ * books live in lib/books.ts.
  *
  * These helpers run server-side only (they read the filesystem).
  */
 import fs from "fs";
 import path from "path";
-import matter from "gray-matter";
 
 const DOCS_DIR = path.join(process.cwd(), "content/docs");
 
@@ -37,48 +35,6 @@ export interface DocPage {
   section?: DocSection;
 }
 
-/** A top-level "book" surfaced on the /docs hub. */
-export interface DocBook {
-  slug: string;
-  title: string;
-  description: string;
-  /** Short kicker shown above the title on cards. */
-  kicker: string;
-  /** Where the book lives. */
-  href: string;
-  /** Marks books that don't yet have content. */
-  comingSoon: boolean;
-}
-
-export const BOOKS: DocBook[] = [
-  {
-    slug: "report",
-    title: "Technical Report",
-    description:
-      "End-to-end technical report covering system architecture, hardware, NavHAL, VaiOS, and VAYU — generated from the project's LaTeX source.",
-    kicker: "Reference",
-    href: "/docs/report",
-    comingSoon: false,
-  },
-  {
-    slug: "navhal",
-    title: "NavHAL Guide",
-    description:
-      "Tutorial-style walkthrough of the NavHAL hardware abstraction layer — peripheral abstractions, porting, and integration with VaiOS.",
-    kicker: "Tutorial",
-    href: "/docs/navhal",
-    comingSoon: false,
-  },
-];
-
-export function getBooks(): DocBook[] {
-  return BOOKS;
-}
-
-export function getBook(slug: string): DocBook | undefined {
-  return BOOKS.find((b) => b.slug === slug);
-}
-
 /** All chapters in the technical report, in reading order. */
 export function getChapters(): DocChapter[] {
   try {
@@ -96,92 +52,6 @@ export function readDocFile(relativePath: string): string {
   } catch {
     return "";
   }
-}
-
-/* ------------------------------------------------------------------------- *
- *  Tutorial books (per-layer markdown content)                              *
- * ------------------------------------------------------------------------- */
-
-export interface TutorialMeta {
-  slug: string;
-  title: string;
-  order: number;
-  summary?: string;
-  kicker?: string;
-  /** Estimated reading time, e.g. "10 min". */
-  readingTime?: string;
-}
-
-export interface Tutorial extends TutorialMeta {
-  /** Raw markdown body (without the front-matter block). */
-  content: string;
-}
-
-/**
- * Read all tutorials for a book. Tutorials live at
- * `content/docs/<bookSlug>/*.md` with YAML front-matter for metadata.
- * Returned in front-matter `order` ascending.
- */
-export function getTutorials(bookSlug: string): TutorialMeta[] {
-  const dir = path.join(DOCS_DIR, bookSlug);
-  let files: string[];
-  try {
-    files = fs.readdirSync(dir).filter((f) => f.endsWith(".md"));
-  } catch {
-    return [];
-  }
-  const items: TutorialMeta[] = [];
-  for (const file of files) {
-    try {
-      const raw = fs.readFileSync(path.join(dir, file), "utf8");
-      const { data } = matter(raw);
-      if (!data.title || !data.slug) continue;
-      items.push({
-        slug: String(data.slug),
-        title: String(data.title),
-        order: Number(data.order ?? 0),
-        summary: data.summary ? String(data.summary) : undefined,
-        kicker: data.kicker ? String(data.kicker) : undefined,
-        readingTime: data.readingTime ? String(data.readingTime) : undefined,
-      });
-    } catch {
-      // Skip unreadable files.
-    }
-  }
-  return items.sort((a, b) => a.order - b.order);
-}
-
-export function getTutorial(
-  bookSlug: string,
-  tutorialSlug: string,
-): Tutorial | null {
-  const dir = path.join(DOCS_DIR, bookSlug);
-  let files: string[];
-  try {
-    files = fs.readdirSync(dir).filter((f) => f.endsWith(".md"));
-  } catch {
-    return null;
-  }
-  for (const file of files) {
-    try {
-      const raw = fs.readFileSync(path.join(dir, file), "utf8");
-      const { data, content } = matter(raw);
-      if (!data.title || !data.slug) continue;
-      if (String(data.slug) !== tutorialSlug) continue;
-      return {
-        slug: String(data.slug),
-        title: String(data.title),
-        order: Number(data.order ?? 0),
-        summary: data.summary ? String(data.summary) : undefined,
-        kicker: data.kicker ? String(data.kicker) : undefined,
-        readingTime: data.readingTime ? String(data.readingTime) : undefined,
-        content,
-      };
-    } catch {
-      // Skip unreadable files.
-    }
-  }
-  return null;
 }
 
 /**

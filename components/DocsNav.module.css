@@ -1,5 +1,5 @@
-/* The contents rail, shared by the report sidebar (DocsNav) and the tutorial
- * sidebar (TutorialNav).
+/* The contents rail, shared by the report sidebar (DocsNav) and the book
+ * sidebar (BookNav).
  *
  * It sticks under the header and the reading bar — `--doc-top`, inherited from
  * .docsContainer — and scrolls on its own so a long table of contents never
