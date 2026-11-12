@@ -22,18 +22,6 @@ const SECTIONS = [
     ],
   },
   {
-    title: "Documentation",
-    links: [
-      { href: "/docs/navhal", label: "NavHAL" },
-      { href: "/docs/vaios", label: "VaiOS" },
-      { href: "/docs/vayu", label: "Vayu" },
-      { href: "/docs/navlink", label: "NavLink" },
-      { href: "/docs/navigator", label: "Navigator" },
-      { href: "/docs/nav", label: "nav" },
-      { href: "/docs/report", label: "Technical report" },
-    ],
-  },
-  {
     title: "Company",
     links: [
       { href: "/team", label: "Team" },
@@ -41,6 +29,21 @@ const SECTIONS = [
       { href: "/contact", label: "Contact" },
     ],
   },
+];
+
+/* Documentation is the longest list, so it sits in two columns. */
+const DOCS = [
+  [
+    { href: "/docs/navhal", label: "NavHAL" },
+    { href: "/docs/vaios", label: "VaiOS" },
+    { href: "/docs/vayu", label: "Vayu" },
+    { href: "/docs/navlink", label: "NavLink" },
+  ],
+  [
+    { href: "/docs/navigator", label: "Navigator" },
+    { href: "/docs/nav", label: "nav" },
+    { href: "/docs/report", label: "Technical report" },
+  ],
 ];
 
 const SOCIAL = [
@@ -70,22 +73,50 @@ export default function Footer() {
           </p>
         </div>
 
-        {SECTIONS.map((section) => (
-          <nav key={section.title} className={styles.col} aria-label={section.title}>
-            <h2 className={`label ${styles.colTitle}`}>{section.title}</h2>
-            <ul className={styles.list}>
-              {section.links.map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href} className={styles.link}>
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        ))}
+        <nav className={styles.col} aria-label={SECTIONS[0].title}>
+          <h2 className={`label ${styles.colTitle}`}>{SECTIONS[0].title}</h2>
+          <ul className={styles.list}>
+            {SECTIONS[0].links.map((link) => (
+              <li key={link.href}>
+                <Link href={link.href} className={styles.link}>
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
 
-        <div className={styles.col}>
+        <nav className={`${styles.col} ${styles.docsCol}`} aria-label="Documentation">
+          <h2 className={`label ${styles.colTitle}`}>Documentation</h2>
+          <div className={styles.docs}>
+            {DOCS.map((group, i) => (
+              <ul key={i} className={styles.list}>
+                {group.map((link) => (
+                  <li key={link.href}>
+                    <Link href={link.href} className={styles.link}>
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            ))}
+          </div>
+        </nav>
+
+        <nav className={styles.col} aria-label={SECTIONS[1].title}>
+          <h2 className={`label ${styles.colTitle}`}>{SECTIONS[1].title}</h2>
+          <ul className={styles.list}>
+            {SECTIONS[1].links.map((link) => (
+              <li key={link.href}>
+                <Link href={link.href} className={styles.link}>
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <div className={`${styles.col} ${styles.contactCol}`}>
           <h2 className={`label ${styles.colTitle}`}>Contact</h2>
           <ul className={styles.list}>
             <li>
@@ -117,9 +148,11 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className={`shell ${styles.bottom}`}>
-        <p className="label">© {new Date().getFullYear()} NAVRobotec</p>
-        <p className="label">All rights reserved</p>
+      <div className={styles.bottomBar}>
+        <div className={`shell ${styles.bottom}`}>
+          <p className="label">© {new Date().getFullYear()} NAVRobotec</p>
+          <p className="label">All rights reserved</p>
+        </div>
       </div>
     </footer>
   );

@@ -35,26 +35,39 @@
 .muted { color: var(--faint); font-size: 0.9375rem; }
 .social { margin-top: 1.75rem; flex-direction: row; flex-wrap: wrap; gap: 1.25rem; }
 
+.bottomBar { border-top: 1px solid var(--line); }
 .bottom {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 0.75rem;
   padding-block: 1.5rem;
-  border-top: 1px solid var(--line);
 }
 
+.col { min-width: 0; }
+.docs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1.5rem; }
+
+/* Mobile: one column, brand first. Tablet: three columns. Desktop: brand on
+   top, four columns in one row. Wide: brand and all four in a single row. */
+.brandCol { max-width: 24rem; }
 @media (min-width: 48rem) {
-  .inner { grid-template-columns: 1.4fr 1fr 1fr; }
+  .inner { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 2rem; }
+  .brandCol { grid-column: 1 / -1; }
+  .docsCol, .contactCol { grid-column: span 2; }
 }
 @media (min-width: 62rem) {
-  .inner { grid-template-columns: 1.6fr 1fr 1fr 1.2fr; }
+  .inner { grid-template-columns: 1fr 2fr 1fr 1.4fr; column-gap: 2.5rem; }
+  .docsCol, .contactCol { grid-column: auto; }
+}
+@media (min-width: 80rem) {
+  .inner { grid-template-columns: 1.6fr 1.2fr 2fr 0.9fr 1.5fr; }
+  .brandCol { grid-column: auto; }
 }
 
 /* Stacked links need a real 44px row, not an overlay: overlays on a column of
    neighbours would fight over the same pixels. The gap moves into the row. */
 .list { gap: 0; }
-.link { display: inline-flex; align-items: center; min-height: 2.75rem; }
+.link { white-space: nowrap; display: inline-flex; align-items: center; min-height: 2.75rem; }
 .muted { display: flex; align-items: center; min-height: 2.75rem; }
 .social { gap: 0 1.25rem; }
 .brand { position: relative; }
