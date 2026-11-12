@@ -373,10 +373,10 @@
     color: var(--band-muted);
     transition: color 0.4s var(--ease);
   }
-  .depthItem[data-step-state="past"] .depthNode { background: rgba(53, 224, 161, 0.45); }
+  .depthItem[data-step-state="past"] .depthNode { background: rgba(4, 114, 79, 0.45); }
   .depthItem[data-step-state="active"] .depthNode {
     background: var(--signal-lit);
-    box-shadow: 0 0 0 4px rgba(53, 224, 161, 0.16);
+    box-shadow: 0 0 0 4px rgba(4, 114, 79, 0.16);
   }
   .depthItem[data-step-state="active"] .depthTier { color: var(--band-text); }
 
@@ -594,7 +594,7 @@
   overflow: hidden;
   padding-block: clamp(5rem, 12vw, 9rem);
   background:
-    radial-gradient(100% 100% at 50% 120%, rgba(53, 224, 161, 0.18), transparent 65%),
+    radial-gradient(100% 100% at 50% 120%, rgba(4, 114, 79, 0.18), transparent 65%),
     var(--band);
 }
 .closingInner { position: relative; text-align: center; }

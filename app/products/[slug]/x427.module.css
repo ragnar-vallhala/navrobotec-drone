@@ -120,8 +120,8 @@
 .layerBase {
   display: grid; gap: 1.25rem; align-items: center; padding: 1.25rem 1.5rem;
   border: 1px solid var(--signal-lit); border-radius: var(--radius-lg); color: var(--band-text);
-  background: linear-gradient(135deg, rgba(53, 224, 161, 0.16), rgba(53, 224, 161, 0.04) 60%, var(--band-2));
-  box-shadow: 0 0 0 4px rgba(53, 224, 161, 0.08), 0 20px 60px -30px rgba(53, 224, 161, 0.4);
+  background: linear-gradient(135deg, rgba(4, 114, 79, 0.16), rgba(4, 114, 79, 0.04) 60%, var(--band-2));
+  box-shadow: 0 0 0 4px rgba(4, 114, 79, 0.08), 0 20px 60px -30px rgba(4, 114, 79, 0.4);
 }
 .baseThumb { position: relative; display: block; width: 100%; max-width: 12rem; aspect-ratio: 3 / 2; border-radius: var(--radius); overflow: hidden; background: var(--band); }
 .baseText { display: grid; gap: 0.25rem; }

@@ -47,11 +47,11 @@
   /* --- signal -------------------------------------------------------------
      One accent, for one thing: the live value. Anything emerald on this site
      should be a number, a state, or the thing you are meant to click. */
-  --signal: #05966a;         /* on paper */
+  --signal: #04724f;         /* the one green */
   --signal-deep: #04724f;
-  --signal-lit: #35e0a1;     /* on near-black — the VAYU glow */
+  --signal-lit: #04724f;
   --signal-wash: #e2f4ec;
-  --signal-line: rgba(5, 150, 106, 0.3);
+  --signal-line: rgba(4, 114, 79, 0.3);
 
   /* --- always-dark bands ---------------------------------------------------
      The hero and the closing call are dark in both themes; these do not swap.
@@ -106,9 +106,9 @@
   --line-strong: rgba(233, 241, 236, 0.22);
 
   --signal: var(--signal-lit);
-  --signal-deep: #1fc98c;
-  --signal-wash: rgba(53, 224, 161, 0.12);
-  --signal-line: rgba(53, 224, 161, 0.32);
+  --signal-deep: #04724f;
+  --signal-wash: rgba(4, 114, 79, 0.22);
+  --signal-line: rgba(4, 114, 79, 0.5);
 
   /* Lifted, not sunk: on a dark page a darker band disappears. */
   --band: #0d1f1a;
@@ -297,14 +297,14 @@ a { color: inherit; text-decoration: none; }
 /* In dark mode --signal becomes the bright mint, and white on mint is close to
    unreadable. The label takes the dark ground instead — the same swap the
    always-dark bands below already make. */
-:root[data-theme="dark"] .btn-primary { color: var(--band); }
-:root[data-theme="dark"] .btn-primary:hover { background: #5ceab5; }
+:root[data-theme="dark"] .btn-primary { color: #fff; }
+:root[data-theme="dark"] .btn-primary:hover { background: #04724f; }
 
 /* On a dark band the same two buttons need the other green and the other
    ground; without this the ghost button is invisible and the primary one is
    too dark to read. */
-.band .btn-primary { background: var(--signal-lit); color: var(--band); }
-.band .btn-primary:hover { background: #5ceab5; }
+.band .btn-primary { background: var(--signal-lit); color: #fff; }
+.band .btn-primary:hover { background: #04724f; }
 .band .btn-ghost { border-color: rgba(230, 239, 234, 0.28); color: var(--band-text); }
 .band .btn-ghost:hover { border-color: var(--signal-lit); color: var(--signal-lit); }
 

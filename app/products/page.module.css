@@ -40,7 +40,7 @@
 .card:hover {
   transform: translateY(-4px);
   border-color: var(--signal);
-  box-shadow: 0 18px 40px -18px rgba(5, 150, 105, 0.45), var(--shadow-card);
+  box-shadow: 0 18px 40px -18px rgba(4, 114, 79, 0.45), var(--shadow-card);
 }
 /* Rule 5: focus is always visible, in the signal colour. On the card itself,
    because the card is the control. */

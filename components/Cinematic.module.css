@@ -32,7 +32,7 @@
   padding-top: calc(var(--bar) + clamp(5rem, 12vw, 9rem));
   padding-bottom: clamp(4.5rem, 10vw, 7rem);
   background:
-    radial-gradient(90% 70% at 70% 0%, rgba(53, 224, 161, 0.1), transparent 62%),
+    radial-gradient(90% 70% at 70% 0%, rgba(4, 114, 79, 0.1), transparent 62%),
     var(--band);
 }
 .plain .card { margin-top: 0; }
