@@ -180,12 +180,6 @@ export default function BoardPage({
               <p className={`small ${styles.note}`}>{gallery.note}</p>
             </div>
             <div className={`${styles.shot} ${styles.shotTop}`}>
-              <BoardPhoto shot={gallery.top} sizes="(max-width: 60rem) 100vw, 44rem" />
-            </div>
-            <div className={`${styles.shot} ${styles.shotBottom}`} style={{ ["--ar" as string]: `${gallery.bottom.width} / ${gallery.bottom.height}` }}>
-              <BoardPhoto shot={gallery.bottom} sizes="(max-width: 60rem) 100vw, 40rem" />
-            </div>
-            <div className={`${styles.shot} ${styles.shotVideo}`} style={gallery.third.kind === "shot" ? { ["--ar" as string]: `${gallery.third.shot.width} / ${gallery.third.shot.height}` } : undefined}>
               {gallery.third.kind === "video" ? (
                 <LoopVideo
                   src={gallery.third.src}
@@ -196,11 +190,11 @@ export default function BoardPage({
                   controls
                 />
               ) : (
-                <BoardPhoto
-                  shot={gallery.third.shot}
-                  sizes="(max-width: 60rem) 100vw, 36rem"
-                />
+                <BoardPhoto shot={gallery.top} sizes="(max-width: 60rem) 100vw, 44rem" />
               )}
+            </div>
+            <div className={`${styles.shot} ${styles.shotBottom}`}>
+              <BoardPhoto shot={gallery.bottom} sizes="(max-width: 60rem) 100vw, 72rem" />
             </div>
           </div>
         </div>

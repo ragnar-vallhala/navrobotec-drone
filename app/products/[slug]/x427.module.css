@@ -72,16 +72,13 @@
 .note { color: var(--ink-2); max-width: 46rem; }
 .shot { position: relative; background: var(--band); border-radius: var(--radius); overflow: hidden; min-width: 0; }
 .shotTop { aspect-ratio: 3 / 2; }
-.shotBottom { aspect-ratio: var(--ar, 3 / 2); }
-.shotVideo { aspect-ratio: var(--ar, 16 / 9); background: #000; }
+.shotBottom { aspect-ratio: 3 / 2; }
 .video { width: 100%; height: 100%; object-fit: cover; display: block; }
 @media (min-width: 60rem) {
   .bento { grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 0.75rem; }
   .galleryCopy { grid-column: 1 / span 5; padding-right: 2rem; }
   .shotTop { grid-column: 6 / span 7; }
-  .shotBottom { grid-column: 1 / span 7; align-self: stretch; aspect-ratio: auto; }
-  .shotVideo { grid-column: 8 / span 5; aspect-ratio: auto; }
-  .shotBottom, .shotVideo { height: 100%; min-height: clamp(20rem, 30vw, 28rem); }
+  .shotBottom { grid-column: 1 / -1; aspect-ratio: 16 / 9; }
 }
 
 /* --- features --- */
