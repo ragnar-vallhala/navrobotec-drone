@@ -15,19 +15,19 @@ import type { Feature, Group, Row } from "./x427-details";
 
 const ALT = "NAVIX X427 Mini flight controller";
 const TOP: Shot = {
-  src: "/images/product-x427-mini-top.f4e0936f.webp",
+  src: "/images/product-x427-mini-top.3d8ffae0.webp",
   alt: `${ALT}, top view`,
   width: 1600,
   height: 1066,
 };
 const BOTTOM: Shot = {
-  src: "/images/product-x427-mini-bottom.4e4376c5.webp",
+  src: "/images/product-x427-mini-bottom.9e5fb37d.webp",
   alt: `${ALT}, bottom view with the STM32F427`,
   width: 1600,
   height: 700,
 };
 const DETAIL: Shot = {
-  src: "/images/product-x427-mini-detail.47c4de86.webp",
+  src: "/images/product-x427-mini-detail.37246fc0.webp",
   alt: `${ALT}, close-up of the top side`,
   width: 1600,
   height: 980,

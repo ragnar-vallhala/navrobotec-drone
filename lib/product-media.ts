@@ -11,13 +11,13 @@ const BOTTOM_ALT = "NAVIX X427 flight controller, bottom view";
    phones, where the frame is 4:3. */
 export const PRODUCTS_OPENING: { wide: Shot; narrow: Shot } = {
   wide: {
-    src: "/images/products-hero-wide.9dfb9d35.webp",
+    src: "/images/products-hero-wide.237fbb67.webp",
     alt: TOP_ALT,
     width: 2000,
     height: 857,
   },
   narrow: {
-    src: "/images/products-hero-narrow.2cec108e.webp",
+    src: "/images/products-hero-narrow.95f7b5d5.webp",
     alt: TOP_ALT,
     width: 1200,
     height: 900,
@@ -33,14 +33,14 @@ export const PRODUCT_MEDIA: Record<
 > = {
   x427: {
     hero: {
-      src: "/images/x427-top.aa71bc83.webp",
+      src: "/images/x427-top.9bcebc80.webp",
       alt: TOP_ALT,
       width: 1600,
       height: 1067,
     },
     gallery: [
       {
-        src: "/images/x427-bottom.6ff7af10.webp",
+        src: "/images/x427-bottom.ff144dd4.webp",
         alt: BOTTOM_ALT,
         width: 1200,
         height: 514,
@@ -52,14 +52,14 @@ export const PRODUCT_MEDIA: Record<
      hand (the board on black), used for the card and the page. */
   "x427-mini": {
     hero: {
-      src: "/images/product-x427-mini.d5457b8b.webp",
+      src: "/images/product-x427-mini.05aebc0d.webp",
       alt: "NAVIX X427 Mini flight controller, top view at an angle",
       width: 1400,
       height: 1050,
     },
     gallery: [],
     card: {
-      src: "/images/product-x427-mini.d5457b8b.webp",
+      src: "/images/product-x427-mini.05aebc0d.webp",
       alt: "NAVIX X427 Mini flight controller, top view at an angle",
       width: 1400,
       height: 1050,
@@ -73,13 +73,13 @@ export const PRODUCT_MEDIA: Record<
    (top and bottom), so there are two slides. */
 export const POPUP_SHOTS: Shot[] = [
   {
-    src: "/images/x427-popup-top.5087ae33.webp",
+    src: "/images/x427-popup-top.dbd9ff15.webp",
     alt: TOP_ALT,
     width: 1200,
     height: 960,
   },
   {
-    src: "/images/x427-popup-bottom.7c094814.webp",
+    src: "/images/x427-popup-bottom.02163c04.webp",
     alt: BOTTOM_ALT,
     width: 1200,
     height: 960,
