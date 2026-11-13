@@ -13,11 +13,17 @@
 .hero {
   position: relative;
   overflow: hidden;
-  height: 100vh;
-  height: 100svh;
-  /* A landscape phone is about 380px tall; below this the frame stops being a
-     frame and the buttons crowd the header. */
-  min-height: 32rem;
+  min-height: 100vh;
+  min-height: 100svh;
+  /* The copy sits in the flow, at the foot of the frame, under room for the
+     banner and header. On a short window the frame grows to hold it instead of
+     the headline sliding up under the header, which it did when the copy was
+     pinned to the bottom of a fixed-height box. */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-top: 7.5rem;
+  padding-bottom: clamp(5rem, 11vh, 8rem);
   background: var(--band);
 }
 
@@ -51,8 +57,7 @@
    every heading further down the page. The foot of the frame is already dark,
    so the type sits on flat ground and costs the photograph nothing. */
 .heroCopy {
-  position: absolute;
-  inset: auto 0 clamp(5rem, 11vh, 8rem) 0;
+  position: relative;
 }
 .heroTitle {
   max-width: 19ch;
