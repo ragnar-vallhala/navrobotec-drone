@@ -1,0 +1,35 @@
+/* Sketch-style diagrams. Colours come from the site tokens through local
+   variables, so the same drawing sits on the dark band and on paper. */
+.sketch {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  --sk-ink: var(--ink);
+  --sk-muted: var(--muted);
+  --sk-acc: var(--signal);
+  --sk-wash: var(--signal-wash);
+  color: var(--sk-ink);
+  font-family: var(--font-display);
+}
+.dark {
+  --sk-ink: var(--band-text);
+  --sk-muted: var(--band-muted);
+  --sk-acc: color-mix(in srgb, var(--signal-lit) 45%, var(--band-text));
+  --sk-wash: rgba(4, 114, 79, 0.3);
+}
+.fill {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+}
+.ink { fill: none; stroke: var(--sk-ink); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.thin { fill: none; stroke: var(--sk-muted); stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; opacity: 0.8; }
+.acc { fill: none; stroke: var(--sk-acc); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.dash { stroke-dasharray: 7 7; }
+.wash { fill: var(--sk-wash); stroke: none; }
+.txt { fill: var(--sk-ink); font-size: 20px; font-weight: 500; }
+.small { fill: var(--sk-muted); font-size: 16px; font-weight: 400; }
+.accTxt { fill: var(--sk-acc); font-size: 15px; font-weight: 600; letter-spacing: 0.04em; }
+.note { fill: var(--sk-muted); font-size: 14px; letter-spacing: 0.04em; font-family: var(--font-data); }
+.grid { fill: none; stroke: var(--sk-muted); stroke-width: 0.5; opacity: 0.18; }

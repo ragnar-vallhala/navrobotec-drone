@@ -11,6 +11,12 @@ import {
 } from "lucide-react";
 import BoardPhoto from "@/components/BoardPhoto";
 import ComingSoon from "@/components/ComingSoon";
+import {
+  InterfacesSketch,
+  ModuleCarrierSketch,
+  TwoCoresSketch,
+  VotingSketch,
+} from "@/components/sketches/H747Sketches";
 import LoopVideo from "@/components/LoopVideo";
 import { PRODUCT_MEDIA } from "@/lib/product-media";
 import InterestDialog from "@/components/InterestDialog";
@@ -130,6 +136,8 @@ export default function BoardPage({
                   sizes="(max-width: 60rem) 100vw, 40rem"
                   priority
                 />
+              ) : page.sketches?.hero ? (
+                <ModuleCarrierSketch tone="dark" fill />
               ) : (
                 <ComingSoon kind="board" />
               )}
@@ -234,6 +242,24 @@ export default function BoardPage({
           </div>
         </div>
       </section>
+
+      {/* --- how it fits together (concept sketches) --- */}
+      {page.sketches?.diagrams ? (
+      <section className="section rule" id="how-it-fits">
+        <div className="shell">
+          <header className={styles.sectionHead}>
+            <p className="label">Concept sketches</p>
+            <h2 className="h1">How it fits together.</h2>
+            <p className="lede">Rough drawings of the design intent. They show what the module is meant to do, not a final layout.</p>
+          </header>
+          <div className={styles.sketches}>
+            <figure className={styles.sketchCard}><TwoCoresSketch /></figure>
+            <figure className={styles.sketchCard}><VotingSketch /></figure>
+            <figure className={styles.sketchCard}><InterfacesSketch /></figure>
+          </div>
+        </div>
+      </section>
+      ) : null}
 
       {/* --- the stack --- */}
       {page.platform ? (

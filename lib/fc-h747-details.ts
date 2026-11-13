@@ -102,6 +102,7 @@ export const H747_PAGE: BoardPage = {
     { value: "8", unit: "DShot", label: "motor outputs" },
     { value: "Lua", unit: "apps", label: "scripting, in design" },
   ],
+  sketches: { hero: true, diagrams: true },
   featuresTitle: "Six things worth knowing.",
   features: FEATURES,
   devTools: false,

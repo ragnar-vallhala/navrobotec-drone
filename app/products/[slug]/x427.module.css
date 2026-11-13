@@ -188,3 +188,19 @@
 @media (max-width: 30rem) { .ctas :global(.btn), .ctaRow :global(.btn) { width: 100%; justify-content: center; } }
 
 .feature .featureTitle, .devCard .devName, .specSummary :global(.h3) { font-weight: 600; color: var(--ink); }
+
+/* --- concept sketches --- */
+.sketches { display: grid; gap: clamp(1rem, 2vw, 1.5rem); grid-template-columns: repeat(auto-fit, minmax(min(26rem, 100%), 1fr)); }
+.sketchCard {
+  margin: 0;
+  padding: clamp(0.75rem, 2vw, 1.25rem);
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  min-width: 0;
+}
+@media (min-width: 40rem) {
+  .sketchCard:last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .sketchCard:last-child:nth-child(odd) > svg { max-width: 34rem; margin-inline: auto; }
+}

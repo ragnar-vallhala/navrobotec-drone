@@ -27,6 +27,9 @@ export type BoardPage = {
       | { kind: "video"; src: string; poster: string; label: string; from: number }
       | { kind: "shot"; shot: Shot };
   };
+  /* Sketch pictures, for a board with no renders yet. `hero` replaces the
+     coming-soon tile; `diagrams` adds the "How it fits together" section. */
+  sketches?: { hero?: boolean; diagrams?: boolean };
   featuresTitle: string;
   features: Feature[];
   /* Left out for a board that has no software-stack claims to make yet. */
