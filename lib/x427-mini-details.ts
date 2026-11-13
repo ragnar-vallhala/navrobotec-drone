@@ -21,10 +21,10 @@ const TOP: Shot = {
   height: 1066,
 };
 const BOTTOM: Shot = {
-  src: "/images/product-x427-mini-bottom.9e5fb37d.webp",
+  src: "/images/product-x427-mini-bottom.7d4c7dcf.webp",
   alt: `${ALT}, bottom view with the STM32F427`,
-  width: 1600,
-  height: 700,
+  width: 1200,
+  height: 800,
 };
 const DETAIL: Shot = {
   src: "/images/product-x427-mini-detail.37246fc0.webp",

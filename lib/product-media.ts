@@ -6,19 +6,20 @@ export type Shot = { src: string; alt: string; width: number; height: number };
 
 const TOP_ALT = "NAVIX X427 flight controller, top view";
 const BOTTOM_ALT = "NAVIX X427 flight controller, bottom view";
+const OPENING_ALT = "Five NAVIX X427 Enclosures laid out in a group: three with the connector top up and two with the bottom plate up";
 
 /* The /products opening: a wide crop for the page frame and a squarer one for
    phones, where the frame is 4:3. */
 export const PRODUCTS_OPENING: { wide: Shot; narrow: Shot } = {
   wide: {
-    src: "/images/products-hero-wide.237fbb67.webp",
-    alt: TOP_ALT,
+    src: "/images/products-hero-wide.b8317b5e.webp",
+    alt: OPENING_ALT,
     width: 2000,
     height: 857,
   },
   narrow: {
-    src: "/images/products-hero-narrow.95f7b5d5.webp",
-    alt: TOP_ALT,
+    src: "/images/products-hero-narrow.22709b37.webp",
+    alt: OPENING_ALT,
     width: 1200,
     height: 900,
   },
@@ -40,13 +41,18 @@ export const PRODUCT_MEDIA: Record<
     },
     gallery: [
       {
-        src: "/images/x427-bottom.ff144dd4.webp",
+        src: "/images/x427-bottom.8cad5b7f.webp",
         alt: BOTTOM_ALT,
         width: 1200,
-        height: 514,
+        height: 800,
       },
     ],
-    card: PRODUCTS_OPENING.narrow,
+    card: {
+      src: "/images/x427-card.95f7b5d5.webp",
+      alt: TOP_ALT,
+      width: 1200,
+      height: 900,
+    },
   },
   /* The X427 Mini: one Blender still from Navix/stills/mini, cut to 4:3 by
      hand (the board on black), used for the card and the page. */

@@ -13,13 +13,11 @@ import {
   Zap,
 } from "lucide-react";
 import BoardPhoto from "@/components/BoardPhoto";
-import ComingSoon from "@/components/ComingSoon";
 import {
   CarriersSketch,
   InterfacesSketch,
   LogsSketch,
   LuaSketch,
-  ModuleCarrierSketch,
   MotorsSketch,
   TwoCoresSketch,
   VotingSketch,
@@ -138,22 +136,6 @@ export default function BoardPage({
                 )}
               </div>
             </div>
-            <div
-              className={`rise ${styles.banner}`}
-              style={{ animationDelay: "0.15s" }}
-            >
-              {media ? (
-                <BoardPhoto
-                  shot={media.hero}
-                  sizes="(max-width: 60rem) 100vw, 40rem"
-                  priority
-                />
-              ) : page.sketches?.hero ? (
-                <ModuleCarrierSketch tone="dark" fill />
-              ) : (
-                <ComingSoon kind="board" />
-              )}
-            </div>
           </div>
         </div>
       </section>
@@ -200,10 +182,10 @@ export default function BoardPage({
             <div className={`${styles.shot} ${styles.shotTop}`}>
               <BoardPhoto shot={gallery.top} sizes="(max-width: 60rem) 100vw, 44rem" />
             </div>
-            <div className={`${styles.shot} ${styles.shotBottom}`} style={{ aspectRatio: `${gallery.bottom.width} / ${gallery.bottom.height}` }}>
+            <div className={`${styles.shot} ${styles.shotBottom}`} style={{ ["--ar" as string]: `${gallery.bottom.width} / ${gallery.bottom.height}` }}>
               <BoardPhoto shot={gallery.bottom} sizes="(max-width: 60rem) 100vw, 40rem" />
             </div>
-            <div className={`${styles.shot} ${styles.shotVideo}`} style={gallery.third.kind === "shot" ? { aspectRatio: `${gallery.third.shot.width} / ${gallery.third.shot.height}` } : undefined}>
+            <div className={`${styles.shot} ${styles.shotVideo}`} style={gallery.third.kind === "shot" ? { ["--ar" as string]: `${gallery.third.shot.width} / ${gallery.third.shot.height}` } : undefined}>
               {gallery.third.kind === "video" ? (
                 <LoopVideo
                   src={gallery.third.src}
