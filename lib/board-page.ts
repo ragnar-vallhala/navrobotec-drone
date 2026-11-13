@@ -44,6 +44,8 @@ export type BoardPage = {
     title: string;
     body: string;
     items: { src: string; alt: string; width: number; height: number; caption: string }[];
+    /* Renders of the same product shown above the drawings, side by side. */
+    renders?: { shot: Shot; caption: string }[];
   };
   /* A link to the product this one goes with. */
   related?: { label: string; title: string; body: string; href: string; link: string };

@@ -289,6 +289,16 @@ export const X427_PAGE: BoardPage = {
   drawings: {
     title: "Board dimensions.",
     body: "Drawings of the board from its layout files. All dimensions are in millimetres.",
+    renders: [
+      {
+        shot: { src: "/images/render-x427-flat.24955330.webp", alt: "NAVIX X427 flight controller seen from directly above, the connectors, USB-C and microSD labelled on the board", width: 960, height: 1200 },
+        caption: "Top, straight on.",
+      },
+      {
+        shot: { src: "/images/render-x427-tilt.7e3ffa15.webp", alt: "NAVIX X427 flight controller seen at an angle from the USB-C end, the connector row standing above the board", width: 1200, height: 800 },
+        caption: "From the USB-C end.",
+      },
+    ],
     items: [
       {
         src: "/images/drawing-x427-top-dims.bf02ee38.webp",

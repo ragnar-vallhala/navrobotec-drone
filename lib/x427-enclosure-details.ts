@@ -170,6 +170,16 @@ export const X427_ENCLOSURE_PAGE: BoardPage = {
   drawings: {
     title: "Dimensions and sections.",
     body: "Drawings of the case. All dimensions are in millimetres.",
+    renders: [
+      {
+        shot: { src: "/images/render-enclosure-flat.aedc91ba.webp", alt: "NAVIX X427 Enclosure seen from directly above, with the connector openings, the logo and the two end brackets", width: 1200, height: 800 },
+        caption: "Top, straight on, with both brackets.",
+      },
+      {
+        shot: { src: "/images/render-enclosure-side.4674b9ba.webp", alt: "NAVIX X427 Enclosure seen from the side at an angle, showing the ribbed top and the bracket feet", width: 1200, height: 800 },
+        caption: "From the side.",
+      },
+    ],
     items: [
       {
         src: "/images/drawing-x427-enc-top-dims.7ed39ba4.webp",

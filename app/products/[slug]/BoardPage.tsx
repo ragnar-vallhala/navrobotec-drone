@@ -489,6 +489,25 @@ export default function BoardPage({
             <h2 className="h1">{page.drawings.title}</h2>
             <p className="lede">{page.drawings.body}</p>
           </header>
+          {page.drawings.renders ? (
+            <div className={styles.renderRow}>
+              {page.drawings.renders.map((r) => (
+                <figure
+                  key={r.shot.src}
+                  className={styles.figure}
+                  style={{ flex: `${r.shot.width / r.shot.height} 1 0` }}
+                >
+                  <div
+                    className={styles.figureShot}
+                    style={{ aspectRatio: `${r.shot.width} / ${r.shot.height}` }}
+                  >
+                    <BoardPhoto shot={r.shot} sizes="(max-width: 52rem) 100vw, 40rem" />
+                  </div>
+                  <figcaption className={`small ${styles.caption}`}>{r.caption}</figcaption>
+                </figure>
+              ))}
+            </div>
+          ) : null}
           <div className={styles.drawings}>
             {page.drawings.items.map((item) => (
               <figure key={item.src} className={styles.drawing}>

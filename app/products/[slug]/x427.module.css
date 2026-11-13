@@ -221,6 +221,11 @@
 .figureShot { position: relative; background: var(--band); border-radius: var(--radius); overflow: hidden; }
 .caption { margin: 0; color: var(--ink-2); }
 
+/* --- renders above the drawings: equal height side by side, stacked on a phone --- */
+.renderRow { display: flex; gap: clamp(1.25rem, 3vw, 2rem); margin-bottom: clamp(1.25rem, 3vw, 2rem); }
+.renderRow > .figure { min-width: 0; }
+@media (max-width: 52rem) { .renderRow { flex-direction: column; } .renderRow > .figure { flex: none !important; } }
+
 /* --- drawings: dark tiles, wide pictures scroll sideways on a phone --- */
 .drawings { display: grid; gap: clamp(1.25rem, 3vw, 2rem); }
 .drawing { margin: 0; display: grid; gap: 0.625rem; min-width: 0; }

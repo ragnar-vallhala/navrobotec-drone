@@ -161,6 +161,16 @@ export const X427_MINI_PAGE: BoardPage = {
   drawings: {
     title: "Board dimensions.",
     body: "A drawing of the board from its layout file. All dimensions are in millimetres.",
+    renders: [
+      {
+        shot: { src: "/images/render-mini-flat.656dad2b.webp", alt: "NAVIX X427 Mini flight controller seen from directly above, USB-C on the left and solder pads along the edges", width: 1200, height: 800 },
+        caption: "Top, straight on.",
+      },
+      {
+        shot: { src: "/images/render-mini-side.77b8db67.webp", alt: "NAVIX X427 Mini flight controller seen at a low angle from the side", width: 1200, height: 800 },
+        caption: "From the side.",
+      },
+    ],
     items: [
       {
         src: "/images/drawing-x427-mini-top-dims.af39248f.webp",
