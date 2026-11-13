@@ -17,7 +17,7 @@ const ON_BOARD: Group[] = [
       { label: "MCU", value: "STM32H747, dual core" },
       { label: "Cortex-M4", value: "Manages flight and the internal sensors" },
       { label: "Cortex-M7", value: "Manages autonomy and external modules and hardware" },
-      { label: "Scripting", value: "A Lua-based app environment, in design" },
+      { label: "Scripting", value: "A Lua-based app environment" },
     ],
   },
   {
@@ -68,7 +68,7 @@ const FEATURES: Feature[] = [
     icon: "code",
     title: "Your own apps, in Lua.",
     body: "The module is designed to have a Lua-based scripting environment, so users can develop apps and put them on it.",
-    more: "It is in design, so there is nothing to download yet. Which core runs the apps is not published yet.",
+    more: "There is nothing to download yet. Which core runs the apps is not published yet.",
     chips: ["Lua", "User apps"],
   },
   {
@@ -101,12 +101,12 @@ export const H747_PAGE: BoardPage = {
   waitlist: false,
   introTitle: "One module, many carrier boards.",
   introBody:
-    "The NAVIX-SMH747 is a small compute module built around the dual-core STM32H747. It plugs into a carrier board, and carrier boards can be small or large. It is in design: this page describes what the module is meant to be, not a built board, and there are no renders yet.",
+    "The NAVIX-SMH747 is a small compute module built around the dual-core STM32H747. It plugs into a carrier board, and carrier boards can be small or large. This page describes what the module is meant to be.",
   stats: [
     { value: "2", unit: "cores", label: "Cortex-M4 and Cortex-M7" },
     { value: "3", unit: "of each", label: "IMU, barometer, magnetometer" },
     { value: "8", unit: "DShot", label: "motor outputs" },
-    { value: "Lua", unit: "apps", label: "scripting, in design" },
+    { value: "Lua", unit: "apps", label: "scripting" },
   ],
   sketches: { hero: true, diagrams: true, more: true },
   principles: [
@@ -121,7 +121,7 @@ export const H747_PAGE: BoardPage = {
       title: "Teams building towards safety-critical flight controllers.",
       body: [
         "The NAVIX-SMH747 is aimed at safety-critical use. That is the intent behind the design, and it shapes choices such as three of each critical sensor.",
-        "It is not certified. It is in design, and nothing on this page is a certification claim.",
+        "It is not certified.",
       ],
     },
     {

@@ -7,7 +7,6 @@ import styles from "./H747Sketches.module.css";
  * images and no requests. Labels are real <text>. They show only what the
  * product brief states; none of it is a final design. */
 
-const NOTE = "Concept sketch, not a final design";
 
 /* The wobble. Applied to lines only; text is drawn outside the filtered groups. */
 function Pencil({ id }: { id: string }) {
@@ -30,7 +29,7 @@ export function ModuleCarrierSketch({ tone = "dark", fill = false }: { tone?: "d
       role="img"
       aria-labelledby="sk-hero-t sk-hero-d"
     >
-      <title id="sk-hero-t">Compute module on a carrier board (concept sketch)</title>
+      <title id="sk-hero-t">Compute module on a carrier board</title>
       <desc id="sk-hero-d">
         A sketch of a small square module above a larger flat carrier board, with dashed lines and an arrow showing the module plugging down into the carrier.
       </desc>
@@ -59,8 +58,7 @@ export function ModuleCarrierSketch({ tone = "dark", fill = false }: { tone?: "d
       </g>
       <text className={styles.txt} x="448" y="124">module</text>
       <text className={styles.txt} x="26" y="340">carrier board</text>
-      <text className={styles.accTxt} x="300" y="44" textAnchor="middle">Compute module on a carrier board (concept sketch)</text>
-      <text className={styles.note} x="300" y="68" textAnchor="middle">{NOTE}</text>
+      <text className={styles.accTxt} x="300" y="44" textAnchor="middle">Compute module on a carrier board</text>
     </svg>
   );
 }
@@ -71,7 +69,7 @@ export function TwoCoresSketch() {
     <svg className={styles.sketch} viewBox="52 0 540 452" role="img" aria-labelledby="sk-cores-t sk-cores-d">
       <title id="sk-cores-t">Two cores, two jobs</title>
       <desc id="sk-cores-d">
-        One STM32H747 box split in two. The Cortex-M4 side points to flight and internal sensors. The Cortex-M7 side points to autonomy and external modules and hardware. A separate dashed note says Lua apps, in design.
+        One STM32H747 box split in two. The Cortex-M4 side points to flight and internal sensors. The Cortex-M7 side points to autonomy and external modules and hardware.
       </desc>
       <Pencil id="sk-cores-f" />
       <g filter="url(#sk-cores-f)">
@@ -93,8 +91,6 @@ export function TwoCoresSketch() {
       <text className={styles.txt} x="450" y="293" textAnchor="middle">Autonomy</text>
       <text className={styles.small} x="450" y="316" textAnchor="middle">+ external modules, hardware</text>
       <text className={styles.txt} x="320" y="392" textAnchor="middle">Lua apps</text>
-      <text className={styles.small} x="320" y="410" textAnchor="middle">in design</text>
-      <text className={styles.note} x="590" y="448" textAnchor="end">{NOTE}</text>
     </svg>
   );
 }
@@ -140,7 +136,6 @@ export function VotingSketch() {
       <text className={styles.txt} x="350" y="216" textAnchor="middle">voting</text>
       <text className={styles.txt} x="545" y="206" textAnchor="middle">Flight</text>
       <text className={styles.txt} x="545" y="230" textAnchor="middle">control</text>
-      <text className={styles.note} x="610" y="408" textAnchor="end">{NOTE}</text>
     </svg>
   );
 }
@@ -196,7 +191,6 @@ export function InterfacesSketch() {
       ))}
       <text className={styles.txt} x="320" y="331" textAnchor="middle">QSPI</text>
       <text className={styles.small} x="320" y="353" textAnchor="middle">logs, internal</text>
-      <text className={styles.note} x="578" y="440" textAnchor="end">{NOTE}</text>
     </svg>
   );
 }
@@ -237,7 +231,6 @@ export function CarriersSketch() {
       <text className={styles.small} x="331" y="226" textAnchor="middle">external peripherals</text>
       <text className={styles.small} x="321" y="326" textAnchor="middle">external peripherals</text>
       <text className={styles.small} x="497" y="326" textAnchor="middle">extra compute</text>
-      <text className={styles.note} x="602" y="390" textAnchor="end">{NOTE}</text>
     </svg>
   );
 }
@@ -248,7 +241,7 @@ export function LuaSketch() {
     <svg className={styles.sketch} viewBox="14 0 590 300" role="img" aria-labelledby="sk-lua-t sk-lua-d">
       <title id="sk-lua-t">Write an app in Lua</title>
       <desc id="sk-lua-d">
-        A box that looks like a code snippet with the text your app, an arrow labelled load, and the module. A dashed tag says in design.
+        A box that looks like a code snippet with the text your app, an arrow labelled load, and the module.
       </desc>
       <Pencil id="sk-lua-f" />
       <g filter="url(#sk-lua-f)">
@@ -265,8 +258,6 @@ export function LuaSketch() {
       <text className={styles.code} x="60" y="118">-- your app</text>
       <text className={styles.small} x="307" y="132" textAnchor="middle">load</text>
       <text className={styles.txt} x="435" y="152" textAnchor="middle">module</text>
-      <text className={styles.small} x="310" y="238" textAnchor="middle">in design</text>
-      <text className={styles.note} x="602" y="290" textAnchor="end">{NOTE}</text>
     </svg>
   );
 }
@@ -299,7 +290,6 @@ export function MotorsSketch() {
         <text key={n} className={styles.txt} x="520" y={73 + (n - 1) * 43} textAnchor="middle">{n}</text>
       ))}
       <text className={styles.small} x="520" y="402" textAnchor="middle">motors</text>
-      <text className={styles.note} x="602" y="424" textAnchor="end">{NOTE}</text>
     </svg>
   );
 }
@@ -328,7 +318,6 @@ export function LogsSketch() {
       <text className={styles.small} x="160" y="196" textAnchor="middle">internal</text>
       <text className={styles.txt} x="450" y="166" textAnchor="middle">MCU</text>
       <text className={styles.txt} x="300" y="278" textAnchor="middle">Internal QSPI storage for logs</text>
-      <text className={styles.note} x="602" y="318" textAnchor="end">{NOTE}</text>
     </svg>
   );
 }
