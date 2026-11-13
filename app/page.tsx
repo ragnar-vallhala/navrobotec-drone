@@ -382,7 +382,7 @@ export default function Home() {
           </ul>
           <h3 className={`label ${styles.softHead}`}>Software</h3>
           <ul className={styles.soft}>
-            {PARTS.map((part) => (
+            {PARTS.filter((part) => part.slug !== "nav" && part.slug !== "navlink").map((part) => (
               <li key={part.slug}>
                 <Link href={part.href} className={styles.softCard}>
                   <span className="label">{part.kicker}</span>
