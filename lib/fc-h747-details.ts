@@ -129,7 +129,7 @@ export const H747_PAGE: BoardPage = {
       title: "Built to be redundant.",
       body: [
         "Three of each means the module is designed to carry three IMUs, three barometers and three magnetometers, where a simpler board would carry one of each.",
-        "A voting-based system is designed to work across the three readings of each kind, so that no single reading is taken on its own. Thresholds, failure rates and fault-tolerance figures are not published, because none exist yet.",
+        "The design has three of each of these sensors and a voting-based system. How the voting works is not published yet, and no thresholds, failure rates or fault-tolerance figures exist yet.",
       ],
     },
     {
