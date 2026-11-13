@@ -2,7 +2,12 @@
 
 import { createContext, useCallback, useContext, useMemo, useState } from "react";
 import WaitlistDialog from "./WaitlistDialog";
-import { WAITLIST_LEDE, WAITLIST_TITLE } from "@/lib/waitlist";
+import {
+  MINI_WAITLIST_TITLE,
+  WAITLIST_LEDE,
+  WAITLIST_TITLE,
+  type WaitlistProduct,
+} from "@/lib/waitlist";
 
 /* One waitlist dialog for the whole site, mounted once in the root layout.
  *
@@ -11,9 +16,17 @@ import { WAITLIST_LEDE, WAITLIST_TITLE } from "@/lib/waitlist";
  * carries a form of its own. The dialog is the same controlled WaitlistDialog
  * the popup used, so the form, copy and rules are one thing. */
 
-type Ctx = { openWaitlist: () => void };
+/* `openWaitlist` is the X427's list and is passed straight to onClick in
+   several places, so it takes no argument; `openWaitlistFor` names a product. */
+type Ctx = {
+  openWaitlist: () => void;
+  openWaitlistFor: (product: WaitlistProduct) => void;
+};
 
-const WaitlistContext = createContext<Ctx>({ openWaitlist: () => {} });
+const WaitlistContext = createContext<Ctx>({
+  openWaitlist: () => {},
+  openWaitlistFor: () => {},
+});
 
 export function useWaitlist(): Ctx {
   return useContext(WaitlistContext);
@@ -26,19 +39,29 @@ export default function WaitlistProvider({
 }) {
   const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
+  const [product, setProduct] = useState<WaitlistProduct>("x427");
 
-  const openWaitlist = useCallback(() => {
+  const openWaitlistFor = useCallback((next: WaitlistProduct) => {
+    setProduct(next);
     setMounted(true);
     setOpen(true);
   }, []);
-  const value = useMemo(() => ({ openWaitlist }), [openWaitlist]);
+  const openWaitlist = useCallback(
+    () => openWaitlistFor("x427"),
+    [openWaitlistFor],
+  );
+  const value = useMemo(
+    () => ({ openWaitlist, openWaitlistFor }),
+    [openWaitlist, openWaitlistFor],
+  );
 
   return (
     <WaitlistContext.Provider value={value}>
       {children}
       {mounted ? (
         <WaitlistDialog
-          title={WAITLIST_TITLE}
+          product={product}
+          title={product === "x427-mini" ? MINI_WAITLIST_TITLE : WAITLIST_TITLE}
           lede={WAITLIST_LEDE}
           open={open}
           onClosed={() => setOpen(false)}

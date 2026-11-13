@@ -27,3 +27,15 @@
 }
 .moreWide { grid-column: 1 / -1; }
 .more[hidden] { display: none; }
+
+/* "Which board?": a fieldset reset, the boards side by side where they fit. */
+.boards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.5rem;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+.boards legend { padding: 0; margin-bottom: 0.25rem; }

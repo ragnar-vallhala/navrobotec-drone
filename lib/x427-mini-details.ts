@@ -140,7 +140,7 @@ export const X427_MINI_PAGE: BoardPage = {
   badge: "Flight controller · In design",
   headline: "The X427, made small.",
   sub: "An STM32F427 at 180 MHz, an IMU, a barometer, CAN and eight PWM outputs, on a 36 x 36 mm board with the standard 30.5 mm mounting pattern.",
-  waitlist: false,
+  waitlist: "x427-mini",
   introTitle: "The same processor, on a board a quarter the size.",
   introBody:
     "The X427 Mini is a four-layer flight controller built around the same STM32F427 as the X427. Compared with the X427 it has one IMU instead of up to three, eight PWM outputs instead of fourteen, and onboard flash instead of a microSD slot. It is in design: this page describes the schematic and board layout, not a built board.",
@@ -167,14 +167,14 @@ export const X427_MINI_PAGE: BoardPage = {
   },
   status: [
     "The X427 Mini is in design. The schematic is at Rev A and the board layout is still being finished, so no board has been built or tested and nothing here is a measured result.",
-    "Enquire to talk to an engineer about it, or look at the X427, which has its waitlist open.",
+    "Join the X427 Mini waitlist to be added to the list, or enquire to talk to an engineer about it.",
   ],
   specs: { onBoard: ON_BOARD, ports: PORTS, power: POWER, mechanical: MECHANICAL },
   reportLinks: false,
   faq: [
     {
       q: "Is it available?",
-      a: "Not yet. The X427 Mini is in design and no board has been built. Enquire and an engineer will reply.",
+      a: "Not yet. The X427 Mini is in design and no board has been built. You can join the X427 Mini waitlist, or enquire and an engineer will reply.",
     },
     {
       q: "How is it different from the X427?",
@@ -202,8 +202,8 @@ export const X427_MINI_PAGE: BoardPage = {
     },
   ],
   closing: {
-    title: "Ask about the Mini.",
-    body: "It is in design, and an engineer can tell you where it stands. Write with your questions.",
+    title: "Join the Mini waitlist.",
+    body: "It is in design. Join the waitlist to be on the list, or write with your questions and an engineer will reply.",
   },
 };
 

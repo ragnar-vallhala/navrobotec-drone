@@ -79,3 +79,19 @@ export function markPopupShown(): void {
 export const WAITLIST_TITLE = "Join the X427 waitlist";
 export const WAITLIST_LEDE =
   "Open to everyone. The first 50 college students on the waitlist receive a free board, first come, first served.";
+
+/* The products that have a waitlist, as the API's `product` field names them.
+   Each has its own list; the student offer above is the X427's alone. */
+export type WaitlistProduct = "x427" | "x427-mini";
+
+export const WAITLIST_PRODUCTS: Record<
+  WaitlistProduct,
+  { name: string; label: string }
+> = {
+  x427: { name: "X427", label: "NAVIX X427" },
+  "x427-mini": { name: "X427 Mini", label: "NAVIX X427 Mini" },
+};
+
+/* The Mini's dialog opens with the Mini ticked; the offer wording is the
+   same as the X427's. */
+export const MINI_WAITLIST_TITLE = "Join the X427 Mini waitlist";

@@ -4,7 +4,11 @@ import { useCallback, useEffect, useId, useRef, useState } from "react";
 import form from "./EnquiryForm.module.css";
 import styles from "./InterestDialog.module.css";
 import own from "./WaitlistDialog.module.css";
-import { markWaitlisted } from "@/lib/waitlist";
+import {
+  markWaitlisted,
+  WAITLIST_PRODUCTS,
+  type WaitlistProduct,
+} from "@/lib/waitlist";
 
 /* The X427 student waitlist, in the same kind of dialog as InterestDialog.
  *
@@ -23,6 +27,10 @@ import { markWaitlisted } from "@/lib/waitlist";
  * The same dialog is used by the X427 page's button and by WaitlistPopup,
  * which opens it controlled (`open`) with no button of its own, so there is
  * one form.
+ *
+ * Each board has its own list. "Which board?" lets the person join one or
+ * both (at least one); `product` only says which is ticked when the dialog
+ * opens. The student offer is the same for both boards.
  *
  * As in EnquiryForm, the API decides what is valid and field errors come back
  * keyed by the `name` attributes below.
@@ -47,19 +55,25 @@ type FieldName =
   | "year"
   | "city"
   | "is_student"
+  | "products"
   | "terms";
 
 type Joined = {
+  /* One line per board asked for, in the order shown. */
+  lines: string[];
   position: number;
   email: string;
   student: boolean;
   withinFreeKits: boolean;
 };
 
-const DUPLICATE =
-  "That email address is already on the X427 waitlist. You do not need to join again.";
-
-export function WaitlistForm() {
+export function WaitlistForm({
+  product = "x427",
+}: {
+  product?: WaitlistProduct;
+}) {
+  const [boards, setBoards] = useState<WaitlistProduct[]>([product]);
+  const offer = true;
   const [sending, setSending] = useState(false);
   const [joined, setJoined] = useState<Joined | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -91,7 +105,12 @@ export function WaitlistForm() {
     if (busy.current) return;
     /* The free-board terms must be accepted by anyone claiming the offer.
        Checked here only: the API does not take or check it. */
-    if (student && !agreed) {
+    if (boards.length === 0) {
+      setErrors({ products: "Pick at least one board." });
+      setFailure((n) => n + 1);
+      return;
+    }
+    if (offer && student && !agreed) {
       setErrors({ terms: "Please agree to the free board offer terms to continue." });
       setFailure((n) => n + 1);
       return;
@@ -111,6 +130,7 @@ export function WaitlistForm() {
         body: JSON.stringify({
           name: get("name"),
           email: get("email"),
+          products: boards,
           is_student: student,
           /* Unticked, these fields are not on the page and are not sent. */
           ...(student
@@ -129,7 +149,11 @@ export function WaitlistForm() {
       if (response.status === 409) {
         /* They are on the list already, which is what the prompt wanted. */
         markWaitlisted();
-        setErrors({ email: DUPLICATE });
+        setErrors({
+          email: `That email address is already on the ${boards
+            .map((b) => WAITLIST_PRODUCTS[b].name)
+            .join(" and ")} waitlist${boards.length > 1 ? "s" : ""}. You do not need to join again.`,
+        });
         setFailure((n) => n + 1);
         return;
       }
@@ -145,6 +169,7 @@ export function WaitlistForm() {
           "year",
           "city",
           "is_student",
+          "products",
         ] satisfies FieldName[]);
         const next: Record<string, string> = {};
         const stray: string[] = [];
@@ -167,14 +192,41 @@ export function WaitlistForm() {
       }
 
       markWaitlisted();
+      type Result = {
+        product: WaitlistProduct;
+        status: string;
+        position: number;
+        within_free_kits?: boolean;
+      };
+      const results = (body?.data?.results as Result[] | undefined) ?? [];
+      const lines: string[] = [];
+      for (const r of results) {
+        const known = WAITLIST_PRODUCTS[r.product];
+        if (!known) continue;
+        if (r.status === "joined") {
+          const at = Number(r.position);
+          lines.push(
+            Number.isFinite(at) && at >= 1
+              ? `You are on the ${known.name} waitlist, position ${at}.`
+              : `You are on the ${known.name} waitlist.`,
+          );
+        } else {
+          lines.push(`You were already on the ${known.name} waitlist.`);
+        }
+      }
       const position = Number(body?.data?.position);
       setJoined({
+        lines,
         /* The API accepted it but did not say where: say that much and no
            more, rather than inventing a number. */
         position: Number.isFinite(position) && position >= 1 ? position : 0,
         email: get("email").trim(),
         student,
-        withinFreeKits: student && body?.data?.within_free_kits === true,
+        withinFreeKits:
+          student &&
+          (results.length
+            ? results.some((r) => r.status === "joined" && r.within_free_kits === true)
+            : body?.data?.within_free_kits === true),
       });
     } catch {
       setErrors({
@@ -193,9 +245,11 @@ export function WaitlistForm() {
       <div className={form.done} role="status" tabIndex={-1} ref={doneRef}>
         <p className="label label-signal">On the waitlist</p>
         <h2 className="h2">
-          {joined.position > 0
-            ? `You are on the X427 waitlist, position ${joined.position}.`
-            : "You are on the X427 waitlist."}
+          {joined.lines.length
+            ? joined.lines.join(" ")
+            : joined.position > 0
+              ? `You are on the X427 waitlist, position ${joined.position}.`
+              : "You are on the X427 waitlist."}
         </h2>
         <p className="body">
           {joined.withinFreeKits
@@ -254,6 +308,35 @@ export function WaitlistForm() {
         {input("name", "Name", "text", "name", { required: true, maxLength: 120 })}
         {input("email", "Email", "email", "email", { required: true, maxLength: 254 })}
 
+        <fieldset
+          className={`${form.field} ${form.wide} ${own.boards}`}
+          aria-describedby={errors.products ? eid("products") : undefined}
+        >
+          <legend className="label">Which board?</legend>
+          {(Object.keys(WAITLIST_PRODUCTS) as WaitlistProduct[]).map((key) => (
+            <label key={key} className={own.check}>
+              <input
+                type="checkbox"
+                checked={boards.includes(key)}
+                onChange={(event) =>
+                  setBoards((current) =>
+                    event.target.checked
+                      ? [...current, key]
+                      : current.filter((b) => b !== key),
+                  )
+                }
+              />
+              <span>{WAITLIST_PRODUCTS[key].label}</span>
+            </label>
+          ))}
+          {errors.products ? (
+            <p id={eid("products")} className={form.fieldError}>
+              {errors.products}
+            </p>
+          ) : null}
+        </fieldset>
+
+        {offer ? (
         <div className={`${form.field} ${own.student}`}>
           <label className={own.check} htmlFor={fid("is_student")}>
             <input
@@ -273,6 +356,9 @@ export function WaitlistForm() {
           ) : null}
         </div>
 
+        ) : null}
+
+        {offer ? (
         <div id={fid("student-fields")} className={own.more} hidden={!student}>
           {student ? (
             <>
@@ -343,6 +429,7 @@ export function WaitlistForm() {
             </>
           ) : null}
         </div>
+        ) : null}
       </div>
 
       <div className={form.honeypot} aria-hidden>
@@ -377,12 +464,15 @@ export function WaitlistForm() {
 
 export default function WaitlistDialog({
   label = "Join waitlist",
+  product = "x427",
   title,
   lede,
   open: wanted,
   onClosed,
 }: {
   label?: string;
+  /* Which product's list the form joins. */
+  product?: WaitlistProduct;
   title: string;
   lede: string;
   /* Controlled use, for WaitlistPopup: when given, there is no button and the
@@ -462,7 +552,7 @@ export default function WaitlistDialog({
             <p className={`body ${styles.lede}`}>{lede}</p>
           </header>
 
-          {open ? <WaitlistForm /> : null}
+          {open ? <WaitlistForm product={product} /> : null}
         </div>
       </dialog>
     </>

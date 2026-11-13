@@ -10,8 +10,10 @@ export type BoardPage = {
   badge: string;
   headline: string;
   sub: string;
-  /* The X427 waitlist and the student offer are for the X427 only. */
-  waitlist: boolean;
+  /* Which product's waitlist the page offers, if any. The student offer is
+     for the X427 only (`studentOffer`). */
+  waitlist: false | "x427" | "x427-mini";
+  studentOffer?: boolean;
   introTitle: string;
   introBody: string;
   stats: { value: string; unit: string; label: string }[];

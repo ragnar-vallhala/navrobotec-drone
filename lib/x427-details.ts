@@ -247,7 +247,8 @@ export const X427_PAGE: BoardPage = {
   badge: "Flight controller · Rev A",
   headline: "The F4 flight controller built for the NavHAL / VaiOS / VAYU stack.",
   sub: "An STM32F427 at 180 MHz, up to three IMUs, DroneCAN, 14 PWM outputs and microSD logging, on a board of 84.9 x 44.1 mm.",
-  waitlist: true,
+  waitlist: "x427",
+  studentOffer: true,
   introTitle: "A flight controller made for a flight stack.",
   introBody:
     "The X427 is a small, four-layer board with the sensors, power path and ports a multirotor needs, built for a flight software stack written in-house. The hardware is at Rev A.",

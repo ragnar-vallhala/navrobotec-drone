@@ -74,7 +74,11 @@ export default function BoardPage({
 }) {
   const media = PRODUCT_MEDIA[page.mediaKey];
   const join = page.waitlist ? (
-    <WaitlistButton label="Join waitlist" className="btn btn-primary" />
+    <WaitlistButton
+      label="Join waitlist"
+      className="btn btn-primary"
+      product={page.waitlist}
+    />
   ) : null;
   const enquire = (
     <InterestDialog
@@ -294,9 +298,13 @@ export default function BoardPage({
               {page.waitlist ? (
                 <div className={styles.ctaRow}>
                   {join}
-                  <Link href="/waitlist" className="btn btn-ghost">
-                    Free board offer for students
-                  </Link>
+                  {page.studentOffer ? (
+                    <Link href="/waitlist" className="btn btn-ghost">
+                      Free board offer for students
+                    </Link>
+                  ) : (
+                    enquire
+                  )}
                 </div>
               ) : (
                 <div className={styles.ctaRow}>{enquire}</div>
