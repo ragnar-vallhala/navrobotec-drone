@@ -6,7 +6,7 @@ import type { Feature, Group, Row } from "./x427-details";
    BoardPage.tsx; the words, numbers and pictures come from here. */
 export type BoardPage = {
   /* The key in PRODUCT_MEDIA for this board's pictures. */
-  mediaKey: string;
+  mediaKey?: string;
   badge: string;
   headline: string;
   sub: string;
@@ -17,7 +17,7 @@ export type BoardPage = {
   introTitle: string;
   introBody: string;
   stats: { value: string; unit: string; label: string }[];
-  gallery: {
+  gallery?: {
     title: string;
     body: string;
     note: string;
@@ -29,9 +29,12 @@ export type BoardPage = {
   };
   featuresTitle: string;
   features: Feature[];
-  platform: { body: string; hardwareName: string; hardwareBody: string };
+  /* Left out for a board that has no software-stack claims to make yet. */
+  platform?: { body: string; hardwareName: string; hardwareBody: string };
+  /* False hides the developer tools section (the X427 pages show it). */
+  devTools?: boolean;
   status: string[];
-  specs: { onBoard: Group[]; ports: Row[]; power: Row[]; mechanical: Row[] };
+  specs: { onBoard: Group[]; ports: Row[]; power: Row[]; mechanical: Row[]; lastTitle?: string };
   /* The X427's specification section links into the report chapters. */
   reportLinks: boolean;
   faq: { q: string; a: string }[];

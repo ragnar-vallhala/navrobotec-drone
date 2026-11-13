@@ -6,6 +6,7 @@ import BoardPhoto from "@/components/BoardPhoto";
 import Cinematic from "@/components/Cinematic";
 import {
   hasDetails,
+  hasPage,
   kindLabel,
   kindOf,
   PRODUCT_MEDIA,
@@ -88,7 +89,8 @@ export default async function Products() {
           ) : (
             <ul className={styles.grid}>
               {products.map((product, index) => {
-                const details = hasDetails(product.slug);
+                const hasRender = hasDetails(product.slug);
+                const details = hasPage(product.slug);
                 return (
                 /* The whole card is the link, so the target is the card rather
                    than a four-word phrase inside it. One anchor per card, too:
@@ -101,7 +103,7 @@ export default async function Products() {
                 >
                   <Link href={`/products/${product.slug}`} className={styles.card}>
                     <span className={styles.frame}>
-                      {details ? (
+                      {hasRender ? (
                         <BoardPhoto
                           shot={PRODUCT_MEDIA[product.slug].card}
                           sizes="(max-width: 48rem) 100vw, (max-width: 72rem) 50vw, 24rem"

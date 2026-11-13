@@ -2,6 +2,7 @@ import Link from "next/link";
 import {
   ArrowRight,
   Cable,
+  Code,
   Cpu,
   Layers,
   Radar,
@@ -9,6 +10,7 @@ import {
   Zap,
 } from "lucide-react";
 import BoardPhoto from "@/components/BoardPhoto";
+import ComingSoon from "@/components/ComingSoon";
 import LoopVideo from "@/components/LoopVideo";
 import { PRODUCT_MEDIA } from "@/lib/product-media";
 import InterestDialog from "@/components/InterestDialog";
@@ -24,6 +26,7 @@ const ICONS: Record<Feature["icon"], typeof Cpu> = {
   ports: Cable,
   size: Ruler,
   stack: Layers,
+  code: Code,
 };
 
 function Table({ rows }: { rows: Row[] }) {
@@ -72,7 +75,8 @@ export default function BoardPage({
   options: string[];
   page: Page;
 }) {
-  const media = PRODUCT_MEDIA[page.mediaKey];
+  const media = page.mediaKey ? PRODUCT_MEDIA[page.mediaKey] : undefined;
+  const gallery = page.gallery;
   const join = page.waitlist ? (
     <WaitlistButton
       label="Join waitlist"
@@ -120,11 +124,15 @@ export default function BoardPage({
               className={`rise ${styles.banner}`}
               style={{ animationDelay: "0.15s" }}
             >
-              <BoardPhoto
-                shot={media.hero}
-                sizes="(max-width: 60rem) 100vw, 40rem"
-                priority
-              />
+              {media ? (
+                <BoardPhoto
+                  shot={media.hero}
+                  sizes="(max-width: 60rem) 100vw, 40rem"
+                  priority
+                />
+              ) : (
+                <ComingSoon kind="board" />
+              )}
             </div>
           </div>
         </div>
@@ -152,34 +160,35 @@ export default function BoardPage({
       </section>
 
       {/* --- gallery --- */}
+      {gallery ? (
       <section className="section-tight rule" id="gallery">
         <div className="shell">
           <div className={styles.bento}>
             <div className={styles.galleryCopy}>
               <p className="label">Overview</p>
-              <h2 className="h2">{page.gallery.title}</h2>
-              <p className="lede">{page.gallery.body}</p>
-              <p className={`small ${styles.note}`}>{page.gallery.note}</p>
+              <h2 className="h2">{gallery.title}</h2>
+              <p className="lede">{gallery.body}</p>
+              <p className={`small ${styles.note}`}>{gallery.note}</p>
             </div>
             <div className={`${styles.shot} ${styles.shotTop}`}>
-              <BoardPhoto shot={page.gallery.top} sizes="(max-width: 60rem) 100vw, 44rem" />
+              <BoardPhoto shot={gallery.top} sizes="(max-width: 60rem) 100vw, 44rem" />
             </div>
-            <div className={`${styles.shot} ${styles.shotBottom}`} style={{ aspectRatio: `${page.gallery.bottom.width} / ${page.gallery.bottom.height}` }}>
-              <BoardPhoto shot={page.gallery.bottom} sizes="(max-width: 60rem) 100vw, 40rem" />
+            <div className={`${styles.shot} ${styles.shotBottom}`} style={{ aspectRatio: `${gallery.bottom.width} / ${gallery.bottom.height}` }}>
+              <BoardPhoto shot={gallery.bottom} sizes="(max-width: 60rem) 100vw, 40rem" />
             </div>
-            <div className={`${styles.shot} ${styles.shotVideo}`} style={page.gallery.third.kind === "shot" ? { aspectRatio: `${page.gallery.third.shot.width} / ${page.gallery.third.shot.height}` } : undefined}>
-              {page.gallery.third.kind === "video" ? (
+            <div className={`${styles.shot} ${styles.shotVideo}`} style={gallery.third.kind === "shot" ? { aspectRatio: `${gallery.third.shot.width} / ${gallery.third.shot.height}` } : undefined}>
+              {gallery.third.kind === "video" ? (
                 <LoopVideo
-                  src={page.gallery.third.src}
-                  poster={page.gallery.third.poster}
-                  label={page.gallery.third.label}
+                  src={gallery.third.src}
+                  poster={gallery.third.poster}
+                  label={gallery.third.label}
                   className={styles.video}
-                  from={page.gallery.third.from}
+                  from={gallery.third.from}
                   controls
                 />
               ) : (
                 <BoardPhoto
-                  shot={page.gallery.third.shot}
+                  shot={gallery.third.shot}
                   sizes="(max-width: 60rem) 100vw, 36rem"
                 />
               )}
@@ -187,6 +196,7 @@ export default function BoardPage({
           </div>
         </div>
       </section>
+      ) : null}
 
       {/* --- six features --- */}
       <section className="section rule" id="features">
@@ -226,6 +236,7 @@ export default function BoardPage({
       </section>
 
       {/* --- the stack --- */}
+      {page.platform ? (
       <section className={`band ${styles.stackBand}`} id="software">
         <div className="shell">
           <header className={styles.sectionHead}>
@@ -246,7 +257,7 @@ export default function BoardPage({
             ))}
             <li className={styles.layerBase}>
               <span className={styles.baseThumb}>
-                <BoardPhoto shot={media.hero} sizes="10rem" />
+                {media ? <BoardPhoto shot={media.hero} sizes="10rem" /> : null}
               </span>
               <span className={styles.baseText}>
                 <span className={`label ${styles.baseLabel}`}>Hardware</span>
@@ -257,8 +268,10 @@ export default function BoardPage({
           </ol>
         </div>
       </section>
+      ) : null}
 
       {/* --- developers --- */}
+      {page.devTools === false ? null : (
       <section className="section rule" id="developers">
         <div className="shell">
           <header className={styles.sectionHead}>
@@ -282,6 +295,7 @@ export default function BoardPage({
           </ul>
         </div>
       </section>
+      )}
 
       {/* --- where it stands --- */}
       <section className="section-tight rule" id="status">
@@ -326,8 +340,10 @@ export default function BoardPage({
               <Spec key={group.title} title={group.title} rows={group.rows} open={i === 0} />
             ))}
             <Spec title="Ports and interfaces" rows={page.specs.ports} />
-            <Spec title="Power design" rows={page.specs.power} />
-            <Spec title="Mechanical" rows={page.specs.mechanical} />
+            {page.specs.power.length > 0 ? (
+              <Spec title="Power design" rows={page.specs.power} />
+            ) : null}
+            <Spec title={page.specs.lastTitle ?? "Mechanical"} rows={page.specs.mechanical} />
           </div>
           {page.reportLinks ? (
           <p className={`small ${styles.note}`}>

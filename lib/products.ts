@@ -144,6 +144,17 @@ const X427_MINI: Product = {
   updatedAt: "2026-11-12T00:00:00Z",
 };
 
+/* Card and page text for the NAVIX-SMH747, which has no render. Applied over
+   the API row for this slug so the card shows the kicker, part, status and
+   one line whatever the row says. Everything else on the row is kept. */
+const H747_TEXT: Partial<Product> = {
+  part: "STM32H747",
+  kicker: "Flight controller",
+  summary:
+    "A dual-core STM32H747 module with triple-redundant sensors, built for carrier boards.",
+  status: "In design",
+};
+
 export type Catalogue =
   | { status: "ok"; products: Product[] }
   | { status: "unavailable" };
@@ -167,7 +178,11 @@ export async function getCatalogue(): Promise<Catalogue> {
              site for that slug. */
           products: [
             ...(products as Product[]).map((p) =>
-              p.slug === "fc-f446" ? X427_MINI : p,
+              p.slug === "fc-f446"
+                ? X427_MINI
+                : p.slug === "fc-h747"
+                  ? { ...p, ...H747_TEXT }
+                  : p,
             ),
             ...((products as Product[]).some((p) => p.slug === X427.slug)
               ? []

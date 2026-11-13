@@ -93,6 +93,14 @@ export function hasDetails(slug: string): boolean {
   return slug in PRODUCT_MEDIA;
 }
 
+/* Pages that have published text but no render: the card and the page show
+   the words on the dark Coming soon tile. */
+const TEXT_ONLY = ["fc-h747"];
+
+export function hasPage(slug: string): boolean {
+  return hasDetails(slug) || TEXT_ONLY.includes(slug);
+}
+
 export function kindOf(slug: string): "board" | "airframe" {
   return slug.startsWith("airframe") ? "airframe" : "board";
 }

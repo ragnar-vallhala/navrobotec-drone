@@ -7,6 +7,7 @@ import InterestDialog from "@/components/InterestDialog";
 import WaitlistButton from "@/components/WaitlistButton";
 import {
   hasDetails,
+  hasPage,
   kindLabel,
   kindOf,
   PRODUCT_MEDIA,
@@ -14,6 +15,7 @@ import {
 import { getCatalogue, INTEREST_BY_SLUG, interestsFor } from "@/lib/products";
 import BoardPage from "./BoardPage";
 import { X427_PAGE } from "@/lib/x427-details";
+import { H747_PAGE } from "@/lib/fc-h747-details";
 import { X427_MINI_PAGE } from "@/lib/x427-mini-details";
 import styles from "./product.module.css";
 
@@ -49,7 +51,7 @@ export async function generateMetadata({
     title: product.name,
     description: product.slug === "x427"
       ? "NAVIX X427 Rev A: STM32F427 flight controller with dual-IMU option, DroneCAN, 14 PWM outputs, microSD logging and a power mux, from the STM32F4 family, built for the NavHAL, VaiOS and VAYU stack."
-      : hasDetails(product.slug)
+      : hasPage(product.slug)
       ? product.summary || product.kicker || undefined
       : `${product.name}: ${kindLabel(product.slug).toLowerCase()} from NAVRobotec, coming soon. Register your interest.`,
     /* No og:image. The renders are transparent PNGs keyed to sit on a dark
@@ -111,6 +113,7 @@ export default async function ProductPage({
   const interest = INTEREST_BY_SLUG[product.slug];
   const isX427 = product.slug === "x427";
   const isMini = product.slug === "x427-mini";
+  const isH747 = product.slug === "fc-h747";
   const jsonLd = isX427
     ? {
         "@context": "https://schema.org",
@@ -136,9 +139,9 @@ export default async function ProductPage({
           }}
         />
       ) : null}
-      {isX427 || isMini ? (
+      {isX427 || isMini || isH747 ? (
         <BoardPage
-          page={isMini ? X427_MINI_PAGE : X427_PAGE}
+          page={isH747 ? H747_PAGE : isMini ? X427_MINI_PAGE : X427_PAGE}
           name={product.name}
           interest={interest}
           options={interestsFor(catalogue.products)}
@@ -289,7 +292,7 @@ export default async function ProductPage({
                     ) : null}
                     <span className={styles.alsoBody}>
                       <span className={`h3 ${styles.alsoName}`}>{other.name}</span>
-                      {hasDetails(other.slug) ? (
+                      {hasPage(other.slug) ? (
                         other.part ? (
                           <span className={`data ${styles.part}`}>{other.part}</span>
                         ) : null

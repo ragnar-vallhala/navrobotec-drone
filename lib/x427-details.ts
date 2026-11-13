@@ -150,7 +150,7 @@ export const STATS: { value: string; unit: string; label: string }[] = [
 ];
 
 export type Feature = {
-  icon: "cpu" | "sensors" | "power" | "ports" | "size" | "stack";
+  icon: "cpu" | "sensors" | "power" | "ports" | "size" | "stack" | "code";
   title: string;
   body: string;
   chips: string[];
