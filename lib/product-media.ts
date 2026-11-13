@@ -12,13 +12,13 @@ const OPENING_ALT = "Five NAVIX X427 Enclosures laid out in a group: three with 
    phones, where the frame is 4:3. */
 export const PRODUCTS_OPENING: { wide: Shot; narrow: Shot } = {
   wide: {
-    src: "/images/products-hero-wide.b8317b5e.webp",
+    src: "/images/products-hero-wide.e23975b5.webp",
     alt: OPENING_ALT,
     width: 2000,
     height: 857,
   },
   narrow: {
-    src: "/images/products-hero-narrow.22709b37.webp",
+    src: "/images/products-hero-narrow.dd1767a4.webp",
     alt: OPENING_ALT,
     width: 1200,
     height: 900,

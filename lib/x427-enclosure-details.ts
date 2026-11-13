@@ -100,19 +100,19 @@ const FEATURES: Feature[] = [
   },
   {
     icon: "box",
-    title: "A cap and a plate.",
+    title: "One shell, one bottom plate.",
     body: "One machined shell forms the walls and the roof, and a bottom plate closes it from underneath. The only other parts are two end brackets and M2 screws.",
     chips: ["One shell", "Bottom plate", "2 end brackets", "M2 screws"],
   },
   {
     icon: "ports",
-    title: "A clean top face.",
+    title: "No screw heads on top.",
     body: "No screw heads show on the top: the screws enter from underneath. Sixteen connector openings hug the connector bodies, with LED and button holes and engraved labels beside them.",
     chips: ["No screws on top", "16 connector openings", "Engraved labels"],
   },
   {
     icon: "hidden",
-    title: "An I/O end that hides the board.",
+    title: "USB-C and microSD openings that hide the board.",
     body: "The USB-C and microSD openings are at one end and sized so the circuit board is not visible through them.",
     chips: ["USB-C", "microSD", "LED and button holes"],
   },
@@ -124,7 +124,7 @@ const FEATURES: Feature[] = [
   },
   {
     icon: "cpu",
-    title: "A board held without a screw.",
+    title: "No screw through the board.",
     body: "Silicone washers and 3.0 mm location pins hold the board in place. No screw goes through it.",
     chips: ["Silicone washers", "3.0 mm pins", "No screw through the board"],
   },

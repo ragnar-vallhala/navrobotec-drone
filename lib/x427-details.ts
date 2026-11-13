@@ -171,7 +171,7 @@ export type Feature = {
 export const FEATURES: Feature[] = [
   {
     icon: "cpu",
-    title: "A fast core, with flash to grow into.",
+    title: "180 MHz Cortex-M4F, 1 MB of flash.",
     body: "The STM32F427VGT6 runs a Cortex-M4F at 180 MHz with 1 MB of flash and 256 KB of SRAM in total. If a build outgrows the flash, the 2 MB STM32F427VIT6 drops into the same footprint, pin for pin.",
     chips: ["180 MHz", "1 MB flash", "192 + 64 KB SRAM", "79 of 82 I/O assigned"],
   },
@@ -183,19 +183,19 @@ export const FEATURES: Feature[] = [
   },
   {
     icon: "power",
-    title: "Two power inputs, one clear order.",
+    title: "Power module first, USB second.",
     body: "A power mux gives the power module on POWER1 priority over USB, with no back-feed between them. Each input is cut off above about 5.6 V to protect the regulators behind it. Two switched 5 V ports report faults and can be turned off by firmware.",
     chips: ["POWER1 over USB", "Over-voltage cut-off", "2 switched 5 V ports", "Up to 2 A on POWER1"],
   },
   {
     icon: "ports",
-    title: "The ports a flight stack asks for.",
+    title: "14 PWM, DroneCAN, GPS, RC and microSD.",
     body: "Fourteen PWM outputs, DroneCAN, GPS, telemetry with flow control, and one RC port that takes SBUS, iBUS, CRSF and DSM. Add a spare serial port, three I2C and an SPI port, USB-C, a 4-bit microSD slot and a debug header.",
     chips: ["14 PWM", "DroneCAN", "SBUS / CRSF / DSM", "microSD logging"],
   },
   {
     icon: "size",
-    title: "Small, and meant to be mounted properly.",
+    title: "84.9 x 44.1 mm, soft-mounted.",
     body: "The board is 84.9 x 44.1 mm with the standard 30.5 x 30.5 mm M3 pattern at its centre. Soft-mount it: the IMUs want vibration isolation. Four corner holes take a case, and 36 test pads serve a pogo-pin fixture.",
     chips: ["84.9 x 44.1 mm", "30.5 x 30.5 mm mount", "4 layers", "36 test pads"],
   },
@@ -261,7 +261,7 @@ export const X427_PAGE: BoardPage = {
   sub: "An STM32F427 at 180 MHz, up to three IMUs, DroneCAN, 14 PWM outputs and microSD logging, on a board of 84.9 x 44.1 mm.",
   waitlist: "x427",
   studentOffer: true,
-  introTitle: "A flight controller made for a flight stack.",
+  introTitle: "An STM32F427 board with up to three IMUs.",
   introBody:
     "The X427 is a small, four-layer board with the sensors, power path and ports a multirotor needs, built for a flight software stack written in-house. The hardware is at Rev A.",
   stats: STATS,

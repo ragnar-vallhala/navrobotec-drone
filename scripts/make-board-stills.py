@@ -13,8 +13,8 @@ S = "/home/ashu/space/Drone/Navix/stills/"
 JOBS = [
     ("x427-top", "hero/high_34.png", 197, 29, 1500, 1000, (1600, 1067)),
     ("x427-bottom", "hero/bot_high.png", 180, 40, 1500, 1000, (1200, 800)),
-    ("products-hero-wide", "enclosure_final/groups/group_five.png", 0, 560, 3840, 1646, (2000, 857)),
-    ("products-hero-narrow", "enclosure_final/groups/group_five.png", 592, 30, 2800, 2100, (1200, 900)),
+    ("products-hero-wide", "enclosure_final/groups/group_five.png", 0, 415, 3840, 1646, (2000, 857)),
+    ("products-hero-narrow", "enclosure_final/groups/group_five.png", 592, 60, 2800, 2100, (1200, 900)),
     ("x427-card", "hero/high_34.png", 247, 4, 1400, 1050, (1200, 900)),
     ("x427-popup-top", "hero/high_34.png", 272, 0, 1350, 1080, (1200, 960)),
     ("x427-popup-bottom", "hero/bot_high.png", 278, 0, 1350, 1080, (1200, 960)),

@@ -212,13 +212,12 @@ export default function BoardPage({
             <p className="lede">{page.details.body}</p>
           </header>
           <ul className={styles.figures}>
-            {page.details.shots.map(({ shot, caption }) => (
+            {page.details.shots.map(({ shot }) => (
               <li key={shot.src}>
                 <figure className={styles.figure}>
                   <div className={styles.figureShot} style={{ aspectRatio: `${shot.width} / ${shot.height}` }}>
                     <BoardPhoto shot={shot} sizes="(max-width: 60rem) 100vw, 36rem" />
                   </div>
-                  <figcaption className={`small ${styles.caption}`}>{caption}</figcaption>
                 </figure>
               </li>
             ))}
@@ -481,7 +480,6 @@ export default function BoardPage({
                   >
                     <BoardPhoto shot={r.shot} sizes="(max-width: 52rem) 100vw, 40rem" />
                   </div>
-                  <figcaption className={`small ${styles.caption}`}>{r.caption}</figcaption>
                 </figure>
               ))}
             </div>
@@ -507,8 +505,7 @@ export default function BoardPage({
                   />
                 </div>
                 <figcaption className={`small ${styles.caption}`}>
-                  {item.caption}
-                  <span className={styles.drawingHint}> Scroll sideways to see all of it.</span>{" "}
+                  <span className={styles.drawingHint}>Scroll sideways to see all of it. </span>
                   <a href={item.src} className={styles.link} target="_blank" rel="noopener">
                     Open full size
                   </a>

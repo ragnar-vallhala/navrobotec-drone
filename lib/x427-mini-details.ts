@@ -111,19 +111,19 @@ const FEATURES: Feature[] = [
   },
   {
     icon: "power",
-    title: "Two power inputs, one clear order.",
+    title: "Power module first, USB second.",
     body: "A power mux gives the power module on POWER1 priority over USB, with no back-feed between them. Each input is cut off above about 5.6 V to protect the regulators behind it. Two switched 5 V ports report faults and can be turned off from firmware.",
     chips: ["POWER1 over USB", "Over-voltage cut-off", "2 switched 5 V ports"],
   },
   {
     icon: "ports",
-    title: "The ports a small flight stack asks for.",
+    title: "8 PWM, CAN, GPS, RC and USB-C.",
     body: "Eight motor outputs, GPS with safety-switch and buzzer lines, telemetry with flow control, one RC port for SBUS, iBUS, CRSF and DSM, a spare serial port, I2C, CAN, an analogue input, USB-C and a debug port.",
     chips: ["8 PWM", "CAN", "SBUS / CRSF / DSM", "USB-C"],
   },
   {
     icon: "size",
-    title: "Small, on the standard mounting pattern.",
+    title: "36 x 36 mm, 30.5 mm mounting pattern.",
     body: "The board is 36 x 36 mm with four M3 holes on the standard 30.5 x 30.5 mm pattern. Soft-mount it: the IMU wants vibration isolation. Ports are 2 mm solder pads, so wires go straight to the board.",
     chips: ["36 x 36 mm", "30.5 mm mount", "4 layers", "6 test pads"],
   },
@@ -141,7 +141,7 @@ export const X427_MINI_PAGE: BoardPage = {
   headline: "The X427, made small.",
   sub: "An STM32F427 at 180 MHz, an IMU, a barometer, CAN and eight PWM outputs, on a 36 x 36 mm board with the standard 30.5 mm mounting pattern.",
   waitlist: "x427-mini",
-  introTitle: "The same processor, on a board a quarter the size.",
+  introTitle: "The X427 processor on a 36 x 36 mm board.",
   introBody:
     "The X427 Mini is a four-layer flight controller built around the same STM32F427 as the X427. Compared with the X427 it has one IMU instead of up to three, eight PWM outputs instead of fourteen, and onboard flash instead of a microSD slot. It is in design: this page describes the schematic and board layout, not a built board.",
   stats: [
