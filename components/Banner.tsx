@@ -28,9 +28,9 @@ export default function Banner() {
       </div>
       <div className={styles.lock}>
         <p className={`${styles.name} ${unbounded.className}`} aria-hidden>
-          <span className={styles.left}>NAVR</span>
+          <span>NAVR</span>
           <Mark className={styles.mark} />
-          <span className={styles.right}>BOTEC</span>
+          <span>BOTEC</span>
         </p>
         <p className={`${styles.tagline} ${script.className}`} aria-hidden>
           man meets machine
