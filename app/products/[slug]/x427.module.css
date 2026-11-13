@@ -231,7 +231,8 @@
   overscroll-behavior-x: contain;
 }
 .drawingScroll:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
-.drawingImage { display: block; width: 100%; min-width: 52rem; height: auto; }
+.drawingImage { display: block; width: 100%; min-width: 56rem; height: auto; }
+@media (max-width: 52rem) { .drawingImage { min-width: 90rem; } }
 .drawingHint { display: none; }
 @media (max-width: 52rem) { .drawingHint { display: inline; } }
 
