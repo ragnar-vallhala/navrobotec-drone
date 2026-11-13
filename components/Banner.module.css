@@ -43,7 +43,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  width: max-content;
   margin: 0;
   font-size: 6.4cqw;
   line-height: 1;
@@ -67,6 +67,6 @@
 @media (max-width: 640px) {
   .banner { aspect-ratio: 4 / 3; }
   .lock { padding-top: 4cqw; }
-  .name { font-size: 10.5cqw; }
+  .name { font-size: 8.6cqw; }
   .tagline { margin-top: 2.4cqw; font-size: 7cqw; }
 }
