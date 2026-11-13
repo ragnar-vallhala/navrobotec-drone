@@ -192,12 +192,3 @@
 .waitlist h2 { margin: 0 0 0.5rem; }
 .waitlist p.body { margin: 0; color: var(--ink-2); }
 
-/* Placeholder for a product with no render yet: a quiet light tile, not a dark box. */
-.soonFrame {
-  position: absolute; inset: 0; display: grid; place-items: center;
-  background: var(--card); color: var(--ink-2);
-  font-family: var(--font-data); font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase;
-  border: 1px dashed var(--line);
-}
-.frame:has(.soonFrame) { aspect-ratio: auto; height: 5.5rem; }
-@media (min-width: 48rem) { .frame:has(.soonFrame) { height: auto; aspect-ratio: 3 / 2; } }

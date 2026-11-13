@@ -1,11 +1,13 @@
 import Banner from "@/components/Banner";
 import Link from "next/link";
+import ComingSoon from "@/components/ComingSoon";
 import WaitlistButton from "@/components/WaitlistButton";
 import BoardPhoto from "@/components/BoardPhoto";
 import Cinematic from "@/components/Cinematic";
 import {
   hasDetails,
   kindLabel,
+  kindOf,
   PRODUCT_MEDIA,
   PRODUCTS_OPENING,
 } from "@/lib/product-media";
@@ -107,9 +109,9 @@ export default async function Products() {
                       ) : (
                         /* No render on this row yet. An empty dark rectangle
                            reads as a broken image, so it says which it is. */
-                        <span className={styles.soonFrame}>Coming soon</span>
+                        <ComingSoon kind={kindOf(product.slug)} />
                       )}
-                      {product.slug === "x427" ? (
+                      {product.slug === "x427" || product.slug === "x427-mini" ? (
                         <span className={styles.badge}>Waitlist open</span>
                       ) : null}
                     </span>
