@@ -505,9 +505,8 @@ export default function BoardPage({
                   />
                 </div>
                 <figcaption className={`small ${styles.caption}`}>
-                  <span className={styles.drawingHint}>Scroll sideways to see all of it. </span>
-                  <a href={item.src} className={styles.link} target="_blank" rel="noopener">
-                    Open full size
+                                    <a href={item.src} className={styles.link} target="_blank" rel="noopener">
+                    Open full size to zoom
                   </a>
                 </figcaption>
               </figure>
