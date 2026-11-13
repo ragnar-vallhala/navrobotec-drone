@@ -5,6 +5,7 @@ import BgReady from "@/components/BgReady";
 import ScrollSteps from "@/components/ScrollSteps";
 import FlightLog from "@/components/FlightLog";
 import { PRODUCT_MEDIA } from "@/lib/product-media";
+import { PARTS } from "@/lib/parts";
 import styles from "./page.module.css";
 
 /* The homepage.
@@ -347,7 +348,7 @@ export default function Home() {
         <div className="shell">
           <header className={styles.head}>
             <p className="label">Products</p>
-            <h2 className="h1">Flight controllers, and the case for them.</h2>
+            <h2 className="h1">Hardware and software, one stack.</h2>
           </header>
 
           <ul className={styles.shown}>
@@ -378,6 +379,22 @@ export default function Home() {
                 </li>
               );
             })}
+          </ul>
+          <h3 className={`label ${styles.softHead}`}>Software</h3>
+          <ul className={styles.soft}>
+            {PARTS.map((part) => (
+              <li key={part.slug}>
+                <Link href={part.href} className={styles.softCard}>
+                  <span className="label">{part.kicker}</span>
+                  <span className="h3">{part.title}</span>
+                  <span className="body">{part.summary}</span>
+                  <span className={styles.focusLink}>
+                    Documentation
+                    <span aria-hidden>→</span>
+                  </span>
+                </Link>
+              </li>
+            ))}
           </ul>
           <p className={styles.shownAll}>
             <Link href="/products" className={styles.focusLink}>
