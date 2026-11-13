@@ -204,3 +204,12 @@
   .sketchCard:last-child:nth-child(odd) { grid-column: 1 / -1; }
   .sketchCard:last-child:nth-child(odd) > svg { max-width: 34rem; margin-inline: auto; }
 }
+
+/* --- design principles strip, note blocks, open list (H747 page) --- */
+.principles { list-style: none; margin: clamp(1.5rem, 3vw, 2.25rem) 0 0; padding: 0; display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr)); }
+.principle { padding: 0.875rem 1.125rem; border-left: 3px solid var(--signal); background: var(--signal-wash); border-radius: 0 var(--radius) var(--radius) 0; color: var(--ink); font-weight: 600; line-height: 1.4; }
+.noteBlock + .noteBlock { margin-top: clamp(2rem, 4vw, 3rem); padding-top: clamp(2rem, 4vw, 3rem); border-top: 1px solid var(--line); }
+.openCard { border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--card); overflow: hidden; }
+.openCard .table { border-top: 0; }
+.noteBlock .statusBody { align-content: start; }
+.sketchCard { display: flex; flex-direction: column; justify-content: center; }

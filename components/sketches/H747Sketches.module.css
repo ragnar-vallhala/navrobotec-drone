@@ -33,3 +33,4 @@
 .accTxt { fill: var(--sk-acc); font-size: 15px; font-weight: 600; letter-spacing: 0.04em; }
 .note { fill: var(--sk-muted); font-size: 14px; letter-spacing: 0.04em; font-family: var(--font-data); }
 .grid { fill: none; stroke: var(--sk-muted); stroke-width: 0.5; opacity: 0.18; }
+.code { fill: var(--sk-ink); font-size: 18px; font-weight: 400; font-family: var(--font-data); }

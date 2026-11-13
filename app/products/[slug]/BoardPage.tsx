@@ -12,8 +12,12 @@ import {
 import BoardPhoto from "@/components/BoardPhoto";
 import ComingSoon from "@/components/ComingSoon";
 import {
+  CarriersSketch,
   InterfacesSketch,
+  LogsSketch,
+  LuaSketch,
   ModuleCarrierSketch,
+  MotorsSketch,
   TwoCoresSketch,
   VotingSketch,
 } from "@/components/sketches/H747Sketches";
@@ -153,6 +157,13 @@ export default function BoardPage({
             <h2 className="h2">{page.introTitle}</h2>
             <p className="lede">{page.introBody}</p>
           </div>
+          {page.principles ? (
+            <ul className={styles.principles} aria-label="Design principles">
+              {page.principles.map((line) => (
+                <li key={line} className={styles.principle}>{line}</li>
+              ))}
+            </ul>
+          ) : null}
           <dl className={styles.stats}>
             {page.stats.map((stat) => (
               <div key={stat.label} className={styles.stat}>
@@ -223,6 +234,7 @@ export default function BoardPage({
                   </span>
                   <h3 className={`h3 ${styles.featureTitle}`}>{feature.title}</h3>
                   <p className={styles.featureBody}>{feature.body}</p>
+                  {feature.more ? <p className={styles.featureBody}>{feature.more}</p> : null}
                   <ul className={styles.chips}>
                     {feature.chips.map((chip) => (
                       <li key={chip} className={`data ${styles.chip}`}>
@@ -256,7 +268,36 @@ export default function BoardPage({
             <figure className={styles.sketchCard}><TwoCoresSketch /></figure>
             <figure className={styles.sketchCard}><VotingSketch /></figure>
             <figure className={styles.sketchCard}><InterfacesSketch /></figure>
+            {page.sketches?.more ? (
+              <>
+                <figure className={styles.sketchCard}><CarriersSketch /></figure>
+                <figure className={styles.sketchCard}><LuaSketch /></figure>
+                <figure className={styles.sketchCard}><MotorsSketch /></figure>
+                <figure className={styles.sketchCard}><LogsSketch /></figure>
+              </>
+            ) : null}
           </div>
+        </div>
+      </section>
+      ) : null}
+
+      {/* --- notes: who it is for, redundancy, carriers --- */}
+      {page.notes ? (
+      <section className="section-tight rule" id="design-notes">
+        <div className="shell">
+          {page.notes.map((note) => (
+            <div key={note.title} className={`${styles.statusGrid} ${styles.noteBlock}`}>
+              <div>
+                <p className="label">{note.label}</p>
+                <h2 className="h2">{note.title}</h2>
+              </div>
+              <div className={styles.statusBody}>
+                {note.body.map((line) => (
+                  <p key={line}>{line}</p>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       </section>
       ) : null}
@@ -353,6 +394,20 @@ export default function BoardPage({
           </div>
         </div>
       </section>
+
+      {page.open ? (
+      <section className="section-tight rule" id="open">
+        <div className="shell">
+          <header className={styles.sectionHead}>
+            <p className="label">Honest list</p>
+            <h2 className="h1">{page.open.title}</h2>
+          </header>
+          <div className={styles.openCard}>
+            <Table rows={page.open.rows} />
+          </div>
+        </div>
+      </section>
+      ) : null}
 
       {/* --- full specifications --- */}
       <section className="section-tight rule" id="specs">

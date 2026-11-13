@@ -54,36 +54,42 @@ const FEATURES: Feature[] = [
     icon: "cpu",
     title: "Two cores, two jobs.",
     body: "An STM32H747 has two cores. The Cortex-M4 manages flight and the internal sensors. The Cortex-M7 manages autonomy and the external modules and hardware.",
+    more: "The module is built around this split: flight and the internal sensors on one core, autonomy and everything external on the other. It is a design intent, not a measured result.",
     chips: ["STM32H747", "Cortex-M4: flight", "Cortex-M7: autonomy"],
   },
   {
     icon: "sensors",
     title: "Triple redundancy, with voting.",
     body: "The module is designed with three IMUs, three barometers and three magnetometers. A voting-based system works across them.",
+    more: "Having three of each kind gives the voting-based system three readings to work across. The voting details and the sensor parts are not published yet.",
     chips: ["3 IMUs", "3 barometers", "3 magnetometers", "Voting"],
   },
   {
     icon: "code",
     title: "Your own apps, in Lua.",
     body: "The module is designed to have a Lua-based scripting environment, so users can develop apps and put them on it.",
+    more: "It is in design, so there is nothing to download yet. Which core runs the apps is not published yet.",
     chips: ["Lua", "User apps"],
   },
   {
     icon: "power",
     title: "Eight DShot motor outputs.",
     body: "The module will have 8 DShot outputs for motors.",
+    more: "The module will have eight DShot outputs for motors, numbered one to eight. This page does not say what airframe they are meant for.",
     chips: ["8 DShot"],
   },
   {
     icon: "stack",
     title: "A module for carrier boards.",
     body: "It is a small compute module that plugs into a carrier board. Carrier boards range from small to large, with different capabilities, external peripherals and compute of their own.",
+    more: "The module is small and plugs into a carrier board. The carrier boards are designed to range from small to large, and the larger ones can bring external peripherals and compute of their own.",
     chips: ["Compute module", "Carrier boards"],
   },
   {
     icon: "ports",
     title: "External interfaces, internal logging.",
     body: "UART, CAN, SPI, USB, SD, Ethernet and a CSI camera interface are available externally. Logs go to internal QSPI.",
+    more: "The external interfaces are UART, CAN, SPI, USB, SD, Ethernet and CSI for a camera. Logs are designed to go to internal QSPI, so they stay on the module.",
     chips: ["UART", "CAN", "SPI", "USB", "SD", "Ethernet", "CSI", "QSPI logs"],
   },
 ];
@@ -102,7 +108,51 @@ export const H747_PAGE: BoardPage = {
     { value: "8", unit: "DShot", label: "motor outputs" },
     { value: "Lua", unit: "apps", label: "scripting, in design" },
   ],
-  sketches: { hero: true, diagrams: true },
+  sketches: { hero: true, diagrams: true, more: true },
+  principles: [
+    "Flight on one core, autonomy on the other",
+    "Three of every critical sensor",
+    "Swap the carrier, keep the module",
+    "Your own apps, written in Lua",
+  ],
+  notes: [
+    {
+      label: "Who it is for",
+      title: "Teams building towards safety-critical flight controllers.",
+      body: [
+        "The NAVIX-SMH747 is aimed at safety-critical use. That is the intent behind the design, and it shapes choices such as three of each critical sensor.",
+        "It is not certified. It is in design, and nothing on this page is a certification claim.",
+      ],
+    },
+    {
+      label: "Redundancy",
+      title: "Built to be redundant.",
+      body: [
+        "Three of each means the module is designed to carry three IMUs, three barometers and three magnetometers, where a simpler board would carry one of each.",
+        "A voting-based system is designed to work across the three readings of each kind, so that no single reading is taken on its own. Thresholds, failure rates and fault-tolerance figures are not published, because none exist yet.",
+      ],
+    },
+    {
+      label: "Carrier boards",
+      title: "The module stays, the carrier changes.",
+      body: [
+        "The module is a small compute module. It plugs into a carrier board, and carrier boards are designed to come in different types, from small to large, with different capabilities.",
+        "The larger carriers can bring external peripherals and compute of their own. How many carrier boards there will be, and what each one has, is not decided yet.",
+      ],
+    },
+  ],
+  open: {
+    title: "What is still open.",
+    rows: [
+      { label: "Size", value: "Not decided yet" },
+      { label: "Sensor parts", value: "Not published yet" },
+      { label: "Carrier board range", value: "Not decided yet" },
+      { label: "Price", value: "Not set" },
+      { label: "Date", value: "No date yet" },
+      { label: "Certification", value: "None, and none claimed" },
+      { label: "Apps runtime", value: "Which core runs Lua apps is not published yet" },
+    ],
+  },
   featuresTitle: "Six things worth knowing.",
   features: FEATURES,
   devTools: false,
@@ -132,6 +182,26 @@ export const H747_PAGE: BoardPage = {
     {
       q: "Is it certified?",
       a: "No. It is in design and has no certification. It is aimed at safety-critical use, which is a design intent only.",
+    },
+    {
+      q: "How big is it?",
+      a: "The size is not decided yet. It is meant to be a small module that plugs into a carrier board.",
+    },
+    {
+      q: "Which sensors does it use?",
+      a: "The parts are not published yet. The design has three each of IMU, barometer and magnetometer.",
+    },
+    {
+      q: "Which core runs my Lua apps?",
+      a: "That is not decided or published yet. The Lua-based scripting environment is in design.",
+    },
+    {
+      q: "Is there a price or date?",
+      a: "No. The module is in design, so there is no price and no date. Use Enquire to ask an engineer.",
+    },
+    {
+      q: "Can I get a board to test?",
+      a: "Not yet. Nothing has been built for testing. Enquire to talk to an engineer about it.",
     },
   ],
   closing: {

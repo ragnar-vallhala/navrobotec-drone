@@ -153,6 +153,8 @@ export type Feature = {
   icon: "cpu" | "sensors" | "power" | "ports" | "size" | "stack" | "code";
   title: string;
   body: string;
+  /* Optional longer text, shown under the body on pages that set it. */
+  more?: string;
   chips: string[];
 };
 

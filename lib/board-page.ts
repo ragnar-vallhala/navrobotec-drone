@@ -29,7 +29,13 @@ export type BoardPage = {
   };
   /* Sketch pictures, for a board with no renders yet. `hero` replaces the
      coming-soon tile; `diagrams` adds the "How it fits together" section. */
-  sketches?: { hero?: boolean; diagrams?: boolean };
+  sketches?: { hero?: boolean; diagrams?: boolean; more?: boolean };
+  /* A short strip of design principles under the numbers. */
+  principles?: string[];
+  /* Text blocks (label, title, paragraphs) shown between the sketches and the status. */
+  notes?: { label: string; title: string; body: string[] }[];
+  /* Things that are not decided yet, as label and one honest line. */
+  open?: { title: string; rows: Row[] };
   featuresTitle: string;
   features: Feature[];
   /* Left out for a board that has no software-stack claims to make yet. */
