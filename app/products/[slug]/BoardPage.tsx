@@ -180,7 +180,10 @@ export default function BoardPage({
               <p className={`small ${styles.note}`}>{gallery.note}</p>
             </div>
             <div className={`${styles.shot} ${styles.shotTop}`}>
-              {gallery.third.kind === "video" ? (
+              <BoardPhoto shot={gallery.top} sizes="(max-width: 60rem) 100vw, 44rem" />
+            </div>
+            {gallery.third.kind === "video" ? (
+              <div className={`${styles.shot} ${styles.shotVideo}`}>
                 <LoopVideo
                   src={gallery.third.src}
                   poster={gallery.third.poster}
@@ -189,13 +192,12 @@ export default function BoardPage({
                   from={gallery.third.from}
                   controls
                 />
-              ) : (
-                <BoardPhoto shot={gallery.top} sizes="(max-width: 60rem) 100vw, 44rem" />
-              )}
-            </div>
-            <div className={`${styles.shot} ${styles.shotBottom}`}>
-              <BoardPhoto shot={gallery.bottom} sizes="(max-width: 60rem) 100vw, 72rem" />
-            </div>
+              </div>
+            ) : (
+              <div className={`${styles.shot} ${styles.shotBottom}`}>
+                <BoardPhoto shot={gallery.bottom} sizes="(max-width: 60rem) 100vw, 72rem" />
+              </div>
+            )}
           </div>
         </div>
       </section>

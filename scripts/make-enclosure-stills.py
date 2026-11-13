@@ -20,7 +20,7 @@ JOBS = [
     ("enclosure-card", "views/hero_34.png", 110, -23, 1700, 1275, (1400, 1050)),
     # gallery: top 3:2, underside 7:3, I/O end 5:3
     ("enclosure-top", "views/top_34.png", 100, -30, 1700, 1133, (1600, 1067)),
-    ("enclosure-bottom", "views/bottom_view.png", 261, 225, 1400, 600, (1600, 686)),
+    ("enclosure-bottom", "groups/group_pair.png", 307, 216, 3226, 1815, (1600, 900)),
     ("enclosure-io", "views/io_macro.png", 135, 90, 1650, 990, (1600, 960)),
     # details, 4:3
     ("enclosure-exploded", "exploded/exploded_34.png", 480, 0, 2880, 2160, (1400, 1050)),

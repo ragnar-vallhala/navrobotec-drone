@@ -21,10 +21,10 @@ const TOP: Shot = {
   height: 1067,
 };
 const BOTTOM: Shot = {
-  src: "/images/enclosure-bottom.dfbb4b1e.webp",
-  alt: `${ALT} seen from underneath: the flat bottom plate, with the two end brackets`,
+  src: "/images/enclosure-bottom.195161e1.webp",
+  alt: `${ALT} one case top side up and one upside down, showing the connector face and the flat bottom plate`,
   width: 1600,
-  height: 686,
+  height: 900,
 };
 const IO: Shot = {
   src: "/images/enclosure-io.54801f1c.webp",
