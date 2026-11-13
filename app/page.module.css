@@ -507,55 +507,29 @@
   object-fit: contain;
 }
 
-/* --- focus ---------------------------------------------------------------------
-   Alternating rows. The section below is a row of three cards; when this one
-   was too, a reader met the same shape twice running and read the two as the
-   same kind of thing.
-*/
-.focus { display: grid; gap: clamp(3rem, 7vw, 5rem); }
-
-.focusRow { display: grid; gap: clamp(1.5rem, 3vw, 2.5rem); align-items: center; }
-
-.focusImage {
+/* --- products on the homepage -------------------------------------------------- */
+.shown { list-style: none; margin: 0; padding: 0; display: grid; gap: clamp(1.25rem, 3vw, 2rem); }
+.shownCard { display: grid; gap: 1.25rem; color: inherit; text-decoration: none; height: 100%; }
+.shownFrame {
   position: relative;
-  /* 4:3 — the frame the images in scripts/make-page-images.py are built to,
-     and the shape a squarish board sits in without being cropped to a strip. */
+  display: block;
   aspect-ratio: 4 / 3;
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  background: var(--paper-2);
+  background: #000;
 }
-.focusImg { object-fit: cover; }
-
-.focusBody { max-width: 34rem; }
-.focusIndex {
-  display: block;
-  font-size: 0.75rem;
-  letter-spacing: 0.14em;
-  color: var(--signal);
-  margin-bottom: 1rem;
-}
-.focusBody h3 { margin-bottom: 1rem; }
-
-/* Evidence and destination, under a rule: what backs the claim and where to
-   go and check it, set apart from the prose rather than continuing it. */
-.focusMeta {
-  margin-top: 1.75rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid var(--line);
-}
-.focusProof {
-  font-size: 0.8125rem;
-  line-height: 1.6;
-  color: var(--muted);
-}
+.shownImg { object-fit: cover; }
+.shownBody { display: flex; flex-direction: column; gap: 0.625rem; align-items: flex-start; }
+.shownBody .body { color: var(--muted); }
+.shownAll { margin-top: clamp(1.75rem, 3vw, 2.5rem); }
+@media (min-width: 48rem) { .shown { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 
 .focusLink {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  margin-top: 1.125rem;
+  margin-top: 0.5rem;
   font-family: var(--font-data);
   font-size: 0.75rem;
   letter-spacing: 0.12em;
@@ -563,21 +537,7 @@
   color: var(--signal);
   transition: gap 0.25s var(--ease);
 }
-.focusLink:hover { gap: 0.75rem; text-decoration: underline; text-underline-offset: 0.25em; }
-/* Nothing above it in the block when a row carries no figure. */
-.focusProof + .focusLink { margin-top: 1.125rem; }
-.focusMeta > .focusLink:only-child { margin-top: 0; }
-
-@media (min-width: 62rem) {
-  .focusRow {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: clamp(2.5rem, 5vw, 4.5rem);
-  }
-  /* Every other row turns over, so the eye is handed back and forth down the
-     section instead of running straight down one column. */
-  .focusRow:nth-child(even) .focusImage { order: 2; }
-  .focusRow:nth-child(even) .focusBody { justify-self: end; }
-}
+.shownCard:hover .focusLink, .focusLink:hover { gap: 0.75rem; text-decoration: underline; text-underline-offset: 0.25em; }
 
 /* --- join ------------------------------------------------------------------------ */
 .join { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; }
@@ -644,8 +604,9 @@
 
 /* Hit area of at least 44px without moving anything: the link keeps its
    size, an invisible box around it grows. */
-.attribLink, .focusLink, .routeLink { position: relative; }
-.attribLink::after, .focusLink::after, .routeLink::after { content: ""; position: absolute; inset: -0.75rem -0.25rem; }
+/* .focusLink keeps its own hit area through the card link */
+.attribLink, .routeLink { position: relative; }
+.attribLink::after, .routeLink::after { content: ""; position: absolute; inset: -0.75rem -0.25rem; }
 
 .heroNote {
   margin: 0.875rem 0 0;

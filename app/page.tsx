@@ -4,7 +4,7 @@ import Image from "@/components/Photo";
 import BgReady from "@/components/BgReady";
 import ScrollSteps from "@/components/ScrollSteps";
 import FlightLog from "@/components/FlightLog";
-import { PAGE_IMAGES } from "@/lib/page-images";
+import { PRODUCT_MEDIA } from "@/lib/product-media";
 import styles from "./page.module.css";
 
 /* The homepage.
@@ -57,48 +57,31 @@ const STACK = [
   },
 ];
 
-/* The heading says "and prove it", so each of these carries the thing that
-   proves it and a way to go and check: the measurement in the instrument
-   voice, and the page it is substantiated on. The numbers are the ones the
-   stack section already states — this is the same claim, sourced.
-
-   Images are built by scripts/make-page-images.py; sources and licences are
-   in assets/focus-source/CREDITS.md. Copper, a settling response, two
-   aircraft — the layer, the loop, the fleet, which is the order the three
-   claims are already in.
-
-   `proof` is optional on purpose. Scale to swarms is a direction rather than
-   a measurement, and inventing a figure to make the third row match the first
-   two is exactly what this section is meant not to do. */
-const FOCUS = [
+/* The products on show, in the order the catalogue lists them. Each card is
+   the product's own render and the facts the product page itself states. */
+const SHOWN = [
   {
-    image: PAGE_IMAGES["focus-layout"],
-    alt: "A bare circuit board in macro — copper traces, gold pads and a debug header.",
-    title: "Sovereign foundation",
-    body: "We own every layer — NavHAL at the hardware, VaiOS as the operating system, VAYU in the air. No black boxes, no foreign dependencies: a stack you can audit from the first register.",
-    proof: "~5-cycle GPIO · register-level · STM32F4 · H7 · AVR",
-    href: "/technology" as const,
-    cta: "How the layers fit",
+    slug: "x427",
+    tag: "Flight controller · Rev A",
+    name: "NAVIX X427",
+    body: "STM32F427 at 180 MHz, up to three IMUs, DroneCAN, 14 PWM outputs and microSD logging, on an 84.9 x 44.1 mm board.",
+    status: "Waitlist open",
   },
   {
-    image: PAGE_IMAGES["focus-timing"],
-    alt: "A control-theory diagram: an oscillation settling towards its set point over time.",
-    title: "Real-time reliability",
-    body: "A flight core that never misses its deadline. VaiOS holds the control loop to a fixed schedule every cycle — benchmarked head to head against FreeRTOS and Zephyr on the same hardware.",
-    proof: "~5.9 µs task-wake · 1 kHz / 250 Hz loops",
-    href: "/docs/vaios/performance" as const,
-    cta: "Read the benchmark",
+    slug: "x427-mini",
+    tag: "Flight controller · In design",
+    name: "NAVIX X427 Mini",
+    body: "The X427 processor on a 36 x 36 mm board: one IMU, 8 PWM outputs and 16 MB of onboard flash.",
+    status: "Waitlist open",
   },
   {
-    image: PAGE_IMAGES["focus-scale"],
-    alt: "Two aircraft airborne in the same frame, one near and one far.",
-    title: "Built to grow",
-    body: "Autonomy and swarms are not bolted on — they are how VaiOS is designed to scale, from one aircraft to many. UAVs come first because that is where we prove it.",
-    proof: null,
-    href: "/vision" as const,
-    cta: "Where this goes",
+    slug: "x427-enclosure",
+    tag: "Enclosure · In design",
+    name: "NAVIX X427 Enclosure",
+    body: "A CNC-machined 6061-T6 aluminium case for the X427, bead blasted and black anodised, with two removable end brackets.",
+    status: "Enquire",
   },
-];
+] as const;
 
 const JOIN = [
   {
@@ -359,55 +342,49 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ---------------- focus ----------------
-          Rows, alternating, rather than a row of three cards. "Three ways in"
-          below is a row of three cards, and the two ran together as the same
-          component twice — the reader met the same shape and read it as the
-          same kind of thing. Rows also give each claim room for the figure
-          that backs it and the page it is backed on, which is what the
-          heading is promising. */}
+      {/* ---------------- products ---------------- */}
       <section className="section rule">
         <div className="shell">
           <header className={styles.head}>
-            <p className="label">Our focus</p>
-            <h2 className="h1">Own every layer, and prove it.</h2>
+            <p className="label">Products</p>
+            <h2 className="h1">Flight controllers, and the case for them.</h2>
           </header>
 
-          <div className={styles.focus}>
-            {FOCUS.map((card, i) => (
-              <article key={card.title} className={styles.focusRow}>
-                <div className={styles.focusImage}>
-                  <Image
-                    src={card.image}
-                    alt={card.alt}
-                    fill
-                    sizes="(max-width: 62rem) 100vw, 46vw"
-                    className={styles.focusImg}
-                  />
-                </div>
-
-                <div className={styles.focusBody}>
-                  <p className={`data ${styles.focusIndex}`}>
-                    {String(i + 1).padStart(2, "0")}
-                  </p>
-                  <h3 className="h2">{card.title}</h3>
-                  <p className="body">{card.body}</p>
-                  {/* The rule belongs to the block, not to the figure: the
-                      third row has no figure to show, and hanging the rule
-                      off `proof` left that row without a bottom edge. */}
-                  <div className={styles.focusMeta}>
-                    {card.proof && (
-                      <p className={`data ${styles.focusProof}`}>{card.proof}</p>
-                    )}
-                    <Link href={card.href} className={styles.focusLink}>
-                      {card.cta}
-                      <span aria-hidden>→</span>
-                    </Link>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
+          <ul className={styles.shown}>
+            {SHOWN.map((item) => {
+              const shot = PRODUCT_MEDIA[item.slug].card;
+              return (
+                <li key={item.slug}>
+                  <Link href={`/products/${item.slug}`} className={styles.shownCard}>
+                    <span className={styles.shownFrame}>
+                      <Image
+                        src={shot.src}
+                        alt={shot.alt}
+                        fill
+                        sizes="(max-width: 48rem) 100vw, 33vw"
+                        className={styles.shownImg}
+                      />
+                    </span>
+                    <span className={styles.shownBody}>
+                      <span className="label">{item.tag}</span>
+                      <h3 className="h3">{item.name}</h3>
+                      <span className="body">{item.body}</span>
+                      <span className={styles.focusLink}>
+                        {item.status}
+                        <span aria-hidden>→</span>
+                      </span>
+                    </span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+          <p className={styles.shownAll}>
+            <Link href="/products" className={styles.focusLink}>
+              All products
+              <span aria-hidden>→</span>
+            </Link>
+          </p>
         </div>
       </section>
 
