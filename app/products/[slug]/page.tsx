@@ -17,6 +17,7 @@ import BoardPage from "./BoardPage";
 import { X427_PAGE } from "@/lib/x427-details";
 import { H747_PAGE } from "@/lib/fc-h747-details";
 import { X427_MINI_PAGE } from "@/lib/x427-mini-details";
+import { X427_ENCLOSURE_PAGE } from "@/lib/x427-enclosure-details";
 import styles from "./product.module.css";
 
 /* One product.
@@ -114,6 +115,7 @@ export default async function ProductPage({
   const isX427 = product.slug === "x427";
   const isMini = product.slug === "x427-mini";
   const isH747 = product.slug === "fc-h747";
+  const isEnclosure = product.slug === "x427-enclosure";
   const jsonLd = isX427
     ? {
         "@context": "https://schema.org",
@@ -139,9 +141,17 @@ export default async function ProductPage({
           }}
         />
       ) : null}
-      {isX427 || isMini || isH747 ? (
+      {isX427 || isMini || isH747 || isEnclosure ? (
         <BoardPage
-          page={isH747 ? H747_PAGE : isMini ? X427_MINI_PAGE : X427_PAGE}
+          page={
+            isH747
+              ? H747_PAGE
+              : isMini
+                ? X427_MINI_PAGE
+                : isEnclosure
+                  ? X427_ENCLOSURE_PAGE
+                  : X427_PAGE
+          }
           name={product.name}
           interest={interest}
           options={interestsFor(catalogue.products)}

@@ -65,6 +65,23 @@ export const PRODUCT_MEDIA: Record<
       height: 1050,
     },
   },
+  /* The X427 Enclosure: Blender stills from Navix/stills/enclosure_final, cut
+     by scripts/make-enclosure-stills.py. */
+  "x427-enclosure": {
+    hero: {
+      src: "/images/enclosure-hero.edf572eb.webp",
+      alt: "NAVIX X427 Enclosure, black anodised aluminium, seen from above at an angle",
+      width: 1600,
+      height: 1067,
+    },
+    gallery: [],
+    card: {
+      src: "/images/enclosure-card.3b9c4ac3.webp",
+      alt: "NAVIX X427 Enclosure, black anodised aluminium, seen from above at an angle",
+      width: 1400,
+      height: 1050,
+    },
+  },
 };
 
 /* The waitlist popup's image panel is a fixed 5:4 box. These two renders are
@@ -106,5 +123,6 @@ export function kindOf(slug: string): "board" | "airframe" {
 }
 
 export function kindLabel(slug: string): string {
+  if (slug === "x427-enclosure") return "Enclosure";
   return kindOf(slug) === "airframe" ? "Airframe" : "Flight controller";
 }

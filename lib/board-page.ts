@@ -36,6 +36,19 @@ export type BoardPage = {
   notes?: { label: string; title: string; body: string[] }[];
   /* Things that are not decided yet, as label and one honest line. */
   open?: { title: string; rows: Row[] };
+  /* More pictures under the gallery, as captioned tiles. */
+  details?: { title: string; body: string; shots: { shot: Shot; caption: string }[] };
+  /* Dimension drawings, each a wide picture in a box that scrolls sideways on a
+     phone. Trimmed from the drawing sheets by scripts/make-drawings.py. */
+  drawings?: {
+    title: string;
+    body: string;
+    items: { src: string; alt: string; width: number; height: number; caption: string }[];
+  };
+  /* A link to the product this one goes with. */
+  related?: { label: string; title: string; body: string; href: string; link: string };
+  /* False hides the "Read the docs" button (a product with no docs of its own). */
+  docsLink?: boolean;
   featuresTitle: string;
   features: Feature[];
   /* Left out for a board that has no software-stack claims to make yet. */
@@ -43,7 +56,14 @@ export type BoardPage = {
   /* False hides the developer tools section (the X427 pages show it). */
   devTools?: boolean;
   status: string[];
-  specs: { onBoard: Group[]; ports: Row[]; power: Row[]; mechanical: Row[]; lastTitle?: string };
+  specs: {
+    onBoard: Group[];
+    ports: Row[];
+    portsTitle?: string;
+    power: Row[];
+    mechanical: Row[];
+    lastTitle?: string;
+  };
   /* The X427's specification section links into the report chapters. */
   reportLinks: boolean;
   faq: { q: string; a: string }[];

@@ -158,6 +158,19 @@ export const X427_MINI_PAGE: BoardPage = {
     bottom: BOTTOM,
     third: { kind: "shot", shot: DETAIL },
   },
+  drawings: {
+    title: "Board dimensions.",
+    body: "A drawing of the board from its layout file. All dimensions are in millimetres.",
+    items: [
+      {
+        src: "/images/drawing-x427-mini-top-dims.af39248f.webp",
+        alt: "Top side drawing of the NAVIX X427 Mini board with dimensions: 36.0 mm by 36.0 mm, mounting holes 30.5 mm apart in both directions. The PWM, RC, TELEM1, SERIAL4 and POWER pad groups are labelled.",
+        width: 1835,
+        height: 1044,
+        caption: "Top side.",
+      },
+    ],
+  },
   featuresTitle: "Six things worth knowing.",
   features: FEATURES,
   platform: {

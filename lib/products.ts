@@ -54,6 +54,7 @@ export const INTEREST_BY_SLUG: Record<string, string> = {
   x427: "NAVIX X427",
   /* fc-f446 stays above: files already recorded under that label keep it. */
   "x427-mini": "NAVIX X427 Mini",
+  "x427-enclosure": "NAVIX X427 Enclosure",
 };
 
 /* The chips to offer, for the products actually on the site.
@@ -144,6 +145,44 @@ const X427_MINI: Product = {
   updatedAt: "2026-11-12T00:00:00Z",
 };
 
+/* NAVIX X427 Enclosure, the machined aluminium case sold apart from the board.
+   Carried here for the same reason as the X427 and the Mini: the card shows
+   whether or not the API row has been migrated (db/017 in the api repo).
+   Facts from the enclosure's CAD model and design notes; price, lead time and
+   availability are not set, so they read N/A. */
+const X427_ENCLOSURE: Product = {
+  id: "bundled-x427-enclosure",
+  slug: "x427-enclosure",
+  name: "NAVIX X427 Enclosure",
+  part: "6061-T6",
+  kicker: "Enclosure",
+  summary: "A machined aluminium enclosure for the NAVIX X427, sold on its own.",
+  status: "Enquire",
+  image: "",
+  imageIsRender: true,
+  specs: [
+    { label: "Product", value: "NAVIX X427 Enclosure" },
+    { label: "Material", value: "CNC 6061-T6 aluminium" },
+    { label: "Finish", value: "Bead blast, Type II black anodise" },
+    {
+      label: "Size",
+      value:
+        "93.95 x 52.00 mm body, 95.95 x 54.00 mm flange, 113.95 x 54.00 mm with brackets",
+    },
+    { label: "Height", value: "16.60 mm (17.80 mm over the end badge)" },
+    {
+      label: "Mounting",
+      value: "Two removable end brackets, 30.5 x 30.5 mm M2 stack pattern",
+    },
+    { label: "Price", value: "N/A" },
+    { label: "Lead time", value: "N/A" },
+    { label: "Availability", value: "N/A" },
+  ],
+  published: true,
+  placeholder: false,
+  updatedAt: "2026-11-13T00:00:00Z",
+};
+
 /* Card and page text for the NAVIX-SMH747, which has no render. Applied over
    the API row for this slug so the card shows the kicker, part, status and
    one line whatever the row says. Everything else on the row is kept. */
@@ -192,6 +231,9 @@ export async function getCatalogue(): Promise<Catalogue> {
             )
               ? []
               : [X427_MINI]),
+            ...((products as Product[]).some((p) => p.slug === X427_ENCLOSURE.slug)
+              ? []
+              : [X427_ENCLOSURE]),
           ]
             .map((p) => ({
               ...p,

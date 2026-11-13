@@ -3,10 +3,13 @@ import {
   ArrowRight,
   Cable,
   Code,
+  Box,
   Cpu,
+  EyeOff,
   Layers,
   Radar,
   Ruler,
+  Wrench,
   Zap,
 } from "lucide-react";
 import BoardPhoto from "@/components/BoardPhoto";
@@ -37,6 +40,9 @@ const ICONS: Record<Feature["icon"], typeof Cpu> = {
   size: Ruler,
   stack: Layers,
   code: Code,
+  box: Box,
+  wrench: Wrench,
+  hidden: EyeOff,
 };
 
 function Table({ rows }: { rows: Row[] }) {
@@ -125,9 +131,11 @@ export default function BoardPage({
               <div className={styles.ctas}>
                 {join}
                 {enquire}
-                <Link href="/docs" className="btn btn-ghost">
-                  Read the docs
-                </Link>
+                {page.docsLink === false ? null : (
+                  <Link href="/docs" className="btn btn-ghost">
+                    Read the docs
+                  </Link>
+                )}
               </div>
             </div>
             <div
@@ -213,6 +221,30 @@ export default function BoardPage({
               )}
             </div>
           </div>
+        </div>
+      </section>
+      ) : null}
+
+      {/* --- more pictures --- */}
+      {page.details ? (
+      <section className="section-tight rule" id="details">
+        <div className="shell">
+          <header className={styles.sectionHead}>
+            <h2 className="h2">{page.details.title}</h2>
+            <p className="lede">{page.details.body}</p>
+          </header>
+          <ul className={styles.figures}>
+            {page.details.shots.map(({ shot, caption }) => (
+              <li key={shot.src}>
+                <figure className={styles.figure}>
+                  <div className={styles.figureShot} style={{ aspectRatio: `${shot.width} / ${shot.height}` }}>
+                    <BoardPhoto shot={shot} sizes="(max-width: 60rem) 100vw, 36rem" />
+                  </div>
+                  <figcaption className={`small ${styles.caption}`}>{caption}</figcaption>
+                </figure>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
       ) : null}
@@ -420,7 +452,9 @@ export default function BoardPage({
             {page.specs.onBoard.map((group, i) => (
               <Spec key={group.title} title={group.title} rows={group.rows} open={i === 0} />
             ))}
-            <Spec title="Ports and interfaces" rows={page.specs.ports} />
+            {page.specs.ports.length > 0 ? (
+              <Spec title={page.specs.portsTitle ?? "Ports and interfaces"} rows={page.specs.ports} />
+            ) : null}
             {page.specs.power.length > 0 ? (
               <Spec title="Power design" rows={page.specs.power} />
             ) : null}
@@ -445,6 +479,62 @@ export default function BoardPage({
           ) : null}
         </div>
       </section>
+
+      {/* --- drawings --- */}
+      {page.drawings ? (
+      <section className="section-tight rule" id="drawings">
+        <div className="shell">
+          <header className={styles.sectionHead}>
+            <p className="label">Drawings</p>
+            <h2 className="h1">{page.drawings.title}</h2>
+            <p className="lede">{page.drawings.body}</p>
+          </header>
+          <div className={styles.drawings}>
+            {page.drawings.items.map((item) => (
+              <figure key={item.src} className={styles.drawing}>
+                <div
+                  className={styles.drawingScroll}
+                  role="region"
+                  aria-label={item.caption}
+                  tabIndex={0}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element -- line art, served as it is: the image loader would re-encode it lossy */}
+                  <img
+                    src={item.src}
+                    alt={item.alt}
+                    width={item.width}
+                    height={item.height}
+                    loading="lazy"
+                    decoding="async"
+                    className={styles.drawingImage}
+                  />
+                </div>
+                <figcaption className={`small ${styles.caption}`}>
+                  {item.caption}
+                  <span className={styles.drawingHint}> Scroll sideways to see all of it.</span>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+      ) : null}
+
+      {/* --- related product --- */}
+      {page.related ? (
+      <section className="section-tight rule" id="related">
+        <div className="shell">
+          <Link href={page.related.href} className={styles.related}>
+            <span className="label">{page.related.label}</span>
+            <span className={`h3 ${styles.relatedTitle}`}>{page.related.title}</span>
+            <span className={styles.relatedBody}>{page.related.body}</span>
+            <span className={`data ${styles.relatedGo}`}>
+              {page.related.link} <ArrowRight size={14} aria-hidden />
+            </span>
+          </Link>
+        </div>
+      </section>
+      ) : null}
 
       {/* --- faq --- */}
       <section className="section-tight rule" id="faq">

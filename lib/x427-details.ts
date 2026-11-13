@@ -150,7 +150,17 @@ export const STATS: { value: string; unit: string; label: string }[] = [
 ];
 
 export type Feature = {
-  icon: "cpu" | "sensors" | "power" | "ports" | "size" | "stack" | "code";
+  icon:
+    | "cpu"
+    | "sensors"
+    | "power"
+    | "ports"
+    | "size"
+    | "stack"
+    | "code"
+    | "box"
+    | "wrench"
+    | "hidden";
   title: string;
   body: string;
   /* Optional longer text, shown under the body on pages that set it. */
@@ -275,6 +285,33 @@ export const X427_PAGE: BoardPage = {
     body: "The X427 is an STM32F4-family, Cortex-M4 board: the same architecture as the NAVIXSM-F401RE our stack already runs on. Here is the software family it is built for, each layer with its own documentation.",
     hardwareName: "NAVIX X427",
     hardwareBody: "STM32F427 flight controller, STM32F4 family, Cortex-M4F",
+  },
+  drawings: {
+    title: "Board dimensions.",
+    body: "Drawings of the board from its layout files. All dimensions are in millimetres.",
+    items: [
+      {
+        src: "/images/drawing-x427-top-dims.bf02ee38.webp",
+        alt: "Top side drawing of the NAVIX X427 board with dimensions: 84.9 mm long, 44.0 mm wide, mounting holes 77.8 mm apart at the corners and 30.5 mm apart at the centre, 37.0 mm and 30.5 mm hole spacing across. The connectors, buttons and LEDs are labelled.",
+        width: 1835,
+        height: 1054,
+        caption: "Top side.",
+      },
+      {
+        src: "/images/drawing-x427-bottom-dims.3d02155b.webp",
+        alt: "Bottom side drawing of the NAVIX X427 board, mirrored as seen from the back, with the same 84.9 mm length, 44.0 mm width and hole spacings, and the STM32F427, TJA1051T/3, TPS2121, 8 MHz crystal and sensors labelled.",
+        width: 1834,
+        height: 1054,
+        caption: "Bottom side, mirrored as seen from the back.",
+      },
+    ],
+  },
+  related: {
+    label: "Accessory",
+    title: "Enclosure for the X427",
+    body: "A machined aluminium case with openings cut for the X427's connectors, sold separately from the board.",
+    href: "/products/x427-enclosure",
+    link: "View the X427 Enclosure",
   },
   status: STATUS,
   specs: { onBoard: ON_BOARD, ports: PORTS, power: POWER, mechanical: MECHANICAL },
