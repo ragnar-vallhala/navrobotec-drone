@@ -2,7 +2,7 @@
 
 This chapter walks through the pages of the normal (non-docked) window and says, for each one, what it shows and which data path feeds it. The simulator page is Chapter 6. Record and replay are Chapter 7.
 
-In the normal window, `MainWindow` puts every page in one `QStackedWidget`. The View menu switches pages: Ctrl+1 Flight Dashboard, Ctrl+2 RC Channels, Ctrl+3 Motors, Ctrl+4 Control Loop, Ctrl+5 Packet Analyzer, Ctrl+6 Simulator, Ctrl+8 Kernel Perf. The Tools menu has Calibration (Ctrl+7) and Gyro Notch (Ctrl+9). Settings has its own menu-bar entry.
+MainWindow lays every page out as a dock panel (`DockShell`). There is no View menu: the old pages are built-in workspaces in the Workspaces menu, with the old keys: Ctrl+1 Fly (the old Flight Dashboard), Ctrl+2 RC channels, Ctrl+3 Motors, Ctrl+4 Control loop, Ctrl+5 Packets, Ctrl+6 Sim, Ctrl+8 Kernel perf. The Tools menu has Calibration (Ctrl+7) and Gyro Notch (Ctrl+9). Settings has its own menu-bar entry. Fullscreen (F11) is in the Window menu.
 
 ## Where the data comes from
 
@@ -19,7 +19,7 @@ The home page is built in `MainWindow::buildUi`. It has an attitude group, an IM
 
 - **Attitude (`AttitudePanel`).** A 2D / 3D toggle. 2D is `AttitudeWidget`, an artificial horizon with a pitch ladder, roll arc and heading tape. 3D is `Drone3DWidget`, which despite the name is a stylised, QPainter-drawn X-frame quad that banks, pitches and yaws with the attitude; it is not the simulator's 3D world. Both are fed from the snapshot (`s.attitude`), and both ease toward the latest angle so low-rate data looks smooth. Pills show the firmware state and the flight mode. `NumbersPanel` adds roll, pitch and yaw with a rolling standard deviation each, refreshed every fourth tick.
 - **IMU (`ImuPanel`).** Graphs for accelerometer, gyroscope, magnetometer and baro altitude (MSL and AGL), a fused-versus-raw vertical estimate chart, and temperature and battery gauges. Battery comes from the `BATTERY` message; the gauge says "no battery telemetry" when none has arrived, and says why when the reading is not a pack.
-- **Log and Faults (`LogsPanel`).** `LogPanel` shows text from `logReceived` (firmware `STATUSTEXT`, command acks, unrecognised frames) with a timestamp style and line cap set in Settings. `FaultsPanel` shows `faultReceived` events with severity, acknowledge and clear; Clear is disabled while the vehicle is armed.
+- **Log and Faults (`LogsPanel`).** `LogPanel` shows text from `logReceived` (firmware `STATUSTEXT`, command acks, unrecognised frames). A `STATUSTEXT` line is prefixed with its syslog severity, for example `[ERR] text`, and the router joins the chunks of a multi-chunk message (same `id`, ordered by `chunk_seq`) into one line; a message with a lost chunk is shown after 2 s (also when the link goes quiet, or closes) with ` [...]` appended. The `STATUSTEXT` `id` only groups chunks and is not a fault id. The panel adds a timestamp (style and line cap set in Settings). `FaultsPanel` shows `faultReceived` events with severity, acknowledge and clear; Clear is disabled while the vehicle is armed.
 
 ## RC Channels
 

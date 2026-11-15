@@ -27,7 +27,7 @@ const BOOKS = [
     dir: process.env.BOOKS_NAVLINK_REPO ?? `${STACK}/navlink`,
     path: "docs/book",
     total: 10,
-    refs: ["origin/docs/book-ch1-3", "origin/docs/book-ch4-6", "origin/docs/book-ch7-10"],
+    refs: ["origin/docs/book-ch1-3", "origin/docs/book-ch4-6", "origin/docs/book-ch7-10", "origin/main"],
   },
   {
     part: "nav",
@@ -35,7 +35,7 @@ const BOOKS = [
     dir: process.env.BOOKS_NAV_REPO ?? `${STACK}/nav`,
     path: "docs/book",
     total: 10,
-    refs: ["origin/main", "origin/docs/book-ch1-3", "origin/docs/book-ch4-6", "origin/docs/book-ch7-10"],
+    refs: ["origin/docs/book-ch1-3", "origin/docs/book-ch4-6", "origin/docs/book-ch7-10", "origin/main"],
   },
   {
     part: "navigator",
