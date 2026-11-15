@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import EnquiryForm from "./EnquiryForm";
 import styles from "./InterestDialog.module.css";
 
@@ -36,6 +36,8 @@ export default function InterestDialog({
   options: string[];
 }) {
   const ref = useRef<HTMLDialogElement>(null);
+  /* One per instance: a catalogue page carries several of these dialogs. */
+  const titleId = useId();
   const [open, setOpen] = useState(false);
 
   const close = useCallback(() => ref.current?.close(), []);
@@ -72,7 +74,7 @@ export default function InterestDialog({
       <dialog
         ref={ref}
         className={styles.dialog}
-        aria-labelledby="interest-title"
+        aria-labelledby={titleId}
         /* Fired by Escape as well as by close(), so this is the one place
            that has to reset the state. */
         onClose={() => setOpen(false)}
@@ -95,7 +97,7 @@ export default function InterestDialog({
 
           <header className={styles.head}>
             <p className="label label-signal">{label}</p>
-            <h2 id="interest-title" className={`h2 ${styles.title}`}>
+            <h2 id={titleId} className={`h2 ${styles.title}`}>
               {title}
             </h2>
             <p className={`body ${styles.lede}`}>{lede}</p>

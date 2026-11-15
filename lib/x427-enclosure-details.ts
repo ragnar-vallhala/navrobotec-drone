@@ -131,7 +131,7 @@ const FEATURES: Feature[] = [
 ];
 
 const STATUS = [
-  "The X427 Enclosure is in design. Nothing has been machined, assembled or tested yet.",
+  "The X427 Enclosure is in design. Nothing has been machined or assembled yet.",
   "It is sold separately from the board. Price, lead time and availability are N/A for now: enquire to talk to an engineer about it.",
 ];
 

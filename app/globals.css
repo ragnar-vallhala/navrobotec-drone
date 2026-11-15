@@ -397,3 +397,6 @@ img[data-reveal][data-ready] { animation: reveal-in 0.35s ease backwards; }
 @media (prefers-reduced-motion: reduce) {
   img[data-reveal][data-ready], [data-bgreveal][data-ready] { animation: none; }
 }
+
+/* Full-width button, for the catalogue's cards and buy box. */
+.btn-block { width: 100%; justify-content: center; text-align: center; }

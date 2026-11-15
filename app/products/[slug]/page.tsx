@@ -1,23 +1,11 @@
 import Banner from "@/components/Banner";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import BoardPhoto from "@/components/BoardPhoto";
-import ComingSoon from "@/components/ComingSoon";
-import InterestDialog from "@/components/InterestDialog";
-import WaitlistButton from "@/components/WaitlistButton";
-import {
-  hasDetails,
-  hasPage,
-  kindLabel,
-  kindOf,
-  PRODUCT_MEDIA,
-} from "@/lib/product-media";
+import ProductCard from "@/components/catalogue/ProductCard";
+import ProductDetail from "@/components/catalogue/ProductDetail";
+import { cardOf } from "@/lib/product-card";
+import { hasPage, kindLabel } from "@/lib/product-media";
 import { getCatalogue, INTEREST_BY_SLUG, interestsFor } from "@/lib/products";
-import BoardPage from "./BoardPage";
-import { X427_PAGE } from "@/lib/x427-details";
-import { H747_PAGE } from "@/lib/fc-h747-details";
-import { X427_MINI_PAGE } from "@/lib/x427-mini-details";
-import { X427_ENCLOSURE_PAGE } from "@/lib/x427-enclosure-details";
 import styles from "./product.module.css";
 
 /* One product.
@@ -108,14 +96,8 @@ export default async function ProductPage({
      must not tell a reader that the product they were linked to never existed. */
   if (!product) notFound();
 
-  const details = hasDetails(product.slug);
-  const media = PRODUCT_MEDIA[product.slug];
-  const kind = kindOf(product.slug);
   const interest = INTEREST_BY_SLUG[product.slug];
   const isX427 = product.slug === "x427";
-  const isMini = product.slug === "x427-mini";
-  const isH747 = product.slug === "fc-h747";
-  const isEnclosure = product.slug === "x427-enclosure";
   const jsonLd = isX427
     ? {
         "@context": "https://schema.org",
@@ -127,9 +109,10 @@ export default async function ProductPage({
         brand: { "@type": "Brand", name: "NAVRobotec" },
       }
     : null;
-  const siblings = catalogue.products.filter(
-    (other) => other.slug !== product.slug,
-  );
+  const options = interestsFor(catalogue.products);
+  const siblings = catalogue.products
+    .filter((other) => other.slug !== product.slug)
+    .map(cardOf);
 
   return (
     <div className="page">
@@ -141,176 +124,16 @@ export default async function ProductPage({
           }}
         />
       ) : null}
-      {isX427 || isMini || isH747 || isEnclosure ? (
-        <BoardPage
-          page={
-            isH747
-              ? H747_PAGE
-              : isMini
-                ? X427_MINI_PAGE
-                : isEnclosure
-                  ? X427_ENCLOSURE_PAGE
-                  : X427_PAGE
-          }
-          name={product.name}
-          interest={interest}
-          options={interestsFor(catalogue.products)}
-        />
-      ) : (
-        <>
-      <section className={styles.crumbSection}>
-        <div className="shell">
-          <nav className={styles.crumbs} aria-label="Breadcrumb">
-            <Link href="/products" className={styles.crumb}>
-              Products
-            </Link>
-            <span className={styles.sep} aria-hidden>
-              /
-            </span>
-            <span aria-current="page" className={styles.here}>
-              {product.name}
-            </span>
-          </nav>
-        </div>
-      </section>
-
-      <section className={styles.leadSection}>
-        <div className="shell">
-          <div className={styles.lead}>
-            <div className={styles.visual}>
-              <div className={`${styles.frame} ${media ? styles.frameBoard : ""}`}>
-                {media ? (
-                  <BoardPhoto
-                    shot={media.hero}
-                    sizes="(max-width: 60rem) 100vw, 34rem"
-                    priority
-                  />
-                ) : (
-                  /* No published render. An empty dark rectangle reads as a
-                     broken image, so it says which it is. */
-                  <ComingSoon kind={kind} />
-                )}
-              </div>
-
-              {media && media.gallery.length > 0 ? (
-                <ul className={styles.gallery}>
-                  {media.gallery.map((shot) => (
-                    <li key={shot.src} className={styles.shot}>
-                      <BoardPhoto
-                        shot={shot}
-                        sizes="(max-width: 60rem) 100vw, 34rem"
-                      />
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
-            </div>
-
-            <div className={styles.intro}>
-              <p className="label label-signal">
-                {details && product.kicker ? product.kicker : kindLabel(product.slug)}
-              </p>
-              <h1 className={`h1 ${styles.name}`}>{product.name}</h1>
-
-              <p className={styles.meta}>
-                {details ? (
-                  <>
-                    {product.part ? (
-                      <span className={`data ${styles.part}`}>{product.part}</span>
-                    ) : null}
-                    {product.status ? (
-                      <span className={`data ${styles.status}`}>
-                        {product.status}
-                      </span>
-                    ) : null}
-                  </>
-                ) : null}
-              </p>
-
-              {details && product.summary ? (
-                <p className={`lede ${styles.summary}`}>{product.summary}</p>
-              ) : null}
-
-              <div className={styles.actions}>
-                <InterestDialog
-                  label="Enquire"
-                  title={`Enquire about ${product.name}`}
-                  lede="Your message goes to an engineer, and the reply comes from one."
-                  interest={interest}
-                  options={interestsFor(catalogue.products)}
-                />
-                {/* The student waitlist is for the X427 only, and sits beside
-                    Enquire rather than replacing it: one is a question for an
-                    engineer, the other a place in the line. */}
-                {product.slug === "x427" ? (
-                  <WaitlistButton label="Join waitlist" />
-                ) : null}
-                <Link href="/docs" className="btn btn-ghost">
-                  Read the documentation
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {details && product.specs.length > 0 ? (
-        <section className="section-tight rule">
-          <div className="shell">
-            <h2 className={`h2 ${styles.specsHead}`}>Specifications</h2>
-            <dl className={styles.specs}>
-              {product.specs.map((spec) => (
-                <div key={spec.label} className={styles.spec}>
-                  <dt className={`label ${styles.specLabel}`}>{spec.label}</dt>
-                  <dd className={`data ${styles.specValue}`}>{spec.value}</dd>
-                </div>
-              ))}
-            </dl>
-
-            <p className={`small ${styles.caveat}`}>
-              The images are renders. Measured results are in{" "}
-              <Link
-                href="/docs/vaios/performance"
-                className={styles.link}
-              >
-                the benchmark
-              </Link>
-              .
-            </p>
-          </div>
-        </section>
-      ) : null}
-
-        </>
-      )}
+      <ProductDetail product={product} interest={interest} options={options} />
 
       {siblings.length > 0 ? (
-        <section className="section-tight rule">
+        <section className={styles.also}>
           <div className="shell">
             <h2 className={`label ${styles.alsoHead}`}>Other products</h2>
-            <ul className={styles.also}>
-              {siblings.map((other) => (
-                <li key={other.id}>
-                  <Link href={`/products/${other.slug}`} className={styles.alsoCard}>
-                    {hasDetails(other.slug) ? (
-                      <span className={styles.alsoFrame}>
-                        <BoardPhoto
-                          shot={PRODUCT_MEDIA[other.slug].card}
-                          sizes="12rem"
-                        />
-                      </span>
-                    ) : null}
-                    <span className={styles.alsoBody}>
-                      <span className={`h3 ${styles.alsoName}`}>{other.name}</span>
-                      {hasPage(other.slug) ? (
-                        other.part ? (
-                          <span className={`data ${styles.part}`}>{other.part}</span>
-                        ) : null
-                      ) : (
-                        <span className={`data ${styles.soon}`}>Coming soon</span>
-                      )}
-                    </span>
-                  </Link>
+            <ul className={styles.alsoGrid}>
+              {siblings.map((card) => (
+                <li key={card.slug} className={styles.alsoCell}>
+                  <ProductCard card={card} options={options} />
                 </li>
               ))}
             </ul>
