@@ -345,3 +345,4 @@
 .addon p { margin: 0; }
 .addonTitle { font-size: 1rem; margin: 0; }
 .addonLink { color: var(--signal, inherit); text-decoration: underline; text-underline-offset: 0.2em; }
+.addonPhoto { display: block; position: relative; aspect-ratio: 4 / 3; overflow: hidden; border-radius: 4px; }

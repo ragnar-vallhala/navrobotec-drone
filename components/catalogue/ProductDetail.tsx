@@ -1,7 +1,8 @@
 import Link from "next/link";
 import type { Product } from "@/lib/products";
 import { kindOf } from "@/lib/product-media";
-import { availabilityOf, buildView, categoryOf } from "@/lib/product-view";
+import BoardPhoto from "@/components/BoardPhoto";
+import { availabilityOf, buildView, cardShot, categoryOf } from "@/lib/product-view";
 import Gallery from "./Gallery";
 import TabNav from "./TabNav";
 import ProductActions from "./ProductActions";
@@ -23,6 +24,7 @@ export default function ProductDetail({
   const availability = availabilityOf(product);
   const category = categoryOf(product);
   const { description } = view;
+  const addonShot = view.addon ? cardShot(view.addon.href.split("/").pop() ?? "") : undefined;
 
   const tabs = [
     description.paragraphs.length || description.points.length
@@ -83,6 +85,11 @@ export default function ProductDetail({
 
             {view.addon ? (
               <div className={styles.addon}>
+                {addonShot ? (
+                  <Link href={view.addon.href} className={styles.addonPhoto} tabIndex={-1} aria-hidden>
+                    <BoardPhoto shot={addonShot} sizes="(max-width: 40rem) 100vw, 20rem" />
+                  </Link>
+                ) : null}
                 <p className="label">{view.addon.label}</p>
                 <h2 className={styles.addonTitle}>{view.addon.title}</h2>
                 <p>{view.addon.body}</p>
