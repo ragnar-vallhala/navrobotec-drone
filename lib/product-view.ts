@@ -43,6 +43,7 @@ export type ProductView = {
   description: { paragraphs: string[]; points: { title: string; body: string }[]; status: string[] };
   specs: SpecGroup[];
   docs: DocLink[];
+  addon: { label: string; title: string; body: string; href: string; link: string } | null;
   drawings: { src: string; alt: string; width: number; height: number; caption: string }[];
   faq: { q: string; a: string }[];
   waitlist: WaitlistProduct | false;
@@ -155,9 +156,6 @@ export function buildView(product: Product): ProductView {
   if (page && page.docsLink !== false) {
     docs.push({ label: "Documentation", href: "/docs", note: "Docs" });
   }
-  if (page?.related) {
-    docs.push({ label: page.related.title, href: page.related.href, note: page.related.label });
-  }
 
   return {
     gallery,
@@ -165,6 +163,9 @@ export function buildView(product: Product): ProductView {
     description,
     specs,
     docs,
+    addon: page?.related
+      ? { label: "Add-on", title: page.related.title, body: page.related.body, href: page.related.href, link: page.related.link }
+      : null,
     drawings,
     faq: page?.faq ?? [],
     waitlist: page ? page.waitlist : false,

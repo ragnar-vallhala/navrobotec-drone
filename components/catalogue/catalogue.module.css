@@ -333,3 +333,15 @@
 }
 
 .tabs a[aria-current="true"] { color: var(--signal); border-bottom-color: var(--signal); font-weight: 600; }
+
+.addon {
+  display: grid;
+  gap: 0.35rem;
+  margin-top: 1.25rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--line, currentColor);
+  border-radius: 6px;
+}
+.addon p { margin: 0; }
+.addonTitle { font-size: 1rem; margin: 0; }
+.addonLink { color: var(--signal, inherit); text-decoration: underline; text-underline-offset: 0.2em; }

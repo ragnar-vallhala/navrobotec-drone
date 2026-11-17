@@ -80,6 +80,17 @@ export default function ProductDetail({
               </p>
               <div className={styles.cta}>{actions}</div>
             </div>
+
+            {view.addon ? (
+              <div className={styles.addon}>
+                <p className="label">{view.addon.label}</p>
+                <h2 className={styles.addonTitle}>{view.addon.title}</h2>
+                <p>{view.addon.body}</p>
+                <Link href={view.addon.href} className={styles.addonLink}>
+                  {view.addon.link}
+                </Link>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>

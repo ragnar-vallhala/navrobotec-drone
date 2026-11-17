@@ -36,7 +36,12 @@ export const dynamic = "force-dynamic";
 
 export default async function Products() {
   const catalogue = await getCatalogue();
-  const products = catalogue.status === "ok" ? catalogue.products : [];
+  /* The enclosure is an add-on to the X427, shown on the X427 page. It keeps
+     its own page but is not listed as a product of its own. */
+  const products =
+    catalogue.status === "ok"
+      ? catalogue.products.filter((p) => p.slug !== "x427-enclosure")
+      : [];
 
   return (
     <div className="page">
