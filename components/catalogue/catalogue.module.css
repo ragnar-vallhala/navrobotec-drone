@@ -336,13 +336,18 @@
 
 .addon {
   display: grid;
-  gap: 0.35rem;
-  margin-top: 1.25rem;
-  padding: 0.9rem 1rem;
-  border: 1px solid var(--line, currentColor);
+  grid-template-columns: 6.5rem minmax(0, 1fr);
+  column-gap: 0.9rem;
+  row-gap: 0.2rem;
+  align-items: start;
+  margin-top: 0.5rem;
+  padding: 0.75rem;
+  border: 1px solid var(--line);
   border-radius: 6px;
 }
 .addon p { margin: 0; }
-.addonTitle { font-size: 1rem; margin: 0; }
-.addonLink { color: var(--signal, inherit); text-decoration: underline; text-underline-offset: 0.2em; }
-.addonPhoto { display: block; position: relative; aspect-ratio: 4 / 3; overflow: hidden; border-radius: 4px; }
+.addon > :not(.addonPhoto) { grid-column: 2; }
+.addonPhoto { grid-column: 1; grid-row: 1 / span 4; display: block; position: relative; aspect-ratio: 4 / 3; overflow: hidden; border-radius: 4px; }
+.addonTitle { font-size: 0.95rem; margin: 0; }
+.addon p:not(.label) { font-size: 0.85rem; color: var(--muted); }
+.addonLink { color: var(--signal, inherit); text-decoration: underline; text-underline-offset: 0.2em; font-size: 0.85rem; }
