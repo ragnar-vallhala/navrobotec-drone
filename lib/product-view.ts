@@ -149,9 +149,7 @@ export function buildView(product: Product): ProductView {
   }));
   if (page?.reportLinks) {
     docs.push(
-      { label: "Hardware chapter", href: "/docs/report/hardware/hw-overview", note: "Report" },
-      { label: "Power section", href: "/docs/report/hardware/hw-power", note: "Report" },
-      { label: "Benchmark", href: "/docs/report/vaios/vaios-performance", note: "Report" },
+      { label: "VaiOS performance and benchmarks", href: "/docs/vaios/performance", note: "Docs" },
     );
   }
   if (page && page.docsLink !== false) {

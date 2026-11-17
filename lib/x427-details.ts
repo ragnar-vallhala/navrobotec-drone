@@ -88,17 +88,17 @@ export const STACK = [
   {
     name: "NavHAL",
     body: "The hardware abstraction layer between the stack and the chip's peripherals.",
-    href: "/docs/report/navhal/navhal-motivation",
+    href: "/docs/navhal",
   },
   {
     name: "VaiOS",
     body: "The real-time runtime: tasks, scheduler, timing and inter-task messaging.",
-    href: "/docs/report/vaios/vaios-overview",
+    href: "/docs/vaios/overview",
   },
   {
     name: "VAYU",
     body: "The flight software: sensing, estimation, control and actuation.",
-    href: "/docs/report/vayu/vayu-overview",
+    href: "/docs/vayu",
   },
 ];
 

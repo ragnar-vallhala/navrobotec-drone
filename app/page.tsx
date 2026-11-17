@@ -73,7 +73,7 @@ const SHOWN = [
     tag: "Flight controller · In design",
     name: "NAVIX X427 Mini",
     body: "The X427 processor on a 36 x 36 mm board: one IMU, 8 PWM outputs and 16 MB of onboard flash.",
-    status: "Waitlist open",
+    status: "In design",
   },
   {
     slug: "x427-enclosure",
@@ -179,7 +179,7 @@ export default function Home() {
             </Link>
           </div>
           <p className={styles.heroNote}>
-            Free board for the first 50 students.
+            Free board for the first 50 college students.
           </p>
         </div>
 
